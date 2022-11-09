@@ -1,11 +1,12 @@
 # smallcat 221106
 
 import pandas as pd
-import networkx as nx
+import igraph as ig
 import sys, getopt
+import time
 
 def printUsage():
-    print('Usage: python3 renum-nodes.py <inputfile1> <inputfile2>')
+    print('Usage: python3 ig-compose.py <inputfile1> <inputfile2>')
 
 def main(argv):
     try:
@@ -38,17 +39,27 @@ def main(argv):
     #     edges2.append([data2["s"][row], data2["d"][row]])
 
     # create graph based on edge file
-    G1 = nx.read_edgelist(edgefile1, comments='#', nodetype=int)
+    G1 = ig._igraph.GraphBase.Read_Edgelist(edgefile1, directed=False)
     # G1.add_edges_from(G1.edges(), weight=1)
 
-    G2 = nx.read_edgelist(edgefile2, comments='#', nodetype=int)
+    # print(G1.get_edgelist())
+
+    G2 = ig._igraph.GraphBase.Read_Edgelist(edgefile2, directed=False)
     # G2.add_edges_from(G2.edges(), weight=1)
 
-    G0 = nx.compose(G1, G2)
+    # print(G2.get_edgelist())
+
+    start = time.time()
+    G0 = ig.disjoint_union([G1, G2]) # error if using union
+    end = time.time()
+
+    print("time = " + str(end - start))
+
+    # print(G0.get_edgelist())
 
     # write to file
     edgefile0 = edgefile1.split('.edges')[0] + "." + edgefile2.split('.edges')[0] + ".edges"
-    df = pd.DataFrame(G0.edges())
+    df = pd.DataFrame(G0.get_edgelist())
     df.to_csv(edgefile0, sep=" ", index=False, header=False)
 
 if __name__ == "__main__":
