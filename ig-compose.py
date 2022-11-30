@@ -39,18 +39,18 @@ def main(argv):
     #     edges2.append([data2["s"][row], data2["d"][row]])
 
     # create graph based on edge file
-    G1 = ig._igraph.GraphBase.Read_Edgelist(edgefile1, directed=False)
+    # DO NOT USE igraph._igraph.GraphBase, USE SUBCLASS igraph.Graph instead
+    # Read_Edgelist() in igraph is 0-based !!! (number vertices from 0)
+    G1 = ig.Graph.Read_Edgelist(edgefile1, directed=False)
+    # G1.vs["name"] = ['1', '2', '3']
     # G1.add_edges_from(G1.edges(), weight=1)
 
-    # print(G1.get_edgelist())
-
-    G2 = ig._igraph.GraphBase.Read_Edgelist(edgefile2, directed=False)
+    G2 = ig.Graph.Read_Edgelist(edgefile2, directed=False)
+    # G2.vs["name"] = ['1', '2', '3']
     # G2.add_edges_from(G2.edges(), weight=1)
 
-    # print(G2.get_edgelist())
-
     start = time.time()
-    G0 = ig.disjoint_union([G1, G2]) # error if using union
+    G0 = ig.union([G1, G2])
     end = time.time()
 
     print("time = " + str(end - start))
