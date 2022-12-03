@@ -3,12 +3,13 @@
 import numpy as np
 import ndcg
 
-rel_true = [0, 1, 0, 1, 2, 3, 3, 1, 0] # [item1 score, item2 score, item3 score, ...] 
+rel_true = [0, 1, 0, 1, 2, 3, 3, 1, 0] # [item0 score, item1 score, item2 score, ...] 
 
-rel_pred = [0, 3, 3, 1, 2] # [real score of predicted item with highest score, real score of predicted item with second highest score, real score of predicted item with third highest score, ...]
+rank = [2, 6, 5, 1, 4] # [item predicted as first rank, item predicted as second rank, item predicted as third rank, ...]
+rel_pred = [rel_true[i] for i in rank] # [real score of predicted item with highest score, real score of predicted item with second highest score, real score of predicted item with third highest score, ...]
 
-p = 5
+p = len(rank)
 
-form = "exp"
+form = "linear"
 
 print(f'p nDCG@{p} ({form}): {ndcg.ndcg(rel_true, rel_pred, p, form)}')
