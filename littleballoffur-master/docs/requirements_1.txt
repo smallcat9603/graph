@@ -1,0 +1,13 @@
+tqdm
+numpy
+sphinx>=3
+sphinx_rtd_theme
+python-louvain
+sklearn
+scipy
+pygsp
+gensim
+pandas
+six
+nbsphinx
+nbsphinx_link
