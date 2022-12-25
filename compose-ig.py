@@ -42,20 +42,13 @@ def main(argv):
     # DO NOT USE igraph._igraph.GraphBase, USE SUBCLASS igraph.Graph instead
     # Read_Edgelist() in igraph is 0-based !!! (number vertices from 0)
     G1 = ig.Graph.Read_Edgelist(edgefile1, directed=False)
-    # G1.vs["name"] = ['1', '2', '3']
-    # G1.add_edges_from(G1.edges(), weight=1)
-
     G2 = ig.Graph.Read_Edgelist(edgefile2, directed=False)
-    # G2.vs["name"] = ['1', '2', '3']
-    # G2.add_edges_from(G2.edges(), weight=1)
 
     start = time.time()
-    G0 = ig.union([G1, G2])
+    G0 = ig.union([G1, G2]) # G0 = G1 U G2
     end = time.time()
 
     print("time = " + str(end - start))
-
-    # print(G0.get_edgelist())
 
     # write to file
     edgefile0 = edgefile1.split('.edges')[0] + "." + edgefile2.split('.edges')[0] + ".edges"
