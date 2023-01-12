@@ -1,0 +1,682 @@
+{
+  "version": "0.7.0",
+  "graph": {
+    "nodes": [
+      {
+        "id": "n0",
+        "position": {
+          "x": 0,
+          "y": 0
+        },
+        "caption": "Person"
+      },
+      {
+        "id": "n1",
+        "position": {
+          "x": 0,
+          "y": 300
+        },
+        "caption": "Movie"
+      },
+      {
+        "id": "n2",
+        "position": {
+          "x": 300,
+          "y": 0
+        },
+        "caption": "User"
+      }
+    ],
+    "relationships": [
+      {
+        "id": "n0",
+        "type": "DIRECTED",
+        "fromId": "n0",
+        "toId": "n1"
+      },
+      {
+        "id": "n1",
+        "type": "ACTED_IN",
+        "fromId": "n0",
+        "toId": "n1"
+      },
+      {
+        "id": "n2",
+        "type": "RATED",
+        "fromId": "n2",
+        "toId": "n1"
+      }
+    ]
+  },
+  "dataModel": {
+    "fileModel": {
+      "fileSchemas": {
+        "acted_in.csv": {
+          "expanded": true,
+          "fields": [
+            {
+              "name": "movieId",
+              "type": "integer",
+              "sample": "1",
+              "include": true
+            },
+            {
+              "name": "person_tmdbId",
+              "type": "integer",
+              "sample": "12899",
+              "include": true
+            },
+            {
+              "name": "role",
+              "type": "string",
+              "sample": "Slinky Dog (voice)",
+              "include": true
+            }
+          ]
+        },
+        "directed.csv": {
+          "expanded": true,
+          "fields": [
+            {
+              "name": "movieId",
+              "type": "integer",
+              "sample": "1",
+              "include": true
+            },
+            {
+              "name": "person_tmdbId",
+              "type": "integer",
+              "sample": "7879",
+              "include": true
+            }
+          ]
+        },
+        "movies.csv": {
+          "expanded": true,
+          "fields": [
+            {
+              "name": "movieId",
+              "type": "integer",
+              "sample": "1",
+              "include": true
+            },
+            {
+              "name": "title",
+              "type": "string",
+              "sample": "Toy Story",
+              "include": true
+            },
+            {
+              "name": "budget",
+              "type": "float",
+              "sample": "30000000.0",
+              "include": true
+            },
+            {
+              "name": "countries",
+              "type": "string",
+              "sample": "USA",
+              "include": true
+            },
+            {
+              "name": "movie_imdbId",
+              "type": "integer",
+              "sample": "114709",
+              "include": true
+            },
+            {
+              "name": "imdbRating",
+              "type": "float",
+              "sample": "8.3",
+              "include": true
+            },
+            {
+              "name": "imdbVotes",
+              "type": "integer",
+              "sample": "591836",
+              "include": true
+            },
+            {
+              "name": "languages",
+              "type": "string",
+              "sample": "English",
+              "include": true
+            },
+            {
+              "name": "plot",
+              "type": "string",
+              "sample": "A cowboy doll is profoundly threatened and jealous when a new spaceman figure supplants him as top toy in a boy's room.",
+              "include": true
+            },
+            {
+              "name": "movie_poster",
+              "type": "string",
+              "sample": "https://image.tmdb.org/t/p/w440_and_h660_face/uXDfjJbdP4ijW5hWSBrPrlKpxab.jpg",
+              "include": true
+            },
+            {
+              "name": "released",
+              "type": "datetime",
+              "sample": "1995-11-22",
+              "include": true
+            },
+            {
+              "name": "revenue",
+              "type": "float",
+              "sample": "373554033.0",
+              "include": true
+            },
+            {
+              "name": "runtime",
+              "type": "integer",
+              "sample": "81",
+              "include": true
+            },
+            {
+              "name": "movie_tmdbId",
+              "type": "integer",
+              "sample": "862",
+              "include": true
+            },
+            {
+              "name": "movie_url",
+              "type": "string",
+              "sample": "https://themoviedb.org/movie/862",
+              "include": true
+            },
+            {
+              "name": "year",
+              "type": "integer",
+              "sample": "1995",
+              "include": true
+            },
+            {
+              "name": "genres",
+              "type": "string",
+              "sample": "Adventure|Animation|Children|Comedy|Fantasy",
+              "include": true
+            }
+          ]
+        },
+        "persons.csv": {
+          "expanded": true,
+          "fields": [
+            {
+              "name": "person_tmdbId",
+              "type": "integer",
+              "sample": "3",
+              "include": true
+            },
+            {
+              "name": "bio",
+              "type": "string",
+              "sample": "Legendary Hollywood Icon Harrison Ford was born on July 13, 1942 in Chicago, Illinois.   His family history includes a strong lineage of actors, radio personalities, and models.   Harrison attended public high school in Park Ridge, Illinois where he was a member of the school Radio Station WMTH.  Harrison worked as the lead voice for sports reporting at WMTH for several years.   Acting wasn’t a major interest to Ford until his junior year at Ripon College when he first took an acting class...",
+              "include": true
+            },
+            {
+              "name": "born",
+              "type": "datetime",
+              "sample": "1942-07-13",
+              "include": true
+            },
+            {
+              "name": "bornIn",
+              "type": "string",
+              "sample": "Chicago, Illinois, USA",
+              "include": true
+            },
+            {
+              "name": "died",
+              "type": "datetime",
+              "sample": "",
+              "include": true
+            },
+            {
+              "name": "person_imdbId",
+              "type": "integer",
+              "sample": "148",
+              "include": true
+            },
+            {
+              "name": "name",
+              "type": "string",
+              "sample": "Harrison Ford",
+              "include": true
+            },
+            {
+              "name": "person_poster",
+              "type": "string",
+              "sample": "https://image.tmdb.org/t/p/w440_and_h660_face/5M7oN3sznp99hWYQ9sX0xheswWX.jpg",
+              "include": true
+            },
+            {
+              "name": "person_url",
+              "type": "string",
+              "sample": "https://themoviedb.org/person/3",
+              "include": true
+            }
+          ]
+        },
+        "ratings.csv": {
+          "expanded": true,
+          "fields": [
+            {
+              "name": "movieId",
+              "type": "boolean",
+              "sample": "1",
+              "include": true
+            },
+            {
+              "name": "userId",
+              "type": "integer",
+              "sample": "630",
+              "include": true
+            },
+            {
+              "name": "name",
+              "type": "string",
+              "sample": "Glenn Mitchell",
+              "include": true
+            },
+            {
+              "name": "rating",
+              "type": "float",
+              "sample": "4.0",
+              "include": true
+            },
+            {
+              "name": "timestamp",
+              "type": "integer",
+              "sample": "1443807734",
+              "include": true
+            }
+          ]
+        }
+      }
+    },
+    "graphModel": {
+      "nodeSchemas": {
+        "n0": {
+          "label": "Person",
+          "additionLabels": [],
+          "labelProperties": [],
+          "properties": [
+            {
+              "property": "tmdbId",
+              "type": "integer",
+              "identifier": "FYZFvRPFH4ptN3dfvHIfm"
+            },
+            {
+              "property": "bio",
+              "type": "string",
+              "identifier": "NVsIqvCfX2UJCQ2UuarlK"
+            },
+            {
+              "property": "born",
+              "type": "datetime",
+              "identifier": "9hpmZnRSQNQP1zw9mI4iY"
+            },
+            {
+              "property": "bornIn",
+              "type": "string",
+              "identifier": "wXfrBZ5oDUYOw4MlSyoBO"
+            },
+            {
+              "property": "died",
+              "type": "datetime",
+              "identifier": "_ZXQVICJ4jGgqWClJWFvq"
+            },
+            {
+              "property": "imdbId",
+              "type": "integer",
+              "identifier": "hWtML4VWsN_4A0wDhaZc6"
+            },
+            {
+              "property": "name",
+              "type": "string",
+              "identifier": "fKPsuW-qVSV6gtOWpQ9Vp"
+            },
+            {
+              "property": "poster",
+              "type": "string",
+              "identifier": "D0OCuJvJi079H--pPlMy-"
+            },
+            {
+              "property": "url",
+              "type": "string",
+              "identifier": "IC5h155zmhlZPqZP7xdn7"
+            }
+          ],
+          "key": {
+            "properties": [
+              "FYZFvRPFH4ptN3dfvHIfm"
+            ]
+          }
+        },
+        "n1": {
+          "label": "Movie",
+          "additionLabels": [],
+          "labelProperties": [],
+          "properties": [
+            {
+              "property": "movieId",
+              "type": "integer",
+              "identifier": "HG50GPcSnxxu-3_mFkgzR"
+            },
+            {
+              "property": "title",
+              "type": "string",
+              "identifier": "iK4ThvOdyLIOiHy3jb1XK"
+            },
+            {
+              "property": "budget",
+              "type": "integer",
+              "identifier": "8zN_Y-TVyCULqMbSIYh8a"
+            },
+            {
+              "property": "countries",
+              "type": "string",
+              "identifier": "YYaG30AYRfZt2GFUp7b2i"
+            },
+            {
+              "property": "imdbId",
+              "type": "integer",
+              "identifier": "PoVxAVDM7CUpC3BgcfcNb"
+            },
+            {
+              "property": "imdbRating",
+              "type": "float",
+              "identifier": "HGVVtFzjk6bxPXllhr5cB"
+            },
+            {
+              "property": "imdbVotes",
+              "type": "integer",
+              "identifier": "3z10xj7fxQ-8WWewRW4iT"
+            },
+            {
+              "property": "languages",
+              "type": "string",
+              "identifier": "GFCbBQe9V6Q4T76njQGYp"
+            },
+            {
+              "property": "plot",
+              "type": "string",
+              "identifier": "b5nLDlDyMIvicNtP3TBQI"
+            },
+            {
+              "property": "poster",
+              "type": "string",
+              "identifier": "hvgRVgNvb0PYO980zUazW"
+            },
+            {
+              "property": "released",
+              "type": "datetime",
+              "identifier": "qhG5UzqXzo8vGK03Drd3B"
+            },
+            {
+              "property": "revenue",
+              "type": "integer",
+              "identifier": "IJDqgABtm7FNzMOKwjQVH"
+            },
+            {
+              "property": "runtime",
+              "type": "integer",
+              "identifier": "TGNuf8je1msSBXvJhdyJG"
+            },
+            {
+              "property": "tmdbId",
+              "type": "integer",
+              "identifier": "zDQuqOTSrCOvvQOQI-v15"
+            },
+            {
+              "property": "url",
+              "type": "string",
+              "identifier": "taYa6qBo4bB3T08Ah9o2_"
+            },
+            {
+              "property": "year",
+              "type": "integer",
+              "identifier": "WWkOKDBfs3f_lk5Ulvtbg"
+            },
+            {
+              "property": "genres",
+              "type": "string",
+              "identifier": "857i4T0o0xA133KzgmhRf"
+            }
+          ],
+          "key": {
+            "properties": [
+              "HG50GPcSnxxu-3_mFkgzR"
+            ]
+          }
+        },
+        "n2": {
+          "label": "User",
+          "additionLabels": [],
+          "labelProperties": [],
+          "properties": [
+            {
+              "property": "userId",
+              "type": "integer",
+              "identifier": "1pBIm0LHHM1f2Jy1zbE8Z"
+            },
+            {
+              "property": "name",
+              "type": "string",
+              "identifier": "bJtL5z3YioLbWzTSn4J3R"
+            }
+          ],
+          "key": {
+            "properties": [
+              "1pBIm0LHHM1f2Jy1zbE8Z"
+            ]
+          }
+        }
+      },
+      "relationshipSchemas": {
+        "n0": {
+          "type": "DIRECTED",
+          "sourceNodeSchema": "n0",
+          "targetNodeSchema": "n1",
+          "properties": []
+        },
+        "n1": {
+          "type": "ACTED_IN",
+          "sourceNodeSchema": "n0",
+          "targetNodeSchema": "n1",
+          "properties": [
+            {
+              "property": "role",
+              "type": "string",
+              "identifier": "0oF5SyoDRBPdsdxbgacnm"
+            }
+          ]
+        },
+        "n2": {
+          "type": "RATED",
+          "sourceNodeSchema": "n2",
+          "targetNodeSchema": "n1",
+          "properties": [
+            {
+              "property": "rating",
+              "type": "integer",
+              "identifier": "LxA7HDx7UWBGVwV1L4ajS"
+            },
+            {
+              "property": "timestamp",
+              "type": "integer",
+              "identifier": "HdHid60FEbuZUFfF4Snf7"
+            }
+          ]
+        }
+      }
+    },
+    "mappingModel": {
+      "nodeMappings": {
+        "n0": {
+          "nodeSchema": "n0",
+          "fileSchema": "persons.csv",
+          "mappings": [
+            {
+              "field": "person_tmdbId"
+            },
+            {
+              "field": "bio"
+            },
+            {
+              "field": "born"
+            },
+            {
+              "field": "bornIn"
+            },
+            {
+              "field": "died"
+            },
+            {
+              "field": "person_imdbId"
+            },
+            {
+              "field": "name"
+            },
+            {
+              "field": "person_poster"
+            },
+            {
+              "field": "person_url"
+            }
+          ]
+        },
+        "n1": {
+          "nodeSchema": "n1",
+          "fileSchema": "movies.csv",
+          "mappings": [
+            {
+              "field": "movieId"
+            },
+            {
+              "field": "title"
+            },
+            {
+              "field": "budget"
+            },
+            {
+              "field": "countries"
+            },
+            {
+              "field": "movie_imdbId"
+            },
+            {
+              "field": "imdbRating"
+            },
+            {
+              "field": "imdbVotes"
+            },
+            {
+              "field": "languages"
+            },
+            {
+              "field": "plot"
+            },
+            {
+              "field": "movie_poster"
+            },
+            {
+              "field": "released"
+            },
+            {
+              "field": "revenue"
+            },
+            {
+              "field": "runtime"
+            },
+            {
+              "field": "movie_tmdbId"
+            },
+            {
+              "field": "movie_url"
+            },
+            {
+              "field": "year"
+            },
+            {
+              "field": "genres"
+            }
+          ]
+        },
+        "n2": {
+          "nodeSchema": "n2",
+          "fileSchema": "ratings.csv",
+          "mappings": [
+            {
+              "field": "userId"
+            },
+            {
+              "field": "name"
+            }
+          ]
+        }
+      },
+      "relationshipMappings": {
+        "n0": {
+          "relationshipSchema": "n0",
+          "mappings": [],
+          "sourceMappings": [
+            {
+              "field": "person_tmdbId"
+            }
+          ],
+          "targetMappings": [
+            {
+              "field": "movieId"
+            }
+          ],
+          "fileSchema": "directed.csv"
+        },
+        "n1": {
+          "relationshipSchema": "n1",
+          "mappings": [
+            {
+              "field": "role"
+            }
+          ],
+          "sourceMappings": [
+            {
+              "field": "person_tmdbId"
+            }
+          ],
+          "targetMappings": [
+            {
+              "field": "movieId"
+            }
+          ],
+          "fileSchema": "acted_in.csv"
+        },
+        "n2": {
+          "relationshipSchema": "n2",
+          "mappings": [
+            {
+              "field": "rating"
+            },
+            {
+              "field": "timestamp"
+            }
+          ],
+          "sourceMappings": [
+            {
+              "field": "userId"
+            }
+          ],
+          "targetMappings": [
+            {
+              "field": "movieId"
+            }
+          ],
+          "fileSchema": "ratings.csv"
+        }
+      }
+    },
+    "configurations": {
+      "idsToIgnore": []
+    }
+  }
+}
