@@ -12,6 +12,7 @@ import pandas as pd
 import networkx as nx
 from networkx.algorithms import approximation as approx
 import sys, getopt
+import time
 
 def main(argv):
     try:
@@ -62,9 +63,12 @@ def main(argv):
     G.add_edges_from(C.edges(), weight=LN)
     # print(G.edges(data=True))
 
+    start = time.time()
     # solve TSP problem   
     cycle = approx.greedy_tsp(G, source=0)
     # print(cycle)
+    end = time.time()    
+    print("time = " + str(end - start))
 
     cycle_stride = []
     for s in range(stride):
