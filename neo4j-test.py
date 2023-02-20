@@ -13,8 +13,12 @@ user = "neo4j"
 password= "traffic-state-regret"
 
 gds = GraphDataScience(host, auth=(user, password))
-
 print(gds.version())
+
+query = """
+call dbms.procedures()
+"""
+print(gds.run_cypher(query))
 
 query = """
 LOAD CSV WITH HEADERS FROM $url AS row
