@@ -8,15 +8,20 @@ user = "neo4j"
 password= "j4oen"
 
 # https://sandbox.neo4j.com/?usecase=blank-sandbox&_ga=2.99281694.1083263989.1673158924-1227688473.1673158924&_gl=1*ln3csj*_ga*MjA0Nzc1MDI3My4xNjcyODkwMTI1*_ga_DL38Q8KGQC*MTY3MzE2NjEyMS4zLjEuMTY3MzE2OTM0My4wLjAuMA..
-host = "bolt://54.226.99.132:7687"
-user = "neo4j"
-password= "traffic-state-regret"
+# host = "bolt://54.226.99.132:7687"
+# user = "neo4j"
+# password= "traffic-state-regret"
 
 gds = GraphDataScience(host, auth=(user, password))
 print(gds.version())
 
 query = """
 call dbms.procedures()
+"""
+print(gds.run_cypher(query))
+
+query = """
+RETURN apoc.version()
 """
 print(gds.run_cypher(query))
 
