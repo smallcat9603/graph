@@ -1,8 +1,11 @@
 import py2neo as pg
+import warnings
+warnings.simplefilter(action='ignore', category=FutureWarning)
 import pandas as pd
 import igraph as ig
-
 from numpy.random import randint
+
+from pyspark.shell import spark
 from pyspark.ml import Pipeline 
 from pyspark.ml.classification import RandomForestClassifier 
 from pyspark.ml.feature import StringIndexer, VectorAssembler 
@@ -12,10 +15,8 @@ from pyspark.sql import functions as F
 from sklearn.metrics import roc_curve, auc 
 from collections import Counter
 from cycler import cycler 
-# import matplotlib 
-# matplotlib.use('TkAgg') 
+
 import matplotlib.pyplot as plt
-from pyspark.shell import spark
 
 # neo4j linux
 # graph = pg.Graph("bolt://localhost:7687", auth=("neo4j", "j4oen")) # defaultly connect to database "neo4j", modify it in conf/neo4j.conf
