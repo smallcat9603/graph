@@ -27,14 +27,14 @@ graph = pg.Graph("bolt://localhost:7687", auth=("neo4j", "j4oenj4oen"))
 ###
 
 query = """
-CREATE CONSTRAINT ON (article:Article) 
-ASSERT article.index IS UNIQUE;
+CREATE CONSTRAINT constraint_article IF NOT EXISTS
+For (article:Article) REQUIRE article.index IS UNIQUE
 """
 graph.run(query)
 
 query = """
-CREATE CONSTRAINT ON (author:Author) 
-ASSERT author.name IS UNIQUE;
+CREATE CONSTRAINT constraint_author IF NOT EXISTS 
+For (author:Author) REQUIRE author.name IS UNIQUE
 """
 graph.run(query)
 
