@@ -45,11 +45,11 @@ CALL apoc.periodic.iterate(
 CALL apoc.load.json("file:///" + file) 
 YIELD value WHERE value.venue IN ["Lecture Notes in Computer Science", "Communications of The ACM", "international conference on software engineering", "advances in computing and communications"]
 return value', 
-'MERGE (a:Article {index:value.id}) ON CREATE SET a += apoc.map.clean(value,["id","authors","references"],[0]) WITH a,value.authors as authors 
+'MERGE (a:Article {index:value.id}) ON CREATE SET a += apoc.map.clean(value,["id","authors","references"],[0]) WITH a, value.authors as authors 
 UNWIND authors as author 
-MERGE (b:Author{name:author}) 
+MERGE (b:Author {name:author}) 
 MERGE (b)<-[:AUTHOR]-(a)', 
-{batchSize: 10000, iterateList: true});
+{batchSize:10000, parallel:true});
 """
 graph.run(query)
 
