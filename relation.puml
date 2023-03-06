@@ -1,0 +1,28 @@
+@startuml
+allowmixing
+skinparam actorStyle awesome
+actor "Author" as a1
+actor "Author" as a2
+usecase "Article" as p1
+' usecase "Article" as p2
+
+p1 -up-> a1: AUTHOR
+p1 -up-> a2: AUTHOR
+a1 -right- a2: CO_AUTHOR
+
+json Article {
+   "index": "String",
+   "abstract": "String",
+   "n_citation": "Int",
+   "title": "String",
+   "venue": "String",
+   "year": "Int"
+}
+json Author {
+   "name": "String"
+}
+json CO_AUTHOR {
+   "year": "Int",
+   "collaborations": "Int"
+}
+@enduml
