@@ -243,7 +243,7 @@ def train_model(fields, training_data):
 
 basic_model = train_model(["commonAuthors"], training_data)
 eval_df = spark.createDataFrame( [(0,), (1,), (2,), (10,), (100,)], ['commonAuthors'])
-basic_model.transform(eval_df).select("commonAuthors", "probability", "prediction") .show(truncate=False)
+basic_model.transform(eval_df).select("commonAuthors", "probability", "prediction").show(truncate=False)
 
 def evaluate_model(model, test_data): 
     # Execute the model against the test set 
