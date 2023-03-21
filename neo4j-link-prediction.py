@@ -324,7 +324,7 @@ plot_feature_importance(fields, rf_model.featureImportances)
 ###
 
 query = """
-CALL gds.graph.drop("myGraph")
+CALL gds.graph.drop("myGraph", false) 
 """
 graph.run(query)
 
