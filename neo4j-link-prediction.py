@@ -20,7 +20,7 @@ import matplotlib.pyplot as plt
 
 # neo4j linux
 # graph = pg.Graph("bolt://localhost:7687", auth=("neo4j", "j4oen")) # defaultly connect to database "neo4j", modify it in conf/neo4j.conf
-# neo4j desktop m1
+# neo4j desktop m1, 4.4.18
 graph = pg.Graph("bolt://localhost:7687", auth=("neo4j", "j4oenj4oen"))
 
 ###
