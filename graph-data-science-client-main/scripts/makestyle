@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+set -o errexit
+set -o nounset
+set -o pipefail
+set -o xtrace
+
+black .
+isort .
+jupyter nbconvert \
+  --clear-output \
+  --inplace \
+  --ClearOutputPreprocessor.enabled=True \
+  --ClearMetadataPreprocessor.enabled=True \
+  --log-level CRITICAL \
+  ./**/*.ipynb

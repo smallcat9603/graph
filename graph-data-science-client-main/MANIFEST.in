@@ -1,0 +1,6 @@
+include requirements/base/base.txt
+include requirements/base/ogb.txt
+include LICENSE
+prune graphdatascience/tests
+prune graphdatascience/resources/cora/serialize_cora.py
+prune graphdatascience/resources/imdb/serialize_imdb.py
