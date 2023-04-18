@@ -7,8 +7,12 @@ import Pyro4
 # ### option 2
 # server = Pyro4.Proxy("PYRONAME:server")
 
-### option 3
-uri = Pyro4.locateNS().lookup("server") 
+# ### option 3
+# uri = Pyro4.locateNS().lookup("server") 
+# server = Pyro4.Proxy(uri)
+
+### option 4
+uri = Pyro4.locateNS(host="127.0.0.1").lookup("server") 
 server = Pyro4.Proxy(uri)
 
 name = input("What is your name? ").strip()
