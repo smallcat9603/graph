@@ -8,7 +8,8 @@ class Server(object):
 def startServer():
   server = Server()
   # daemon = Pyro4.Daemon()
-  daemon = Pyro4.Daemon(host="0.0.0.0")
+  # daemon = Pyro4.Daemon(host="0.0.0.0")
+  daemon = Pyro4.Daemon(host="192.168.3.39")
   ns = Pyro4.locateNS()
   uri = daemon.register(server)
   ns.register("server", uri)
