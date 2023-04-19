@@ -8,8 +8,8 @@ class Server(object):
 def startServer():
   server = Server()
   # daemon = Pyro4.Daemon()
-  daemon = Pyro4.Daemon(host="0.0.0.0")
-  ns = Pyro4.locateNS(host="0.0.0.0")
+  daemon = Pyro4.Daemon(host="0.0.0.0", port=9091)
+  ns = Pyro4.locateNS()
   uri = daemon.register(server)
   ns.register("server", uri)
   print("Ready. Object uri =", uri)
