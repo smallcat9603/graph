@@ -11,8 +11,6 @@ def startServer():
   daemon = Pyro4.Daemon(host="0.0.0.0") # default port is random
   # ns = Pyro4.locateNS()
   ns = Pyro4.locateNS(host="127.0.0.1") # ns default port = 9090
-  for name in ns.list():
-    print(name)
   uri = daemon.register(server)
   ns.register("server", uri)
   print("Ready. Object uri =", uri)
