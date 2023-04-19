@@ -8,8 +8,9 @@ class Server(object):
 def startServer():
   server = Server()
   # daemon = Pyro4.Daemon()
-  daemon = Pyro4.Daemon(host="0.0.0.0", port=9091)
-  ns = Pyro4.locateNS()
+  daemon = Pyro4.Daemon(host="0.0.0.0") # default port is random
+  # ns = Pyro4.locateNS()
+  ns = Pyro4.locateNS(host="127.0.0.1") # ns default port = 9090
   for name in ns.list():
     print(name)
   uri = daemon.register(server)
