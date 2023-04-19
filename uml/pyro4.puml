@@ -1,0 +1,14 @@
+@startuml
+left to right direction
+skinparam actorStyle awesome
+actor "Client" as c
+rectangle Server_Cluster {
+  usecase "Server1" as s1
+  usecase "Server2" as s2
+  usecase "Server3" as s3
+}
+c --> s1
+s1 --> s2
+s2 --> s3
+s3 --> s1
+@enduml
