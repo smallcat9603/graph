@@ -12,8 +12,11 @@ import Pyro4
 # ### option 4 (require name server ip)
 # uri = Pyro4.locateNS(host="127.0.0.1").lookup("server") # ns default port = 9090
 
-### option 5 (require name server ip)
-uri = "PYRONAME:server@127.0.0.1" # "PYRONAME:server@127.0.0.1:9090"
+# ### option 5 (require name server ip)
+# uri = "PYRONAME:server@127.0.0.1" # "PYRONAME:server@127.0.0.1:9090"
+
+### option 6 (remote connection via ip address)
+uri = "PYRONAME:server@192.168.3.39" # name server ip
 
 
 server = Pyro4.Proxy(uri)
