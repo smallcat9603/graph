@@ -49,15 +49,29 @@ def main(argv):
         v["name"] = v.index
 
     start = time.time()
-    communities = G.community_fastgreedy().as_clustering(n=nsubgraphs)
-    membership = np.array(communities.membership)
+    communities = G.community_fastgreedy().as_clustering(n=nsubgraphs) # 1 community --> 1 server
+    membership = np.array(communities.membership) # [0, 0, 1, 1, 2, 2, 2, ...]
     subgraphs = [G.subgraph(np.where(membership == i)[0]) for i in range(nsubgraphs)]
     end = time.time()
 
     print("time = " + str(end - start))
 
-    # write to file
+    # server id is from 0
+    server_route_tables = [{} for _ in range(nsubgraphs)]
+    for e in G.es:
+        server_source = membership[e.source]
+        server_target = membership[e.target]
+        if server_source != server_target:
+            if e.source in server_route_tables[server_source]:
+                server_route_tables[server_source][e.source].append((e.target, server_target))
+                server_route_tables[server_target][e.target].append((e.source, server_source))
+            else:
+                server_route_tables[server_source][e.source] = [(e.target, server_target)]
+                server_route_tables[server_target][e.target] = [(e.source, server_source)]
+
+    # write to file, server id is from 1
     for n in range(nsubgraphs):
+        # generate subgraph edgelist files
         sub = edgefile.split('.txt')[0] + ".sub" + str(n+1) + ".txt"
         g = subgraphs[n]
 
@@ -69,6 +83,13 @@ def main(argv):
         df = pd.DataFrame(edgelist)
 
         df.to_csv(sub, sep=" ", index=False, header=False)
+
+        # generate subgraph edgenode route tables
+        sources = list(server_route_tables[n].keys())
+        targets_servers = list(server_route_tables[n].values())
+        df = pd.DataFrame({'sources':sources, 'targets_servers':targets_servers})
+        rt = edgefile.split('.txt')[0] + ".rt" + str(n+1) + ".txt"
+        df.to_csv(rt, sep=" ", index=False, header=False)
 
 if __name__ == "__main__":
    main(sys.argv[1:])  
