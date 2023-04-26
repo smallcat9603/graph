@@ -45,8 +45,8 @@ def main(argv):
     # Read_Edgelist() in igraph is 0-based !!! (number vertices from 0)
     G = ig.Graph.Read_Edgelist(edgefile, directed=False)
     # node "name" = id
-    for i, vertex in enumerate(G.vs):
-        vertex['name'] = i
+    for v in G.vs:
+        v["name"] = v.index
 
     start = time.time()
     communities = G.community_fastgreedy().as_clustering(n=nsubgraphs)
@@ -59,9 +59,15 @@ def main(argv):
     # write to file
     for n in range(nsubgraphs):
         sub = edgefile.split('.txt')[0] + ".sub" + str(n+1) + ".txt"
+        g = subgraphs[n]
+
+        # node id is from 0 in subgraph
         # df = pd.DataFrame(subgraphs[n].get_edgelist())
-        edgelist = [(subgraphs[n].vs(e.source)["name"][0], subgraphs[n].vs(e.target)["name"][0]) for e in subgraphs[n].es]
+
+        # node id is maintained the same as in graph
+        edgelist = [(g.vs[e.source]["name"], g.vs[e.target]["name"]) for e in g.es]
         df = pd.DataFrame(edgelist)
+
         df.to_csv(sub, sep=" ", index=False, header=False)
 
 if __name__ == "__main__":
