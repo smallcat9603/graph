@@ -46,7 +46,7 @@ def main(argv):
     G = ig.Graph.Read_Edgelist(edgefile, directed=False)
 
     # generate graph
-    # G = ig.Graph.Erdos_Renyi(n=20, m=35, directed=False, loops=False)
+    # G = ig.Graph.Erdos_Renyi(n=20, m=35, directed=False, loops=False) # n=nnodes, m=nedges
 
     # print graph info
     print(G)
