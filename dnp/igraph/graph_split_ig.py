@@ -48,8 +48,15 @@ def main(argv):
     # generate graph
     # G = ig.Graph.Erdos_Renyi(n=20, m=35, directed=False, loops=False) # n=nnodes, m=nedges
 
+    # check graph
+    if(G.is_connected()):
+        print("Graph is connected")
+    else:
+        print("Graph is not connected")
+        sys.exit(1)
+
     # print graph info
-    print(G)
+    print(G.summary())
 
     # node "name" = id
     for v in G.vs:
