@@ -45,8 +45,10 @@ def main(argv):
     # Read_Edgelist() in igraph is 0-based !!! (number vertices from 0)
     G = ig.Graph.Read_Edgelist(edgefile, directed=False)
 
-    # generate graph
-    # G = ig.Graph.Erdos_Renyi(n=20, m=35, directed=False, loops=False) # n=nnodes, m=nedges
+    # generate a random graph with a specified node number and edge number
+    # nnodes = 20000
+    # nedges = 200000
+    # G = ig.Graph.Erdos_Renyi(n=nnodes, m=nedges, directed=False, loops=False) # not guarantee connectiveness
 
     # check graph
     if(G.is_connected()):
