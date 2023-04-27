@@ -44,6 +44,13 @@ def main(argv):
     # DO NOT USE igraph._igraph.GraphBase, USE SUBCLASS igraph.Graph instead
     # Read_Edgelist() in igraph is 0-based !!! (number vertices from 0)
     G = ig.Graph.Read_Edgelist(edgefile, directed=False)
+
+    # generate graph
+    # G = ig.Graph.Erdos_Renyi(n=20, m=35, directed=False, loops=False)
+
+    # print graph info
+    print(G)
+
     # node "name" = id
     for v in G.vs:
         v["name"] = v.index
@@ -64,9 +71,11 @@ def main(argv):
         if server_source != server_target:
             if e.source in server_route_tables[server_source]:
                 server_route_tables[server_source][e.source].append((e.target, server_target))
+            else:
+                server_route_tables[server_source][e.source] = [(e.target, server_target)]   
+            if e.target in server_route_tables[server_target]:
                 server_route_tables[server_target][e.target].append((e.source, server_source))
             else:
-                server_route_tables[server_source][e.source] = [(e.target, server_target)]
                 server_route_tables[server_target][e.target] = [(e.source, server_source)]
 
     # write to file, server id is from 1
