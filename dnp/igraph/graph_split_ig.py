@@ -46,8 +46,8 @@ def main(argv):
     G = ig.Graph.Read_Edgelist(edgefile, directed=False)
 
     # generate a random graph with a specified node number and edge number
-    # nnodes = 20000
-    # nedges = 200000
+    # nnodes = 100
+    # nedges = 1000
     # G = ig.Graph.Erdos_Renyi(n=nnodes, m=nedges, directed=False, loops=False) # not guarantee connectiveness
 
     # check graph
