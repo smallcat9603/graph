@@ -87,10 +87,10 @@ def main(argv):
             else:
                 server_route_tables[server_target][e.target] = [(e.source, server_source)]
 
-    # write to file, server id is from 1
+    # write to file, server id is from 0
     for n in range(nsubgraphs):
         # generate subgraph edgelist files
-        sub = edgefile.split('.txt')[0] + ".sub" + str(n+1) + ".txt"
+        sub = edgefile.split('.txt')[0] + ".sub" + str(n) + ".txt"
         g = subgraphs[n]
 
         # node id is from 0 in subgraph
@@ -106,7 +106,7 @@ def main(argv):
         sources = list(server_route_tables[n].keys())
         targets_servers = list(server_route_tables[n].values())
         df = pd.DataFrame({'sources':sources, 'targets_servers':targets_servers})
-        rt = edgefile.split('.txt')[0] + ".rt" + str(n+1) + ".txt"
+        rt = edgefile.split('.txt')[0] + ".rt" + str(n) + ".txt"
         df.to_csv(rt, sep=" ", index=False, header=False)
 
 if __name__ == "__main__":
