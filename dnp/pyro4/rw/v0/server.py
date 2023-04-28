@@ -1,5 +1,5 @@
 import Pyro4
-import rw_v0 as rw
+import rw
 import sys
 
 nservers = 3 # server id = 0,1,2

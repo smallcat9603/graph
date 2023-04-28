@@ -1,4 +1,3 @@
-# from __future__ import print_function
 import Pyro4
 import random
 
@@ -15,7 +14,7 @@ class Walker(object):
         self.nextName = next
         self.next = None
     @Pyro4.expose
-    def process(self, message):
+    def walk(self, message):
         if self.next is None:
             self.next = Pyro4.Proxy("PYRONAME:Server" + self.nextName)
         if self.name in message:
@@ -25,7 +24,7 @@ class Walker(object):
             return rn
         else:
             message.append(self.name)
-            result = self.next.process(message)
+            result = self.next.walk(message)
             rn = generate_random_numbers()
             print("Server{0} walks through nodes: {1}".format(self.name, rn))
             result = rn + result
