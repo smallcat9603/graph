@@ -12,7 +12,7 @@ class Walker(object):
         self.map_node = {v: k for k, v in node_map.items()} # reverse keys and values in node_map, map_node = {0: 100, 1: 200, 2: 150, ...}, local --> global
         self.nhops = nhops
         self.next = None
-    def nexthop(self, cur_local, cur_global):
+    def nexthop_roulette(self, cur_local, cur_global):
         neighbors_in = self.graph.neighbors(cur_local)
         nneighbors_in = len(neighbors_in)
         neighbors_out = self.route_table[cur_global]
@@ -47,7 +47,7 @@ class Walker(object):
             else:
                 print("messge is wrong")
                 sys.exit(1)
-            next_local_node, next_global_node, next_global_server = self.nexthop(cur_local, cur_global)
+            next_local_node, next_global_node, next_global_server = self.nexthop_roulette(cur_local, cur_global)
             message.append(next_global_node)                       
         hops = len(message)
         if hops >= self.nhops:
