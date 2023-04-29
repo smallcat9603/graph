@@ -4,13 +4,12 @@ import igraph as ig
 import sys
 
 class Walker(object):
-    def __init__(self, name, graph, route_table, node_map, nhops): 
+    def __init__(self, name, graph, route_table, node_map): # nodes in route_table are global
         self.name = name
         self.graph = graph
         self.route_table = route_table
         self.node_map = node_map # node_map = {100: 0, 200: 1, 150: 2, ...}, global --> local
         self.map_node = {v: k for k, v in node_map.items()} # reverse keys and values in node_map, map_node = {0: 100, 1: 200, 2: 150, ...}, local --> global
-        self.nhops = nhops
         self.next = None
     def nexthop_roulette(self, cur_local, cur_global):
         neighbors_in = self.graph.neighbors(cur_local)
@@ -31,11 +30,11 @@ class Walker(object):
             next_global_server = next_global[1]   
         return next_local_node, next_global_node, next_global_server
     @Pyro4.expose
-    def walk(self, message): 
+    def walk(self, message, nhops): 
         next_local_node = -1
         next_global_node = -1
         next_global_server = -1
-        while next_global_server == -1 and len(message) < self.nhops: # walk inside
+        while next_global_server == -1 and len(message) < nhops: # walk inside
             msg = message[-1]
             if msg == "go": # starting point of walker
                 cur_local = random.randint(0, self.graph.vcount()-1)
@@ -49,16 +48,15 @@ class Walker(object):
                 sys.exit(1)
             next_local_node, next_global_node, next_global_server = self.nexthop_roulette(cur_local, cur_global)
             message.append(next_global_node)                       
-        hops = len(message)
-        if hops >= self.nhops:
+        if len(message) >= nhops:
             print("Walker stopped at Server{0}".format(self.name))
-            print("Finished. Walker walks through nodes: {0}".format(message))
+            print("Finished. Walker walks through {0} nodes: {1}".format(len(message), message))
         elif next_local_node == -1: # walk outside
-            print("Walker walks through {0} nodes".format(hops))
+            print("Walker walks through {0} nodes".format(len(message)))
             nextname = str(next_global_server)
             print("Walker walks from Server{0} to Server{1}".format(self.name, nextname))
             self.next = Pyro4.Proxy("PYRONAME:Server" + nextname)
-            self.next.walk(message)
+            self.next.walk(message, nhops)
         else:
             print("Something is wrong")
             sys.exit(1)
