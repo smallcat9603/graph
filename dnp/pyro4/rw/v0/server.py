@@ -9,6 +9,7 @@ def map_nodes_in_edgelist(file, file_new):
     node_map = {}
     with open(file, "r") as f:
         edgelist = [line.strip().split() for line in f]
+        edgelist = [list(map(int, edge)) for edge in edgelist]
         nodes = set([edge[0] for edge in edgelist] + [edge[1] for edge in edgelist])
         node_map = {node: i for i, node in enumerate(nodes)}
         edgelist_new = [(node_map[edge[0]], node_map[edge[1]]) for edge in edgelist]
@@ -42,7 +43,7 @@ columns = ["sources", "targets_servers"]
 routes = pd.read_csv(f"test.rt{this}.txt", comment="#", sep="\s+", names=columns)
 route_table = {}
 for row in range(len(routes)):
-    route_table[routes["sources"][row]] = eval(routes["targets_servers"][row])
+    route_table[int(routes["sources"][row])] = list(eval(routes["targets_servers"][row]))
 
 servername = "Server" + this
 daemon = Pyro4.Daemon()
