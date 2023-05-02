@@ -31,6 +31,7 @@ class Walker(object):
             next_global_server = next_global[1]   
         return next_local_node, next_global_node, next_global_server
     @Pyro5.server.expose
+    @Pyro5.server.oneway
     def walk(self, message, nhops): 
         next_local_node = -1
         next_global_node = -1
