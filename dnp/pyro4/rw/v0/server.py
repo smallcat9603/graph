@@ -1,4 +1,4 @@
-import Pyro4
+import Pyro5
 import sys
 import igraph as ig
 import pandas as pd
@@ -48,10 +48,10 @@ for row in range(len(routes)):
 
 # boot server
 servername = "Server" + this
-daemon = Pyro4.Daemon()
+daemon = Pyro5.server.Daemon()
 obj = rw.Walker(this, graph, route_table, node_map)
 uri = daemon.register(obj)
-ns = Pyro4.locateNS()
+ns = Pyro5.core.locate_ns()
 ns.register(servername, uri)
 # enter the service loop.
 print("Server%s started ..." % this)

@@ -1,4 +1,5 @@
-import Pyro4
+import Pyro5.server
+import Pyro5.client
 import random
 import igraph as ig
 import sys
@@ -29,7 +30,7 @@ class Walker(object):
             next_global_node = next_global[0]
             next_global_server = next_global[1]   
         return next_local_node, next_global_node, next_global_server
-    @Pyro4.expose
+    @Pyro5.server.expose
     def walk(self, message, nhops): 
         next_local_node = -1
         next_global_node = -1
@@ -56,7 +57,7 @@ class Walker(object):
             nextname = str(next_global_server)
             self.go_out += 1
             print("{0}: Walker walks from Server{1} to Server{2}".format(self.go_out, self.name, nextname))
-            with Pyro4.Proxy("PYRONAME:Server" + nextname) as next:
+            with Pyro5.client.Proxy("PYRONAME:Server" + nextname) as next:
                 next.walk(message, nhops)
         else:
             print("Something is wrong")
