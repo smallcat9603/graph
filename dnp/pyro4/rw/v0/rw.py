@@ -10,7 +10,7 @@ class Walker(object):
         self.route_table = route_table
         self.node_map = node_map # node_map = {100: 0, 200: 1, 150: 2, ...}, global --> local
         self.map_node = {v: k for k, v in node_map.items()} # reverse keys and values in node_map, map_node = {0: 100, 1: 200, 2: 150, ...}, local --> global
-        self.next = None
+        self.go_out = 0
     def nexthop_roulette(self, cur_local, cur_global):
         neighbors_in = self.graph.neighbors(cur_local)
         nneighbors_in = len(neighbors_in)
@@ -54,9 +54,10 @@ class Walker(object):
         elif next_local_node == -1: # walk outside
             print("Walker walks through {0} nodes".format(len(message)))
             nextname = str(next_global_server)
-            print("Walker walks from Server{0} to Server{1}".format(self.name, nextname))
-            self.next = Pyro4.Proxy("PYRONAME:Server" + nextname)
-            self.next.walk(message, nhops)
+            self.go_out += 1
+            print("{0}: Walker walks from Server{1} to Server{2}".format(self.go_out, self.name, nextname))
+            with Pyro4.Proxy("PYRONAME:Server" + nextname) as next:
+                next.walk(message, nhops)
         else:
             print("Something is wrong")
             sys.exit(1)
