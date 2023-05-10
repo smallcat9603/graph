@@ -33,7 +33,7 @@ class Walker(object):
         return next_local_node, next_global_node, next_global_server
     @Pyro5.server.expose
     @Pyro5.server.oneway
-    def walk(self, message, nhops): 
+    def walk(self, message, nhops, walker): 
         next_local_node = -1
         next_global_node = -1
         next_global_server = -1
@@ -52,17 +52,17 @@ class Walker(object):
             next_local_node, next_global_node, next_global_server = self.nexthop_roulette(cur_local, cur_global)
             message.append(next_global_node)                       
         if len(message) >= nhops:
-            print("Walker stopped at Server{0}".format(self.name))
-            print("Finished. Walker walks through {0} nodes: {1}".format(len(message), message))
+            print("Walker{0} stopped at Server{1}".format(walker, self.name))
+            print("Finished. Walker{0} walks through {1} nodes: {2}".format(walker, len(message), message))
         elif next_local_node == -1: # walk outside
-            print("Walker walks through {0} nodes".format(len(message)))
+            print("Walker{0} walks through {1} nodes".format(walker, len(message)))
             nextname = str(next_global_server)
             self.go_out += 1
-            print("{0}: Walker walks from Server{1} to Server{2}".format(self.go_out, self.name, nextname))
+            print("{0}: Walker{1} walks from Server{2} to Server{3}".format(self.go_out, walker, self.name, nextname))
             uri = "PYRO:walker@" + self.hosts[next_global_server]
             # with Pyro5.client.Proxy("PYRONAME:Server" + nextname) as next: # require ns
             with Pyro5.client.Proxy(uri) as next: # not require ns
-                next.walk(message, nhops)
+                next.walk(message, nhops, walker)
         else:
-            print("Something is wrong")
+            print("Something is wrong for Walker{0}".format(walker))
             sys.exit(1)

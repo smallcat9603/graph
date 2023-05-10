@@ -53,6 +53,9 @@ route_table = {}
 for row in range(len(routes)):
     route_table[int(routes["sources"][row])] = list(eval(routes["targets_servers"][row]))
 
+# config pyro
+Pyro5.config.SERVERTYPE = "thread" # thread, multiplex
+
 # boot server
 # servername = "Server" + this # this = 0, 1, 2, ...
 # serverport = 9091 + serverid # ns port is 9090, server port is from 9091, server0 --> port9091, server1 --> port9092, server2 --> port9093, ...
@@ -64,5 +67,5 @@ uri = daemon.register(obj, objectId="walker") # default objectId is random like 
 # ns = Pyro5.core.locate_ns()
 # ns.register(servername, uri)
 # enter the service loop.
-print("Server%s started ..." % this)
+print("Server%s started (%s) ..." % (this, Pyro5.config.SERVERTYPE))
 daemon.requestLoop()

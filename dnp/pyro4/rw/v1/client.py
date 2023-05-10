@@ -15,13 +15,14 @@ nhops = 100 # path length for each walker
 if len(sys.argv) > 1 and int(sys.argv[1]) > 0:
     nhops = int(sys.argv[1])
 
-# obj = Pyro5.client.Proxy("PYRONAME:Server0") # automatically look for ns first
-uri = "PYRO:walker@" + hosts[0]
-obj = Pyro5.client.Proxy(uri) # connect to server directly (not need ns anymore)
-try:
-    print("Client starts ...")
-    obj.walk(["go"], nhops)
-    print("Client finished.")
-except Exception:
-    print("Pyro traceback:")
-    print("".join(Pyro5.errors.get_pyro_traceback()))
+for walker in range(10):
+    # obj = Pyro5.client.Proxy("PYRONAME:Server0") # automatically look for ns first
+    uri = "PYRO:walker@" + hosts[0]
+    obj = Pyro5.client.Proxy(uri) # connect to server directly (not need ns anymore)
+    try:
+        print("Client{0} starts ...".format(walker))
+        obj.walk(["go"], nhops, walker)
+        print("Client{0} finished.".format(walker))
+    except Exception:
+        print("Pyro traceback:")
+        print("".join(Pyro5.errors.get_pyro_traceback()))
