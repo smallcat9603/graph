@@ -47,12 +47,13 @@ for row in range(len(routes)):
     route_table[int(routes["sources"][row])] = list(eval(routes["targets_servers"][row]))
 
 # boot server
-servername = "Server" + this
-daemon = Pyro5.server.Daemon()
+servername = "Server" + this # this = 0, 1, 2, ...
+serverport = 9091 + int(this) # ns port is 9090, server port is from 9091, server0 --> port9091, server1 --> port9092, server2 --> port9093, ...
+daemon = Pyro5.server.Daemon(host="127.0.0.1", port=serverport)
 obj = rw.Walker(this, graph, route_table, node_map)
-uri = daemon.register(obj)
-ns = Pyro5.core.locate_ns()
-ns.register(servername, uri)
+uri = daemon.register(obj, objectId="walker") # default objectId is random like obj_79549b4c52dc43ffaaa486b76b25c2af
+# ns = Pyro5.core.locate_ns()
+# ns.register(servername, uri)
 # enter the service loop.
 print("Server%s started ..." % this)
 daemon.requestLoop()

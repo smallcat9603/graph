@@ -58,7 +58,8 @@ class Walker(object):
             nextname = str(next_global_server)
             self.go_out += 1
             print("{0}: Walker walks from Server{1} to Server{2}".format(self.go_out, self.name, nextname))
-            with Pyro5.client.Proxy("PYRONAME:Server" + nextname) as next:
+            # with Pyro5.client.Proxy("PYRONAME:Server" + nextname) as next: # require ns
+            with Pyro5.client.Proxy("PYRO:walker@127.0.0.1:" + str(9091+next_global_server)) as next: # not require ns
                 next.walk(message, nhops)
         else:
             print("Something is wrong")
