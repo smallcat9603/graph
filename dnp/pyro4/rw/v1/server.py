@@ -16,13 +16,20 @@ def map_nodes_in_edgelist(file, file_new):
         df = pd.DataFrame(edgelist_new)
         df.to_csv(file_new, sep=" ", index=False, header=False)
         return node_map
+    
+# read hosts from file
+columns = ["server_id", "ip_port"]
+hostfile = pd.read_csv("hosts.txt", comment="#", sep="\s+", names=columns)
+nhosts = len(hostfile) # server id = 0,1,2
+hosts = {}
+for row in range(nhosts):
+    hosts[int(hostfile["server_id"][row])] = hostfile["ip_port"][row]
 
-nservers = 3 # server id = 0,1,2
 this = ""
-if len(sys.argv) == 2 and 0 <= int(sys.argv[1]) < nservers:
+if len(sys.argv) == 2 and 0 <= int(sys.argv[1]) < nhosts:
     this = sys.argv[1]
 else:
-    print("input server id [0-{0}]".format(nservers-1))
+    print("input server id [0-{0}]".format(nhosts-1))
     sys.exit(1)
 
 # standardize node id in edgelist file and read subgraph, otherwise graph is not connected in igraph (global --> local)
@@ -47,10 +54,12 @@ for row in range(len(routes)):
     route_table[int(routes["sources"][row])] = list(eval(routes["targets_servers"][row]))
 
 # boot server
-servername = "Server" + this # this = 0, 1, 2, ...
-serverport = 9091 + int(this) # ns port is 9090, server port is from 9091, server0 --> port9091, server1 --> port9092, server2 --> port9093, ...
-daemon = Pyro5.server.Daemon(host="127.0.0.1", port=serverport)
-obj = rw.Walker(this, graph, route_table, node_map)
+# servername = "Server" + this # this = 0, 1, 2, ...
+# serverport = 9091 + serverid # ns port is 9090, server port is from 9091, server0 --> port9091, server1 --> port9092, server2 --> port9093, ...
+serverid = int(this)
+host_port = hosts[serverid].split(":")
+daemon = Pyro5.server.Daemon(host=host_port[0], port=int(host_port[1]))
+obj = rw.Walker(this, graph, route_table, node_map, hosts)
 uri = daemon.register(obj, objectId="walker") # default objectId is random like obj_79549b4c52dc43ffaaa486b76b25c2af
 # ns = Pyro5.core.locate_ns()
 # ns.register(servername, uri)

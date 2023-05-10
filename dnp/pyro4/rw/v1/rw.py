@@ -5,13 +5,14 @@ import igraph as ig
 import sys
 
 class Walker(object):
-    def __init__(self, name, graph, route_table, node_map): # nodes in route_table are global
+    def __init__(self, name, graph, route_table, node_map, hosts): # nodes in route_table are global
         self.name = name
         self.graph = graph
         self.route_table = route_table
         self.node_map = node_map # node_map = {100: 0, 200: 1, 150: 2, ...}, global --> local
         self.map_node = {v: k for k, v in node_map.items()} # reverse keys and values in node_map, map_node = {0: 100, 1: 200, 2: 150, ...}, local --> global
         self.go_out = 0
+        self.hosts = hosts
     def nexthop_roulette(self, cur_local, cur_global):
         neighbors_in = self.graph.neighbors(cur_local)
         nneighbors_in = len(neighbors_in)
@@ -58,8 +59,9 @@ class Walker(object):
             nextname = str(next_global_server)
             self.go_out += 1
             print("{0}: Walker walks from Server{1} to Server{2}".format(self.go_out, self.name, nextname))
+            uri = "PYRO:walker@" + self.hosts[next_global_server]
             # with Pyro5.client.Proxy("PYRONAME:Server" + nextname) as next: # require ns
-            with Pyro5.client.Proxy("PYRO:walker@127.0.0.1:" + str(9091+next_global_server)) as next: # not require ns
+            with Pyro5.client.Proxy(uri) as next: # not require ns
                 next.walk(message, nhops)
         else:
             print("Something is wrong")
