@@ -55,7 +55,10 @@ def main(argv):
         print("Graph is connected")
     else:
         print("Graph is not connected")
-        sys.exit(1)
+        nnodes = G.vcount()
+        G = G.components().giant()
+        print("The largest component is used instead: " + str(G.vcount()/nnodes))
+        # sys.exit(1)
 
     # print graph info
     print(G.summary())
