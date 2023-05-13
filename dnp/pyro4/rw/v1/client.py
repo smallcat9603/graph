@@ -1,6 +1,6 @@
 import Pyro5
 import Pyro5.client
-import sys, getopt, os
+import sys, getopt, os, platform
 import pandas as pd
 
 def printUsage():
@@ -27,9 +27,20 @@ def main(argv):
             printUsage()
             sys.exit(1)
 
+    # match hostfile
+    filename = ""
+    uname = platform.uname()
+    system = uname[0]
+    node = uname[1]
+    if system == "Darwin":
+        filename = "hosts_local.txt"
+    elif system == "Linux":
+        if "calc" in node:
+            filename = "hosts_calc.txt"
+
     # read hosts from file
     columns = ["server_id", "ip_port"]
-    hostfile = pd.read_csv("hosts.txt", comment="#", sep="\s+", names=columns)
+    hostfile = pd.read_csv(filename, comment="#", sep="\s+", names=columns)
     nhosts = len(hostfile) # server id = 0,1,2, ...
     hosts = {}
     for row in range(nhosts):

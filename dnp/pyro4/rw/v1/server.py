@@ -1,5 +1,6 @@
 import Pyro5
 import sys
+import platform
 import igraph as ig
 import pandas as pd
 import rw
@@ -16,10 +17,21 @@ def map_nodes_in_edgelist(file, file_new):
         df = pd.DataFrame(edgelist_new)
         df.to_csv(file_new, sep=" ", index=False, header=False)
         return node_map
-    
+
+# match hostfile
+filename = ""
+uname = platform.uname()
+system = uname[0]
+node = uname[1]
+if system == "Darwin":
+    filename = "hosts_local.txt"
+elif system == "Linux":
+    if "calc" in node:
+        filename = "hosts_calc.txt"
+
 # read hosts from file
 columns = ["server_id", "ip_port"]
-hostfile = pd.read_csv("hosts.txt", comment="#", sep="\s+", names=columns)
+hostfile = pd.read_csv(filename, comment="#", sep="\s+", names=columns)
 nhosts = len(hostfile) # server id = 0,1,2
 hosts = {}
 for row in range(nhosts):
