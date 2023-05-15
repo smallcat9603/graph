@@ -68,6 +68,8 @@ def main(argv):
         v["name"] = v.index
 
     start = time.time()
+    # communities = G.community_edge_betweenness(clusters=nsubgraphs).as_clustering()
+    # communities = G.community_walktrap().as_clustering(n=nsubgraphs)
     communities = G.community_fastgreedy().as_clustering(n=nsubgraphs) # 1 community --> 1 server
     membership = np.array(communities.membership) # [0, 0, 1, 1, 2, 2, 2, ...]
     subgraphs = [G.subgraph(np.where(membership == i)[0]) for i in range(nsubgraphs)]
