@@ -1,7 +1,6 @@
 # smallcat 230515
 
 import igraph as ig
-import networkx as nx
 import sys, getopt, os
 
 def printUsage():
