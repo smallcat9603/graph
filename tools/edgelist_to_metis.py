@@ -9,7 +9,7 @@ def printUsage():
 
 def main(argv):
     try:
-        opts, args = getopt.getopt(argv, "h") # opts = [("-h", " ")], args = [edgelistfile, nsubgraphs]
+        opts, args = getopt.getopt(argv, "h") # opts = [("-h", " ")], args = [edgelistfile]
     except getopt.GetoptError:
         printUsage()
         sys.exit(1)
