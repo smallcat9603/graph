@@ -42,7 +42,7 @@ def main(argv):
     print(G.summary())
 
     start = time.time()
-    uG = G.as_undirected() # 0 --> 1 to 0 -- 1, 1 --> 2 --> 1 to 1 -- 2
+    uG = G.as_undirected().simplify(multiple=True, loops=True, combine_edges=None) # 0 --> 1 to 0 -- 1, 1 --> 2 --> 1 to 1 -- 2
     end = time.time()
 
     print("time = " + str(end - start))

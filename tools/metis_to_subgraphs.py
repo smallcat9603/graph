@@ -85,7 +85,6 @@ def main(argv):
         # node id is maintained the same as in graph
         edgelist = [(g.vs[e.source]["name"], g.vs[e.target]["name"]) for e in g.es]
         df = pd.DataFrame(edgelist)
-
         df.to_csv(sub, sep=" ", index=False, header=False)
 
         # generate subgraph edgenode route tables

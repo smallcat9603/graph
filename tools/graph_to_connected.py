@@ -3,7 +3,6 @@
 import igraph as ig
 import sys, getopt
 import os
-import time
 
 def printUsage():
     print('Usage: python3 {0} <edgelistfile>'.format(os.path.basename(__file__)))
