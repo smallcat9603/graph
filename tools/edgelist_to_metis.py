@@ -39,6 +39,7 @@ def main(argv):
         for n in range(vcount):
             line = " ".join(str(x+1) for x in metis_lines[n]) + "\n" # metis nodes are 1-origin (igraph nodes are 0-origin)
             f.write(line)
+    print(output_file + " generated.")
 
 if __name__ == "__main__":
    main(sys.argv[1:])  

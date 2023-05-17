@@ -44,6 +44,7 @@ def main(argv):
 
     file = edgefile.split('.txt')[0] + ".connected.txt"
     G.write_edgelist(file)
+    print(file + " generated.")
 
 if __name__ == "__main__":
    main(sys.argv[1:])  

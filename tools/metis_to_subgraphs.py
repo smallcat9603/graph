@@ -79,6 +79,13 @@ def main(argv):
         sub = edgefile.split('.txt')[0] + ".sub" + str(n) + ".txt"
         g = subgraphs[n]
 
+        # check graph
+        if(g.is_connected()):
+            print(f"Subgraph{n} is connected")
+        else:
+            print(f"Subgraph{n} is not connected")
+            sys.exit(1)
+
         # node id is from 0 in subgraph
         # df = pd.DataFrame(subgraphs[n].get_edgelist())
 
@@ -86,6 +93,7 @@ def main(argv):
         edgelist = [(g.vs[e.source]["name"], g.vs[e.target]["name"]) for e in g.es]
         df = pd.DataFrame(edgelist)
         df.to_csv(sub, sep=" ", index=False, header=False)
+        print(sub + " generated.")
 
         # generate subgraph edgenode route tables
         sources = list(server_route_tables[n].keys())
@@ -93,6 +101,7 @@ def main(argv):
         df = pd.DataFrame({'sources':sources, 'targets_servers':targets_servers})
         rt = edgefile.split('.txt')[0] + ".rt" + str(n) + ".txt"
         df.to_csv(rt, sep=" ", index=False, header=False)
+        print(rt + " generated.")
 
 if __name__ == "__main__":
    main(sys.argv[1:])  
