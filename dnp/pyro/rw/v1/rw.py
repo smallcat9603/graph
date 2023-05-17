@@ -16,8 +16,10 @@ class Walker(object):
     def nexthop_roulette(self, cur_local, cur_global):
         neighbors_in = self.graph.neighbors(cur_local)
         nneighbors_in = len(neighbors_in)
-        neighbors_out = self.route_table[cur_global]
-        nneighbors_out = len(neighbors_out)
+        nneighbors_out = 0
+        if cur_global in self.route_table:
+            neighbors_out = self.route_table[cur_global]
+            nneighbors_out = len(neighbors_out)
         nneighbors = nneighbors_in + nneighbors_out
         next_idx = random.randint(0, nneighbors-1)
         next_local_node = -1
