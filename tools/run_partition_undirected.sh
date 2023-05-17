@@ -1,6 +1,6 @@
 #!/bin/sh
 
-txt=$1
+txt=$1 # if required first use graph_to_undirected.py to transform directed to undirected, and use csv_to_edgelist.py to transform csv to txt
 nparts=$2
 
 base="${txt%.txt}" # 去除最后的 ".txt"
