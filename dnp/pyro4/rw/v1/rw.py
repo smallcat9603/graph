@@ -34,6 +34,7 @@ class Walker(object):
     @Pyro5.server.expose
     @Pyro5.server.oneway
     def walk(self, message, nhops, walker): 
+        print("Walker{0} gets started to walk at Server{1}".format(walker, self.name))
         next_local_node = -1
         next_global_node = -1
         next_global_server = -1

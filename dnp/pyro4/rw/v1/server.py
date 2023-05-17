@@ -19,6 +19,7 @@ def map_nodes_in_edgelist(file, file_new):
         edgelist_new = [(node_map[edge[0]], node_map[edge[1]]) for edge in edgelist]
         df = pd.DataFrame(edgelist_new)
         df.to_csv(file_new, sep=" ", index=False, header=False)
+        print(file_new + " generated.")
         return node_map
 
 def main(argv):
