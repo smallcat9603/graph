@@ -26,7 +26,7 @@ def main(argv):
     if len(args) != 2:
             printUsage()
             sys.exit(2)       
-    edgefile = args[0]
+    edgefile = args[0] # undirected graph
     nsubgraphs = int(args[1])
 
     # read edge info from edge file
