@@ -23,8 +23,8 @@ def main(argv):
     if len(args) != 2:
             printUsage()
             sys.exit(1)       
-    edgefile = args[0]
-    metisoutput = args[1]
+    edgefile = "data/" + args[0]
+    metisoutput = "data/" + args[1]
     nsubgraphs = int(metisoutput.split(".part.")[1])
 
     # create graph based on edge file

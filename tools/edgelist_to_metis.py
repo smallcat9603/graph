@@ -22,7 +22,7 @@ def main(argv):
     if len(args) != 1:
             printUsage()
             sys.exit(1)       
-    edgefile = args[0]
+    edgefile = "data/" + args[0]
 
     G = ig.Graph.Read_Edgelist(edgefile)
     vcount = G.vcount()
