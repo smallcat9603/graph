@@ -23,7 +23,7 @@ def main(argv):
     if len(args) != 1:
             printUsage()
             sys.exit(1)       
-    edgefile = "data/" + args[0]
+    edgefile = args[0]
 
     # create graph based on edge file
     # DO NOT USE igraph._igraph.GraphBase, USE SUBCLASS igraph.Graph instead
