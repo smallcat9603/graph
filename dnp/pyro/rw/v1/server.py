@@ -42,7 +42,7 @@ def main(argv):
     for row in range(nhosts):
         hosts[int(hostfile["server_id"][row])] = hostfile["ip_port"][row]
 
-    graphbase = "test"
+    graphbase = "data/test"
     this = ""
     try:
         opts, args = getopt.getopt(argv, "hg:") # opts = [("-h", " "), ("-g", "...")], args = [server_number]
