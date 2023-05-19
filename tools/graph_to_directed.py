@@ -47,7 +47,7 @@ def main(argv):
 
     print("time = " + str(end - start))
 
-    file = edgefile.removesuffix(".txt") + ".directed.txt"
+    file = edgefile[:-len(".txt")] + ".directed.txt" # use removesuffix in python3.9
     uG.write_edgelist(file)
     print(file + " generated.")
 

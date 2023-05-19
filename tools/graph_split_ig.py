@@ -95,7 +95,7 @@ def main(argv):
     # write to file, server id is from 0
     for n in range(nsubgraphs):
         # generate subgraph edgelist files
-        sub = edgefile.removesuffix(".txt") + ".sub" + str(n) + ".txt"
+        sub = edgefile[:-len(".txt")] + ".sub" + str(n) + ".txt" # use removesuffix in python3.9
         g = subgraphs[n]
 
         # node id is from 0 in subgraph
@@ -111,7 +111,7 @@ def main(argv):
         sources = list(server_route_tables[n].keys())
         targets_servers = list(server_route_tables[n].values())
         df = pd.DataFrame({'sources':sources, 'targets_servers':targets_servers})
-        rt = edgefile.removesuffix(".txt") + ".rt" + str(n) + ".txt"
+        rt = edgefile[:-len(".txt")] + ".rt" + str(n) + ".txt" # use removesuffix in python3.9
         df.to_csv(rt, sep=" ", index=False, header=False)
 
 if __name__ == "__main__":

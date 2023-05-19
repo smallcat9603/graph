@@ -32,7 +32,7 @@ def main(argv):
     edgefile = args[0]
 
     data = pd.read_csv(edgefile, index_col=index_col, header=header)
-    txt = edgefile.removesuffix(".csv") + ".txt"
+    txt = edgefile[:-len(".csv")] + ".txt" # use removesuffix in python3.9
     data.to_csv(txt, sep='\t', index=False, header=False)
     print(txt + " generated.")
 

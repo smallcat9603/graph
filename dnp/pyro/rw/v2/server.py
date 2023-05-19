@@ -66,7 +66,7 @@ def main(argv):
 
     # standardize node id in edgelist file and read subgraph, otherwise graph is not connected in igraph (global --> local)
     file = f"{graphbase}.sub{this}.txt"
-    file_new = file.removesuffix(".txt") + ".x.txt"
+    file_new = file[:-len(".txt")] + ".x.txt" # use removesuffix in python3.9
     node_map = map_nodes_in_edgelist(file, file_new)
     graph = ig.Graph.Read_Edgelist(file_new, directed=False)
 

@@ -43,7 +43,7 @@ def main(argv):
     print(G.summary())
 
     # generate connected graph edgelist file
-    file = edgefile.removesuffix(".txt") + ".connected.txt"
+    file = edgefile[:-len(".txt")] + ".connected.txt" # use removesuffix in python3.9
     G.write_edgelist(file)
     print(file + " generated.")
 
