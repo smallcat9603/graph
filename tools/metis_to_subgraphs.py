@@ -75,11 +75,14 @@ def main(argv):
                 server_route_tables[server_target][e.target] = [(e.source, server_source)]
 
     # write to file, server id is from 0
-    if not os.path.exists(nsubs):
-        os.makedirs(nsubs)
+    subdir = "data/" + nsubs
+    if not os.path.exists(subdir):
+        os.makedirs(subdir)
     for n in range(nsubgraphs):
+        base = subdir + "/" + edgefile.split("/")[-1][:-len(".txt")]
+
         # generate subgraph edgelist files
-        sub = nsubs + "/" + edgefile[:-len(".txt")] + ".sub" + str(n) + ".txt" # use removesuffix in python3.9
+        sub = base + ".sub" + str(n) + ".txt" 
         g = subgraphs[n]
 
         # check graph
@@ -102,7 +105,7 @@ def main(argv):
         sources = list(server_route_tables[n].keys())
         targets_servers = list(server_route_tables[n].values())
         df = pd.DataFrame({'sources':sources, 'targets_servers':targets_servers})
-        rt = nsubs + "/" + edgefile[:-len(".txt")] + ".rt" + str(n) + ".txt" # use removesuffix in python3.9
+        rt = base + ".rt" + str(n) + ".txt" 
         df.to_csv(rt, sep=" ", index=False, header=False)
         print(rt + " generated.")
 
