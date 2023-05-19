@@ -75,6 +75,8 @@ def main(argv):
                 server_route_tables[server_target][e.target] = [(e.source, server_source)]
 
     # write to file, server id is from 0
+    if not os.path.exists(nsubs):
+        os.makedirs(nsubs)
     for n in range(nsubgraphs):
         # generate subgraph edgelist files
         sub = nsubs + "/" + edgefile[:-len(".txt")] + ".sub" + str(n) + ".txt" # use removesuffix in python3.9
