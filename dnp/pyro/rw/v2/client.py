@@ -1,5 +1,6 @@
 import Pyro5
 import Pyro5.client
+import Pyro5.api
 import sys, getopt, os, platform
 import pandas as pd
 
@@ -50,18 +51,21 @@ def main(argv):
     for host in range(nhosts):
         id_start = host * nwalkers
         id_end = id_start + nwalkers
-        for walker in range(id_start, id_end):
-            # obj = Pyro5.client.Proxy("PYRONAME:Server0") # automatically look for ns first
-            ip = hosts[host]
-            uri = "PYRO:walker@" + ip
-            obj = Pyro5.client.Proxy(uri) # connect to server directly (not need ns anymore)
-            try:
-                print("Client starts Walker{0} at Server{1} ({2}) ...".format(walker, host, ip))
-                obj.walk(["go"], nhops, walker)
+        ip = hosts[host]
+        uri = "PYRO:walker@" + ip
+        # obj = Pyro5.client.Proxy("PYRONAME:Server0") # automatically look for ns first
+        obj = Pyro5.client.Proxy(uri) # connect to server directly (not need ns anymore)
+        batch = Pyro5.api.BatchProxy(obj)
+        try:
+            for walker in range(id_start, id_end):
+                # obj.walk(["go"], nhops, walker)
+                batch.walk(["go"], nhops, walker)
                 # print("Client{0} finished.".format(walker))
-            except Exception:
-                print("Pyro traceback:")
-                print("".join(Pyro5.errors.get_pyro_traceback()))
+            batch()
+            print(f"Client starts {nwalkers} Walkers[{id_start}-{id_end-1}] at Server{host} ({ip}) ...")
+        except Exception:
+            print("Pyro traceback:")
+            print("".join(Pyro5.errors.get_pyro_traceback()))
 
 if __name__ == "__main__":
     main(sys.argv[1:])
