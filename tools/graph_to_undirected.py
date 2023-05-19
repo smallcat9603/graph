@@ -47,7 +47,7 @@ def main(argv):
 
     print("time = " + str(end - start))
 
-    file = edgefile.rstrip(".txt") + ".undirected.txt"
+    file = edgefile.removesuffix(".txt") + ".undirected.txt"
     uG.write_edgelist(file)
     print(file + " generated.")
 

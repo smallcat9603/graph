@@ -33,7 +33,7 @@ def main(argv):
         metis_lines[u].append(v)
         metis_lines[v].append(u)
 
-    output_file = edgefile.rstrip(".txt") + ".metis.txt"
+    output_file = edgefile.removesuffix(".txt") + ".metis.txt"
     with open(output_file, 'w') as f:
         f.write(f"{vcount} {ecount}\n")
         for n in range(vcount):

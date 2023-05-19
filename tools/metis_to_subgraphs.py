@@ -77,7 +77,7 @@ def main(argv):
     # write to file, server id is from 0
     for n in range(nsubgraphs):
         # generate subgraph edgelist files
-        sub = nsubs + "/" + edgefile.rstrip(".txt") + ".sub" + str(n) + ".txt"
+        sub = nsubs + "/" + edgefile.removesuffix(".txt") + ".sub" + str(n) + ".txt"
         g = subgraphs[n]
 
         # check graph
@@ -100,7 +100,7 @@ def main(argv):
         sources = list(server_route_tables[n].keys())
         targets_servers = list(server_route_tables[n].values())
         df = pd.DataFrame({'sources':sources, 'targets_servers':targets_servers})
-        rt = nsubs + "/" + edgefile.rstrip(".txt") + ".rt" + str(n) + ".txt"
+        rt = nsubs + "/" + edgefile.removesuffix(".txt") + ".rt" + str(n) + ".txt"
         df.to_csv(rt, sep=" ", index=False, header=False)
         print(rt + " generated.")
 

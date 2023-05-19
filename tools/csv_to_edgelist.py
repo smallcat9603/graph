@@ -32,7 +32,7 @@ def main(argv):
     edgefile = args[0]
 
     data = pd.read_csv(edgefile, index_col=index_col, header=header)
-    txt = edgefile.rstrip(".csv") + ".txt"
+    txt = edgefile.removesuffix(".csv") + ".txt"
     data.to_csv(txt, sep='\t', index=False, header=False)
     print(txt + " generated.")
 

@@ -42,7 +42,8 @@ def main(argv):
     # print graph info
     print(G.summary())
 
-    file = edgefile.rstrip(".txt") + ".connected.txt"
+    # generate connected graph edgelist file
+    file = edgefile.removesuffix(".txt") + ".connected.txt"
     G.write_edgelist(file)
     print(file + " generated.")
 
