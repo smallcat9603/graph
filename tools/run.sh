@@ -1,5 +1,7 @@
 #!/bin/sh
 
+### e.g., ./run.sh data/test.txt 3 # test.txt is an undirected edgelist file, 3 is number of partitions
+
 txt=$1 # if required first use graph_to_undirected.py to transform directed to undirected, and use csv_to_edgelist.py to transform csv to txt
 nparts=$2
 
