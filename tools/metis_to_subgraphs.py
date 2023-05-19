@@ -25,7 +25,8 @@ def main(argv):
             sys.exit(1)       
     edgefile = args[0]
     metisoutput = args[1]
-    nsubgraphs = int(metisoutput.split(".part.")[1])
+    nsubs = metisoutput.split(".part.")[1]
+    nsubgraphs = int(nsubs)
 
     # create graph based on edge file
     # DO NOT USE igraph._igraph.GraphBase, USE SUBCLASS igraph.Graph instead
@@ -76,7 +77,7 @@ def main(argv):
     # write to file, server id is from 0
     for n in range(nsubgraphs):
         # generate subgraph edgelist files
-        sub = edgefile.rstrip(".txt") + ".sub" + str(n) + ".txt"
+        sub = nsubs + "/" + edgefile.rstrip(".txt") + ".sub" + str(n) + ".txt"
         g = subgraphs[n]
 
         # check graph
@@ -99,7 +100,7 @@ def main(argv):
         sources = list(server_route_tables[n].keys())
         targets_servers = list(server_route_tables[n].values())
         df = pd.DataFrame({'sources':sources, 'targets_servers':targets_servers})
-        rt = edgefile.rstrip(".txt") + ".rt" + str(n) + ".txt"
+        rt = nsubs + "/" + edgefile.rstrip(".txt") + ".rt" + str(n) + ".txt"
         df.to_csv(rt, sep=" ", index=False, header=False)
         print(rt + " generated.")
 
