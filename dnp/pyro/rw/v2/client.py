@@ -5,7 +5,7 @@ import sys, getopt, os, platform
 import pandas as pd
 
 def printUsage():
-    print('Usage: python3 {0} -w [nwalkers] -s [nsteps]'.format(os.path.basename(__file__)))
+    print('Usage: python3 {0} -w [nwalkers] -s [nsteps] <number_of_servers>'.format(os.path.basename(__file__)))
 
 def main(argv):
     nwalkers = 1 # number of walkers starting from each server
@@ -27,6 +27,12 @@ def main(argv):
         else:
             printUsage()
             sys.exit(1)
+    nhosts = 3
+    if len(args) == 1 and 1 <= int(args[0]) <= 8:
+        nhosts = int(args[0])   
+    else:        
+        print("input number of servers (<= 8)")
+        sys.exit(1)        
 
     # match hostfile
     filename = ""
@@ -42,7 +48,6 @@ def main(argv):
     # read hosts from file
     columns = ["server_id", "ip_port"]
     hostfile = pd.read_csv(filename, comment="#", sep="\s+", names=columns)
-    nhosts = len(hostfile) # server id = 0,1,2, ...
     hosts = {}
     for row in range(nhosts):
         hosts[int(hostfile["server_id"][row])] = hostfile["ip_port"][row]

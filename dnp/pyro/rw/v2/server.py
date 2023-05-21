@@ -6,7 +6,7 @@ import pandas as pd
 import rw
 
 def printUsage():
-    print('Usage: python3 {0} -g <graphbase> <server_number>'.format(os.path.basename(__file__)))
+    print('Usage: python3 {0} [-g $graphbase] <number_of_servers> <server_id>'.format(os.path.basename(__file__)))
 
 # map to node ids that are from 0 and continuous
 def map_nodes_in_edgelist(file, file_new):
@@ -23,6 +23,33 @@ def map_nodes_in_edgelist(file, file_new):
         return node_map
 
 def main(argv):
+    graphbase = "../data/3/test" # for test
+    try:
+        opts, args = getopt.getopt(argv, "hg:") # opts = [("-h", " "), ("-g", "...")], args = [number_of_servers, server_id]
+    except getopt.GetoptError:
+        printUsage()
+        sys.exit(1)
+    for opt, arg in opts:
+        if opt == '-h':
+            printUsage()
+            sys.exit()
+        elif opt == '-g':
+            graphbase = arg
+        else:
+            printUsage()
+            sys.exit(1)
+    nhosts = 3
+    this = ""
+    if len(args) == 2 and 0 <= int(args[1]) < int(args[0]) <= 8:
+        nhosts = int(args[0])
+        this = args[1]    
+    else:        
+        print("server id should be less than number of servers (<= 8)")
+        sys.exit(1)
+    if graphbase == "../data/3/test" and nhosts != 3:
+        print("input option -g to specify graphbase")
+        sys.exit(1)
+
     # match hostfile
     filename = ""
     uname = platform.uname()
@@ -37,32 +64,9 @@ def main(argv):
     # read hosts from file
     columns = ["server_id", "ip_port"]
     hostfile = pd.read_csv(filename, comment="#", sep="\s+", names=columns)
-    nhosts = len(hostfile) # server id = 0,1,2
     hosts = {}
     for row in range(nhosts):
         hosts[int(hostfile["server_id"][row])] = hostfile["ip_port"][row]
-
-    graphbase = "../data/3/test"
-    this = ""
-    try:
-        opts, args = getopt.getopt(argv, "hg:") # opts = [("-h", " "), ("-g", "...")], args = [server_number]
-    except getopt.GetoptError:
-        printUsage()
-        sys.exit(1)
-    for opt, arg in opts:
-        if opt == '-h':
-            printUsage()
-            sys.exit()
-        elif opt == '-g':
-            graphbase = arg
-        else:
-            printUsage()
-            sys.exit(1)
-    if len(args) == 1 and 0 <= int(args[0]) < nhosts:
-        this = args[0]    
-    else:        
-        print("input server id [0-{0}]".format(nhosts-1))
-        sys.exit(1)
 
     # standardize node id in edgelist file and read subgraph, otherwise graph is not connected in igraph (global --> local)
     file = f"{graphbase}.sub{this}.txt"
