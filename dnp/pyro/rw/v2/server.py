@@ -6,7 +6,7 @@ import pandas as pd
 import rw
 
 def printUsage():
-    print('Usage: python3 {0} [-g $graphbase] <number_of_servers> <server_id>'.format(os.path.basename(__file__)))
+    print('Usage: python3 {0} [-m] [-g $graphbase] <number_of_servers> <server_id>'.format(os.path.basename(__file__)))
 
 # map to node ids that are from 0 and continuous
 def map_nodes_in_edgelist(file, file_new):
@@ -24,8 +24,10 @@ def map_nodes_in_edgelist(file, file_new):
 
 def main(argv):
     graphbase = "../data/3/test" # for test
+    # config pyro
+    Pyro5.config.SERVERTYPE = "thread" # thread, multiplex
     try:
-        opts, args = getopt.getopt(argv, "hg:") # opts = [("-h", " "), ("-g", "...")], args = [number_of_servers, server_id]
+        opts, args = getopt.getopt(argv, "hmg:") # opts = [("-h", " "), ("-m", " "), ("-g", "...")], args = [number_of_servers, server_id]
     except getopt.GetoptError:
         printUsage()
         sys.exit(1)
@@ -33,6 +35,8 @@ def main(argv):
         if opt == '-h':
             printUsage()
             sys.exit()
+        elif opt == '-m':
+            Pyro5.config.SERVERTYPE = "multiplex"
         elif opt == '-g':
             graphbase = arg
         else:
@@ -89,9 +93,6 @@ def main(argv):
     route_table = {}
     for row in range(len(routes)):
         route_table[int(routes["sources"][row])] = list(eval(routes["targets_servers"][row]))
-
-    # config pyro
-    Pyro5.config.SERVERTYPE = "thread" # thread, multiplex
 
     # boot server
     # servername = "Server" + this # this = 0, 1, 2, ...
