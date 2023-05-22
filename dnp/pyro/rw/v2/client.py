@@ -3,6 +3,7 @@ import Pyro5.client
 import Pyro5.api
 import sys, getopt, os, platform
 import pandas as pd
+import time
 
 def printUsage():
     print('Usage: python3 {0} -w [nwalkers] -s [nsteps] <number_of_servers>'.format(os.path.basename(__file__)))
@@ -64,7 +65,7 @@ def main(argv):
         try:
             for walker in range(id_start, id_end):
                 # obj.walk(["go"], nhops, walker)
-                batch.walk(["go"], nhops, walker)
+                batch.walk([f"go_{int(time.time())}"], nhops, walker)
                 # print("Client{0} finished.".format(walker))
             batch()
             print(f"Client starts {nwalkers} Walkers[{id_start}-{id_end-1}] at Server{host} ({ip}) ...")
