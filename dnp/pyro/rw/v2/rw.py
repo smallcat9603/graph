@@ -49,7 +49,7 @@ class Walker(object):
         line += "\n"
         with open(filepath, "a") as f:
             f.write(line)
-            
+
     @Pyro5.server.expose
     @Pyro5.server.oneway
     def walk(self, message, nhops, walker): 

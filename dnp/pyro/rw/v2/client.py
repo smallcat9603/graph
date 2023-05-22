@@ -62,10 +62,11 @@ def main(argv):
         # obj = Pyro5.client.Proxy("PYRONAME:Server0") # automatically look for ns first
         obj = Pyro5.client.Proxy(uri) # connect to server directly (not need ns anymore)
         batch = Pyro5.api.BatchProxy(obj)
+        timestamp = int(time.time())
         try:
             for walker in range(id_start, id_end):
                 # obj.walk(["go"], nhops, walker)
-                batch.walk([f"go_{int(time.time())}"], nhops, walker)
+                batch.walk([f"go_{timestamp}"], nhops, walker)
                 # print("Client{0} finished.".format(walker))
             batch()
             print(f"Client starts {nwalkers} Walkers[{id_start}-{id_end-1}] at Server{host} ({ip}) ...")
