@@ -42,13 +42,20 @@ class Walker(object):
         dir = "../log"
         if not os.path.exists(dir):
             os.makedirs(dir)
-        filepath = dir + f"/server{self.name}.log"
+        filepath = dir + f"/{self.timestamp}.log"
         line = ""
         for i in items:
             line += str(i) + "\t"
         line += "\n"
         with open(filepath, "a") as f:
             f.write(line)
+        print(f"saved in {filepath}.")
+
+    def save_path(self, walker, message):
+        filepath = f"../log/{self.timestamp}.txt"
+        with open(filepath, "a") as f:
+            f.write(f'{walker}\t{message}\n')
+        print(f"saved in {filepath}.")
 
     @Pyro5.server.expose
     @Pyro5.server.oneway
@@ -81,13 +88,15 @@ class Walker(object):
                           self.start_time, 
                           self.stop_time,
                           self.stop_time-self.start_time,
+                          self.name,
+                          self.go_out,
                           walker,
-                          nhops,
-                          self.go_out)
+                          nhops)
+            self.save_path(walker, message)
         elif next_local_node == -1: # walk outside
             nextname = str(next_global_server)
             self.go_out += 1
-            print(f"{self.go_out}: Walker{walker} walked through {len(message)} nodes, and will go from Server{self.name} to Server{nextname}")
+            # print(f"{self.go_out}: Walker{walker} walked through {len(message)} nodes, and will go from Server{self.name} to Server{nextname}")
             uri = "PYRO:walker@" + self.hosts[next_global_server]
             # with Pyro5.client.Proxy("PYRONAME:Server" + nextname) as next: # require ns
             with Pyro5.client.Proxy(uri) as next: # not require ns
