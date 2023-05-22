@@ -1,8 +1,8 @@
 import Pyro5.server
 import Pyro5.client
 import random
-import igraph as ig
-import sys
+import sys, os
+import time
 
 class Walker(object):
     def __init__(self, name, graph, route_table, node_map, hosts): # nodes in route_table are global
@@ -13,6 +13,9 @@ class Walker(object):
         self.map_node = {v: k for k, v in node_map.items()} # reverse keys and values in node_map, map_node = {0: 100, 1: 200, 2: 150, ...}, local --> global
         self.go_out = 0
         self.hosts = hosts
+        self.start_time = 0.0
+        self.stop_time = 0.0
+        # self.timestamp = 0
     def nexthop_roulette(self, cur_local, cur_global):
         neighbors_in = self.graph.neighbors(cur_local)
         nneighbors_in = len(neighbors_in)
@@ -33,6 +36,17 @@ class Walker(object):
             next_global_node = next_global[0]
             next_global_server = next_global[1]   
         return next_local_node, next_global_node, next_global_server
+    def save_log(self, *items):
+        dir = "../log"
+        if not os.path.exists(dir):
+            os.makedirs(dir)
+        filepath = dir + f"/server{self.name}.log"
+        line = ""
+        for i in items:
+            line += str(i) + "\t"
+        line += "\n"
+        with open(filepath, "a") as f:
+            f.write(line)
     @Pyro5.server.expose
     @Pyro5.server.oneway
     def walk(self, message, nhops, walker): 
@@ -43,6 +57,8 @@ class Walker(object):
         while next_global_server == -1 and len(message) < nhops: # walk inside
             msg = message[-1]
             if msg == "go": # starting point of walker
+                self.start_time = time.time()
+                self.go_out = 0
                 cur_local = random.randint(0, self.graph.vcount()-1)
                 cur_global = self.map_node[cur_local]
                 message = [cur_global]   
@@ -55,8 +71,15 @@ class Walker(object):
             next_local_node, next_global_node, next_global_server = self.nexthop_roulette(cur_local, cur_global)
             message.append(next_global_node)                       
         if len(message) >= nhops:
+            self.stop_time = time.time()
             print("Walker{0} stopped at Server{1}".format(walker, self.name))
             print("Finished. Walker{0} walks through {1} nodes: {2}".format(walker, len(message), message))
+            self.save_log(self.start_time, 
+                          self.stop_time,
+                          self.stop_time-self.start_time,
+                          walker,
+                          nhops,
+                          self.go_out)
         elif next_local_node == -1: # walk outside
             print("Walker{0} walks through {1} nodes".format(walker, len(message)))
             nextname = str(next_global_server)
