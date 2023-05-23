@@ -85,9 +85,12 @@ class Walker(object):
             self.stop_time = time.time()
             print(f"Finished. Walker{walker} stopped at Server{self.name}, walking through {len(message)} nodes:\n{message}")
             self.save_log(self.timestamp,
+                          self.graph.vcount(),
+                          self.graph.ecount(),                          
                           self.start_time, 
                           self.stop_time,
                           self.stop_time-self.start_time,
+                          len(self.hosts),
                           self.name,
                           self.go_out,
                           walker,
