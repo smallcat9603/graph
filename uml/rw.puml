@@ -1,0 +1,34 @@
+@startuml
+left to right direction
+
+package Server {
+    map "**Forwarding Table**" as ft {
+      InNode_OutNode => OutServerID
+    }
+}
+
+package Server_1 {
+    map "**FTable**" as ft1 {
+      ... => 
+      10_123 => 2
+    }
+}
+
+package Server_2 {
+    map "**FTable**" as ft2 {
+      ... => 
+      123_58 => 3
+    }
+}
+
+package Server_3 {
+    map "**FTable**" as ft3 {
+      ... =>
+      58_34 => 1
+    }
+}
+
+ft1::10_123 --> Server_2
+ft2::123_58 --> Server_3
+ft3::58_34 --> Server_1
+@enduml
