@@ -97,7 +97,7 @@ class Walker(object):
                           nhops)
             self.save_path(walker, message)
         elif next_local_node == -1: # walk outside
-            nextname = str(next_global_server)
+            # nextname = str(next_global_server)
             self.go_out += 1
             # print(f"{self.go_out}: Walker{walker} walked through {len(message)} nodes, and will go from Server{self.name} to Server{nextname}")
             uri = "PYRO:walker@" + self.hosts[next_global_server]
