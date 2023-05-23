@@ -73,7 +73,9 @@ def main(argv):
         hosts[int(hostfile["server_id"][row])] = hostfile["ip_port"][row]
 
     # standardize node id in edgelist file and read subgraph, otherwise graph is not connected in igraph (global --> local)
-    file = f"{graphbase}.sub{this}.txt"
+    file = f"{graphbase}.txt"
+    if nhosts > 1:
+        file = f"{graphbase}.sub{this}.txt"
     file_new = file[:-len(".txt")] + ".x.txt" # use removesuffix in python3.9
     node_map = map_nodes_in_edgelist(file, file_new)
     graph = ig.Graph.Read_Edgelist(file_new, directed=False)
@@ -88,11 +90,12 @@ def main(argv):
         sys.exit(1)
 
     # read route table from file
-    columns = ["sources", "targets_servers"]
-    routes = pd.read_csv(f"{graphbase}.rt{this}.txt", comment="#", sep="\s+", names=columns)
     route_table = {}
-    for row in range(len(routes)):
-        route_table[int(routes["sources"][row])] = list(eval(routes["targets_servers"][row]))
+    if nhosts > 1:
+        columns = ["sources", "targets_servers"]
+        routes = pd.read_csv(f"{graphbase}.rt{this}.txt", comment="#", sep="\s+", names=columns)
+        for row in range(len(routes)):
+            route_table[int(routes["sources"][row])] = list(eval(routes["targets_servers"][row]))
 
     # boot server
     # servername = "Server" + this # this = 0, 1, 2, ...
@@ -105,7 +108,7 @@ def main(argv):
     # ns = Pyro5.core.locate_ns()
     # ns.register(servername, uri)
     # enter the service loop.
-    print("Server%s started (%s) ..." % (this, Pyro5.config.SERVERTYPE))
+    print(f"Server{this} ({nhosts}) started ({Pyro5.config.SERVERTYPE}) ...")
     daemon.requestLoop()
 
 if __name__ == "__main__":
