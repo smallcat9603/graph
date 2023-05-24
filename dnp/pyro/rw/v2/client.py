@@ -69,8 +69,8 @@ def main(argv):
             #     batch.walk([f"go_{start_time}"], nhops, walker)
             #     # print("Client{0} finished.".format(walker))
             # batch()
-            obj.start(start_time, nhops, id_start, id_end)
             print(f"Client starts {nwalkers} Walkers[{id_start}-{id_end-1}] at Server{host} ({ip}) ...")
+            obj.start(start_time, nhops, id_start, id_end)
         except Exception:
             print("Pyro traceback:")
             print("".join(Pyro5.errors.get_pyro_traceback()))

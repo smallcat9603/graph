@@ -104,6 +104,7 @@ class Walker(object):
     def start(self, start_time, nhops, id_start, id_end): 
         self.start_time = start_time
         self.timestamp = int(start_time)
+        time.sleep(0.001) # prevent arriving before starting
         for walker in range(id_start, id_end):
             self.walk([f"go_{start_time}"], nhops, walker)
         print(f"Walkers[{id_start}-{id_end-1}] start at Server{self.name} ...")
