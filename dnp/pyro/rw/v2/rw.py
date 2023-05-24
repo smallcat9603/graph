@@ -67,9 +67,6 @@ class Walker(object):
             msg = message[-1]
             if isinstance(msg, str) and msg.startswith("go_"): # starting point of walker
                 print(f"Walker{walker} gets started to walk at Server{self.name}")
-                if self.start_time == 0.0:
-                    self.start_time = float(msg[len("go_"):])
-                    self.timestamp = int(self.start_time)
                 cur_local = random.randint(0, self.graph.vcount()-1)
                 cur_global = self.map_node[cur_local]
                 message = [cur_global]   
@@ -101,3 +98,13 @@ class Walker(object):
         else:
             print(f"Something is wrong for Walker{walker}")
             sys.exit(1)
+
+    @Pyro5.server.expose
+    @Pyro5.server.oneway
+    def start(self, start_time, nhops, id_start, id_end): 
+        self.start_time = start_time
+        self.timestamp = int(start_time)
+        for walker in range(id_start, id_end):
+            self.walk([f"go_{start_time}"], nhops, walker)
+        print(f"Walkers[{id_start}-{id_end-1}] start at Server{self.name} ...")
+
