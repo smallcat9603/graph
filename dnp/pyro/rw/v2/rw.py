@@ -4,6 +4,7 @@ import random
 import sys, os
 import time
 
+# @Pyro5.server.behavior(instance_mode="single")
 class Walker(object):
     def __init__(self, name, graph, route_table, node_map, hosts): # nodes in route_table are global
         self.name = name
@@ -11,10 +12,9 @@ class Walker(object):
         self.route_table = route_table
         self.node_map = node_map # node_map = {100: 0, 200: 1, 150: 2, ...}, global --> local
         self.map_node = {v: k for k, v in node_map.items()} # reverse keys and values in node_map, map_node = {0: 100, 1: 200, 2: 150, ...}, local --> global
-        self.go_out = 0
         self.hosts = hosts
+        self.nhosts = len(hosts)
         self.start_time = 0.0
-        self.stop_time = 0.0
         self.timestamp = 0
 
     def nexthop_roulette(self, cur_local, cur_global):
@@ -49,13 +49,13 @@ class Walker(object):
         line += "\n"
         with open(filepath, "a") as f:
             f.write(line)
-        print(f"saved in {filepath}.")
+        # print(f"saved in {filepath}.")
 
     def save_path(self, walker, message):
         filepath = f"../log/{self.timestamp}.txt"
         with open(filepath, "a") as f:
             f.write(f'{walker}\t{message}\n')
-        print(f"saved in {filepath}.")
+        # print(f"saved in {filepath}.")
 
     @Pyro5.server.expose
     @Pyro5.server.oneway
@@ -67,9 +67,9 @@ class Walker(object):
             msg = message[-1]
             if isinstance(msg, str) and msg.startswith("go_"): # starting point of walker
                 print(f"Walker{walker} gets started to walk at Server{self.name}")
-                self.timestamp = int(msg[len("go_"):])
-                self.start_time = time.time()
-                self.go_out = 0
+                if self.start_time == 0.0:
+                    self.start_time = float(msg[len("go_"):])
+                    self.timestamp = int(self.start_time)
                 cur_local = random.randint(0, self.graph.vcount()-1)
                 cur_global = self.map_node[cur_local]
                 message = [cur_global]   
@@ -82,24 +82,18 @@ class Walker(object):
             next_local_node, next_global_node, next_global_server = self.nexthop_roulette(cur_local, cur_global)
             message.append(next_global_node)                      
         if len(message) >= nhops:
-            self.stop_time = time.time()
-            print(f"Finished. Walker{walker} stopped at Server{self.name}, walking through {len(message)} nodes:\n{message}")
-            self.save_log(self.timestamp,
-                          self.graph.vcount(),
-                          self.graph.ecount(),                          
-                          self.start_time, 
-                          self.stop_time,
-                          self.stop_time-self.start_time,
-                          len(self.hosts),
-                          self.name,
-                          self.go_out,
-                          walker,
-                          nhops)
+            print(f"Finished. Walker{walker} stopped at Server{self.name}, walking through {len(message)} nodes.")
+            stop_time = time.time()
+            self.save_log(stop_time,
+                        stop_time-self.start_time,
+                        walker,
+                        self.name,
+                        self.nhosts,
+                        nhops)
             self.save_path(walker, message)
         elif next_local_node == -1: # walk outside
             # nextname = str(next_global_server)
-            self.go_out += 1
-            # print(f"{self.go_out}: Walker{walker} walked through {len(message)} nodes, and will go from Server{self.name} to Server{nextname}")
+            # print(f"Walker{walker} walked through {len(message)} nodes, and will go from Server{self.name} to Server{nextname}")
             uri = "PYRO:walker@" + self.hosts[next_global_server]
             # with Pyro5.client.Proxy("PYRONAME:Server" + nextname) as next: # require ns
             with Pyro5.client.Proxy(uri) as next: # not require ns

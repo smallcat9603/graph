@@ -54,7 +54,7 @@ def main(argv):
         hosts[int(hostfile["server_id"][row])] = hostfile["ip_port"][row]
 
     # total number of walkers = nhosts * nwalkers
-    timestamp = int(time.time())
+    start_time = time.time()
     for host in range(nhosts):
         id_start = host * nwalkers
         id_end = id_start + nwalkers
@@ -66,7 +66,7 @@ def main(argv):
         try:
             for walker in range(id_start, id_end):
                 # obj.walk(["go"], nhops, walker)
-                batch.walk([f"go_{timestamp}"], nhops, walker)
+                batch.walk([f"go_{start_time}"], nhops, walker)
                 # print("Client{0} finished.".format(walker))
             batch()
             print(f"Client starts {nwalkers} Walkers[{id_start}-{id_end-1}] at Server{host} ({ip}) ...")
