@@ -58,6 +58,14 @@ class Walker(object):
             f.write(f'{walker}\t{message}\n')
         # print(f"saved in {filepath}.")
 
+    def remote_invoke(self, next_global_server, message, nhops, walker):
+        # nextname = str(next_global_server)
+        # print(f"Walker{walker} walked through {len(message)} nodes, and will go from Server{self.name} to Server{nextname}")
+        uri = "PYRO:walker@" + self.hosts[next_global_server]
+        # with Pyro5.client.Proxy("PYRONAME:Server" + nextname) as next: # require ns
+        with Pyro5.client.Proxy(uri) as next: # not require ns
+            next.walk(message, nhops, walker)
+
     @Pyro5.server.expose
     @Pyro5.server.oneway
     def walk(self, message, nhops, walker): 
@@ -90,12 +98,9 @@ class Walker(object):
                         nhops)
             self.save_path(walker, message)
         elif next_local_node == -1: # walk outside
-            # nextname = str(next_global_server)
-            # print(f"Walker{walker} walked through {len(message)} nodes, and will go from Server{self.name} to Server{nextname}")
-            uri = "PYRO:walker@" + self.hosts[next_global_server]
-            # with Pyro5.client.Proxy("PYRONAME:Server" + nextname) as next: # require ns
-            with Pyro5.client.Proxy(uri) as next: # not require ns
-                next.walk(message, nhops, walker)
+            self.remote_invoke(next_global_server, message, nhops, walker)
+            # t = threading.Timer(0, self.remote_invoke, (next_global_server, message, nhops, walker, ))
+            # t.start()
         else:
             print(f"Something is wrong for Walker{walker}")
             sys.exit(1)
@@ -111,4 +116,4 @@ class Walker(object):
             self.walk([f"go_{start_time}"], nhops, walker)
             # t = threading.Timer(0, self.walk, ([f"go_{start_time}"], nhops, walker, ))
             # t.start()
-            # time.sleep(0.1)
+            # time.sleep(0.001)
