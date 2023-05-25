@@ -26,6 +26,7 @@ def main(argv):
     graphbase = "../data/3/test" # for test
     # config pyro
     Pyro5.config.SERVERTYPE = "thread" # thread, multiplex
+    Pyro5.config.THREADPOOL_SIZE = 10000 # default 80
     try:
         opts, args = getopt.getopt(argv, "hmg:") # opts = [("-h", " "), ("-m", " "), ("-g", "...")], args = [number_of_servers, server_id]
     except getopt.GetoptError:
@@ -108,7 +109,7 @@ def main(argv):
     # ns = Pyro5.core.locate_ns()
     # ns.register(servername, uri)
     # enter the service loop.
-    print(f"Server{this} ({nhosts}) started ({Pyro5.config.SERVERTYPE}) ...")
+    print(f"Server{this} ({nhosts}) started ({Pyro5.config.SERVERTYPE}, max {Pyro5.config.THREADPOOL_SIZE} threads) ...")
     daemon.requestLoop()
 
 if __name__ == "__main__":

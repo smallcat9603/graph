@@ -3,6 +3,7 @@ import Pyro5.client
 import random
 import sys, os
 import time
+import threading
 
 # @Pyro5.server.behavior(instance_mode="single")
 class Walker(object):
@@ -105,7 +106,9 @@ class Walker(object):
         self.start_time = start_time
         self.timestamp = int(start_time)
         time.sleep(0.001) # prevent arriving before starting
+        print(f"Walkers[{id_start}-{id_end-1}] start at Server{self.name} ...")
         for walker in range(id_start, id_end):
             self.walk([f"go_{start_time}"], nhops, walker)
-        print(f"Walkers[{id_start}-{id_end-1}] start at Server{self.name} ...")
-
+            # t = threading.Timer(0, self.walk, ([f"go_{start_time}"], nhops, walker, ))
+            # t.start()
+            # time.sleep(0.1)
