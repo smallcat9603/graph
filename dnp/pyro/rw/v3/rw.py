@@ -61,7 +61,7 @@ class Walker(object):
         next_global_server = -1
         while next_global_server == -1 and len(message) < nhops: # walk inside
             msg = message[-1]
-            if isinstance(msg, str) and msg.startswith("go_"): # starting point of walker
+            if isinstance(msg, str) and msg == "go": # starting point of walker
                 print(f"Walker{walker} gets started to walk at Server{self.name}")
                 cur_local = random.randint(0, self.graph.vcount()-1)
                 cur_global = self.map_node[cur_local]
@@ -87,9 +87,9 @@ class Walker(object):
 
     @Pyro5.server.expose
     @Pyro5.server.oneway
-    def start(self, start_time, nhops, id_start, id_end): 
-        self.start_time = start_time
+    def start(self, nhops, id_start, id_end): 
+        self.start_time = time.time()
         time.sleep(0.001) # prevent arriving before starting
         print(f"Walkers[{id_start}-{id_end-1}] start at Server{self.name} ...")
         for walker in range(id_start, id_end):
-            self.walk([f"go_{start_time}"], nhops, walker)
+            self.walk(["go"], nhops, walker)

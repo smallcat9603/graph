@@ -65,10 +65,6 @@ def main(argv):
             print("".join(Pyro5.errors.get_pyro_traceback()))
 
     # output resuts
-    if len(set(start_times)) == 1:
-        print("timestamp synchronized")
-    else:
-        print("timestamp not synchronized")
     runtime = max(stop_times)-max(start_times)
     print(f"time = {runtime}")
     print(f"goout = {sum(go_outs)}")
