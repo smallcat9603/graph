@@ -4,14 +4,14 @@ import Pyro5.api
 import sys, getopt, os, platform
 import pandas as pd
 import time
-import json
 
 def printUsage():
     print('Usage: python3 {0} -w [nwalkers] -s [nsteps] <number_of_servers>'.format(os.path.basename(__file__)))
 
 def main(argv):
-    nwalkers = 1 # number of walkers starting from each server
-    nhops = 100 # path length for each walker
+    nwalkers_unit = 25
+    nwalkers = 25 # number of walkers starting from each server
+    nhops = 80 # path length for each walker
 
     try:
         opts, args = getopt.getopt(argv, "hw:s:") 
@@ -34,7 +34,7 @@ def main(argv):
         nhosts = int(args[0])   
     else:        
         print("input number of servers (<= 8)")
-        sys.exit(1)        
+        sys.exit(1)      
 
     # match hostfile
     filename = ""
@@ -55,58 +55,20 @@ def main(argv):
         hosts[int(hostfile["server_id"][row])] = hostfile["ip_port"][row]
 
     # total number of walkers = nhosts * nwalkers
+    count = int(nwalkers/nwalkers_unit)
     start_time = time.time()
-    for host in range(nhosts):
-        id_start = host * nwalkers
-        id_end = id_start + nwalkers
-        ip = hosts[host]
-        uri = "PYRO:walker@" + ip
-        # obj = Pyro5.client.Proxy("PYRONAME:Server0") # automatically look for ns first
-        obj = Pyro5.client.Proxy(uri) # connect to server directly (not need ns anymore)
-        # batch = Pyro5.api.BatchProxy(obj)
-        try:
-            # for walker in range(id_start, id_end):
-            #     # obj.walk(["go"], nhops, walker)
-            #     batch.walk([f"go_{start_time}"], nhops, walker)
-            #     # print("Client{0} finished.".format(walker))
-            # batch()
-            print(f"Client starts {nwalkers} Walkers[{id_start}-{id_end-1}] at Server{host} ({ip}) ...")
-            obj.start(start_time, nhops, id_start, id_end)
-        except Exception:
-            print("Pyro traceback:")
-            print("".join(Pyro5.errors.get_pyro_traceback()))
-
-    # fetch results from each server
-    start_times = []
-    stop_times = []
-    merged_paths = {}
-    for host in range(nhosts):
-        ip = hosts[host]
-        uri = "PYRO:walker@" + ip
-        obj = Pyro5.client.Proxy(uri) # connect to server directly (not need ns anymore)
-        try:
-            starttime, stoptime, paths = obj.get_results()
-            start_times.append(starttime)
-            stop_times.append(stoptime)
-            merged_paths.update(paths)
-        except Exception:
-            print("Pyro traceback:")
-            print("".join(Pyro5.errors.get_pyro_traceback()))
-
-    # output resuts
-    if len(set(start_times)) == 1:
-        print("timestamp synchronized")
-    else:
-        print("timestamp not synchronized")
-    print(f"time = {max(stop_times)-max(start_times)}")
-    dir = "../log"
-    if not os.path.exists(dir):
-        os.makedirs(dir)
-    filepath = dir + f"/t{int(start_time)}_w{nwalkers}_s{nhops}_n{nhosts}.log"
-    with open(filepath, 'w') as file:
-        json.dump(merged_paths, file)
-    print(f"paths saved in {filepath}")
-    
+    for n in range(count):
+        for host in range(nhosts):
+            id_start = nwalkers_unit * (n * nhosts + host)
+            id_end = id_start + nwalkers_unit
+            ip = hosts[host]
+            uri = "PYRO:walker@" + ip
+            obj = Pyro5.client.Proxy(uri) # connect to server directly (not need ns anymore)
+            try:
+                print(f"Client starts {nwalkers_unit} Walkers[{id_start}-{id_end-1}] at Server{host} ({ip}) ...")
+                obj.start(start_time, nhops, id_start, id_end)
+            except Exception:
+                print(f"Pyro traceback:\n{''.join(Pyro5.errors.get_pyro_traceback())}")
 
 if __name__ == "__main__":
     main(sys.argv[1:])
