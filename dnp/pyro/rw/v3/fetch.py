@@ -68,6 +68,7 @@ def main(argv):
     runtime = max(stop_times)-max(start_times)
     print(f"time = {runtime}")
     print(f"goout = {sum(go_outs)}")
+    print(f"received {len(merged_paths)} paths")
     timestamp = int(max(start_times))
     dir = "../log"
     if not os.path.exists(dir):
