@@ -2,7 +2,6 @@ import Pyro5
 import Pyro5.client
 import sys, getopt, os, platform
 import pandas as pd
-import time
 import json
 
 def printUsage():
@@ -49,15 +48,17 @@ def main(argv):
     # fetch results from each server
     start_times = []
     stop_times = []
+    go_outs = []
     merged_paths = {}
     for host in range(nhosts):
         ip = hosts[host]
         uri = "PYRO:walker@" + ip
         obj = Pyro5.client.Proxy(uri) # connect to server directly (not need ns anymore)
         try:
-            starttime, stoptime, paths = obj.get_results()
+            starttime, stoptime, goout, paths = obj.get_results()
             start_times.append(starttime)
             stop_times.append(stoptime)
+            go_outs.append(goout)
             merged_paths.update(paths)
         except Exception:
             print("Pyro traceback:")
@@ -68,15 +69,25 @@ def main(argv):
         print("timestamp synchronized")
     else:
         print("timestamp not synchronized")
-    print(f"time = {max(stop_times)-max(start_times)}")
+    runtime = max(stop_times)-max(start_times)
+    print(f"time = {runtime}")
+    print(f"goout = {sum(go_outs)}")
     timestamp = int(max(start_times))
     dir = "../log"
     if not os.path.exists(dir):
         os.makedirs(dir)
-    filepath = dir + f"/t{timestamp}_n{nhosts}.log"
-    with open(filepath, 'w') as file:
+    jsonfile = dir + f"/t{timestamp}_n{nhosts}.json"
+    txtfile = dir + f"/t{timestamp}_n{nhosts}.txt"
+    with open(jsonfile, 'w') as file:
         json.dump(merged_paths, file)
-    print(f"paths saved in {filepath}")
+    line = f"{runtime}\t{sum(go_outs)}"
+    for each in go_outs:
+        line += f"\t{each}"
+    line += "\n"
+    with open(txtfile, 'w') as file:
+        file.write(line)
+    print(f"paths saved in {jsonfile}")
+    print(f"statistics saved in {txtfile}")
     
 if __name__ == "__main__":
     main(sys.argv[1:])
