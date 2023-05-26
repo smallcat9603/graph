@@ -77,7 +77,7 @@ def main(argv):
     txtfile = dir + f"/t{timestamp}_n{nhosts}.txt"
     with open(jsonfile, 'w') as file:
         json.dump(merged_paths, file)
-    line = f"{runtime}\t{sum(go_outs)}"
+    line = f"{runtime}\t{len(merged_paths)}\t{sum(go_outs)}"
     for each in go_outs:
         line += f"\t{each}"
     line += "\n"
