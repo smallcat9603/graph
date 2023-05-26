@@ -16,7 +16,9 @@ class Walker(object):
         self.hosts = hosts
         self.nhosts = len(hosts)
         self.start_time = 0.0
-        self.timestamp = 0
+        self.stop_time = 0.0
+        # self.timestamp = 0
+        self.paths = {}
 
     def nexthop_roulette(self, cur_local, cur_global):
         neighbors_in = self.graph.neighbors(cur_local)
@@ -39,23 +41,23 @@ class Walker(object):
             next_global_server = next_global[1]   
         return next_local_node, next_global_node, next_global_server
     
-    def save_log(self, *items):
-        dir = "../log"
-        if not os.path.exists(dir):
-            os.makedirs(dir)
-        filepath = dir + f"/{self.timestamp}.log"
-        line = ""
-        for i in items:
-            line += str(i) + "\t"
-        line += "\n"
-        with open(filepath, "a") as f:
-            f.write(line)
+    # def save_log(self, *items):
+    #     dir = "../log"
+    #     if not os.path.exists(dir):
+    #         os.makedirs(dir)
+    #     filepath = dir + f"/{self.timestamp}.log"
+    #     line = ""
+    #     for i in items:
+    #         line += str(i) + "\t"
+    #     line += "\n"
+    #     with open(filepath, "a") as f:
+    #         f.write(line)
         # print(f"saved in {filepath}.")
 
-    def save_path(self, walker, message):
-        filepath = f"../log/{self.timestamp}.txt"
-        with open(filepath, "a") as f:
-            f.write(f'{walker}\t{message}\n')
+    # def save_path(self, walker, message):
+    #     filepath = f"../log/{self.timestamp}.txt"
+    #     with open(filepath, "a") as f:
+    #         f.write(f'{walker}\t{message}\n')
         # print(f"saved in {filepath}.")
 
     def remote_invoke(self, next_global_server, message, nhops, walker):
@@ -67,7 +69,11 @@ class Walker(object):
             next.walk(message, nhops, walker)
 
     @Pyro5.server.expose
-    @Pyro5.server.oneway
+    def get_results(self):
+        return self.start_time, self.stop_time, self.paths
+
+    @Pyro5.server.expose
+    # @Pyro5.server.oneway
     def walk(self, message, nhops, walker): 
         next_local_node = -1
         next_global_node = -1
@@ -89,14 +95,15 @@ class Walker(object):
             message.append(next_global_node)                      
         if len(message) >= nhops:
             print(f"Finished. Walker{walker} stopped at Server{self.name}, walking through {len(message)} nodes.")
-            stop_time = time.time()
-            self.save_log(stop_time,
-                        stop_time-self.start_time,
-                        walker,
-                        self.name,
-                        self.nhosts,
-                        nhops)
-            self.save_path(walker, message)
+            self.stop_time = time.time()
+            # self.save_log(stop_time,
+            #             stop_time-self.start_time,
+            #             walker,
+            #             self.name,
+            #             self.nhosts,
+            #             nhops)
+            # self.save_path(walker, message)
+            self.paths[walker] = message
         elif next_local_node == -1: # walk outside
             self.remote_invoke(next_global_server, message, nhops, walker)
             # t = threading.Timer(0, self.remote_invoke, (next_global_server, message, nhops, walker, ))
@@ -106,10 +113,10 @@ class Walker(object):
             sys.exit(1)
 
     @Pyro5.server.expose
-    @Pyro5.server.oneway
+    # @Pyro5.server.oneway
     def start(self, start_time, nhops, id_start, id_end): 
         self.start_time = start_time
-        self.timestamp = int(start_time)
+        # self.timestamp = int(start_time)
         time.sleep(0.001) # prevent arriving before starting
         print(f"Walkers[{id_start}-{id_end-1}] start at Server{self.name} ...")
         for walker in range(id_start, id_end):

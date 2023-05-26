@@ -4,6 +4,7 @@ import Pyro5.api
 import sys, getopt, os, platform
 import pandas as pd
 import time
+import json
 
 def printUsage():
     print('Usage: python3 {0} -w [nwalkers] -s [nsteps] <number_of_servers>'.format(os.path.basename(__file__)))
@@ -74,6 +75,38 @@ def main(argv):
         except Exception:
             print("Pyro traceback:")
             print("".join(Pyro5.errors.get_pyro_traceback()))
+
+    # fetch results from each server
+    start_times = []
+    stop_times = []
+    merged_paths = {}
+    for host in range(nhosts):
+        ip = hosts[host]
+        uri = "PYRO:walker@" + ip
+        obj = Pyro5.client.Proxy(uri) # connect to server directly (not need ns anymore)
+        try:
+            starttime, stoptime, paths = obj.get_results()
+            start_times.append(starttime)
+            stop_times.append(stoptime)
+            merged_paths.update(paths)
+        except Exception:
+            print("Pyro traceback:")
+            print("".join(Pyro5.errors.get_pyro_traceback()))
+
+    # output resuts
+    if len(set(start_times)) == 1:
+        print("timestamp synchronized")
+    else:
+        print("timestamp not synchronized")
+    print(f"time = {max(stop_times)-max(start_times)}")
+    dir = "../log"
+    if not os.path.exists(dir):
+        os.makedirs(dir)
+    filepath = dir + f"/t{int(start_time)}_w{nwalkers}_s{nhops}_n{nhosts}.log"
+    with open(filepath, 'w') as file:
+        json.dump(merged_paths, file)
+    print(f"paths saved in {filepath}")
+    
 
 if __name__ == "__main__":
     main(sys.argv[1:])
