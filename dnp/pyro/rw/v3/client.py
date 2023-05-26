@@ -9,8 +9,7 @@ def printUsage():
     print('Usage: python3 {0} -w [nwalkers] -s [nsteps] <number_of_servers>'.format(os.path.basename(__file__)))
 
 def main(argv):
-    nwalkers_unit = 25
-    nwalkers = 25 # number of walkers starting from each server
+    nwalkers = 1 # number of walkers starting from each server
     nhops = 80 # path length for each walker
 
     try:
@@ -55,20 +54,18 @@ def main(argv):
         hosts[int(hostfile["server_id"][row])] = hostfile["ip_port"][row]
 
     # total number of walkers = nhosts * nwalkers
-    count = int(nwalkers/nwalkers_unit)
     start_time = time.time()
-    for n in range(count):
-        for host in range(nhosts):
-            id_start = nwalkers_unit * (n * nhosts + host)
-            id_end = id_start + nwalkers_unit
-            ip = hosts[host]
-            uri = "PYRO:walker@" + ip
-            obj = Pyro5.client.Proxy(uri) # connect to server directly (not need ns anymore)
-            try:
-                print(f"Client starts {nwalkers_unit} Walkers[{id_start}-{id_end-1}] at Server{host} ({ip}) ...")
-                obj.start(start_time, nhops, id_start, id_end)
-            except Exception:
-                print(f"Pyro traceback:\n{''.join(Pyro5.errors.get_pyro_traceback())}")
+    for host in range(nhosts):
+        id_start = host * nwalkers
+        id_end = id_start + nwalkers
+        ip = hosts[host]
+        uri = "PYRO:walker@" + ip
+        obj = Pyro5.client.Proxy(uri) # connect to server directly (not need ns anymore)
+        try:
+            print(f"Client starts {nwalkers} Walkers[{id_start}-{id_end-1}] at Server{host} ({ip}) ...")
+            obj.start(start_time, nhops, id_start, id_end)
+        except Exception:
+            print(f"Pyro traceback:\n{''.join(Pyro5.errors.get_pyro_traceback())}")
 
 if __name__ == "__main__":
     main(sys.argv[1:])
