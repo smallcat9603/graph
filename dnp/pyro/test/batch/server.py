@@ -1,5 +1,6 @@
 import Pyro5
 import Pyro5.server
+import platform
 
 class Server(object):
   @Pyro5.server.expose
@@ -19,6 +20,12 @@ class Server(object):
 
 def startServer():
   host = "127.0.0.1"
+  uname = platform.uname()
+  system = uname[0]
+  node = uname[1]
+  if system == "Linux":
+    if "calc" in node:
+        host = "10.52.10.9"
   port = 9091
   daemon = Pyro5.server.Daemon(host=host, port=port)
   obj = Server()
