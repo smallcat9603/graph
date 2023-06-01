@@ -48,6 +48,11 @@ class Walker(object):
         # with Pyro5.client.Proxy("PYRONAME:Server" + nextname) as next: # require ns
         with Pyro5.client.Proxy(uri) as next: # not require ns
             next.walk(message, nhops, walker)
+            # try:
+            #     next.walk(message, nhops, walker)
+            # except Pyro5.errors.ConnectionClosedError:  # or possibly CommunicationError
+            #     print(f"Connection lost. REBINDING to Server{next_global_server} ({self.hosts[next_global_server]})...")
+            #     next._pyroReconnect()
 
     @Pyro5.server.expose
     def get_results(self):
