@@ -26,7 +26,7 @@ def main(argv):
     graphbase = "../data/3/test" # for test
     # config pyro
     Pyro5.config.SERVERTYPE = "thread" # thread, multiplex
-    Pyro5.config.THREADPOOL_SIZE = 10000 # default 80
+    Pyro5.config.THREADPOOL_SIZE = 100000 # default 80
     try:
         opts, args = getopt.getopt(argv, "hmg:") # opts = [("-h", " "), ("-m", " "), ("-g", "...")], args = [number_of_servers, server_id]
     except getopt.GetoptError:

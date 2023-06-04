@@ -17,7 +17,7 @@ class Walker(object):
         self.nhosts = len(hosts)
         self.start_time = 0.0
         self.stop_time = 0.0
-        self.paths = {}
+        self.paths = []
         self.go_out = 0
 
     def nexthop_roulette(self, cur_local, cur_global):
@@ -59,7 +59,7 @@ class Walker(object):
         return self.start_time, self.stop_time, self.go_out, self.paths
 
     @Pyro5.server.expose
-    @Pyro5.server.oneway
+    # @Pyro5.server.oneway
     def walk(self, message, nhops, walker): 
         next_local_node = -1
         next_global_node = -1
@@ -67,6 +67,8 @@ class Walker(object):
         while next_global_server == -1 and len(message) < nhops: # walk inside
             msg = message[-1]
             if isinstance(msg, str) and msg == "go": # starting point of walker
+                if self.start_time == 0.0:
+                    self.start_time = time.time()
                 print(f"Walker{walker} gets started to walk at Server{self.name}")
                 cur_local = random.randint(0, self.graph.vcount()-1)
                 cur_global = self.map_node[cur_local]
@@ -82,19 +84,10 @@ class Walker(object):
         if len(message) >= nhops:
             print(f"Finished. Walker{walker} stopped at Server{self.name}, walking through {len(message)} nodes.")
             self.stop_time = time.time()
-            self.paths[walker] = message
+            self.paths.append((walker, message))
         elif next_local_node == -1: # walk outside
             self.go_out += 1
             self.remote_invoke(next_global_server, message, nhops, walker)
         else:
             print(f"Something is wrong for Walker{walker}")
             sys.exit(1)
-
-    @Pyro5.server.expose
-    @Pyro5.server.oneway
-    def start(self, nhops, id_start, id_end): 
-        self.start_time = time.time()
-        time.sleep(0.001) # prevent arriving before starting
-        print(f"Walkers[{id_start}-{id_end-1}] start at Server{self.name} ...")
-        for walker in range(id_start, id_end):
-            self.walk(["go"], nhops, walker)
