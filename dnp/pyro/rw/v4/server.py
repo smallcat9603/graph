@@ -4,6 +4,7 @@ import platform
 import igraph as ig
 import pandas as pd
 import rw
+import concurrent.futures
 
 def printUsage():
     print('Usage: python3 {0} [-m] [-g $graphbase] <number_of_servers> <server_id>'.format(os.path.basename(__file__)))
@@ -24,7 +25,7 @@ def map_nodes_in_edgelist(file, file_new):
 
 def main(argv):
     graphbase = "../data/3/test" # for test
-    max_threads = 2
+    max_threads = concurrent.futures.ThreadPoolExecutor()._max_workers # default = cpus + 4
     # config pyro
     Pyro5.config.SERVERTYPE = "thread" # thread, multiplex
     # Pyro5.config.THREADPOOL_SIZE = 100000 # default 80
