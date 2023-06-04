@@ -27,7 +27,7 @@ def main(argv):
     max_threads = 2
     # config pyro
     Pyro5.config.SERVERTYPE = "thread" # thread, multiplex
-    Pyro5.config.THREADPOOL_SIZE = 100000 # default 80
+    # Pyro5.config.THREADPOOL_SIZE = 100000 # default 80
     try:
         opts, args = getopt.getopt(argv, "hmg:t:") # opts = [("-h", " "), ("-m", " "), ("-g", "..."), ("-t", "...")], args = [number_of_servers, server_id]
     except getopt.GetoptError:
@@ -112,7 +112,8 @@ def main(argv):
     # ns = Pyro5.core.locate_ns()
     # ns.register(servername, uri)
     # enter the service loop.
-    print(f"Server{this} ({nhosts}) started ({Pyro5.config.SERVERTYPE}, max {Pyro5.config.THREADPOOL_SIZE} threads) ...")
+    print(f"Server{this} ({nhosts}) started ({Pyro5.config.SERVERTYPE}) ...")
+    print(f"max_threads = {max_threads}")
     daemon.requestLoop()
 
 if __name__ == "__main__":
