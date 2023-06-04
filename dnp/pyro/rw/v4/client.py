@@ -45,11 +45,11 @@ def count_finished(timestep, hosts, nhosts, Nwalkers):
             break
         time.sleep(timestep)
 
-def start_walker(uri, nhops, walker):
+def start_server(uri, nhops, id_start, id_end):
     # This will run in a thread. Create a proxy just for this thread:
     with Pyro5.client.Proxy(uri) as p:
         try:
-            p.walk(["go"], nhops, walker)
+            p.start_walkers(nhops, id_start, id_end)
         except Exception:
             print(f"Pyro traceback:\n{''.join(Pyro5.errors.get_pyro_traceback())}")           
 
@@ -98,23 +98,22 @@ def main(argv):
     for row in range(nhosts):
         hosts[int(hostfile["server_id"][row])] = hostfile["ip_port"][row]  
 
+    # start servers
+    for host in range(nhosts):
+        id_start = host * nwalkers
+        id_end = id_start + nwalkers
+        ip = hosts[host]
+        uri = "PYRO:walker@" + ip
+        print(f"Client starts {nwalkers} Walkers[{id_start}-{id_end-1}] at Server{host} ({ip}) ...")
+        t = threading.Thread(target=start_server, args=[uri, nhops, id_start, id_end])
+        t.daemon = True
+        t.start()
+          
     # total number of walkers = nhosts * nwalkers
     Nwalkers = nhosts*nwalkers
     t_cf = threading.Thread(target=count_finished, args=[1, hosts, nhosts, Nwalkers])
     t_cf.daemon = True
     t_cf.start() 
-
-    print(f"Client starts {Nwalkers} Walkers on {nhosts} Servers ...")
-    for walker in range(Nwalkers):
-        host = walker%nhosts
-        ip = hosts[host]
-        uri = "PYRO:walker@" + ip
-        # print(f"Client starts {nwalkers} Walkers[{id_start}-{id_end-1}] at Server{host} ({ip}) ...")
-        t = threading.Thread(target=start_walker, args=[uri, nhops, walker])
-        t.daemon = True
-        t.start()
-        time.sleep(0.05) # avoid Pyro5.errors.ConnectionClosedError        
-
     t_cf.join()
     print("Done.")
 

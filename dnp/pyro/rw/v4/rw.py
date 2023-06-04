@@ -67,8 +67,6 @@ class Walker(object):
         while next_global_server == -1 and len(message) < nhops: # walk inside
             msg = message[-1]
             if isinstance(msg, str) and msg == "go": # starting point of walker
-                if self.start_time == 0.0:
-                    self.start_time = time.time()
                 print(f"Walker{walker} gets started to walk at Server{self.name}")
                 cur_local = random.randint(0, self.graph.vcount()-1)
                 cur_global = self.map_node[cur_local]
@@ -91,3 +89,15 @@ class Walker(object):
         else:
             print(f"Something is wrong for Walker{walker}")
             sys.exit(1)
+
+    @Pyro5.server.expose
+    # @Pyro5.server.oneway
+    def start_walkers(self, nhops, id_start, id_end): 
+        self.start_time = time.time()
+        time.sleep(0.001) # prevent arriving before starting
+        print(f"Walkers[{id_start}-{id_end-1}] start at Server{self.name} ...")
+        for walker in range(id_start, id_end):
+            t = threading.Thread(target=self.walk, args=[["go"], nhops, walker])
+            t.daemon = True
+            t.start()
+            time.sleep(0.3) # avoid Pyro5.errors.ConnectionClosedError (m1 experience: 1-server --> 0.05, 2-server --> 0.1, 4-server --> 0.3)
