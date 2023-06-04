@@ -99,21 +99,21 @@ def main(argv):
         hosts[int(hostfile["server_id"][row])] = hostfile["ip_port"][row]  
 
     # total number of walkers = nhosts * nwalkers
-    t_cf = threading.Thread(target=count_finished, args=[1, hosts, nhosts, nhosts*nwalkers])
+    Nwalkers = nhosts*nwalkers
+    t_cf = threading.Thread(target=count_finished, args=[1, hosts, nhosts, Nwalkers])
     t_cf.daemon = True
     t_cf.start() 
 
-    for host in range(nhosts):
-        id_start = host * nwalkers
-        id_end = id_start + nwalkers
+    print(f"Client starts {Nwalkers} Walkers on {nhosts} Servers ...")
+    for walker in range(Nwalkers):
+        host = walker%nhosts
         ip = hosts[host]
         uri = "PYRO:walker@" + ip
-        print(f"Client starts {nwalkers} Walkers[{id_start}-{id_end-1}] at Server{host} ({ip}) ...")
-        for walker in range(id_start, id_end):
-            t = threading.Thread(target=start_walker, args=[uri, nhops, walker])
-            t.daemon = True
-            t.start()
-            time.sleep(0.05) # avoid Pyro5.errors.ConnectionClosedError
+        # print(f"Client starts {nwalkers} Walkers[{id_start}-{id_end-1}] at Server{host} ({ip}) ...")
+        t = threading.Thread(target=start_walker, args=[uri, nhops, walker])
+        t.daemon = True
+        t.start()
+        time.sleep(0.05) # avoid Pyro5.errors.ConnectionClosedError        
 
     t_cf.join()
     print("Done.")
