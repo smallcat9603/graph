@@ -24,11 +24,12 @@ def map_nodes_in_edgelist(file, file_new):
 
 def main(argv):
     graphbase = "../data/3/test" # for test
+    max_threads = 2
     # config pyro
     Pyro5.config.SERVERTYPE = "thread" # thread, multiplex
     Pyro5.config.THREADPOOL_SIZE = 100000 # default 80
     try:
-        opts, args = getopt.getopt(argv, "hmg:") # opts = [("-h", " "), ("-m", " "), ("-g", "...")], args = [number_of_servers, server_id]
+        opts, args = getopt.getopt(argv, "hmg:t:") # opts = [("-h", " "), ("-m", " "), ("-g", "..."), ("-t", "...")], args = [number_of_servers, server_id]
     except getopt.GetoptError:
         printUsage()
         sys.exit(1)
@@ -40,6 +41,8 @@ def main(argv):
             Pyro5.config.SERVERTYPE = "multiplex"
         elif opt == '-g':
             graphbase = arg
+        elif opt == '-t':
+            max_threads = int(arg)
         else:
             printUsage()
             sys.exit(1)
@@ -104,7 +107,7 @@ def main(argv):
     serverid = int(this)
     host_port = hosts[serverid].split(":")
     daemon = Pyro5.server.Daemon(host=host_port[0], port=int(host_port[1]))
-    obj = rw.Walker(this, graph, route_table, node_map, hosts)
+    obj = rw.Walker(this, graph, max_threads, route_table, node_map, hosts)
     uri = daemon.register(obj, objectId="walker") # default objectId is random like obj_79549b4c52dc43ffaaa486b76b25c2af
     # ns = Pyro5.core.locate_ns()
     # ns.register(servername, uri)

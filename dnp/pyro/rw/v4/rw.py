@@ -1,15 +1,16 @@
 import Pyro5.server
 import Pyro5.client
 import random
-import sys, os
+import sys
 import time
-import threading
+import concurrent.futures
 
 # @Pyro5.server.behavior(instance_mode="single")
 class Walker(object):
-    def __init__(self, name, graph, route_table, node_map, hosts): # nodes in route_table are global
+    def __init__(self, name, graph, max_threads, route_table, node_map, hosts): # nodes in route_table are global
         self.name = name
         self.graph = graph
+        self.max_threads = max_threads
         self.route_table = route_table
         self.node_map = node_map # node_map = {100: 0, 200: 1, 150: 2, ...}, global --> local
         self.map_node = {v: k for k, v in node_map.items()} # reverse keys and values in node_map, map_node = {0: 100, 1: 200, 2: 150, ...}, local --> global
@@ -96,8 +97,16 @@ class Walker(object):
         self.start_time = time.time()
         time.sleep(0.001) # prevent arriving before starting
         print(f"Walkers[{id_start}-{id_end-1}] start at Server{self.name} ...")
-        for walker in range(id_start, id_end):
-            t = threading.Thread(target=self.walk, args=[["go"], nhops, walker])
-            t.daemon = True
-            t.start()
-            time.sleep(0.3) # avoid Pyro5.errors.ConnectionClosedError (m1 experience: 1-server --> 0.05, 2-server --> 0.1, 4-server --> 0.3)
+
+        # # option1: stupid max_thread_num control by delay
+        # for walker in range(id_start, id_end):
+        #     t = threading.Thread(target=self.walk, args=[["go"], nhops, walker])
+        #     t.daemon = True
+        #     t.start()
+        #     time.sleep(0.3) # avoid Pyro5.errors.ConnectionClosedError (m1 experience: 1-server --> 0.05, 2-server --> 0.1, 4-server --> 0.3)
+
+        # option2: automatic max_thread_num control by ThreadPool
+        with concurrent.futures.ThreadPoolExecutor(max_workers=self.max_threads) as executor:
+            for walker in range(id_start, id_end):
+                executor.submit(self.walk, ["go"], nhops, walker)
+            executor.shutdown()
