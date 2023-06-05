@@ -41,7 +41,7 @@ def count_finished(timestep, hosts, nhosts, Nwalkers):
                 print(f"Pyro traceback:\n{''.join(Pyro5.errors.get_pyro_traceback())}")  
         finished.append(len(merged_paths))
         print(finished[-1], end="\t", flush=True)
-        if finished[-1] == Nwalkers:
+        if finished[-1] == Nwalkers or (len(finished) > 1 and finished[-1] == finished[-2]):
             break
         time.sleep(timestep)
 
