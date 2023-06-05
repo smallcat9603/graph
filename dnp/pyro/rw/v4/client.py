@@ -8,7 +8,7 @@ import threading
 import json
 
 def printUsage():
-    print('Usage: python3 {0} -w [nwalkers] -s [nsteps] <number_of_servers>'.format(os.path.basename(__file__)))
+    print('Usage: python3 {0} -w [nwalkers] -s [nsteps] -t [timestep] <number_of_servers>'.format(os.path.basename(__file__)))
 
 start_times = []
 stop_times = []
@@ -41,7 +41,7 @@ def count_finished(timestep, hosts, nhosts, Nwalkers):
                 print(f"Pyro traceback:\n{''.join(Pyro5.errors.get_pyro_traceback())}")  
         finished.append(len(merged_paths))
         print(finished[-1], end="\t", flush=True)
-        if finished[-1] == Nwalkers or (len(finished) > 1 and finished[-1] == finished[-2]):
+        if finished[-1] == Nwalkers or (len(finished) > 7 and finished[-1]-finished[-8] < 1):
             break
         time.sleep(timestep)
 
@@ -56,9 +56,10 @@ def start_server(uri, nhops, id_start, id_end):
 def main(argv):
     nwalkers = 1 # number of walkers starting from each server
     nhops = 80 # path length for each walker
+    timestep = 1
 
     try:
-        opts, args = getopt.getopt(argv, "hw:s:") 
+        opts, args = getopt.getopt(argv, "hw:s:t:") 
     except getopt.GetoptError:
         printUsage()
         sys.exit(1)
@@ -70,6 +71,8 @@ def main(argv):
             nwalkers = int(arg)
         elif opt == '-s':
             nhops = int(arg)
+        elif opt == '-t':
+            timestep = int(arg)            
         else:
             printUsage()
             sys.exit(1)
@@ -111,7 +114,7 @@ def main(argv):
           
     # total number of walkers = nhosts * nwalkers
     Nwalkers = nhosts*nwalkers
-    t_cf = threading.Thread(target=count_finished, args=[1, hosts, nhosts, Nwalkers])
+    t_cf = threading.Thread(target=count_finished, args=[timestep, hosts, nhosts, Nwalkers])
     t_cf.daemon = True
     t_cf.start() 
     t_cf.join()
