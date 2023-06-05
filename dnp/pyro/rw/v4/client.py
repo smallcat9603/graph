@@ -15,6 +15,8 @@ stop_times = []
 go_outs = []
 merged_paths = [] # use list instead of dict to avoid "RuntimeError: dictionary changed size during iteration" error
 finished = []
+max_threads = []
+chunk_sizes = []
 
 def count_finished(timestep, hosts, nhosts, Nwalkers):
     global start_times
@@ -22,21 +24,27 @@ def count_finished(timestep, hosts, nhosts, Nwalkers):
     global go_outs
     global merged_paths
     global finished
+    global max_threads
+    global chunk_sizes
     while True:
         start_times = [] 
         stop_times = [] 
         go_outs = []
         merged_paths = []
+        max_threads = []
+        chunk_sizes = []
         for host in range(nhosts):
             ip = hosts[host]
             uri = "PYRO:walker@" + ip
             obj = Pyro5.client.Proxy(uri) # connect to server directly (not need ns anymore)
             try:
-                starttime, stoptime, goout, paths = obj.get_results()
+                starttime, stoptime, goout, paths, maxthreads, chunksize = obj.get_results()
                 start_times.append(starttime)
                 stop_times.append(stoptime)
                 go_outs.append(goout)
                 merged_paths += paths
+                max_threads.append(maxthreads)
+                chunk_sizes.append(chunksize)
             except Exception:
                 print(f"Pyro traceback:\n{''.join(Pyro5.errors.get_pyro_traceback())}")  
         finished.append(len(merged_paths))
@@ -121,15 +129,17 @@ def main(argv):
     print("Done.")
 
     # output results
-    runtime = max(stop_times)-min(start_times)
+    runtime = max(stop_times)-max(start_times)
     print(f"time = {runtime}")
     print(f"goout = {sum(go_outs)}")
-    timestamp = int(min(start_times))
+    timestamp = int(max(start_times))
     dir = "../log"
     if not os.path.exists(dir):
         os.makedirs(dir)
-    jsonfile = dir + f"/t{timestamp}_n{nhosts}.json"
-    txtfile = dir + f"/t{timestamp}_n{nhosts}.txt"
+    maxthreads = max(max_threads)
+    chunksize = max(chunk_sizes)
+    jsonfile = dir + f"/{timestamp}_n{nhosts}_t{maxthreads}_c{chunksize}.json"
+    txtfile = dir + f"/{timestamp}_n{nhosts}_t{maxthreads}_c{chunksize}.txt"
     with open(jsonfile, 'w') as file:
         json.dump(dict(merged_paths), file)
     print(f"paths saved in {jsonfile}")

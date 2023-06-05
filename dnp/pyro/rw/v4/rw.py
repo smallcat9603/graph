@@ -58,7 +58,7 @@ class Walker(object):
 
     @Pyro5.server.expose
     def get_results(self):
-        return self.start_time, self.stop_time, self.go_out, self.paths
+        return self.start_time, self.stop_time, self.go_out, self.paths, self.max_threads, self.chunk_size
 
     @Pyro5.server.expose
     # @Pyro5.server.oneway
