@@ -10,15 +10,6 @@ import json
 def printUsage():
     print('Usage: python3 {0} -w [nwalkers] -s [nsteps] -t [timestep] <number_of_servers>'.format(os.path.basename(__file__)))
 
-start_times = []
-stop_times = []
-go_outs = []
-merged_paths = [] # use list instead of dict to avoid "RuntimeError: dictionary changed size during iteration" error
-finished = []
-nprocesses = []
-max_threads = []
-chunk_sizes = []
-
 def count_finished(timestep, hosts, nhosts, Nwalkers):
     global start_times
     global stop_times
@@ -28,11 +19,12 @@ def count_finished(timestep, hosts, nhosts, Nwalkers):
     global nprocesses
     global max_threads
     global chunk_sizes
+    finished = []
     while True:
         start_times = [] 
         stop_times = [] 
         go_outs = []
-        merged_paths = []
+        merged_paths = [] # use list instead of dict to avoid "RuntimeError: dictionary changed size during iteration" error
         nprocesses = []
         max_threads = []
         chunk_sizes = []
