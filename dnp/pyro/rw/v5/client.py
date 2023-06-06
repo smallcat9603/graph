@@ -11,41 +11,39 @@ def printUsage():
     print('Usage: python3 {0} -w [nwalkers] -s [nsteps] -t [timestep] <number_of_servers>'.format(os.path.basename(__file__)))
 
 def count_finished(timestep, hosts, nhosts, Nwalkers):
-    global start_times
-    global stop_times
-    global go_outs
-    global merged_paths
-    global finished
-    global nprocesses
-    global max_threads
-    global chunk_sizes
+    global start_times, stop_times, go_outs, merged_paths, finished, nprocesses, max_threads, chunk_sizes
     finished = []
+    start_times = [] 
+    stop_times = [] 
+    go_outs = []
+    merged_paths = [] # use list instead of dict to avoid "RuntimeError: dictionary changed size during iteration" error
+    nprocesses = []
+    max_threads = []
+    chunk_sizes = []
+    objs = [Pyro5.client.Proxy("PYRO:walker@" + hosts[host]) for host in range(nhosts)]
     while True:
-        start_times = [] 
-        stop_times = [] 
-        go_outs = []
-        merged_paths = [] # use list instead of dict to avoid "RuntimeError: dictionary changed size during iteration" error
-        nprocesses = []
-        max_threads = []
-        chunk_sizes = []
+        npaths = 0
         for host in range(nhosts):
-            ip = hosts[host]
-            uri = "PYRO:walker@" + ip
-            obj = Pyro5.client.Proxy(uri) # connect to server directly (not need ns anymore)
             try:
-                starttime, stoptime, goout, paths, processes, maxthreads, chunksize = obj.get_results()
+                _, _, _, paths, _, _, _ = objs[host].get_results()
+            except Exception:
+                print(f"Pyro traceback:\n{''.join(Pyro5.errors.get_pyro_traceback())}")  
+            npaths += len(paths)
+        finished.append(npaths)
+        print(npaths, end="\t", flush=True)
+        if npaths == Nwalkers or (len(finished) > 7 and finished[-1]-finished[-8] < 1):
+            for host in range(nhosts):
+                try:
+                    starttime, stoptime, goout, paths, processes, maxthreads, chunksize = objs[host].get_results()
+                except Exception:
+                    print(f"Pyro traceback:\n{''.join(Pyro5.errors.get_pyro_traceback())}")    
                 start_times.append(starttime)
                 stop_times.append(stoptime)
                 go_outs.append(goout)
                 merged_paths += paths
                 nprocesses.append(processes)
                 max_threads.append(maxthreads)
-                chunk_sizes.append(chunksize)
-            except Exception:
-                print(f"Pyro traceback:\n{''.join(Pyro5.errors.get_pyro_traceback())}")  
-        finished.append(len(merged_paths))
-        print(finished[-1], end="\t", flush=True)
-        if finished[-1] == Nwalkers or (len(finished) > 7 and finished[-1]-finished[-8] < 1):
+                chunk_sizes.append(chunksize)             
             break
         time.sleep(timestep)
 
