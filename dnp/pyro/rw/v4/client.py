@@ -15,6 +15,7 @@ stop_times = []
 go_outs = []
 merged_paths = [] # use list instead of dict to avoid "RuntimeError: dictionary changed size during iteration" error
 finished = []
+nprocesses = []
 max_threads = []
 chunk_sizes = []
 
@@ -24,6 +25,7 @@ def count_finished(timestep, hosts, nhosts, Nwalkers):
     global go_outs
     global merged_paths
     global finished
+    global nprocesses
     global max_threads
     global chunk_sizes
     while True:
@@ -31,6 +33,7 @@ def count_finished(timestep, hosts, nhosts, Nwalkers):
         stop_times = [] 
         go_outs = []
         merged_paths = []
+        nprocesses = []
         max_threads = []
         chunk_sizes = []
         for host in range(nhosts):
@@ -38,11 +41,12 @@ def count_finished(timestep, hosts, nhosts, Nwalkers):
             uri = "PYRO:walker@" + ip
             obj = Pyro5.client.Proxy(uri) # connect to server directly (not need ns anymore)
             try:
-                starttime, stoptime, goout, paths, maxthreads, chunksize = obj.get_results()
+                starttime, stoptime, goout, paths, processes, maxthreads, chunksize = obj.get_results()
                 start_times.append(starttime)
                 stop_times.append(stoptime)
                 go_outs.append(goout)
                 merged_paths += paths
+                nprocesses.append(processes)
                 max_threads.append(maxthreads)
                 chunk_sizes.append(chunksize)
             except Exception:
@@ -136,10 +140,11 @@ def main(argv):
     dir = "../log"
     if not os.path.exists(dir):
         os.makedirs(dir)
+    processes = max(nprocesses)
     maxthreads = max(max_threads)
     chunksize = max(chunk_sizes)
-    jsonfile = dir + f"/{timestamp}_n{nhosts}_t{maxthreads}_c{chunksize}.json"
-    txtfile = dir + f"/{timestamp}_n{nhosts}_t{maxthreads}_c{chunksize}.txt"
+    jsonfile = dir + f"/{timestamp}_n{nhosts}_p{processes}_t{maxthreads}_c{chunksize}.json"
+    txtfile = dir + f"/{timestamp}_n{nhosts}_p{processes}_t{maxthreads}_c{chunksize}.txt"
     with open(jsonfile, 'w') as file:
         json.dump(dict(merged_paths), file)
     print(f"paths saved in {jsonfile}")

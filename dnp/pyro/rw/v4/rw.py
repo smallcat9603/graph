@@ -4,12 +4,14 @@ import random
 import sys
 import time
 import concurrent.futures
+import multiprocessing
 
 # @Pyro5.server.behavior(instance_mode="single")
 class Walker(object):
-    def __init__(self, name, graph, max_threads, chunk_size, route_table, node_map, hosts): # nodes in route_table are global
+    def __init__(self, name, graph, nprocesses, max_threads, chunk_size, route_table, node_map, hosts): # nodes in route_table are global
         self.name = name
         self.graph = graph
+        self.nprocesses = nprocesses
         self.max_threads = max_threads
         self.chunk_size = chunk_size
         self.route_table = route_table
@@ -58,7 +60,7 @@ class Walker(object):
 
     @Pyro5.server.expose
     def get_results(self):
-        return self.start_time, self.stop_time, self.go_out, self.paths, self.max_threads, self.chunk_size
+        return self.start_time, self.stop_time, self.go_out, self.paths, self.nprocesses, self.max_threads, self.chunk_size
 
     @Pyro5.server.expose
     # @Pyro5.server.oneway
@@ -112,7 +114,12 @@ class Walker(object):
         #         executor.submit(self.walk, ["go"], nhops, walker)
         #     # executor.shutdown()
 
-        # option3: automatic max_thread_num control by ThreadPool map
-        with concurrent.futures.ThreadPoolExecutor(max_workers=self.max_threads) as executor:
+        # # option3: automatic max_thread_num control by ThreadPool map
+        # with concurrent.futures.ThreadPoolExecutor(max_workers=self.max_threads) as executor:
+        #     params = map(lambda x: (["go"], nhops, x), range(id_start, id_end))
+        #     executor.map(lambda args: self.walk(*args), params, chunksize=self.chunk_size)
+
+        # option4: multiprocessing map
+        with multiprocessing.Pool(processes=self.nprocesses) as pool:
             params = map(lambda x: (["go"], nhops, x), range(id_start, id_end))
-            executor.map(lambda args: self.walk(*args), params, chunksize=self.chunk_size)
+            pool.starmap(self.walk, params, chunksize=self.chunk_size)

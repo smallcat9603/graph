@@ -7,7 +7,7 @@ import rw
 import concurrent.futures
 
 def printUsage():
-    print('Usage: python3 {0} [-m] [-g $graphbase] <number_of_servers> <server_id>'.format(os.path.basename(__file__)))
+    print('Usage: python3 {0} [-m] [-g $graphbase] [-p $nprocesses] [-t $maxthreads] [-c $chunksize] <number_of_servers> <server_id>'.format(os.path.basename(__file__)))
 
 # map to node ids that are from 0 and continuous
 def map_nodes_in_edgelist(file, file_new):
@@ -26,12 +26,13 @@ def map_nodes_in_edgelist(file, file_new):
 def main(argv):
     graphbase = "../data/3/test" # for test
     max_threads = concurrent.futures.ThreadPoolExecutor()._max_workers # default = cpus + 4
+    nprocesses = os.cpu_count() # default = cpus
     chunk_size = 1
     # config pyro
     Pyro5.config.SERVERTYPE = "thread" # thread, multiplex
     Pyro5.config.THREADPOOL_SIZE = 100000 # default 80
     try:
-        opts, args = getopt.getopt(argv, "hmg:t:c:") # opts = [("-h", " "), ("-m", " "), ("-g", "..."), ("-t", "...")], args = [number_of_servers, server_id]
+        opts, args = getopt.getopt(argv, "hmg:p:t:c:") # opts = [("-h", " "), ("-m", " "), ("-g", "..."), ("-t", "...")], args = [number_of_servers, server_id]
     except getopt.GetoptError:
         printUsage()
         sys.exit(1)
@@ -43,6 +44,8 @@ def main(argv):
             Pyro5.config.SERVERTYPE = "multiplex"
         elif opt == '-g':
             graphbase = arg
+        elif opt == '-p':
+            nprocesses = int(arg)
         elif opt == '-t':
             max_threads = int(arg)
         elif opt == '-c':
@@ -111,13 +114,13 @@ def main(argv):
     serverid = int(this)
     host_port = hosts[serverid].split(":")
     daemon = Pyro5.server.Daemon(host=host_port[0], port=int(host_port[1]))
-    obj = rw.Walker(this, graph, max_threads, chunk_size, route_table, node_map, hosts)
+    obj = rw.Walker(this, graph, nprocesses, max_threads, chunk_size, route_table, node_map, hosts)
     uri = daemon.register(obj, objectId="walker") # default objectId is random like obj_79549b4c52dc43ffaaa486b76b25c2af
     # ns = Pyro5.core.locate_ns()
     # ns.register(servername, uri)
     # enter the service loop.
     print(f"Server{this} ({nhosts}) started ({Pyro5.config.SERVERTYPE}) ...")
-    print(f"max_threads = {max_threads}, chunk_size = {chunk_size}")
+    print(f"ncpus = {os.cpu_count()}, nprocesses = {nprocesses}, max_threads = {max_threads}, chunk_size = {chunk_size}")
     daemon.requestLoop()
 
 if __name__ == "__main__":
