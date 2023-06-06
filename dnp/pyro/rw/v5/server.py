@@ -71,10 +71,10 @@ def main(argv):
     system = uname[0]
     node = uname[1]
     if system == "Darwin":
-        filename = "hosts_local.txt"
+        filename = "../hosts/local.txt"
     elif system == "Linux":
         if "calc" in node:
-            filename = "hosts_calc.txt"
+            filename = "../hosts/calc.txt"
 
     # read hosts from file
     columns = ["server_id", "ip_port"]
