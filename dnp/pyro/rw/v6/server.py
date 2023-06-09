@@ -24,7 +24,7 @@ def map_nodes_in_edgelist(file, file_new):
         return node_map
 
 def main(argv):
-    graphbase = "../data/3/test" # for test
+    graphbase = ""
     max_threads = concurrent.futures.ThreadPoolExecutor()._max_workers # default = cpus + 4
     nprocesses = os.cpu_count() # default = cpus
     chunk_size = 1
@@ -43,7 +43,14 @@ def main(argv):
         elif opt == '-m':
             Pyro5.config.SERVERTYPE = "multiplex"
         elif opt == '-g':
-            graphbase = arg
+            if arg == "facebook":
+                graphbase = "../data/facebook_combined_undirected_connected"
+            elif arg == "git":
+                graphbase = "../data/musae_git_edges_undirected.connected"
+            elif arg == "twitch":
+                graphbase = "../data/large_twitch_edges_undirected.connected"
+            elif arg == "livejournal":
+                graphbase = "../data/soc-LiveJournal1_directed.undirected.connected"
         elif opt == '-p':
             nprocesses = int(arg)
         elif opt == '-t':
@@ -61,9 +68,11 @@ def main(argv):
     else:        
         print("server id should be less than number of servers (<= 8)")
         sys.exit(1)
-    if graphbase == "../data/3/test" and nhosts != 3:
+    if graphbase == "":
         print("input option -g to specify graphbase")
         sys.exit(1)
+    if nhosts > 1:
+        graphbase = graphbase.replace("../data/", f"../data/{nhosts}/")
 
     # match hostfile
     filename = ""
