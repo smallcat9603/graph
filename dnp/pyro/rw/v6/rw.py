@@ -101,6 +101,10 @@ class Walker(object):
         time.sleep(0.001) # prevent arriving before starting
         print(f"Walkers[{id_start}-{id_end-1}] start at Server{self.name} ...")
 
+        # # option0: loop
+        # for walker in range(id_start, id_end):
+        #     self.walk(["go"], nhops, walker)
+
         # # option1: stupid max_thread_num control by delay
         # for walker in range(id_start, id_end):
         #     t = threading.Thread(target=self.walk, args=[["go"], nhops, walker])
@@ -108,7 +112,7 @@ class Walker(object):
         #     t.start()
         #     time.sleep(0.3) # avoid Pyro5.errors.ConnectionClosedError (m1 experience: 1-server --> 0.05, 2-server --> 0.1, 4-server --> 0.3)
 
-        # option2: automatic max_thread_num control by ThreadPool submit
+        # # option2: automatic max_thread_num control by ThreadPool submit
         # with concurrent.futures.ThreadPoolExecutor(max_workers=self.max_threads) as executor:
         #     for walker in range(id_start, id_end):
         #         executor.submit(self.walk, ["go"], nhops, walker)
