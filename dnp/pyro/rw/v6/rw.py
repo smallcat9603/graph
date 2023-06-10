@@ -5,6 +5,7 @@ import sys
 import time
 import concurrent.futures
 import multiprocessing
+import threading
 
 # @Pyro5.server.behavior(instance_mode="single")
 class Walker(object):
@@ -104,6 +105,7 @@ class Walker(object):
         # # option0: loop
         # for walker in range(id_start, id_end):
         #     self.walk(["go"], nhops, walker)
+        #     time.sleep(0.3)
 
         # # option1: stupid max_thread_num control by delay
         # for walker in range(id_start, id_end):
