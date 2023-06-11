@@ -64,7 +64,7 @@ class Walker(object):
         return self.start_time, self.stop_time, self.go_out, self.paths, self.nprocesses, self.max_threads, self.chunk_size
 
     @Pyro5.server.expose
-    @Pyro5.server.oneway
+    # @Pyro5.server.oneway
     def walk(self, message, nhops, walker): 
         next_local_node = -1
         next_global_node = -1
@@ -96,7 +96,7 @@ class Walker(object):
             sys.exit(1)
 
     @Pyro5.server.expose
-    @Pyro5.server.oneway
+    # @Pyro5.server.oneway
     def start_walkers(self, nhops, id_start, id_end): 
         self.start_time = time.time()
         time.sleep(0.001) # prevent arriving before starting
