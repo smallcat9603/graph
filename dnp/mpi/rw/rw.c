@@ -26,47 +26,37 @@ int main(int argc, char** argv) {
     MPI_Abort(MPI_COMM_WORLD, 1);
   }
 
-  // preparation
-  int partner_rank = (rank+1)%2;
-  int* rw = (int*) malloc(sizeof(int)*2);
-  if (rank == 0) {
-    rw[0] = 0;
-    rw[1] = 1;
-  }
-  else {
-    rw[0] = 3;
-    rw[1] = 2;
-  }
-  
-  // send and recv
+  MPI_Request req;
+  MPI_Status st;
+  int received_flag = 0;
+
   double start_time, end_time;
   start_time = MPI_Wtime();
 
-  int* send = (int*) malloc(sizeof(int)*2); 
-  int* recv = (int*) malloc(sizeof(int)*2);
-  MPI_Status st[2];
-  MPI_Request req[2];  
+  while (!received_flag) {
 
-  MPI_Irecv(recv, 2, MPI_INT, partner_rank, 0, MPI_COMM_WORLD, req);
-  
-  memmove(send, rw, sizeof(int)*2);
-  MPI_Isend(send, 2, MPI_INT, partner_rank, 0, MPI_COMM_WORLD, req+1);  
+    int* recv = (int*) malloc(sizeof(int)*2);
+    MPI_Irecv(recv, 2, MPI_INT, MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &req);
 
-  MPI_Waitall(2, req, st); 
 
-  // combination
-  int* comb = (int*) malloc(sizeof(int)*4);
-  memmove(comb, recv, sizeof(int)*2); 
-  memmove(comb+2, &rw[1], sizeof(int)); 
-  memmove(comb+3, &rw[0], sizeof(int)); 
-  
+    MPI_Test(&req, &received_flag, &st);
+    if (received_flag) {
+      int received_count;
+      MPI_Get_count(&st, MPI_INT, &received_count);
+      printf("received_count=%d\n", received_count);
+    } else {
+      int* send = (int*) malloc(sizeof(int)*2);
+      send[0] = rank;
+      send[1] = rank + 1;
+      int partner_rank = (rank+1)%2;
+      MPI_Isend(send, 2, MPI_INT, partner_rank, 0, MPI_COMM_WORLD, &req);  
+      MPI_Test(&req, &received_flag, &st);
+    }
+  }
+
   end_time = MPI_Wtime();
 
-  // output
-  printf("rank = %d, elapsed = %f: ", rank, end_time-start_time); 
-  for(int i=0; i<4; i++) printf("%d --> ", comb[i]);
-  printf("\n");                  
+  printf("rank = %d, elapsed = %f\n", rank, end_time-start_time);              
 
-  // end
   MPI_Finalize();
 }
