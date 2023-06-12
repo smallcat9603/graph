@@ -9,6 +9,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <string.h>
+#include <unistd.h>
 
 int main(int argc, char** argv) {
 
@@ -26,32 +27,39 @@ int main(int argc, char** argv) {
     MPI_Abort(MPI_COMM_WORLD, 1);
   }
 
-  MPI_Request req;
-  MPI_Status st;
   int received_flag = 0;
+  int send_flag = 0;
 
-  double start_time, end_time;
+  double start_time, end_time, last_received_time;
   start_time = MPI_Wtime();
+  last_received_time = MPI_Wtime();
 
-  while (!received_flag) {
+  int* send = (int*) malloc(sizeof(int)*2);
+  send[0] = rank;
+  send[1] = rank + 1;
+  int partner_rank = (rank+1)%2;
+  int count = 1;
 
+  while (MPI_Wtime() - last_received_time < 1) {
+
+    MPI_Request req_recv;
+    MPI_Status st;
     int* recv = (int*) malloc(sizeof(int)*2);
-    MPI_Irecv(recv, 2, MPI_INT, MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &req);
-
-
-    MPI_Test(&req, &received_flag, &st);
-    if (received_flag) {
-      int received_count;
-      MPI_Get_count(&st, MPI_INT, &received_count);
-      printf("received_count=%d\n", received_count);
-    } else {
-      int* send = (int*) malloc(sizeof(int)*2);
-      send[0] = rank;
-      send[1] = rank + 1;
-      int partner_rank = (rank+1)%2;
-      MPI_Isend(send, 2, MPI_INT, partner_rank, 0, MPI_COMM_WORLD, &req);  
-      MPI_Test(&req, &received_flag, &st);
+    MPI_Irecv(recv, 100, MPI_INT, MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &req_recv);
+    while (count > 0){
+      MPI_Request req_send;
+      MPI_Isend(send, 2, MPI_INT, partner_rank, 0, MPI_COMM_WORLD, &req_send);  
+      count--;
     }
+    while(!received_flag){
+      MPI_Test(&req_recv, &received_flag, &st);
+      if (received_flag) {
+        int received_count;
+        MPI_Get_count(&st, MPI_INT, &received_count);
+        printf("rank = %d, received_count=%d\n", rank, received_count);
+        last_received_time = MPI_Wtime();
+      }
+    } 
   }
 
   end_time = MPI_Wtime();
