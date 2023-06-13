@@ -1,0 +1,2214 @@
+
+---
+events:
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/usr/share/cmake-3.26/Modules/CMakeDetermineSystem.cmake:204 (message)"
+      - "CMakeLists.txt:33 (project)"
+    message: |
+      The system is: Linux - 5.10.104-linuxkit - aarch64
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/usr/share/cmake-3.26/Modules/CMakeDetermineCompilerId.cmake:17 (message)"
+      - "/usr/share/cmake-3.26/Modules/CMakeDetermineCompilerId.cmake:64 (__determine_compiler_id_test)"
+      - "/usr/share/cmake-3.26/Modules/CMakeDetermineCCompiler.cmake:123 (CMAKE_DETERMINE_COMPILER_ID)"
+      - "CMakeLists.txt:33 (project)"
+    message: |
+      Compiling the C compiler identification source file "CMakeCCompilerId.c" succeeded.
+      Compiler: /usr/bin/cc 
+      Build flags: 
+      Id flags:  
+      
+      The output was:
+      0
+      
+      
+      Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "a.out"
+      
+      The C compiler identification is GNU, found in:
+        /github/graph/igraph-0.10.4/build/CMakeFiles/3.26.4/CompilerIdC/a.out
+      
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/usr/share/cmake-3.26/Modules/CMakeDetermineCompilerId.cmake:17 (message)"
+      - "/usr/share/cmake-3.26/Modules/CMakeDetermineCompilerId.cmake:64 (__determine_compiler_id_test)"
+      - "/usr/share/cmake-3.26/Modules/CMakeDetermineCXXCompiler.cmake:126 (CMAKE_DETERMINE_COMPILER_ID)"
+      - "CMakeLists.txt:33 (project)"
+    message: |
+      Compiling the CXX compiler identification source file "CMakeCXXCompilerId.cpp" succeeded.
+      Compiler: /usr/bin/c++ 
+      Build flags: 
+      Id flags:  
+      
+      The output was:
+      0
+      
+      
+      Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "a.out"
+      
+      The CXX compiler identification is GNU, found in:
+        /github/graph/igraph-0.10.4/build/CMakeFiles/3.26.4/CompilerIdCXX/a.out
+      
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/share/cmake-3.26/Modules/CMakeDetermineCompilerABI.cmake:57 (try_compile)"
+      - "/usr/share/cmake-3.26/Modules/CMakeTestCCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:33 (project)"
+    checks:
+      - "Detecting C compiler ABI info"
+    directories:
+      source: "/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-Y42x9K"
+      binary: "/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-Y42x9K"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/github/graph/igraph-0.10.4/etc/cmake"
+    buildResult:
+      variable: "CMAKE_C_ABI_COMPILED"
+      cached: true
+      stdout: |
+        Change Dir: /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-Y42x9K
+        
+        Run Build Command(s):/usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_ff648/fast && /usr/bin/make  -f CMakeFiles/cmTC_ff648.dir/build.make CMakeFiles/cmTC_ff648.dir/build
+        make[1]: Entering directory '/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-Y42x9K'
+        Building C object CMakeFiles/cmTC_ff648.dir/CMakeCCompilerABI.c.o
+        /usr/bin/cc   -v -o CMakeFiles/cmTC_ff648.dir/CMakeCCompilerABI.c.o -c /usr/share/cmake-3.26/Modules/CMakeCCompilerABI.c
+        Using built-in specs.
+        COLLECT_GCC=/usr/bin/cc
+        Target: aarch64-linux-gnu
+        Configured with: ../src/configure -v --with-pkgversion='Ubuntu 9.3.0-17ubuntu1~20.04' --with-bugurl=file:///usr/share/doc/gcc-9/README.Bugs --enable-languages=c,ada,c++,go,d,fortran,objc,obj-c++,gm2 --prefix=/usr --with-gcc-major-version-only --program-suffix=-9 --program-prefix=aarch64-linux-gnu- --enable-shared --enable-linker-build-id --libexecdir=/usr/lib --without-included-gettext --enable-threads=posix --libdir=/usr/lib --enable-nls --enable-clocale=gnu --enable-libstdcxx-debug --enable-libstdcxx-time=yes --with-default-libstdcxx-abi=new --enable-gnu-unique-object --disable-libquadmath --disable-libquadmath-support --enable-plugin --enable-default-pie --with-system-zlib --with-target-system-zlib=auto --enable-objc-gc=auto --enable-multiarch --enable-fix-cortex-a53-843419 --disable-werror --enable-checking=release --build=aarch64-linux-gnu --host=aarch64-linux-gnu --target=aarch64-linux-gnu
+        Thread model: posix
+        gcc version 9.3.0 (Ubuntu 9.3.0-17ubuntu1~20.04) 
+        COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_ff648.dir/CMakeCCompilerABI.c.o' '-c' '-mlittle-endian' '-mabi=lp64'
+         /usr/lib/gcc/aarch64-linux-gnu/9/cc1 -quiet -v -imultiarch aarch64-linux-gnu /usr/share/cmake-3.26/Modules/CMakeCCompilerABI.c -quiet -dumpbase CMakeCCompilerABI.c -mlittle-endian -mabi=lp64 -auxbase-strip CMakeFiles/cmTC_ff648.dir/CMakeCCompilerABI.c.o -version -fasynchronous-unwind-tables -fstack-protector-strong -Wformat -Wformat-security -fstack-clash-protection -o /tmp/cc2Yplon.s
+        GNU C17 (Ubuntu 9.3.0-17ubuntu1~20.04) version 9.3.0 (aarch64-linux-gnu)
+        	compiled by GNU C version 9.3.0, GMP version 6.2.0, MPFR version 4.0.2, MPC version 1.1.0, isl version isl-0.22.1-GMP
+        
+        GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
+        ignoring nonexistent directory "/usr/local/include/aarch64-linux-gnu"
+        ignoring nonexistent directory "/usr/lib/gcc/aarch64-linux-gnu/9/include-fixed"
+        ignoring nonexistent directory "/usr/lib/gcc/aarch64-linux-gnu/9/../../../../aarch64-linux-gnu/include"
+        #include "..." search starts here:
+        #include <...> search starts here:
+         /usr/lib/gcc/aarch64-linux-gnu/9/include
+         /usr/local/include
+         /usr/include/aarch64-linux-gnu
+         /usr/include
+        End of search list.
+        GNU C17 (Ubuntu 9.3.0-17ubuntu1~20.04) version 9.3.0 (aarch64-linux-gnu)
+        	compiled by GNU C version 9.3.0, GMP version 6.2.0, MPFR version 4.0.2, MPC version 1.1.0, isl version isl-0.22.1-GMP
+        
+        GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
+        Compiler executable checksum: 13e224182c6e897e114f431ecfe03700
+        COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_ff648.dir/CMakeCCompilerABI.c.o' '-c' '-mlittle-endian' '-mabi=lp64'
+         as -v -EL -mabi=lp64 -o CMakeFiles/cmTC_ff648.dir/CMakeCCompilerABI.c.o /tmp/cc2Yplon.s
+        GNU assembler version 2.34 (aarch64-linux-gnu) using BFD version (GNU Binutils for Ubuntu) 2.34
+        COMPILER_PATH=/usr/lib/gcc/aarch64-linux-gnu/9/:/usr/lib/gcc/aarch64-linux-gnu/9/:/usr/lib/gcc/aarch64-linux-gnu/:/usr/lib/gcc/aarch64-linux-gnu/9/:/usr/lib/gcc/aarch64-linux-gnu/
+        LIBRARY_PATH=/usr/lib/gcc/aarch64-linux-gnu/9/:/usr/lib/gcc/aarch64-linux-gnu/9/../../../aarch64-linux-gnu/:/usr/lib/gcc/aarch64-linux-gnu/9/../../../../lib/:/lib/aarch64-linux-gnu/:/lib/../lib/:/usr/lib/aarch64-linux-gnu/:/usr/lib/../lib/:/usr/lib/gcc/aarch64-linux-gnu/9/../../../:/lib/:/usr/lib/
+        COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_ff648.dir/CMakeCCompilerABI.c.o' '-c' '-mlittle-endian' '-mabi=lp64'
+        Linking C executable cmTC_ff648
+        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_ff648.dir/link.txt --verbose=1
+        /usr/bin/cc  -v CMakeFiles/cmTC_ff648.dir/CMakeCCompilerABI.c.o -o cmTC_ff648 
+        Using built-in specs.
+        COLLECT_GCC=/usr/bin/cc
+        COLLECT_LTO_WRAPPER=/usr/lib/gcc/aarch64-linux-gnu/9/lto-wrapper
+        Target: aarch64-linux-gnu
+        Configured with: ../src/configure -v --with-pkgversion='Ubuntu 9.3.0-17ubuntu1~20.04' --with-bugurl=file:///usr/share/doc/gcc-9/README.Bugs --enable-languages=c,ada,c++,go,d,fortran,objc,obj-c++,gm2 --prefix=/usr --with-gcc-major-version-only --program-suffix=-9 --program-prefix=aarch64-linux-gnu- --enable-shared --enable-linker-build-id --libexecdir=/usr/lib --without-included-gettext --enable-threads=posix --libdir=/usr/lib --enable-nls --enable-clocale=gnu --enable-libstdcxx-debug --enable-libstdcxx-time=yes --with-default-libstdcxx-abi=new --enable-gnu-unique-object --disable-libquadmath --disable-libquadmath-support --enable-plugin --enable-default-pie --with-system-zlib --with-target-system-zlib=auto --enable-objc-gc=auto --enable-multiarch --enable-fix-cortex-a53-843419 --disable-werror --enable-checking=release --build=aarch64-linux-gnu --host=aarch64-linux-gnu --target=aarch64-linux-gnu
+        Thread model: posix
+        gcc version 9.3.0 (Ubuntu 9.3.0-17ubuntu1~20.04) 
+        COMPILER_PATH=/usr/lib/gcc/aarch64-linux-gnu/9/:/usr/lib/gcc/aarch64-linux-gnu/9/:/usr/lib/gcc/aarch64-linux-gnu/:/usr/lib/gcc/aarch64-linux-gnu/9/:/usr/lib/gcc/aarch64-linux-gnu/
+        LIBRARY_PATH=/usr/lib/gcc/aarch64-linux-gnu/9/:/usr/lib/gcc/aarch64-linux-gnu/9/../../../aarch64-linux-gnu/:/usr/lib/gcc/aarch64-linux-gnu/9/../../../../lib/:/lib/aarch64-linux-gnu/:/lib/../lib/:/usr/lib/aarch64-linux-gnu/:/usr/lib/../lib/:/usr/lib/gcc/aarch64-linux-gnu/9/../../../:/lib/:/usr/lib/
+        COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_ff648' '-mlittle-endian' '-mabi=lp64'
+         /usr/lib/gcc/aarch64-linux-gnu/9/collect2 -plugin /usr/lib/gcc/aarch64-linux-gnu/9/liblto_plugin.so -plugin-opt=/usr/lib/gcc/aarch64-linux-gnu/9/lto-wrapper -plugin-opt=-fresolution=/tmp/ccf2AdnR.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s --build-id --eh-frame-hdr --hash-style=gnu --as-needed -dynamic-linker /lib/ld-linux-aarch64.so.1 -X -EL -maarch64linux --fix-cortex-a53-843419 -pie -z now -z relro -o cmTC_ff648 /usr/lib/gcc/aarch64-linux-gnu/9/../../../aarch64-linux-gnu/Scrt1.o /usr/lib/gcc/aarch64-linux-gnu/9/../../../aarch64-linux-gnu/crti.o /usr/lib/gcc/aarch64-linux-gnu/9/crtbeginS.o -L/usr/lib/gcc/aarch64-linux-gnu/9 -L/usr/lib/gcc/aarch64-linux-gnu/9/../../../aarch64-linux-gnu -L/usr/lib/gcc/aarch64-linux-gnu/9/../../../../lib -L/lib/aarch64-linux-gnu -L/lib/../lib -L/usr/lib/aarch64-linux-gnu -L/usr/lib/../lib -L/usr/lib/gcc/aarch64-linux-gnu/9/../../.. CMakeFiles/cmTC_ff648.dir/CMakeCCompilerABI.c.o -lgcc --push-state --as-needed -lgcc_s --pop-state -lc -lgcc --push-state --as-needed -lgcc_s --pop-state /usr/lib/gcc/aarch64-linux-gnu/9/crtendS.o /usr/lib/gcc/aarch64-linux-gnu/9/../../../aarch64-linux-gnu/crtn.o
+        COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_ff648' '-mlittle-endian' '-mabi=lp64'
+        make[1]: Leaving directory '/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-Y42x9K'
+        
+      exitCode: 0
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/usr/share/cmake-3.26/Modules/CMakeDetermineCompilerABI.cmake:127 (message)"
+      - "/usr/share/cmake-3.26/Modules/CMakeTestCCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:33 (project)"
+    message: |
+      Parsed C implicit include dir info: rv=done
+        found start of include info
+        found start of implicit include info
+          add: [/usr/lib/gcc/aarch64-linux-gnu/9/include]
+          add: [/usr/local/include]
+          add: [/usr/include/aarch64-linux-gnu]
+          add: [/usr/include]
+        end of search list found
+        collapse include dir [/usr/lib/gcc/aarch64-linux-gnu/9/include] ==> [/usr/lib/gcc/aarch64-linux-gnu/9/include]
+        collapse include dir [/usr/local/include] ==> [/usr/local/include]
+        collapse include dir [/usr/include/aarch64-linux-gnu] ==> [/usr/include/aarch64-linux-gnu]
+        collapse include dir [/usr/include] ==> [/usr/include]
+        implicit include dirs: [/usr/lib/gcc/aarch64-linux-gnu/9/include;/usr/local/include;/usr/include/aarch64-linux-gnu;/usr/include]
+      
+      
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/usr/share/cmake-3.26/Modules/CMakeDetermineCompilerABI.cmake:152 (message)"
+      - "/usr/share/cmake-3.26/Modules/CMakeTestCCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:33 (project)"
+    message: |
+      Parsed C implicit link information:
+        link line regex: [^( *|.*[/\\])(ld|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\\]+-)?ld|collect2)[^/\\]*( |$)]
+        ignore line: [Change Dir: /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-Y42x9K]
+        ignore line: []
+        ignore line: [Run Build Command(s):/usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_ff648/fast && /usr/bin/make  -f CMakeFiles/cmTC_ff648.dir/build.make CMakeFiles/cmTC_ff648.dir/build]
+        ignore line: [make[1]: Entering directory '/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-Y42x9K']
+        ignore line: [Building C object CMakeFiles/cmTC_ff648.dir/CMakeCCompilerABI.c.o]
+        ignore line: [/usr/bin/cc   -v -o CMakeFiles/cmTC_ff648.dir/CMakeCCompilerABI.c.o -c /usr/share/cmake-3.26/Modules/CMakeCCompilerABI.c]
+        ignore line: [Using built-in specs.]
+        ignore line: [COLLECT_GCC=/usr/bin/cc]
+        ignore line: [Target: aarch64-linux-gnu]
+        ignore line: [Configured with: ../src/configure -v --with-pkgversion='Ubuntu 9.3.0-17ubuntu1~20.04' --with-bugurl=file:///usr/share/doc/gcc-9/README.Bugs --enable-languages=c ada c++ go d fortran objc obj-c++ gm2 --prefix=/usr --with-gcc-major-version-only --program-suffix=-9 --program-prefix=aarch64-linux-gnu- --enable-shared --enable-linker-build-id --libexecdir=/usr/lib --without-included-gettext --enable-threads=posix --libdir=/usr/lib --enable-nls --enable-clocale=gnu --enable-libstdcxx-debug --enable-libstdcxx-time=yes --with-default-libstdcxx-abi=new --enable-gnu-unique-object --disable-libquadmath --disable-libquadmath-support --enable-plugin --enable-default-pie --with-system-zlib --with-target-system-zlib=auto --enable-objc-gc=auto --enable-multiarch --enable-fix-cortex-a53-843419 --disable-werror --enable-checking=release --build=aarch64-linux-gnu --host=aarch64-linux-gnu --target=aarch64-linux-gnu]
+        ignore line: [Thread model: posix]
+        ignore line: [gcc version 9.3.0 (Ubuntu 9.3.0-17ubuntu1~20.04) ]
+        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_ff648.dir/CMakeCCompilerABI.c.o' '-c' '-mlittle-endian' '-mabi=lp64']
+        ignore line: [ /usr/lib/gcc/aarch64-linux-gnu/9/cc1 -quiet -v -imultiarch aarch64-linux-gnu /usr/share/cmake-3.26/Modules/CMakeCCompilerABI.c -quiet -dumpbase CMakeCCompilerABI.c -mlittle-endian -mabi=lp64 -auxbase-strip CMakeFiles/cmTC_ff648.dir/CMakeCCompilerABI.c.o -version -fasynchronous-unwind-tables -fstack-protector-strong -Wformat -Wformat-security -fstack-clash-protection -o /tmp/cc2Yplon.s]
+        ignore line: [GNU C17 (Ubuntu 9.3.0-17ubuntu1~20.04) version 9.3.0 (aarch64-linux-gnu)]
+        ignore line: [	compiled by GNU C version 9.3.0  GMP version 6.2.0  MPFR version 4.0.2  MPC version 1.1.0  isl version isl-0.22.1-GMP]
+        ignore line: []
+        ignore line: [GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072]
+        ignore line: [ignoring nonexistent directory "/usr/local/include/aarch64-linux-gnu"]
+        ignore line: [ignoring nonexistent directory "/usr/lib/gcc/aarch64-linux-gnu/9/include-fixed"]
+        ignore line: [ignoring nonexistent directory "/usr/lib/gcc/aarch64-linux-gnu/9/../../../../aarch64-linux-gnu/include"]
+        ignore line: [#include "..." search starts here:]
+        ignore line: [#include <...> search starts here:]
+        ignore line: [ /usr/lib/gcc/aarch64-linux-gnu/9/include]
+        ignore line: [ /usr/local/include]
+        ignore line: [ /usr/include/aarch64-linux-gnu]
+        ignore line: [ /usr/include]
+        ignore line: [End of search list.]
+        ignore line: [GNU C17 (Ubuntu 9.3.0-17ubuntu1~20.04) version 9.3.0 (aarch64-linux-gnu)]
+        ignore line: [	compiled by GNU C version 9.3.0  GMP version 6.2.0  MPFR version 4.0.2  MPC version 1.1.0  isl version isl-0.22.1-GMP]
+        ignore line: []
+        ignore line: [GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072]
+        ignore line: [Compiler executable checksum: 13e224182c6e897e114f431ecfe03700]
+        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_ff648.dir/CMakeCCompilerABI.c.o' '-c' '-mlittle-endian' '-mabi=lp64']
+        ignore line: [ as -v -EL -mabi=lp64 -o CMakeFiles/cmTC_ff648.dir/CMakeCCompilerABI.c.o /tmp/cc2Yplon.s]
+        ignore line: [GNU assembler version 2.34 (aarch64-linux-gnu) using BFD version (GNU Binutils for Ubuntu) 2.34]
+        ignore line: [COMPILER_PATH=/usr/lib/gcc/aarch64-linux-gnu/9/:/usr/lib/gcc/aarch64-linux-gnu/9/:/usr/lib/gcc/aarch64-linux-gnu/:/usr/lib/gcc/aarch64-linux-gnu/9/:/usr/lib/gcc/aarch64-linux-gnu/]
+        ignore line: [LIBRARY_PATH=/usr/lib/gcc/aarch64-linux-gnu/9/:/usr/lib/gcc/aarch64-linux-gnu/9/../../../aarch64-linux-gnu/:/usr/lib/gcc/aarch64-linux-gnu/9/../../../../lib/:/lib/aarch64-linux-gnu/:/lib/../lib/:/usr/lib/aarch64-linux-gnu/:/usr/lib/../lib/:/usr/lib/gcc/aarch64-linux-gnu/9/../../../:/lib/:/usr/lib/]
+        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_ff648.dir/CMakeCCompilerABI.c.o' '-c' '-mlittle-endian' '-mabi=lp64']
+        ignore line: [Linking C executable cmTC_ff648]
+        ignore line: [/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_ff648.dir/link.txt --verbose=1]
+        ignore line: [/usr/bin/cc  -v CMakeFiles/cmTC_ff648.dir/CMakeCCompilerABI.c.o -o cmTC_ff648 ]
+        ignore line: [Using built-in specs.]
+        ignore line: [COLLECT_GCC=/usr/bin/cc]
+        ignore line: [COLLECT_LTO_WRAPPER=/usr/lib/gcc/aarch64-linux-gnu/9/lto-wrapper]
+        ignore line: [Target: aarch64-linux-gnu]
+        ignore line: [Configured with: ../src/configure -v --with-pkgversion='Ubuntu 9.3.0-17ubuntu1~20.04' --with-bugurl=file:///usr/share/doc/gcc-9/README.Bugs --enable-languages=c ada c++ go d fortran objc obj-c++ gm2 --prefix=/usr --with-gcc-major-version-only --program-suffix=-9 --program-prefix=aarch64-linux-gnu- --enable-shared --enable-linker-build-id --libexecdir=/usr/lib --without-included-gettext --enable-threads=posix --libdir=/usr/lib --enable-nls --enable-clocale=gnu --enable-libstdcxx-debug --enable-libstdcxx-time=yes --with-default-libstdcxx-abi=new --enable-gnu-unique-object --disable-libquadmath --disable-libquadmath-support --enable-plugin --enable-default-pie --with-system-zlib --with-target-system-zlib=auto --enable-objc-gc=auto --enable-multiarch --enable-fix-cortex-a53-843419 --disable-werror --enable-checking=release --build=aarch64-linux-gnu --host=aarch64-linux-gnu --target=aarch64-linux-gnu]
+        ignore line: [Thread model: posix]
+        ignore line: [gcc version 9.3.0 (Ubuntu 9.3.0-17ubuntu1~20.04) ]
+        ignore line: [COMPILER_PATH=/usr/lib/gcc/aarch64-linux-gnu/9/:/usr/lib/gcc/aarch64-linux-gnu/9/:/usr/lib/gcc/aarch64-linux-gnu/:/usr/lib/gcc/aarch64-linux-gnu/9/:/usr/lib/gcc/aarch64-linux-gnu/]
+        ignore line: [LIBRARY_PATH=/usr/lib/gcc/aarch64-linux-gnu/9/:/usr/lib/gcc/aarch64-linux-gnu/9/../../../aarch64-linux-gnu/:/usr/lib/gcc/aarch64-linux-gnu/9/../../../../lib/:/lib/aarch64-linux-gnu/:/lib/../lib/:/usr/lib/aarch64-linux-gnu/:/usr/lib/../lib/:/usr/lib/gcc/aarch64-linux-gnu/9/../../../:/lib/:/usr/lib/]
+        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_ff648' '-mlittle-endian' '-mabi=lp64']
+        link line: [ /usr/lib/gcc/aarch64-linux-gnu/9/collect2 -plugin /usr/lib/gcc/aarch64-linux-gnu/9/liblto_plugin.so -plugin-opt=/usr/lib/gcc/aarch64-linux-gnu/9/lto-wrapper -plugin-opt=-fresolution=/tmp/ccf2AdnR.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s --build-id --eh-frame-hdr --hash-style=gnu --as-needed -dynamic-linker /lib/ld-linux-aarch64.so.1 -X -EL -maarch64linux --fix-cortex-a53-843419 -pie -z now -z relro -o cmTC_ff648 /usr/lib/gcc/aarch64-linux-gnu/9/../../../aarch64-linux-gnu/Scrt1.o /usr/lib/gcc/aarch64-linux-gnu/9/../../../aarch64-linux-gnu/crti.o /usr/lib/gcc/aarch64-linux-gnu/9/crtbeginS.o -L/usr/lib/gcc/aarch64-linux-gnu/9 -L/usr/lib/gcc/aarch64-linux-gnu/9/../../../aarch64-linux-gnu -L/usr/lib/gcc/aarch64-linux-gnu/9/../../../../lib -L/lib/aarch64-linux-gnu -L/lib/../lib -L/usr/lib/aarch64-linux-gnu -L/usr/lib/../lib -L/usr/lib/gcc/aarch64-linux-gnu/9/../../.. CMakeFiles/cmTC_ff648.dir/CMakeCCompilerABI.c.o -lgcc --push-state --as-needed -lgcc_s --pop-state -lc -lgcc --push-state --as-needed -lgcc_s --pop-state /usr/lib/gcc/aarch64-linux-gnu/9/crtendS.o /usr/lib/gcc/aarch64-linux-gnu/9/../../../aarch64-linux-gnu/crtn.o]
+          arg [/usr/lib/gcc/aarch64-linux-gnu/9/collect2] ==> ignore
+          arg [-plugin] ==> ignore
+          arg [/usr/lib/gcc/aarch64-linux-gnu/9/liblto_plugin.so] ==> ignore
+          arg [-plugin-opt=/usr/lib/gcc/aarch64-linux-gnu/9/lto-wrapper] ==> ignore
+          arg [-plugin-opt=-fresolution=/tmp/ccf2AdnR.res] ==> ignore
+          arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
+          arg [-plugin-opt=-pass-through=-lgcc_s] ==> ignore
+          arg [-plugin-opt=-pass-through=-lc] ==> ignore
+          arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
+          arg [-plugin-opt=-pass-through=-lgcc_s] ==> ignore
+          arg [--build-id] ==> ignore
+          arg [--eh-frame-hdr] ==> ignore
+          arg [--hash-style=gnu] ==> ignore
+          arg [--as-needed] ==> ignore
+          arg [-dynamic-linker] ==> ignore
+          arg [/lib/ld-linux-aarch64.so.1] ==> ignore
+          arg [-X] ==> ignore
+          arg [-EL] ==> ignore
+          arg [-maarch64linux] ==> ignore
+          arg [--fix-cortex-a53-843419] ==> ignore
+          arg [-pie] ==> ignore
+          arg [-znow] ==> ignore
+          arg [-zrelro] ==> ignore
+          arg [-o] ==> ignore
+          arg [cmTC_ff648] ==> ignore
+          arg [/usr/lib/gcc/aarch64-linux-gnu/9/../../../aarch64-linux-gnu/Scrt1.o] ==> obj [/usr/lib/gcc/aarch64-linux-gnu/9/../../../aarch64-linux-gnu/Scrt1.o]
+          arg [/usr/lib/gcc/aarch64-linux-gnu/9/../../../aarch64-linux-gnu/crti.o] ==> obj [/usr/lib/gcc/aarch64-linux-gnu/9/../../../aarch64-linux-gnu/crti.o]
+          arg [/usr/lib/gcc/aarch64-linux-gnu/9/crtbeginS.o] ==> obj [/usr/lib/gcc/aarch64-linux-gnu/9/crtbeginS.o]
+          arg [-L/usr/lib/gcc/aarch64-linux-gnu/9] ==> dir [/usr/lib/gcc/aarch64-linux-gnu/9]
+          arg [-L/usr/lib/gcc/aarch64-linux-gnu/9/../../../aarch64-linux-gnu] ==> dir [/usr/lib/gcc/aarch64-linux-gnu/9/../../../aarch64-linux-gnu]
+          arg [-L/usr/lib/gcc/aarch64-linux-gnu/9/../../../../lib] ==> dir [/usr/lib/gcc/aarch64-linux-gnu/9/../../../../lib]
+          arg [-L/lib/aarch64-linux-gnu] ==> dir [/lib/aarch64-linux-gnu]
+          arg [-L/lib/../lib] ==> dir [/lib/../lib]
+          arg [-L/usr/lib/aarch64-linux-gnu] ==> dir [/usr/lib/aarch64-linux-gnu]
+          arg [-L/usr/lib/../lib] ==> dir [/usr/lib/../lib]
+          arg [-L/usr/lib/gcc/aarch64-linux-gnu/9/../../..] ==> dir [/usr/lib/gcc/aarch64-linux-gnu/9/../../..]
+          arg [CMakeFiles/cmTC_ff648.dir/CMakeCCompilerABI.c.o] ==> ignore
+          arg [-lgcc] ==> lib [gcc]
+          arg [--push-state] ==> ignore
+          arg [--as-needed] ==> ignore
+          arg [-lgcc_s] ==> lib [gcc_s]
+          arg [--pop-state] ==> ignore
+          arg [-lc] ==> lib [c]
+          arg [-lgcc] ==> lib [gcc]
+          arg [--push-state] ==> ignore
+          arg [--as-needed] ==> ignore
+          arg [-lgcc_s] ==> lib [gcc_s]
+          arg [--pop-state] ==> ignore
+          arg [/usr/lib/gcc/aarch64-linux-gnu/9/crtendS.o] ==> obj [/usr/lib/gcc/aarch64-linux-gnu/9/crtendS.o]
+          arg [/usr/lib/gcc/aarch64-linux-gnu/9/../../../aarch64-linux-gnu/crtn.o] ==> obj [/usr/lib/gcc/aarch64-linux-gnu/9/../../../aarch64-linux-gnu/crtn.o]
+        collapse obj [/usr/lib/gcc/aarch64-linux-gnu/9/../../../aarch64-linux-gnu/Scrt1.o] ==> [/usr/lib/aarch64-linux-gnu/Scrt1.o]
+        collapse obj [/usr/lib/gcc/aarch64-linux-gnu/9/../../../aarch64-linux-gnu/crti.o] ==> [/usr/lib/aarch64-linux-gnu/crti.o]
+        collapse obj [/usr/lib/gcc/aarch64-linux-gnu/9/../../../aarch64-linux-gnu/crtn.o] ==> [/usr/lib/aarch64-linux-gnu/crtn.o]
+        collapse library dir [/usr/lib/gcc/aarch64-linux-gnu/9] ==> [/usr/lib/gcc/aarch64-linux-gnu/9]
+        collapse library dir [/usr/lib/gcc/aarch64-linux-gnu/9/../../../aarch64-linux-gnu] ==> [/usr/lib/aarch64-linux-gnu]
+        collapse library dir [/usr/lib/gcc/aarch64-linux-gnu/9/../../../../lib] ==> [/usr/lib]
+        collapse library dir [/lib/aarch64-linux-gnu] ==> [/lib/aarch64-linux-gnu]
+        collapse library dir [/lib/../lib] ==> [/lib]
+        collapse library dir [/usr/lib/aarch64-linux-gnu] ==> [/usr/lib/aarch64-linux-gnu]
+        collapse library dir [/usr/lib/../lib] ==> [/usr/lib]
+        collapse library dir [/usr/lib/gcc/aarch64-linux-gnu/9/../../..] ==> [/usr/lib]
+        implicit libs: [gcc;gcc_s;c;gcc;gcc_s]
+        implicit objs: [/usr/lib/aarch64-linux-gnu/Scrt1.o;/usr/lib/aarch64-linux-gnu/crti.o;/usr/lib/gcc/aarch64-linux-gnu/9/crtbeginS.o;/usr/lib/gcc/aarch64-linux-gnu/9/crtendS.o;/usr/lib/aarch64-linux-gnu/crtn.o]
+        implicit dirs: [/usr/lib/gcc/aarch64-linux-gnu/9;/usr/lib/aarch64-linux-gnu;/usr/lib;/lib/aarch64-linux-gnu;/lib]
+        implicit fwks: []
+      
+      
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/share/cmake-3.26/Modules/CMakeDetermineCompilerABI.cmake:57 (try_compile)"
+      - "/usr/share/cmake-3.26/Modules/CMakeTestCXXCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:33 (project)"
+    checks:
+      - "Detecting CXX compiler ABI info"
+    directories:
+      source: "/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-gTPl4I"
+      binary: "/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-gTPl4I"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: ""
+      CMAKE_CXX_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/github/graph/igraph-0.10.4/etc/cmake"
+    buildResult:
+      variable: "CMAKE_CXX_ABI_COMPILED"
+      cached: true
+      stdout: |
+        Change Dir: /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-gTPl4I
+        
+        Run Build Command(s):/usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_3bc02/fast && /usr/bin/make  -f CMakeFiles/cmTC_3bc02.dir/build.make CMakeFiles/cmTC_3bc02.dir/build
+        make[1]: Entering directory '/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-gTPl4I'
+        Building CXX object CMakeFiles/cmTC_3bc02.dir/CMakeCXXCompilerABI.cpp.o
+        /usr/bin/c++   -v -o CMakeFiles/cmTC_3bc02.dir/CMakeCXXCompilerABI.cpp.o -c /usr/share/cmake-3.26/Modules/CMakeCXXCompilerABI.cpp
+        Using built-in specs.
+        COLLECT_GCC=/usr/bin/c++
+        Target: aarch64-linux-gnu
+        Configured with: ../src/configure -v --with-pkgversion='Ubuntu 9.3.0-17ubuntu1~20.04' --with-bugurl=file:///usr/share/doc/gcc-9/README.Bugs --enable-languages=c,ada,c++,go,d,fortran,objc,obj-c++,gm2 --prefix=/usr --with-gcc-major-version-only --program-suffix=-9 --program-prefix=aarch64-linux-gnu- --enable-shared --enable-linker-build-id --libexecdir=/usr/lib --without-included-gettext --enable-threads=posix --libdir=/usr/lib --enable-nls --enable-clocale=gnu --enable-libstdcxx-debug --enable-libstdcxx-time=yes --with-default-libstdcxx-abi=new --enable-gnu-unique-object --disable-libquadmath --disable-libquadmath-support --enable-plugin --enable-default-pie --with-system-zlib --with-target-system-zlib=auto --enable-objc-gc=auto --enable-multiarch --enable-fix-cortex-a53-843419 --disable-werror --enable-checking=release --build=aarch64-linux-gnu --host=aarch64-linux-gnu --target=aarch64-linux-gnu
+        Thread model: posix
+        gcc version 9.3.0 (Ubuntu 9.3.0-17ubuntu1~20.04) 
+        COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_3bc02.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mlittle-endian' '-mabi=lp64'
+         /usr/lib/gcc/aarch64-linux-gnu/9/cc1plus -quiet -v -imultiarch aarch64-linux-gnu -D_GNU_SOURCE /usr/share/cmake-3.26/Modules/CMakeCXXCompilerABI.cpp -quiet -dumpbase CMakeCXXCompilerABI.cpp -mlittle-endian -mabi=lp64 -auxbase-strip CMakeFiles/cmTC_3bc02.dir/CMakeCXXCompilerABI.cpp.o -version -fasynchronous-unwind-tables -fstack-protector-strong -Wformat -Wformat-security -fstack-clash-protection -o /tmp/cc3msK6x.s
+        GNU C++14 (Ubuntu 9.3.0-17ubuntu1~20.04) version 9.3.0 (aarch64-linux-gnu)
+        	compiled by GNU C version 9.3.0, GMP version 6.2.0, MPFR version 4.0.2, MPC version 1.1.0, isl version isl-0.22.1-GMP
+        
+        GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
+        ignoring duplicate directory "/usr/include/aarch64-linux-gnu/c++/9"
+        ignoring nonexistent directory "/usr/local/include/aarch64-linux-gnu"
+        ignoring nonexistent directory "/usr/lib/gcc/aarch64-linux-gnu/9/include-fixed"
+        ignoring nonexistent directory "/usr/lib/gcc/aarch64-linux-gnu/9/../../../../aarch64-linux-gnu/include"
+        #include "..." search starts here:
+        #include <...> search starts here:
+         /usr/include/c++/9
+         /usr/include/aarch64-linux-gnu/c++/9
+         /usr/include/c++/9/backward
+         /usr/lib/gcc/aarch64-linux-gnu/9/include
+         /usr/local/include
+         /usr/include/aarch64-linux-gnu
+         /usr/include
+        End of search list.
+        GNU C++14 (Ubuntu 9.3.0-17ubuntu1~20.04) version 9.3.0 (aarch64-linux-gnu)
+        	compiled by GNU C version 9.3.0, GMP version 6.2.0, MPFR version 4.0.2, MPC version 1.1.0, isl version isl-0.22.1-GMP
+        
+        GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
+        Compiler executable checksum: bd4e2981e4def5b847601e40ab985a50
+        COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_3bc02.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mlittle-endian' '-mabi=lp64'
+         as -v -EL -mabi=lp64 -o CMakeFiles/cmTC_3bc02.dir/CMakeCXXCompilerABI.cpp.o /tmp/cc3msK6x.s
+        GNU assembler version 2.34 (aarch64-linux-gnu) using BFD version (GNU Binutils for Ubuntu) 2.34
+        COMPILER_PATH=/usr/lib/gcc/aarch64-linux-gnu/9/:/usr/lib/gcc/aarch64-linux-gnu/9/:/usr/lib/gcc/aarch64-linux-gnu/:/usr/lib/gcc/aarch64-linux-gnu/9/:/usr/lib/gcc/aarch64-linux-gnu/
+        LIBRARY_PATH=/usr/lib/gcc/aarch64-linux-gnu/9/:/usr/lib/gcc/aarch64-linux-gnu/9/../../../aarch64-linux-gnu/:/usr/lib/gcc/aarch64-linux-gnu/9/../../../../lib/:/lib/aarch64-linux-gnu/:/lib/../lib/:/usr/lib/aarch64-linux-gnu/:/usr/lib/../lib/:/usr/lib/gcc/aarch64-linux-gnu/9/../../../:/lib/:/usr/lib/
+        COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_3bc02.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mlittle-endian' '-mabi=lp64'
+        Linking CXX executable cmTC_3bc02
+        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_3bc02.dir/link.txt --verbose=1
+        /usr/bin/c++  -v CMakeFiles/cmTC_3bc02.dir/CMakeCXXCompilerABI.cpp.o -o cmTC_3bc02 
+        Using built-in specs.
+        COLLECT_GCC=/usr/bin/c++
+        COLLECT_LTO_WRAPPER=/usr/lib/gcc/aarch64-linux-gnu/9/lto-wrapper
+        Target: aarch64-linux-gnu
+        Configured with: ../src/configure -v --with-pkgversion='Ubuntu 9.3.0-17ubuntu1~20.04' --with-bugurl=file:///usr/share/doc/gcc-9/README.Bugs --enable-languages=c,ada,c++,go,d,fortran,objc,obj-c++,gm2 --prefix=/usr --with-gcc-major-version-only --program-suffix=-9 --program-prefix=aarch64-linux-gnu- --enable-shared --enable-linker-build-id --libexecdir=/usr/lib --without-included-gettext --enable-threads=posix --libdir=/usr/lib --enable-nls --enable-clocale=gnu --enable-libstdcxx-debug --enable-libstdcxx-time=yes --with-default-libstdcxx-abi=new --enable-gnu-unique-object --disable-libquadmath --disable-libquadmath-support --enable-plugin --enable-default-pie --with-system-zlib --with-target-system-zlib=auto --enable-objc-gc=auto --enable-multiarch --enable-fix-cortex-a53-843419 --disable-werror --enable-checking=release --build=aarch64-linux-gnu --host=aarch64-linux-gnu --target=aarch64-linux-gnu
+        Thread model: posix
+        gcc version 9.3.0 (Ubuntu 9.3.0-17ubuntu1~20.04) 
+        COMPILER_PATH=/usr/lib/gcc/aarch64-linux-gnu/9/:/usr/lib/gcc/aarch64-linux-gnu/9/:/usr/lib/gcc/aarch64-linux-gnu/:/usr/lib/gcc/aarch64-linux-gnu/9/:/usr/lib/gcc/aarch64-linux-gnu/
+        LIBRARY_PATH=/usr/lib/gcc/aarch64-linux-gnu/9/:/usr/lib/gcc/aarch64-linux-gnu/9/../../../aarch64-linux-gnu/:/usr/lib/gcc/aarch64-linux-gnu/9/../../../../lib/:/lib/aarch64-linux-gnu/:/lib/../lib/:/usr/lib/aarch64-linux-gnu/:/usr/lib/../lib/:/usr/lib/gcc/aarch64-linux-gnu/9/../../../:/lib/:/usr/lib/
+        COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_3bc02' '-shared-libgcc' '-mlittle-endian' '-mabi=lp64'
+         /usr/lib/gcc/aarch64-linux-gnu/9/collect2 -plugin /usr/lib/gcc/aarch64-linux-gnu/9/liblto_plugin.so -plugin-opt=/usr/lib/gcc/aarch64-linux-gnu/9/lto-wrapper -plugin-opt=-fresolution=/tmp/ccHhe92X.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --build-id --eh-frame-hdr --hash-style=gnu --as-needed -dynamic-linker /lib/ld-linux-aarch64.so.1 -X -EL -maarch64linux --fix-cortex-a53-843419 -pie -z now -z relro -o cmTC_3bc02 /usr/lib/gcc/aarch64-linux-gnu/9/../../../aarch64-linux-gnu/Scrt1.o /usr/lib/gcc/aarch64-linux-gnu/9/../../../aarch64-linux-gnu/crti.o /usr/lib/gcc/aarch64-linux-gnu/9/crtbeginS.o -L/usr/lib/gcc/aarch64-linux-gnu/9 -L/usr/lib/gcc/aarch64-linux-gnu/9/../../../aarch64-linux-gnu -L/usr/lib/gcc/aarch64-linux-gnu/9/../../../../lib -L/lib/aarch64-linux-gnu -L/lib/../lib -L/usr/lib/aarch64-linux-gnu -L/usr/lib/../lib -L/usr/lib/gcc/aarch64-linux-gnu/9/../../.. CMakeFiles/cmTC_3bc02.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/lib/gcc/aarch64-linux-gnu/9/crtendS.o /usr/lib/gcc/aarch64-linux-gnu/9/../../../aarch64-linux-gnu/crtn.o
+        COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_3bc02' '-shared-libgcc' '-mlittle-endian' '-mabi=lp64'
+        make[1]: Leaving directory '/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-gTPl4I'
+        
+      exitCode: 0
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/usr/share/cmake-3.26/Modules/CMakeDetermineCompilerABI.cmake:127 (message)"
+      - "/usr/share/cmake-3.26/Modules/CMakeTestCXXCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:33 (project)"
+    message: |
+      Parsed CXX implicit include dir info: rv=done
+        found start of include info
+        found start of implicit include info
+          add: [/usr/include/c++/9]
+          add: [/usr/include/aarch64-linux-gnu/c++/9]
+          add: [/usr/include/c++/9/backward]
+          add: [/usr/lib/gcc/aarch64-linux-gnu/9/include]
+          add: [/usr/local/include]
+          add: [/usr/include/aarch64-linux-gnu]
+          add: [/usr/include]
+        end of search list found
+        collapse include dir [/usr/include/c++/9] ==> [/usr/include/c++/9]
+        collapse include dir [/usr/include/aarch64-linux-gnu/c++/9] ==> [/usr/include/aarch64-linux-gnu/c++/9]
+        collapse include dir [/usr/include/c++/9/backward] ==> [/usr/include/c++/9/backward]
+        collapse include dir [/usr/lib/gcc/aarch64-linux-gnu/9/include] ==> [/usr/lib/gcc/aarch64-linux-gnu/9/include]
+        collapse include dir [/usr/local/include] ==> [/usr/local/include]
+        collapse include dir [/usr/include/aarch64-linux-gnu] ==> [/usr/include/aarch64-linux-gnu]
+        collapse include dir [/usr/include] ==> [/usr/include]
+        implicit include dirs: [/usr/include/c++/9;/usr/include/aarch64-linux-gnu/c++/9;/usr/include/c++/9/backward;/usr/lib/gcc/aarch64-linux-gnu/9/include;/usr/local/include;/usr/include/aarch64-linux-gnu;/usr/include]
+      
+      
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/usr/share/cmake-3.26/Modules/CMakeDetermineCompilerABI.cmake:152 (message)"
+      - "/usr/share/cmake-3.26/Modules/CMakeTestCXXCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:33 (project)"
+    message: |
+      Parsed CXX implicit link information:
+        link line regex: [^( *|.*[/\\])(ld|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\\]+-)?ld|collect2)[^/\\]*( |$)]
+        ignore line: [Change Dir: /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-gTPl4I]
+        ignore line: []
+        ignore line: [Run Build Command(s):/usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_3bc02/fast && /usr/bin/make  -f CMakeFiles/cmTC_3bc02.dir/build.make CMakeFiles/cmTC_3bc02.dir/build]
+        ignore line: [make[1]: Entering directory '/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-gTPl4I']
+        ignore line: [Building CXX object CMakeFiles/cmTC_3bc02.dir/CMakeCXXCompilerABI.cpp.o]
+        ignore line: [/usr/bin/c++   -v -o CMakeFiles/cmTC_3bc02.dir/CMakeCXXCompilerABI.cpp.o -c /usr/share/cmake-3.26/Modules/CMakeCXXCompilerABI.cpp]
+        ignore line: [Using built-in specs.]
+        ignore line: [COLLECT_GCC=/usr/bin/c++]
+        ignore line: [Target: aarch64-linux-gnu]
+        ignore line: [Configured with: ../src/configure -v --with-pkgversion='Ubuntu 9.3.0-17ubuntu1~20.04' --with-bugurl=file:///usr/share/doc/gcc-9/README.Bugs --enable-languages=c ada c++ go d fortran objc obj-c++ gm2 --prefix=/usr --with-gcc-major-version-only --program-suffix=-9 --program-prefix=aarch64-linux-gnu- --enable-shared --enable-linker-build-id --libexecdir=/usr/lib --without-included-gettext --enable-threads=posix --libdir=/usr/lib --enable-nls --enable-clocale=gnu --enable-libstdcxx-debug --enable-libstdcxx-time=yes --with-default-libstdcxx-abi=new --enable-gnu-unique-object --disable-libquadmath --disable-libquadmath-support --enable-plugin --enable-default-pie --with-system-zlib --with-target-system-zlib=auto --enable-objc-gc=auto --enable-multiarch --enable-fix-cortex-a53-843419 --disable-werror --enable-checking=release --build=aarch64-linux-gnu --host=aarch64-linux-gnu --target=aarch64-linux-gnu]
+        ignore line: [Thread model: posix]
+        ignore line: [gcc version 9.3.0 (Ubuntu 9.3.0-17ubuntu1~20.04) ]
+        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_3bc02.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mlittle-endian' '-mabi=lp64']
+        ignore line: [ /usr/lib/gcc/aarch64-linux-gnu/9/cc1plus -quiet -v -imultiarch aarch64-linux-gnu -D_GNU_SOURCE /usr/share/cmake-3.26/Modules/CMakeCXXCompilerABI.cpp -quiet -dumpbase CMakeCXXCompilerABI.cpp -mlittle-endian -mabi=lp64 -auxbase-strip CMakeFiles/cmTC_3bc02.dir/CMakeCXXCompilerABI.cpp.o -version -fasynchronous-unwind-tables -fstack-protector-strong -Wformat -Wformat-security -fstack-clash-protection -o /tmp/cc3msK6x.s]
+        ignore line: [GNU C++14 (Ubuntu 9.3.0-17ubuntu1~20.04) version 9.3.0 (aarch64-linux-gnu)]
+        ignore line: [	compiled by GNU C version 9.3.0  GMP version 6.2.0  MPFR version 4.0.2  MPC version 1.1.0  isl version isl-0.22.1-GMP]
+        ignore line: []
+        ignore line: [GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072]
+        ignore line: [ignoring duplicate directory "/usr/include/aarch64-linux-gnu/c++/9"]
+        ignore line: [ignoring nonexistent directory "/usr/local/include/aarch64-linux-gnu"]
+        ignore line: [ignoring nonexistent directory "/usr/lib/gcc/aarch64-linux-gnu/9/include-fixed"]
+        ignore line: [ignoring nonexistent directory "/usr/lib/gcc/aarch64-linux-gnu/9/../../../../aarch64-linux-gnu/include"]
+        ignore line: [#include "..." search starts here:]
+        ignore line: [#include <...> search starts here:]
+        ignore line: [ /usr/include/c++/9]
+        ignore line: [ /usr/include/aarch64-linux-gnu/c++/9]
+        ignore line: [ /usr/include/c++/9/backward]
+        ignore line: [ /usr/lib/gcc/aarch64-linux-gnu/9/include]
+        ignore line: [ /usr/local/include]
+        ignore line: [ /usr/include/aarch64-linux-gnu]
+        ignore line: [ /usr/include]
+        ignore line: [End of search list.]
+        ignore line: [GNU C++14 (Ubuntu 9.3.0-17ubuntu1~20.04) version 9.3.0 (aarch64-linux-gnu)]
+        ignore line: [	compiled by GNU C version 9.3.0  GMP version 6.2.0  MPFR version 4.0.2  MPC version 1.1.0  isl version isl-0.22.1-GMP]
+        ignore line: []
+        ignore line: [GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072]
+        ignore line: [Compiler executable checksum: bd4e2981e4def5b847601e40ab985a50]
+        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_3bc02.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mlittle-endian' '-mabi=lp64']
+        ignore line: [ as -v -EL -mabi=lp64 -o CMakeFiles/cmTC_3bc02.dir/CMakeCXXCompilerABI.cpp.o /tmp/cc3msK6x.s]
+        ignore line: [GNU assembler version 2.34 (aarch64-linux-gnu) using BFD version (GNU Binutils for Ubuntu) 2.34]
+        ignore line: [COMPILER_PATH=/usr/lib/gcc/aarch64-linux-gnu/9/:/usr/lib/gcc/aarch64-linux-gnu/9/:/usr/lib/gcc/aarch64-linux-gnu/:/usr/lib/gcc/aarch64-linux-gnu/9/:/usr/lib/gcc/aarch64-linux-gnu/]
+        ignore line: [LIBRARY_PATH=/usr/lib/gcc/aarch64-linux-gnu/9/:/usr/lib/gcc/aarch64-linux-gnu/9/../../../aarch64-linux-gnu/:/usr/lib/gcc/aarch64-linux-gnu/9/../../../../lib/:/lib/aarch64-linux-gnu/:/lib/../lib/:/usr/lib/aarch64-linux-gnu/:/usr/lib/../lib/:/usr/lib/gcc/aarch64-linux-gnu/9/../../../:/lib/:/usr/lib/]
+        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_3bc02.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mlittle-endian' '-mabi=lp64']
+        ignore line: [Linking CXX executable cmTC_3bc02]
+        ignore line: [/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_3bc02.dir/link.txt --verbose=1]
+        ignore line: [/usr/bin/c++  -v CMakeFiles/cmTC_3bc02.dir/CMakeCXXCompilerABI.cpp.o -o cmTC_3bc02 ]
+        ignore line: [Using built-in specs.]
+        ignore line: [COLLECT_GCC=/usr/bin/c++]
+        ignore line: [COLLECT_LTO_WRAPPER=/usr/lib/gcc/aarch64-linux-gnu/9/lto-wrapper]
+        ignore line: [Target: aarch64-linux-gnu]
+        ignore line: [Configured with: ../src/configure -v --with-pkgversion='Ubuntu 9.3.0-17ubuntu1~20.04' --with-bugurl=file:///usr/share/doc/gcc-9/README.Bugs --enable-languages=c ada c++ go d fortran objc obj-c++ gm2 --prefix=/usr --with-gcc-major-version-only --program-suffix=-9 --program-prefix=aarch64-linux-gnu- --enable-shared --enable-linker-build-id --libexecdir=/usr/lib --without-included-gettext --enable-threads=posix --libdir=/usr/lib --enable-nls --enable-clocale=gnu --enable-libstdcxx-debug --enable-libstdcxx-time=yes --with-default-libstdcxx-abi=new --enable-gnu-unique-object --disable-libquadmath --disable-libquadmath-support --enable-plugin --enable-default-pie --with-system-zlib --with-target-system-zlib=auto --enable-objc-gc=auto --enable-multiarch --enable-fix-cortex-a53-843419 --disable-werror --enable-checking=release --build=aarch64-linux-gnu --host=aarch64-linux-gnu --target=aarch64-linux-gnu]
+        ignore line: [Thread model: posix]
+        ignore line: [gcc version 9.3.0 (Ubuntu 9.3.0-17ubuntu1~20.04) ]
+        ignore line: [COMPILER_PATH=/usr/lib/gcc/aarch64-linux-gnu/9/:/usr/lib/gcc/aarch64-linux-gnu/9/:/usr/lib/gcc/aarch64-linux-gnu/:/usr/lib/gcc/aarch64-linux-gnu/9/:/usr/lib/gcc/aarch64-linux-gnu/]
+        ignore line: [LIBRARY_PATH=/usr/lib/gcc/aarch64-linux-gnu/9/:/usr/lib/gcc/aarch64-linux-gnu/9/../../../aarch64-linux-gnu/:/usr/lib/gcc/aarch64-linux-gnu/9/../../../../lib/:/lib/aarch64-linux-gnu/:/lib/../lib/:/usr/lib/aarch64-linux-gnu/:/usr/lib/../lib/:/usr/lib/gcc/aarch64-linux-gnu/9/../../../:/lib/:/usr/lib/]
+        ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_3bc02' '-shared-libgcc' '-mlittle-endian' '-mabi=lp64']
+        link line: [ /usr/lib/gcc/aarch64-linux-gnu/9/collect2 -plugin /usr/lib/gcc/aarch64-linux-gnu/9/liblto_plugin.so -plugin-opt=/usr/lib/gcc/aarch64-linux-gnu/9/lto-wrapper -plugin-opt=-fresolution=/tmp/ccHhe92X.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --build-id --eh-frame-hdr --hash-style=gnu --as-needed -dynamic-linker /lib/ld-linux-aarch64.so.1 -X -EL -maarch64linux --fix-cortex-a53-843419 -pie -z now -z relro -o cmTC_3bc02 /usr/lib/gcc/aarch64-linux-gnu/9/../../../aarch64-linux-gnu/Scrt1.o /usr/lib/gcc/aarch64-linux-gnu/9/../../../aarch64-linux-gnu/crti.o /usr/lib/gcc/aarch64-linux-gnu/9/crtbeginS.o -L/usr/lib/gcc/aarch64-linux-gnu/9 -L/usr/lib/gcc/aarch64-linux-gnu/9/../../../aarch64-linux-gnu -L/usr/lib/gcc/aarch64-linux-gnu/9/../../../../lib -L/lib/aarch64-linux-gnu -L/lib/../lib -L/usr/lib/aarch64-linux-gnu -L/usr/lib/../lib -L/usr/lib/gcc/aarch64-linux-gnu/9/../../.. CMakeFiles/cmTC_3bc02.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/lib/gcc/aarch64-linux-gnu/9/crtendS.o /usr/lib/gcc/aarch64-linux-gnu/9/../../../aarch64-linux-gnu/crtn.o]
+          arg [/usr/lib/gcc/aarch64-linux-gnu/9/collect2] ==> ignore
+          arg [-plugin] ==> ignore
+          arg [/usr/lib/gcc/aarch64-linux-gnu/9/liblto_plugin.so] ==> ignore
+          arg [-plugin-opt=/usr/lib/gcc/aarch64-linux-gnu/9/lto-wrapper] ==> ignore
+          arg [-plugin-opt=-fresolution=/tmp/ccHhe92X.res] ==> ignore
+          arg [-plugin-opt=-pass-through=-lgcc_s] ==> ignore
+          arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
+          arg [-plugin-opt=-pass-through=-lc] ==> ignore
+          arg [-plugin-opt=-pass-through=-lgcc_s] ==> ignore
+          arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
+          arg [--build-id] ==> ignore
+          arg [--eh-frame-hdr] ==> ignore
+          arg [--hash-style=gnu] ==> ignore
+          arg [--as-needed] ==> ignore
+          arg [-dynamic-linker] ==> ignore
+          arg [/lib/ld-linux-aarch64.so.1] ==> ignore
+          arg [-X] ==> ignore
+          arg [-EL] ==> ignore
+          arg [-maarch64linux] ==> ignore
+          arg [--fix-cortex-a53-843419] ==> ignore
+          arg [-pie] ==> ignore
+          arg [-znow] ==> ignore
+          arg [-zrelro] ==> ignore
+          arg [-o] ==> ignore
+          arg [cmTC_3bc02] ==> ignore
+          arg [/usr/lib/gcc/aarch64-linux-gnu/9/../../../aarch64-linux-gnu/Scrt1.o] ==> obj [/usr/lib/gcc/aarch64-linux-gnu/9/../../../aarch64-linux-gnu/Scrt1.o]
+          arg [/usr/lib/gcc/aarch64-linux-gnu/9/../../../aarch64-linux-gnu/crti.o] ==> obj [/usr/lib/gcc/aarch64-linux-gnu/9/../../../aarch64-linux-gnu/crti.o]
+          arg [/usr/lib/gcc/aarch64-linux-gnu/9/crtbeginS.o] ==> obj [/usr/lib/gcc/aarch64-linux-gnu/9/crtbeginS.o]
+          arg [-L/usr/lib/gcc/aarch64-linux-gnu/9] ==> dir [/usr/lib/gcc/aarch64-linux-gnu/9]
+          arg [-L/usr/lib/gcc/aarch64-linux-gnu/9/../../../aarch64-linux-gnu] ==> dir [/usr/lib/gcc/aarch64-linux-gnu/9/../../../aarch64-linux-gnu]
+          arg [-L/usr/lib/gcc/aarch64-linux-gnu/9/../../../../lib] ==> dir [/usr/lib/gcc/aarch64-linux-gnu/9/../../../../lib]
+          arg [-L/lib/aarch64-linux-gnu] ==> dir [/lib/aarch64-linux-gnu]
+          arg [-L/lib/../lib] ==> dir [/lib/../lib]
+          arg [-L/usr/lib/aarch64-linux-gnu] ==> dir [/usr/lib/aarch64-linux-gnu]
+          arg [-L/usr/lib/../lib] ==> dir [/usr/lib/../lib]
+          arg [-L/usr/lib/gcc/aarch64-linux-gnu/9/../../..] ==> dir [/usr/lib/gcc/aarch64-linux-gnu/9/../../..]
+          arg [CMakeFiles/cmTC_3bc02.dir/CMakeCXXCompilerABI.cpp.o] ==> ignore
+          arg [-lstdc++] ==> lib [stdc++]
+          arg [-lm] ==> lib [m]
+          arg [-lgcc_s] ==> lib [gcc_s]
+          arg [-lgcc] ==> lib [gcc]
+          arg [-lc] ==> lib [c]
+          arg [-lgcc_s] ==> lib [gcc_s]
+          arg [-lgcc] ==> lib [gcc]
+          arg [/usr/lib/gcc/aarch64-linux-gnu/9/crtendS.o] ==> obj [/usr/lib/gcc/aarch64-linux-gnu/9/crtendS.o]
+          arg [/usr/lib/gcc/aarch64-linux-gnu/9/../../../aarch64-linux-gnu/crtn.o] ==> obj [/usr/lib/gcc/aarch64-linux-gnu/9/../../../aarch64-linux-gnu/crtn.o]
+        collapse obj [/usr/lib/gcc/aarch64-linux-gnu/9/../../../aarch64-linux-gnu/Scrt1.o] ==> [/usr/lib/aarch64-linux-gnu/Scrt1.o]
+        collapse obj [/usr/lib/gcc/aarch64-linux-gnu/9/../../../aarch64-linux-gnu/crti.o] ==> [/usr/lib/aarch64-linux-gnu/crti.o]
+        collapse obj [/usr/lib/gcc/aarch64-linux-gnu/9/../../../aarch64-linux-gnu/crtn.o] ==> [/usr/lib/aarch64-linux-gnu/crtn.o]
+        collapse library dir [/usr/lib/gcc/aarch64-linux-gnu/9] ==> [/usr/lib/gcc/aarch64-linux-gnu/9]
+        collapse library dir [/usr/lib/gcc/aarch64-linux-gnu/9/../../../aarch64-linux-gnu] ==> [/usr/lib/aarch64-linux-gnu]
+        collapse library dir [/usr/lib/gcc/aarch64-linux-gnu/9/../../../../lib] ==> [/usr/lib]
+        collapse library dir [/lib/aarch64-linux-gnu] ==> [/lib/aarch64-linux-gnu]
+        collapse library dir [/lib/../lib] ==> [/lib]
+        collapse library dir [/usr/lib/aarch64-linux-gnu] ==> [/usr/lib/aarch64-linux-gnu]
+        collapse library dir [/usr/lib/../lib] ==> [/usr/lib]
+        collapse library dir [/usr/lib/gcc/aarch64-linux-gnu/9/../../..] ==> [/usr/lib]
+        implicit libs: [stdc++;m;gcc_s;gcc;c;gcc_s;gcc]
+        implicit objs: [/usr/lib/aarch64-linux-gnu/Scrt1.o;/usr/lib/aarch64-linux-gnu/crti.o;/usr/lib/gcc/aarch64-linux-gnu/9/crtbeginS.o;/usr/lib/gcc/aarch64-linux-gnu/9/crtendS.o;/usr/lib/aarch64-linux-gnu/crtn.o]
+        implicit dirs: [/usr/lib/gcc/aarch64-linux-gnu/9;/usr/lib/aarch64-linux-gnu;/usr/lib;/lib/aarch64-linux-gnu;/lib]
+        implicit fwks: []
+      
+      
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/share/cmake-3.26/Modules/Internal/CheckSourceCompiles.cmake:101 (try_compile)"
+      - "/usr/share/cmake-3.26/Modules/Internal/CheckCompilerFlag.cmake:18 (cmake_check_source_compiles)"
+      - "/usr/share/cmake-3.26/Modules/CheckCCompilerFlag.cmake:40 (cmake_check_compiler_flag)"
+      - "etc/cmake/compilers.cmake:13 (check_c_compiler_flag)"
+      - "CMakeLists.txt:42 (include)"
+    checks:
+      - "Performing Test COMPILER_SUPPORTS_UNKNOWN_WARNING_OPTION_FLAG"
+    directories:
+      source: "/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-7e4XuI"
+      binary: "/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-7e4XuI"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/github/graph/igraph-0.10.4/etc/cmake"
+    buildResult:
+      variable: "COMPILER_SUPPORTS_UNKNOWN_WARNING_OPTION_FLAG"
+      cached: true
+      stdout: |
+        Change Dir: /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-7e4XuI
+        
+        Run Build Command(s):/usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_50f35/fast && /usr/bin/make  -f CMakeFiles/cmTC_50f35.dir/build.make CMakeFiles/cmTC_50f35.dir/build
+        make[1]: Entering directory '/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-7e4XuI'
+        Building C object CMakeFiles/cmTC_50f35.dir/src.c.o
+        /usr/bin/cc -DCOMPILER_SUPPORTS_UNKNOWN_WARNING_OPTION_FLAG  -Wunknown-warning-option -o CMakeFiles/cmTC_50f35.dir/src.c.o -c /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-7e4XuI/src.c
+        cc: error: unrecognized command line option '-Wunknown-warning-option'
+        make[1]: *** [CMakeFiles/cmTC_50f35.dir/build.make:78: CMakeFiles/cmTC_50f35.dir/src.c.o] Error 1
+        make[1]: Leaving directory '/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-7e4XuI'
+        make: *** [Makefile:127: cmTC_50f35/fast] Error 2
+        
+      exitCode: 2
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/share/cmake-3.26/Modules/Internal/CheckSourceCompiles.cmake:101 (try_compile)"
+      - "/usr/share/cmake-3.26/Modules/CheckCSourceCompiles.cmake:76 (cmake_check_source_compiles)"
+      - "etc/cmake/attribute_support.cmake:16 (check_c_source_compiles)"
+      - "CMakeLists.txt:45 (include)"
+    checks:
+      - "Performing Test COMPILER_HAS_DEPRECATED_ENUMVAL_ATTR"
+    directories:
+      source: "/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-lJO7AM"
+      binary: "/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-lJO7AM"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/github/graph/igraph-0.10.4/etc/cmake"
+    buildResult:
+      variable: "COMPILER_HAS_DEPRECATED_ENUMVAL_ATTR"
+      cached: true
+      stdout: |
+        Change Dir: /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-lJO7AM
+        
+        Run Build Command(s):/usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_8082a/fast && /usr/bin/make  -f CMakeFiles/cmTC_8082a.dir/build.make CMakeFiles/cmTC_8082a.dir/build
+        make[1]: Entering directory '/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-lJO7AM'
+        Building C object CMakeFiles/cmTC_8082a.dir/src.c.o
+        /usr/bin/cc -DCOMPILER_HAS_DEPRECATED_ENUMVAL_ATTR  -Werror -o CMakeFiles/cmTC_8082a.dir/src.c.o -c /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-lJO7AM/src.c
+        Linking C executable cmTC_8082a
+        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_8082a.dir/link.txt --verbose=1
+        /usr/bin/cc   -Werror CMakeFiles/cmTC_8082a.dir/src.c.o -o cmTC_8082a 
+        make[1]: Leaving directory '/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-lJO7AM'
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/share/cmake-3.26/Modules/Internal/CheckSourceCompiles.cmake:101 (try_compile)"
+      - "/usr/share/cmake-3.26/Modules/CheckCSourceCompiles.cmake:76 (cmake_check_source_compiles)"
+      - "etc/cmake/CheckTLSSupport.cmake:9 (check_c_source_compiles)"
+      - "etc/cmake/tls.cmake:4 (check_tls_support)"
+      - "etc/cmake/features.cmake:3 (include)"
+      - "CMakeLists.txt:71 (include)"
+    directories:
+      source: "/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-cUmJfM"
+      binary: "/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-cUmJfM"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/github/graph/igraph-0.10.4/etc/cmake"
+    buildResult:
+      variable: "HAVE_GCC_TLS"
+      cached: true
+      stdout: |
+        Change Dir: /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-cUmJfM
+        
+        Run Build Command(s):/usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_874f6/fast && /usr/bin/make  -f CMakeFiles/cmTC_874f6.dir/build.make CMakeFiles/cmTC_874f6.dir/build
+        make[1]: Entering directory '/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-cUmJfM'
+        Building C object CMakeFiles/cmTC_874f6.dir/src.c.o
+        /usr/bin/cc -DHAVE_GCC_TLS  -std=gnu99 -o CMakeFiles/cmTC_874f6.dir/src.c.o -c /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-cUmJfM/src.c
+        Linking C executable cmTC_874f6
+        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_874f6.dir/link.txt --verbose=1
+        /usr/bin/cc CMakeFiles/cmTC_874f6.dir/src.c.o -o cmTC_874f6 
+        make[1]: Leaving directory '/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-cUmJfM'
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/share/cmake-3.26/Modules/Internal/CheckSourceCompiles.cmake:101 (try_compile)"
+      - "/usr/share/cmake-3.26/Modules/CheckCSourceCompiles.cmake:76 (cmake_check_source_compiles)"
+      - "/usr/share/cmake-3.26/Modules/FindThreads.cmake:97 (CHECK_C_SOURCE_COMPILES)"
+      - "/usr/share/cmake-3.26/Modules/FindThreads.cmake:163 (_threads_check_libc)"
+      - "etc/cmake/dependencies.cmake:8 (include)"
+      - "CMakeLists.txt:74 (include)"
+    checks:
+      - "Performing Test CMAKE_HAVE_LIBC_PTHREAD"
+    directories:
+      source: "/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-IAeRvI"
+      binary: "/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-IAeRvI"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/github/graph/igraph-0.10.4/etc/cmake"
+    buildResult:
+      variable: "CMAKE_HAVE_LIBC_PTHREAD"
+      cached: true
+      stdout: |
+        Change Dir: /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-IAeRvI
+        
+        Run Build Command(s):/usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_ea575/fast && /usr/bin/make  -f CMakeFiles/cmTC_ea575.dir/build.make CMakeFiles/cmTC_ea575.dir/build
+        make[1]: Entering directory '/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-IAeRvI'
+        Building C object CMakeFiles/cmTC_ea575.dir/src.c.o
+        /usr/bin/cc -DCMAKE_HAVE_LIBC_PTHREAD  -std=gnu99 -o CMakeFiles/cmTC_ea575.dir/src.c.o -c /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-IAeRvI/src.c
+        Linking C executable cmTC_ea575
+        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_ea575.dir/link.txt --verbose=1
+        /usr/bin/cc CMakeFiles/cmTC_ea575.dir/src.c.o -o cmTC_ea575 
+        /usr/bin/ld: CMakeFiles/cmTC_ea575.dir/src.c.o: in function `main':
+        src.c:(.text+0x48): undefined reference to `pthread_create'
+        /usr/bin/ld: src.c:(.text+0x50): undefined reference to `pthread_detach'
+        /usr/bin/ld: src.c:(.text+0x58): undefined reference to `pthread_cancel'
+        /usr/bin/ld: src.c:(.text+0x64): undefined reference to `pthread_join'
+        collect2: error: ld returned 1 exit status
+        make[1]: *** [CMakeFiles/cmTC_ea575.dir/build.make:99: cmTC_ea575] Error 1
+        make[1]: Leaving directory '/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-IAeRvI'
+        make: *** [Makefile:127: cmTC_ea575/fast] Error 2
+        
+      exitCode: 2
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/share/cmake-3.26/Modules/CheckLibraryExists.cmake:71 (try_compile)"
+      - "/usr/share/cmake-3.26/Modules/FindThreads.cmake:112 (CHECK_LIBRARY_EXISTS)"
+      - "/usr/share/cmake-3.26/Modules/FindThreads.cmake:175 (_threads_check_lib)"
+      - "etc/cmake/dependencies.cmake:8 (include)"
+      - "CMakeLists.txt:74 (include)"
+    checks:
+      - "Looking for pthread_create in pthreads"
+    directories:
+      source: "/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-HYaR8I"
+      binary: "/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-HYaR8I"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/github/graph/igraph-0.10.4/etc/cmake"
+    buildResult:
+      variable: "CMAKE_HAVE_PTHREADS_CREATE"
+      cached: true
+      stdout: |
+        Change Dir: /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-HYaR8I
+        
+        Run Build Command(s):/usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_b2c4e/fast && /usr/bin/make  -f CMakeFiles/cmTC_b2c4e.dir/build.make CMakeFiles/cmTC_b2c4e.dir/build
+        make[1]: Entering directory '/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-HYaR8I'
+        Building C object CMakeFiles/cmTC_b2c4e.dir/CheckFunctionExists.c.o
+        /usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create -std=gnu99 -o CMakeFiles/cmTC_b2c4e.dir/CheckFunctionExists.c.o -c /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-HYaR8I/CheckFunctionExists.c
+        Linking C executable cmTC_b2c4e
+        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_b2c4e.dir/link.txt --verbose=1
+        /usr/bin/cc  -DCHECK_FUNCTION_EXISTS=pthread_create CMakeFiles/cmTC_b2c4e.dir/CheckFunctionExists.c.o -o cmTC_b2c4e  -lpthreads 
+        /usr/bin/ld: cannot find -lpthreads
+        collect2: error: ld returned 1 exit status
+        make[1]: *** [CMakeFiles/cmTC_b2c4e.dir/build.make:99: cmTC_b2c4e] Error 1
+        make[1]: Leaving directory '/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-HYaR8I'
+        make: *** [Makefile:127: cmTC_b2c4e/fast] Error 2
+        
+      exitCode: 2
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/share/cmake-3.26/Modules/CheckLibraryExists.cmake:71 (try_compile)"
+      - "/usr/share/cmake-3.26/Modules/FindThreads.cmake:112 (CHECK_LIBRARY_EXISTS)"
+      - "/usr/share/cmake-3.26/Modules/FindThreads.cmake:176 (_threads_check_lib)"
+      - "etc/cmake/dependencies.cmake:8 (include)"
+      - "CMakeLists.txt:74 (include)"
+    checks:
+      - "Looking for pthread_create in pthread"
+    directories:
+      source: "/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-RKNw6L"
+      binary: "/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-RKNw6L"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/github/graph/igraph-0.10.4/etc/cmake"
+    buildResult:
+      variable: "CMAKE_HAVE_PTHREAD_CREATE"
+      cached: true
+      stdout: |
+        Change Dir: /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-RKNw6L
+        
+        Run Build Command(s):/usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_e43cb/fast && /usr/bin/make  -f CMakeFiles/cmTC_e43cb.dir/build.make CMakeFiles/cmTC_e43cb.dir/build
+        make[1]: Entering directory '/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-RKNw6L'
+        Building C object CMakeFiles/cmTC_e43cb.dir/CheckFunctionExists.c.o
+        /usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create -std=gnu99 -o CMakeFiles/cmTC_e43cb.dir/CheckFunctionExists.c.o -c /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-RKNw6L/CheckFunctionExists.c
+        Linking C executable cmTC_e43cb
+        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_e43cb.dir/link.txt --verbose=1
+        /usr/bin/cc  -DCHECK_FUNCTION_EXISTS=pthread_create CMakeFiles/cmTC_e43cb.dir/CheckFunctionExists.c.o -o cmTC_e43cb  -lpthread 
+        make[1]: Leaving directory '/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-RKNw6L'
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/share/cmake-3.26/Modules/CheckFunctionExists.cmake:91 (try_compile)"
+      - "/usr/share/cmake-3.26/Modules/FindBLAS.cmake:367 (check_function_exists)"
+      - "/usr/share/cmake-3.26/Modules/FindBLAS.cmake:411 (check_blas_libraries)"
+      - "etc/cmake/dependencies.cmake:41 (find_package)"
+      - "CMakeLists.txt:75 (find_dependencies)"
+    directories:
+      source: "/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-lAA6oI"
+      binary: "/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-lAA6oI"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/github/graph/igraph-0.10.4/etc/cmake"
+    buildResult:
+      variable: "BLAS_WORKS"
+      cached: true
+      stdout: |
+        Change Dir: /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-lAA6oI
+        
+        Run Build Command(s):/usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_45294/fast && /usr/bin/make  -f CMakeFiles/cmTC_45294.dir/build.make CMakeFiles/cmTC_45294.dir/build
+        make[1]: Entering directory '/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-lAA6oI'
+        Building C object CMakeFiles/cmTC_45294.dir/CheckFunctionExists.c.o
+        /usr/bin/cc   -DCHECK_FUNCTION_EXISTS=sgemm_ -std=gnu99 -o CMakeFiles/cmTC_45294.dir/CheckFunctionExists.c.o -c /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-lAA6oI/CheckFunctionExists.c
+        Linking C executable cmTC_45294
+        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_45294.dir/link.txt --verbose=1
+        /usr/bin/cc  -DCHECK_FUNCTION_EXISTS=sgemm_ CMakeFiles/cmTC_45294.dir/CheckFunctionExists.c.o -o cmTC_45294 
+        /usr/bin/ld: CMakeFiles/cmTC_45294.dir/CheckFunctionExists.c.o: in function `main':
+        CheckFunctionExists.c:(.text+0x10): undefined reference to `sgemm_'
+        collect2: error: ld returned 1 exit status
+        make[1]: *** [CMakeFiles/cmTC_45294.dir/build.make:99: cmTC_45294] Error 1
+        make[1]: Leaving directory '/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-lAA6oI'
+        make: *** [Makefile:127: cmTC_45294/fast] Error 2
+        
+      exitCode: 2
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/share/cmake-3.26/Modules/CheckFunctionExists.cmake:91 (try_compile)"
+      - "/usr/share/cmake-3.26/Modules/FindBLAS.cmake:367 (check_function_exists)"
+      - "/usr/share/cmake-3.26/Modules/FindBLAS.cmake:854 (check_blas_libraries)"
+      - "etc/cmake/dependencies.cmake:41 (find_package)"
+      - "CMakeLists.txt:75 (find_dependencies)"
+    directories:
+      source: "/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-MXZvML"
+      binary: "/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-MXZvML"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/github/graph/igraph-0.10.4/etc/cmake"
+    buildResult:
+      variable: "BLAS_blas_f77blas_atlas_WORKS"
+      cached: true
+      stdout: |
+        Change Dir: /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-MXZvML
+        
+        Run Build Command(s):/usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_a3907/fast && /usr/bin/make  -f CMakeFiles/cmTC_a3907.dir/build.make CMakeFiles/cmTC_a3907.dir/build
+        make[1]: Entering directory '/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-MXZvML'
+        Building C object CMakeFiles/cmTC_a3907.dir/CheckFunctionExists.c.o
+        /usr/bin/cc   -DCHECK_FUNCTION_EXISTS=dgemm_ -std=gnu99 -o CMakeFiles/cmTC_a3907.dir/CheckFunctionExists.c.o -c /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-MXZvML/CheckFunctionExists.c
+        Linking C executable cmTC_a3907
+        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_a3907.dir/link.txt --verbose=1
+        /usr/bin/cc  -DCHECK_FUNCTION_EXISTS=dgemm_ CMakeFiles/cmTC_a3907.dir/CheckFunctionExists.c.o -o cmTC_a3907  /usr/lib/aarch64-linux-gnu/libblas.so /usr/lib/aarch64-linux-gnu/libf77blas.so /usr/lib/aarch64-linux-gnu/libatlas.so 
+        make[1]: Leaving directory '/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-MXZvML'
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/share/cmake-3.26/Modules/CheckFunctionExists.cmake:91 (try_compile)"
+      - "/usr/share/cmake-3.26/Modules/FindLAPACK.cmake:220 (check_function_exists)"
+      - "/usr/share/cmake-3.26/Modules/FindLAPACK.cmake:395 (check_lapack_libraries)"
+      - "etc/cmake/dependencies.cmake:41 (find_package)"
+      - "CMakeLists.txt:75 (find_dependencies)"
+    directories:
+      source: "/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-nzFyhJ"
+      binary: "/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-nzFyhJ"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/github/graph/igraph-0.10.4/etc/cmake"
+    buildResult:
+      variable: "LAPACK_WORKS"
+      cached: true
+      stdout: |
+        Change Dir: /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-nzFyhJ
+        
+        Run Build Command(s):/usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_e941a/fast && /usr/bin/make  -f CMakeFiles/cmTC_e941a.dir/build.make CMakeFiles/cmTC_e941a.dir/build
+        make[1]: Entering directory '/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-nzFyhJ'
+        Building C object CMakeFiles/cmTC_e941a.dir/CheckFunctionExists.c.o
+        /usr/bin/cc   -DCHECK_FUNCTION_EXISTS=cheev_ -std=gnu99 -o CMakeFiles/cmTC_e941a.dir/CheckFunctionExists.c.o -c /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-nzFyhJ/CheckFunctionExists.c
+        Linking C executable cmTC_e941a
+        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_e941a.dir/link.txt --verbose=1
+        /usr/bin/cc  -DCHECK_FUNCTION_EXISTS=cheev_ CMakeFiles/cmTC_e941a.dir/CheckFunctionExists.c.o -o cmTC_e941a  /usr/lib/aarch64-linux-gnu/libblas.so /usr/lib/aarch64-linux-gnu/libf77blas.so /usr/lib/aarch64-linux-gnu/libatlas.so -lpthread -lm -ldl 
+        /usr/bin/ld: CMakeFiles/cmTC_e941a.dir/CheckFunctionExists.c.o: in function `main':
+        CheckFunctionExists.c:(.text+0x10): undefined reference to `cheev_'
+        collect2: error: ld returned 1 exit status
+        make[1]: *** [CMakeFiles/cmTC_e941a.dir/build.make:102: cmTC_e941a] Error 1
+        make[1]: Leaving directory '/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-nzFyhJ'
+        make: *** [Makefile:127: cmTC_e941a/fast] Error 2
+        
+      exitCode: 2
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/share/cmake-3.26/Modules/CheckFunctionExists.cmake:91 (try_compile)"
+      - "/usr/share/cmake-3.26/Modules/FindLAPACK.cmake:220 (check_function_exists)"
+      - "/usr/share/cmake-3.26/Modules/FindLAPACK.cmake:681 (check_lapack_libraries)"
+      - "etc/cmake/dependencies.cmake:41 (find_package)"
+      - "CMakeLists.txt:75 (find_dependencies)"
+    directories:
+      source: "/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-wYkKNK"
+      binary: "/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-wYkKNK"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/github/graph/igraph-0.10.4/etc/cmake"
+    buildResult:
+      variable: "LAPACK_lapack_WORKS"
+      cached: true
+      stdout: |
+        Change Dir: /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-wYkKNK
+        
+        Run Build Command(s):/usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_c6fba/fast && /usr/bin/make  -f CMakeFiles/cmTC_c6fba.dir/build.make CMakeFiles/cmTC_c6fba.dir/build
+        make[1]: Entering directory '/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-wYkKNK'
+        Building C object CMakeFiles/cmTC_c6fba.dir/CheckFunctionExists.c.o
+        /usr/bin/cc   -DCHECK_FUNCTION_EXISTS=cheev_ -std=gnu99 -o CMakeFiles/cmTC_c6fba.dir/CheckFunctionExists.c.o -c /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-wYkKNK/CheckFunctionExists.c
+        Linking C executable cmTC_c6fba
+        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_c6fba.dir/link.txt --verbose=1
+        /usr/bin/cc  -DCHECK_FUNCTION_EXISTS=cheev_ CMakeFiles/cmTC_c6fba.dir/CheckFunctionExists.c.o -o cmTC_c6fba  /usr/lib/aarch64-linux-gnu/liblapack.so /usr/lib/aarch64-linux-gnu/libblas.so /usr/lib/aarch64-linux-gnu/libf77blas.so /usr/lib/aarch64-linux-gnu/libatlas.so 
+        make[1]: Leaving directory '/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-wYkKNK'
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/share/cmake-3.26/Modules/FindOpenMP.cmake:219 (try_compile)"
+      - "/usr/share/cmake-3.26/Modules/FindOpenMP.cmake:483 (_OPENMP_GET_FLAGS)"
+      - "etc/cmake/dependencies.cmake:62 (find_package)"
+      - "CMakeLists.txt:75 (find_dependencies)"
+    description: "Detecting C OpenMP compiler info"
+    directories:
+      source: "/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-oJxCAK"
+      binary: "/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-oJxCAK"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/github/graph/igraph-0.10.4/etc/cmake"
+    buildResult:
+      variable: "OpenMP_COMPILE_RESULT_C_fopenmp"
+      cached: true
+      stdout: |
+        Change Dir: /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-oJxCAK
+        
+        Run Build Command(s):/usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_742b8/fast && /usr/bin/make  -f CMakeFiles/cmTC_742b8.dir/build.make CMakeFiles/cmTC_742b8.dir/build
+        make[1]: Entering directory '/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-oJxCAK'
+        Building C object CMakeFiles/cmTC_742b8.dir/OpenMPTryFlag.c.o
+        /usr/bin/cc   -fopenmp -v -std=gnu99 -o CMakeFiles/cmTC_742b8.dir/OpenMPTryFlag.c.o -c /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-oJxCAK/OpenMPTryFlag.c
+        Using built-in specs.
+        COLLECT_GCC=/usr/bin/cc
+        Target: aarch64-linux-gnu
+        Configured with: ../src/configure -v --with-pkgversion='Ubuntu 9.3.0-17ubuntu1~20.04' --with-bugurl=file:///usr/share/doc/gcc-9/README.Bugs --enable-languages=c,ada,c++,go,d,fortran,objc,obj-c++,gm2 --prefix=/usr --with-gcc-major-version-only --program-suffix=-9 --program-prefix=aarch64-linux-gnu- --enable-shared --enable-linker-build-id --libexecdir=/usr/lib --without-included-gettext --enable-threads=posix --libdir=/usr/lib --enable-nls --enable-clocale=gnu --enable-libstdcxx-debug --enable-libstdcxx-time=yes --with-default-libstdcxx-abi=new --enable-gnu-unique-object --disable-libquadmath --disable-libquadmath-support --enable-plugin --enable-default-pie --with-system-zlib --with-target-system-zlib=auto --enable-objc-gc=auto --enable-multiarch --enable-fix-cortex-a53-843419 --disable-werror --enable-checking=release --build=aarch64-linux-gnu --host=aarch64-linux-gnu --target=aarch64-linux-gnu
+        Thread model: posix
+        gcc version 9.3.0 (Ubuntu 9.3.0-17ubuntu1~20.04) 
+        COLLECT_GCC_OPTIONS='-fopenmp' '-v' '-std=gnu99' '-o' 'CMakeFiles/cmTC_742b8.dir/OpenMPTryFlag.c.o' '-c' '-mlittle-endian' '-mabi=lp64' '-pthread'
+         /usr/lib/gcc/aarch64-linux-gnu/9/cc1 -quiet -v -imultiarch aarch64-linux-gnu -D_REENTRANT /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-oJxCAK/OpenMPTryFlag.c -quiet -dumpbase OpenMPTryFlag.c -mlittle-endian -mabi=lp64 -auxbase-strip CMakeFiles/cmTC_742b8.dir/OpenMPTryFlag.c.o -std=gnu99 -version -fopenmp -fasynchronous-unwind-tables -fstack-protector-strong -Wformat -Wformat-security -fstack-clash-protection -o /tmp/cc02pI7q.s
+        GNU C99 (Ubuntu 9.3.0-17ubuntu1~20.04) version 9.3.0 (aarch64-linux-gnu)
+        	compiled by GNU C version 9.3.0, GMP version 6.2.0, MPFR version 4.0.2, MPC version 1.1.0, isl version isl-0.22.1-GMP
+        
+        GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
+        ignoring nonexistent directory "/usr/local/include/aarch64-linux-gnu"
+        ignoring nonexistent directory "/usr/lib/gcc/aarch64-linux-gnu/9/include-fixed"
+        ignoring nonexistent directory "/usr/lib/gcc/aarch64-linux-gnu/9/../../../../aarch64-linux-gnu/include"
+        #include "..." search starts here:
+        #include <...> search starts here:
+         /usr/lib/gcc/aarch64-linux-gnu/9/include
+         /usr/local/include
+         /usr/include/aarch64-linux-gnu
+         /usr/include
+        End of search list.
+        GNU C99 (Ubuntu 9.3.0-17ubuntu1~20.04) version 9.3.0 (aarch64-linux-gnu)
+        	compiled by GNU C version 9.3.0, GMP version 6.2.0, MPFR version 4.0.2, MPC version 1.1.0, isl version isl-0.22.1-GMP
+        
+        GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
+        Compiler executable checksum: 13e224182c6e897e114f431ecfe03700
+        COLLECT_GCC_OPTIONS='-fopenmp' '-v' '-std=gnu99' '-o' 'CMakeFiles/cmTC_742b8.dir/OpenMPTryFlag.c.o' '-c' '-mlittle-endian' '-mabi=lp64' '-pthread'
+         as -v -EL -mabi=lp64 -o CMakeFiles/cmTC_742b8.dir/OpenMPTryFlag.c.o /tmp/cc02pI7q.s
+        GNU assembler version 2.34 (aarch64-linux-gnu) using BFD version (GNU Binutils for Ubuntu) 2.34
+        COMPILER_PATH=/usr/lib/gcc/aarch64-linux-gnu/9/:/usr/lib/gcc/aarch64-linux-gnu/9/:/usr/lib/gcc/aarch64-linux-gnu/:/usr/lib/gcc/aarch64-linux-gnu/9/:/usr/lib/gcc/aarch64-linux-gnu/
+        LIBRARY_PATH=/usr/lib/gcc/aarch64-linux-gnu/9/:/usr/lib/gcc/aarch64-linux-gnu/9/../../../aarch64-linux-gnu/:/usr/lib/gcc/aarch64-linux-gnu/9/../../../../lib/:/lib/aarch64-linux-gnu/:/lib/../lib/:/usr/lib/aarch64-linux-gnu/:/usr/lib/../lib/:/usr/lib/gcc/aarch64-linux-gnu/9/../../../:/lib/:/usr/lib/
+        COLLECT_GCC_OPTIONS='-fopenmp' '-v' '-std=gnu99' '-o' 'CMakeFiles/cmTC_742b8.dir/OpenMPTryFlag.c.o' '-c' '-mlittle-endian' '-mabi=lp64' '-pthread'
+        Linking C executable cmTC_742b8
+        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_742b8.dir/link.txt --verbose=1
+        /usr/bin/cc  -fopenmp -v CMakeFiles/cmTC_742b8.dir/OpenMPTryFlag.c.o -o cmTC_742b8  -v 
+        Using built-in specs.
+        COLLECT_GCC=/usr/bin/cc
+        COLLECT_LTO_WRAPPER=/usr/lib/gcc/aarch64-linux-gnu/9/lto-wrapper
+        Target: aarch64-linux-gnu
+        Configured with: ../src/configure -v --with-pkgversion='Ubuntu 9.3.0-17ubuntu1~20.04' --with-bugurl=file:///usr/share/doc/gcc-9/README.Bugs --enable-languages=c,ada,c++,go,d,fortran,objc,obj-c++,gm2 --prefix=/usr --with-gcc-major-version-only --program-suffix=-9 --program-prefix=aarch64-linux-gnu- --enable-shared --enable-linker-build-id --libexecdir=/usr/lib --without-included-gettext --enable-threads=posix --libdir=/usr/lib --enable-nls --enable-clocale=gnu --enable-libstdcxx-debug --enable-libstdcxx-time=yes --with-default-libstdcxx-abi=new --enable-gnu-unique-object --disable-libquadmath --disable-libquadmath-support --enable-plugin --enable-default-pie --with-system-zlib --with-target-system-zlib=auto --enable-objc-gc=auto --enable-multiarch --enable-fix-cortex-a53-843419 --disable-werror --enable-checking=release --build=aarch64-linux-gnu --host=aarch64-linux-gnu --target=aarch64-linux-gnu
+        Thread model: posix
+        gcc version 9.3.0 (Ubuntu 9.3.0-17ubuntu1~20.04) 
+        COMPILER_PATH=/usr/lib/gcc/aarch64-linux-gnu/9/:/usr/lib/gcc/aarch64-linux-gnu/9/:/usr/lib/gcc/aarch64-linux-gnu/:/usr/lib/gcc/aarch64-linux-gnu/9/:/usr/lib/gcc/aarch64-linux-gnu/
+        LIBRARY_PATH=/usr/lib/gcc/aarch64-linux-gnu/9/:/usr/lib/gcc/aarch64-linux-gnu/9/../../../aarch64-linux-gnu/:/usr/lib/gcc/aarch64-linux-gnu/9/../../../../lib/:/lib/aarch64-linux-gnu/:/lib/../lib/:/usr/lib/aarch64-linux-gnu/:/usr/lib/../lib/:/usr/lib/gcc/aarch64-linux-gnu/9/../../../:/lib/:/usr/lib/
+        Reading specs from /usr/lib/gcc/aarch64-linux-gnu/9/libgomp.spec
+        COLLECT_GCC_OPTIONS='-fopenmp' '-v' '-o' 'cmTC_742b8' '-v' '-mlittle-endian' '-mabi=lp64' '-pthread'
+         /usr/lib/gcc/aarch64-linux-gnu/9/collect2 -plugin /usr/lib/gcc/aarch64-linux-gnu/9/liblto_plugin.so -plugin-opt=/usr/lib/gcc/aarch64-linux-gnu/9/lto-wrapper -plugin-opt=-fresolution=/tmp/ccZv7ymT.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lpthread -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s --build-id --eh-frame-hdr --hash-style=gnu --as-needed -dynamic-linker /lib/ld-linux-aarch64.so.1 -X -EL -maarch64linux --fix-cortex-a53-843419 -pie -z now -z relro -o cmTC_742b8 /usr/lib/gcc/aarch64-linux-gnu/9/../../../aarch64-linux-gnu/Scrt1.o /usr/lib/gcc/aarch64-linux-gnu/9/../../../aarch64-linux-gnu/crti.o /usr/lib/gcc/aarch64-linux-gnu/9/crtbeginS.o -L/usr/lib/gcc/aarch64-linux-gnu/9 -L/usr/lib/gcc/aarch64-linux-gnu/9/../../../aarch64-linux-gnu -L/usr/lib/gcc/aarch64-linux-gnu/9/../../../../lib -L/lib/aarch64-linux-gnu -L/lib/../lib -L/usr/lib/aarch64-linux-gnu -L/usr/lib/../lib -L/usr/lib/gcc/aarch64-linux-gnu/9/../../.. CMakeFiles/cmTC_742b8.dir/OpenMPTryFlag.c.o -lgomp -lgcc --push-state --as-needed -lgcc_s --pop-state -lpthread -lc -lgcc --push-state --as-needed -lgcc_s --pop-state /usr/lib/gcc/aarch64-linux-gnu/9/crtendS.o /usr/lib/gcc/aarch64-linux-gnu/9/../../../aarch64-linux-gnu/crtn.o
+        COLLECT_GCC_OPTIONS='-fopenmp' '-v' '-o' 'cmTC_742b8' '-v' '-mlittle-endian' '-mabi=lp64' '-pthread'
+        make[1]: Leaving directory '/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-oJxCAK'
+        
+      exitCode: 0
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/usr/share/cmake-3.26/Modules/FindOpenMP.cmake:262 (message)"
+      - "/usr/share/cmake-3.26/Modules/FindOpenMP.cmake:483 (_OPENMP_GET_FLAGS)"
+      - "etc/cmake/dependencies.cmake:62 (find_package)"
+      - "CMakeLists.txt:75 (find_dependencies)"
+    message: |
+      Parsed C OpenMP implicit link information from above output:
+        link line regex: [^( *|.*[/\\])(ld|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\\]+-)?ld|collect2)[^/\\]*( |$)]
+        ignore line: [Change Dir: /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-oJxCAK]
+        ignore line: []
+        ignore line: [Run Build Command(s):/usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_742b8/fast && /usr/bin/make  -f CMakeFiles/cmTC_742b8.dir/build.make CMakeFiles/cmTC_742b8.dir/build]
+        ignore line: [make[1]: Entering directory '/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-oJxCAK']
+        ignore line: [Building C object CMakeFiles/cmTC_742b8.dir/OpenMPTryFlag.c.o]
+        ignore line: [/usr/bin/cc   -fopenmp -v -std=gnu99 -o CMakeFiles/cmTC_742b8.dir/OpenMPTryFlag.c.o -c /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-oJxCAK/OpenMPTryFlag.c]
+        ignore line: [Using built-in specs.]
+        ignore line: [COLLECT_GCC=/usr/bin/cc]
+        ignore line: [Target: aarch64-linux-gnu]
+        ignore line: [Configured with: ../src/configure -v --with-pkgversion='Ubuntu 9.3.0-17ubuntu1~20.04' --with-bugurl=file:///usr/share/doc/gcc-9/README.Bugs --enable-languages=c ada c++ go d fortran objc obj-c++ gm2 --prefix=/usr --with-gcc-major-version-only --program-suffix=-9 --program-prefix=aarch64-linux-gnu- --enable-shared --enable-linker-build-id --libexecdir=/usr/lib --without-included-gettext --enable-threads=posix --libdir=/usr/lib --enable-nls --enable-clocale=gnu --enable-libstdcxx-debug --enable-libstdcxx-time=yes --with-default-libstdcxx-abi=new --enable-gnu-unique-object --disable-libquadmath --disable-libquadmath-support --enable-plugin --enable-default-pie --with-system-zlib --with-target-system-zlib=auto --enable-objc-gc=auto --enable-multiarch --enable-fix-cortex-a53-843419 --disable-werror --enable-checking=release --build=aarch64-linux-gnu --host=aarch64-linux-gnu --target=aarch64-linux-gnu]
+        ignore line: [Thread model: posix]
+        ignore line: [gcc version 9.3.0 (Ubuntu 9.3.0-17ubuntu1~20.04) ]
+        ignore line: [COLLECT_GCC_OPTIONS='-fopenmp' '-v' '-std=gnu99' '-o' 'CMakeFiles/cmTC_742b8.dir/OpenMPTryFlag.c.o' '-c' '-mlittle-endian' '-mabi=lp64' '-pthread']
+        ignore line: [ /usr/lib/gcc/aarch64-linux-gnu/9/cc1 -quiet -v -imultiarch aarch64-linux-gnu -D_REENTRANT /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-oJxCAK/OpenMPTryFlag.c -quiet -dumpbase OpenMPTryFlag.c -mlittle-endian -mabi=lp64 -auxbase-strip CMakeFiles/cmTC_742b8.dir/OpenMPTryFlag.c.o -std=gnu99 -version -fopenmp -fasynchronous-unwind-tables -fstack-protector-strong -Wformat -Wformat-security -fstack-clash-protection -o /tmp/cc02pI7q.s]
+        ignore line: [GNU C99 (Ubuntu 9.3.0-17ubuntu1~20.04) version 9.3.0 (aarch64-linux-gnu)]
+        ignore line: [	compiled by GNU C version 9.3.0  GMP version 6.2.0  MPFR version 4.0.2  MPC version 1.1.0  isl version isl-0.22.1-GMP]
+        ignore line: []
+        ignore line: [GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072]
+        ignore line: [ignoring nonexistent directory "/usr/local/include/aarch64-linux-gnu"]
+        ignore line: [ignoring nonexistent directory "/usr/lib/gcc/aarch64-linux-gnu/9/include-fixed"]
+        ignore line: [ignoring nonexistent directory "/usr/lib/gcc/aarch64-linux-gnu/9/../../../../aarch64-linux-gnu/include"]
+        ignore line: [#include "..." search starts here:]
+        ignore line: [#include <...> search starts here:]
+        ignore line: [ /usr/lib/gcc/aarch64-linux-gnu/9/include]
+        ignore line: [ /usr/local/include]
+        ignore line: [ /usr/include/aarch64-linux-gnu]
+        ignore line: [ /usr/include]
+        ignore line: [End of search list.]
+        ignore line: [GNU C99 (Ubuntu 9.3.0-17ubuntu1~20.04) version 9.3.0 (aarch64-linux-gnu)]
+        ignore line: [	compiled by GNU C version 9.3.0  GMP version 6.2.0  MPFR version 4.0.2  MPC version 1.1.0  isl version isl-0.22.1-GMP]
+        ignore line: []
+        ignore line: [GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072]
+        ignore line: [Compiler executable checksum: 13e224182c6e897e114f431ecfe03700]
+        ignore line: [COLLECT_GCC_OPTIONS='-fopenmp' '-v' '-std=gnu99' '-o' 'CMakeFiles/cmTC_742b8.dir/OpenMPTryFlag.c.o' '-c' '-mlittle-endian' '-mabi=lp64' '-pthread']
+        ignore line: [ as -v -EL -mabi=lp64 -o CMakeFiles/cmTC_742b8.dir/OpenMPTryFlag.c.o /tmp/cc02pI7q.s]
+        ignore line: [GNU assembler version 2.34 (aarch64-linux-gnu) using BFD version (GNU Binutils for Ubuntu) 2.34]
+        ignore line: [COMPILER_PATH=/usr/lib/gcc/aarch64-linux-gnu/9/:/usr/lib/gcc/aarch64-linux-gnu/9/:/usr/lib/gcc/aarch64-linux-gnu/:/usr/lib/gcc/aarch64-linux-gnu/9/:/usr/lib/gcc/aarch64-linux-gnu/]
+        ignore line: [LIBRARY_PATH=/usr/lib/gcc/aarch64-linux-gnu/9/:/usr/lib/gcc/aarch64-linux-gnu/9/../../../aarch64-linux-gnu/:/usr/lib/gcc/aarch64-linux-gnu/9/../../../../lib/:/lib/aarch64-linux-gnu/:/lib/../lib/:/usr/lib/aarch64-linux-gnu/:/usr/lib/../lib/:/usr/lib/gcc/aarch64-linux-gnu/9/../../../:/lib/:/usr/lib/]
+        ignore line: [COLLECT_GCC_OPTIONS='-fopenmp' '-v' '-std=gnu99' '-o' 'CMakeFiles/cmTC_742b8.dir/OpenMPTryFlag.c.o' '-c' '-mlittle-endian' '-mabi=lp64' '-pthread']
+        ignore line: [Linking C executable cmTC_742b8]
+        ignore line: [/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_742b8.dir/link.txt --verbose=1]
+        ignore line: [/usr/bin/cc  -fopenmp -v CMakeFiles/cmTC_742b8.dir/OpenMPTryFlag.c.o -o cmTC_742b8  -v ]
+        ignore line: [Using built-in specs.]
+        ignore line: [COLLECT_GCC=/usr/bin/cc]
+        ignore line: [COLLECT_LTO_WRAPPER=/usr/lib/gcc/aarch64-linux-gnu/9/lto-wrapper]
+        ignore line: [Target: aarch64-linux-gnu]
+        ignore line: [Configured with: ../src/configure -v --with-pkgversion='Ubuntu 9.3.0-17ubuntu1~20.04' --with-bugurl=file:///usr/share/doc/gcc-9/README.Bugs --enable-languages=c ada c++ go d fortran objc obj-c++ gm2 --prefix=/usr --with-gcc-major-version-only --program-suffix=-9 --program-prefix=aarch64-linux-gnu- --enable-shared --enable-linker-build-id --libexecdir=/usr/lib --without-included-gettext --enable-threads=posix --libdir=/usr/lib --enable-nls --enable-clocale=gnu --enable-libstdcxx-debug --enable-libstdcxx-time=yes --with-default-libstdcxx-abi=new --enable-gnu-unique-object --disable-libquadmath --disable-libquadmath-support --enable-plugin --enable-default-pie --with-system-zlib --with-target-system-zlib=auto --enable-objc-gc=auto --enable-multiarch --enable-fix-cortex-a53-843419 --disable-werror --enable-checking=release --build=aarch64-linux-gnu --host=aarch64-linux-gnu --target=aarch64-linux-gnu]
+        ignore line: [Thread model: posix]
+        ignore line: [gcc version 9.3.0 (Ubuntu 9.3.0-17ubuntu1~20.04) ]
+        ignore line: [COMPILER_PATH=/usr/lib/gcc/aarch64-linux-gnu/9/:/usr/lib/gcc/aarch64-linux-gnu/9/:/usr/lib/gcc/aarch64-linux-gnu/:/usr/lib/gcc/aarch64-linux-gnu/9/:/usr/lib/gcc/aarch64-linux-gnu/]
+        ignore line: [LIBRARY_PATH=/usr/lib/gcc/aarch64-linux-gnu/9/:/usr/lib/gcc/aarch64-linux-gnu/9/../../../aarch64-linux-gnu/:/usr/lib/gcc/aarch64-linux-gnu/9/../../../../lib/:/lib/aarch64-linux-gnu/:/lib/../lib/:/usr/lib/aarch64-linux-gnu/:/usr/lib/../lib/:/usr/lib/gcc/aarch64-linux-gnu/9/../../../:/lib/:/usr/lib/]
+        ignore line: [Reading specs from /usr/lib/gcc/aarch64-linux-gnu/9/libgomp.spec]
+        ignore line: [COLLECT_GCC_OPTIONS='-fopenmp' '-v' '-o' 'cmTC_742b8' '-v' '-mlittle-endian' '-mabi=lp64' '-pthread']
+        link line: [ /usr/lib/gcc/aarch64-linux-gnu/9/collect2 -plugin /usr/lib/gcc/aarch64-linux-gnu/9/liblto_plugin.so -plugin-opt=/usr/lib/gcc/aarch64-linux-gnu/9/lto-wrapper -plugin-opt=-fresolution=/tmp/ccZv7ymT.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lpthread -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s --build-id --eh-frame-hdr --hash-style=gnu --as-needed -dynamic-linker /lib/ld-linux-aarch64.so.1 -X -EL -maarch64linux --fix-cortex-a53-843419 -pie -z now -z relro -o cmTC_742b8 /usr/lib/gcc/aarch64-linux-gnu/9/../../../aarch64-linux-gnu/Scrt1.o /usr/lib/gcc/aarch64-linux-gnu/9/../../../aarch64-linux-gnu/crti.o /usr/lib/gcc/aarch64-linux-gnu/9/crtbeginS.o -L/usr/lib/gcc/aarch64-linux-gnu/9 -L/usr/lib/gcc/aarch64-linux-gnu/9/../../../aarch64-linux-gnu -L/usr/lib/gcc/aarch64-linux-gnu/9/../../../../lib -L/lib/aarch64-linux-gnu -L/lib/../lib -L/usr/lib/aarch64-linux-gnu -L/usr/lib/../lib -L/usr/lib/gcc/aarch64-linux-gnu/9/../../.. CMakeFiles/cmTC_742b8.dir/OpenMPTryFlag.c.o -lgomp -lgcc --push-state --as-needed -lgcc_s --pop-state -lpthread -lc -lgcc --push-state --as-needed -lgcc_s --pop-state /usr/lib/gcc/aarch64-linux-gnu/9/crtendS.o /usr/lib/gcc/aarch64-linux-gnu/9/../../../aarch64-linux-gnu/crtn.o]
+          arg [/usr/lib/gcc/aarch64-linux-gnu/9/collect2] ==> ignore
+          arg [-plugin] ==> ignore
+          arg [/usr/lib/gcc/aarch64-linux-gnu/9/liblto_plugin.so] ==> ignore
+          arg [-plugin-opt=/usr/lib/gcc/aarch64-linux-gnu/9/lto-wrapper] ==> ignore
+          arg [-plugin-opt=-fresolution=/tmp/ccZv7ymT.res] ==> ignore
+          arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
+          arg [-plugin-opt=-pass-through=-lgcc_s] ==> ignore
+          arg [-plugin-opt=-pass-through=-lpthread] ==> ignore
+          arg [-plugin-opt=-pass-through=-lc] ==> ignore
+          arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
+          arg [-plugin-opt=-pass-through=-lgcc_s] ==> ignore
+          arg [--build-id] ==> ignore
+          arg [--eh-frame-hdr] ==> ignore
+          arg [--hash-style=gnu] ==> ignore
+          arg [--as-needed] ==> ignore
+          arg [-dynamic-linker] ==> ignore
+          arg [/lib/ld-linux-aarch64.so.1] ==> ignore
+          arg [-X] ==> ignore
+          arg [-EL] ==> ignore
+          arg [-maarch64linux] ==> ignore
+          arg [--fix-cortex-a53-843419] ==> ignore
+          arg [-pie] ==> ignore
+          arg [-znow] ==> ignore
+          arg [-zrelro] ==> ignore
+          arg [-o] ==> ignore
+          arg [cmTC_742b8] ==> ignore
+          arg [-L/usr/lib/gcc/aarch64-linux-gnu/9] ==> dir [/usr/lib/gcc/aarch64-linux-gnu/9]
+          arg [-L/usr/lib/gcc/aarch64-linux-gnu/9/../../../aarch64-linux-gnu] ==> dir [/usr/lib/gcc/aarch64-linux-gnu/9/../../../aarch64-linux-gnu]
+          arg [-L/usr/lib/gcc/aarch64-linux-gnu/9/../../../../lib] ==> dir [/usr/lib/gcc/aarch64-linux-gnu/9/../../../../lib]
+          arg [-L/lib/aarch64-linux-gnu] ==> dir [/lib/aarch64-linux-gnu]
+          arg [-L/lib/../lib] ==> dir [/lib/../lib]
+          arg [-L/usr/lib/aarch64-linux-gnu] ==> dir [/usr/lib/aarch64-linux-gnu]
+          arg [-L/usr/lib/../lib] ==> dir [/usr/lib/../lib]
+          arg [-L/usr/lib/gcc/aarch64-linux-gnu/9/../../..] ==> dir [/usr/lib/gcc/aarch64-linux-gnu/9/../../..]
+          arg [CMakeFiles/cmTC_742b8.dir/OpenMPTryFlag.c.o] ==> ignore
+          arg [-lgomp] ==> lib [gomp]
+          arg [-lgcc] ==> lib [gcc]
+          arg [--push-state] ==> ignore
+          arg [--as-needed] ==> ignore
+          arg [-lgcc_s] ==> lib [gcc_s]
+          arg [--pop-state] ==> ignore
+          arg [-lpthread] ==> lib [pthread]
+          arg [-lc] ==> lib [c]
+          arg [-lgcc] ==> lib [gcc]
+          arg [--push-state] ==> ignore
+          arg [--as-needed] ==> ignore
+          arg [-lgcc_s] ==> lib [gcc_s]
+          arg [--pop-state] ==> ignore
+        collapse library dir [/usr/lib/gcc/aarch64-linux-gnu/9] ==> [/usr/lib/gcc/aarch64-linux-gnu/9]
+        collapse library dir [/usr/lib/gcc/aarch64-linux-gnu/9/../../../aarch64-linux-gnu] ==> [/usr/lib/aarch64-linux-gnu]
+        collapse library dir [/usr/lib/gcc/aarch64-linux-gnu/9/../../../../lib] ==> [/usr/lib]
+        collapse library dir [/lib/aarch64-linux-gnu] ==> [/lib/aarch64-linux-gnu]
+        collapse library dir [/lib/../lib] ==> [/lib]
+        collapse library dir [/usr/lib/aarch64-linux-gnu] ==> [/usr/lib/aarch64-linux-gnu]
+        collapse library dir [/usr/lib/../lib] ==> [/usr/lib]
+        collapse library dir [/usr/lib/gcc/aarch64-linux-gnu/9/../../..] ==> [/usr/lib]
+        implicit libs: [gomp;gcc;gcc_s;pthread;c;gcc;gcc_s]
+        implicit objs: []
+        implicit dirs: [/usr/lib/gcc/aarch64-linux-gnu/9;/usr/lib/aarch64-linux-gnu;/usr/lib;/lib/aarch64-linux-gnu;/lib]
+        implicit fwks: []
+      
+      
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/share/cmake-3.26/Modules/FindOpenMP.cmake:219 (try_compile)"
+      - "/usr/share/cmake-3.26/Modules/FindOpenMP.cmake:483 (_OPENMP_GET_FLAGS)"
+      - "etc/cmake/dependencies.cmake:62 (find_package)"
+      - "CMakeLists.txt:75 (find_dependencies)"
+    description: "Detecting CXX OpenMP compiler info"
+    directories:
+      source: "/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-VbcW6K"
+      binary: "/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-VbcW6K"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: ""
+      CMAKE_CXX_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/github/graph/igraph-0.10.4/etc/cmake"
+    buildResult:
+      variable: "OpenMP_COMPILE_RESULT_CXX_fopenmp"
+      cached: true
+      stdout: |
+        Change Dir: /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-VbcW6K
+        
+        Run Build Command(s):/usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_224be/fast && /usr/bin/make  -f CMakeFiles/cmTC_224be.dir/build.make CMakeFiles/cmTC_224be.dir/build
+        make[1]: Entering directory '/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-VbcW6K'
+        Building CXX object CMakeFiles/cmTC_224be.dir/OpenMPTryFlag.cpp.o
+        /usr/bin/c++   -fopenmp -v -std=gnu++11 -o CMakeFiles/cmTC_224be.dir/OpenMPTryFlag.cpp.o -c /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-VbcW6K/OpenMPTryFlag.cpp
+        Using built-in specs.
+        COLLECT_GCC=/usr/bin/c++
+        Target: aarch64-linux-gnu
+        Configured with: ../src/configure -v --with-pkgversion='Ubuntu 9.3.0-17ubuntu1~20.04' --with-bugurl=file:///usr/share/doc/gcc-9/README.Bugs --enable-languages=c,ada,c++,go,d,fortran,objc,obj-c++,gm2 --prefix=/usr --with-gcc-major-version-only --program-suffix=-9 --program-prefix=aarch64-linux-gnu- --enable-shared --enable-linker-build-id --libexecdir=/usr/lib --without-included-gettext --enable-threads=posix --libdir=/usr/lib --enable-nls --enable-clocale=gnu --enable-libstdcxx-debug --enable-libstdcxx-time=yes --with-default-libstdcxx-abi=new --enable-gnu-unique-object --disable-libquadmath --disable-libquadmath-support --enable-plugin --enable-default-pie --with-system-zlib --with-target-system-zlib=auto --enable-objc-gc=auto --enable-multiarch --enable-fix-cortex-a53-843419 --disable-werror --enable-checking=release --build=aarch64-linux-gnu --host=aarch64-linux-gnu --target=aarch64-linux-gnu
+        Thread model: posix
+        gcc version 9.3.0 (Ubuntu 9.3.0-17ubuntu1~20.04) 
+        COLLECT_GCC_OPTIONS='-fopenmp' '-v' '-std=gnu++11' '-o' 'CMakeFiles/cmTC_224be.dir/OpenMPTryFlag.cpp.o' '-c' '-shared-libgcc' '-mlittle-endian' '-mabi=lp64' '-pthread'
+         /usr/lib/gcc/aarch64-linux-gnu/9/cc1plus -quiet -v -imultiarch aarch64-linux-gnu -D_GNU_SOURCE -D_REENTRANT /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-VbcW6K/OpenMPTryFlag.cpp -quiet -dumpbase OpenMPTryFlag.cpp -mlittle-endian -mabi=lp64 -auxbase-strip CMakeFiles/cmTC_224be.dir/OpenMPTryFlag.cpp.o -std=gnu++11 -version -fopenmp -fasynchronous-unwind-tables -fstack-protector-strong -Wformat -Wformat-security -fstack-clash-protection -o /tmp/ccHxmNDw.s
+        GNU C++11 (Ubuntu 9.3.0-17ubuntu1~20.04) version 9.3.0 (aarch64-linux-gnu)
+        	compiled by GNU C version 9.3.0, GMP version 6.2.0, MPFR version 4.0.2, MPC version 1.1.0, isl version isl-0.22.1-GMP
+        
+        GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
+        ignoring duplicate directory "/usr/include/aarch64-linux-gnu/c++/9"
+        ignoring nonexistent directory "/usr/local/include/aarch64-linux-gnu"
+        ignoring nonexistent directory "/usr/lib/gcc/aarch64-linux-gnu/9/include-fixed"
+        ignoring nonexistent directory "/usr/lib/gcc/aarch64-linux-gnu/9/../../../../aarch64-linux-gnu/include"
+        #include "..." search starts here:
+        #include <...> search starts here:
+         /usr/include/c++/9
+         /usr/include/aarch64-linux-gnu/c++/9
+         /usr/include/c++/9/backward
+         /usr/lib/gcc/aarch64-linux-gnu/9/include
+         /usr/local/include
+         /usr/include/aarch64-linux-gnu
+         /usr/include
+        End of search list.
+        GNU C++11 (Ubuntu 9.3.0-17ubuntu1~20.04) version 9.3.0 (aarch64-linux-gnu)
+        	compiled by GNU C version 9.3.0, GMP version 6.2.0, MPFR version 4.0.2, MPC version 1.1.0, isl version isl-0.22.1-GMP
+        
+        GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
+        Compiler executable checksum: bd4e2981e4def5b847601e40ab985a50
+        COLLECT_GCC_OPTIONS='-fopenmp' '-v' '-std=gnu++11' '-o' 'CMakeFiles/cmTC_224be.dir/OpenMPTryFlag.cpp.o' '-c' '-shared-libgcc' '-mlittle-endian' '-mabi=lp64' '-pthread'
+         as -v -EL -mabi=lp64 -o CMakeFiles/cmTC_224be.dir/OpenMPTryFlag.cpp.o /tmp/ccHxmNDw.s
+        GNU assembler version 2.34 (aarch64-linux-gnu) using BFD version (GNU Binutils for Ubuntu) 2.34
+        COMPILER_PATH=/usr/lib/gcc/aarch64-linux-gnu/9/:/usr/lib/gcc/aarch64-linux-gnu/9/:/usr/lib/gcc/aarch64-linux-gnu/:/usr/lib/gcc/aarch64-linux-gnu/9/:/usr/lib/gcc/aarch64-linux-gnu/
+        LIBRARY_PATH=/usr/lib/gcc/aarch64-linux-gnu/9/:/usr/lib/gcc/aarch64-linux-gnu/9/../../../aarch64-linux-gnu/:/usr/lib/gcc/aarch64-linux-gnu/9/../../../../lib/:/lib/aarch64-linux-gnu/:/lib/../lib/:/usr/lib/aarch64-linux-gnu/:/usr/lib/../lib/:/usr/lib/gcc/aarch64-linux-gnu/9/../../../:/lib/:/usr/lib/
+        COLLECT_GCC_OPTIONS='-fopenmp' '-v' '-std=gnu++11' '-o' 'CMakeFiles/cmTC_224be.dir/OpenMPTryFlag.cpp.o' '-c' '-shared-libgcc' '-mlittle-endian' '-mabi=lp64' '-pthread'
+        Linking CXX executable cmTC_224be
+        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_224be.dir/link.txt --verbose=1
+        /usr/bin/c++  -fopenmp -v CMakeFiles/cmTC_224be.dir/OpenMPTryFlag.cpp.o -o cmTC_224be  -v 
+        Using built-in specs.
+        COLLECT_GCC=/usr/bin/c++
+        COLLECT_LTO_WRAPPER=/usr/lib/gcc/aarch64-linux-gnu/9/lto-wrapper
+        Target: aarch64-linux-gnu
+        Configured with: ../src/configure -v --with-pkgversion='Ubuntu 9.3.0-17ubuntu1~20.04' --with-bugurl=file:///usr/share/doc/gcc-9/README.Bugs --enable-languages=c,ada,c++,go,d,fortran,objc,obj-c++,gm2 --prefix=/usr --with-gcc-major-version-only --program-suffix=-9 --program-prefix=aarch64-linux-gnu- --enable-shared --enable-linker-build-id --libexecdir=/usr/lib --without-included-gettext --enable-threads=posix --libdir=/usr/lib --enable-nls --enable-clocale=gnu --enable-libstdcxx-debug --enable-libstdcxx-time=yes --with-default-libstdcxx-abi=new --enable-gnu-unique-object --disable-libquadmath --disable-libquadmath-support --enable-plugin --enable-default-pie --with-system-zlib --with-target-system-zlib=auto --enable-objc-gc=auto --enable-multiarch --enable-fix-cortex-a53-843419 --disable-werror --enable-checking=release --build=aarch64-linux-gnu --host=aarch64-linux-gnu --target=aarch64-linux-gnu
+        Thread model: posix
+        gcc version 9.3.0 (Ubuntu 9.3.0-17ubuntu1~20.04) 
+        COMPILER_PATH=/usr/lib/gcc/aarch64-linux-gnu/9/:/usr/lib/gcc/aarch64-linux-gnu/9/:/usr/lib/gcc/aarch64-linux-gnu/:/usr/lib/gcc/aarch64-linux-gnu/9/:/usr/lib/gcc/aarch64-linux-gnu/
+        LIBRARY_PATH=/usr/lib/gcc/aarch64-linux-gnu/9/:/usr/lib/gcc/aarch64-linux-gnu/9/../../../aarch64-linux-gnu/:/usr/lib/gcc/aarch64-linux-gnu/9/../../../../lib/:/lib/aarch64-linux-gnu/:/lib/../lib/:/usr/lib/aarch64-linux-gnu/:/usr/lib/../lib/:/usr/lib/gcc/aarch64-linux-gnu/9/../../../:/lib/:/usr/lib/
+        Reading specs from /usr/lib/gcc/aarch64-linux-gnu/9/libgomp.spec
+        COLLECT_GCC_OPTIONS='-fopenmp' '-v' '-o' 'cmTC_224be' '-v' '-shared-libgcc' '-mlittle-endian' '-mabi=lp64' '-pthread'
+         /usr/lib/gcc/aarch64-linux-gnu/9/collect2 -plugin /usr/lib/gcc/aarch64-linux-gnu/9/liblto_plugin.so -plugin-opt=/usr/lib/gcc/aarch64-linux-gnu/9/lto-wrapper -plugin-opt=-fresolution=/tmp/cc5jdASY.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lpthread -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --build-id --eh-frame-hdr --hash-style=gnu --as-needed -dynamic-linker /lib/ld-linux-aarch64.so.1 -X -EL -maarch64linux --fix-cortex-a53-843419 -pie -z now -z relro -o cmTC_224be /usr/lib/gcc/aarch64-linux-gnu/9/../../../aarch64-linux-gnu/Scrt1.o /usr/lib/gcc/aarch64-linux-gnu/9/../../../aarch64-linux-gnu/crti.o /usr/lib/gcc/aarch64-linux-gnu/9/crtbeginS.o -L/usr/lib/gcc/aarch64-linux-gnu/9 -L/usr/lib/gcc/aarch64-linux-gnu/9/../../../aarch64-linux-gnu -L/usr/lib/gcc/aarch64-linux-gnu/9/../../../../lib -L/lib/aarch64-linux-gnu -L/lib/../lib -L/usr/lib/aarch64-linux-gnu -L/usr/lib/../lib -L/usr/lib/gcc/aarch64-linux-gnu/9/../../.. CMakeFiles/cmTC_224be.dir/OpenMPTryFlag.cpp.o -lstdc++ -lm -lgomp -lgcc_s -lgcc -lpthread -lc -lgcc_s -lgcc /usr/lib/gcc/aarch64-linux-gnu/9/crtendS.o /usr/lib/gcc/aarch64-linux-gnu/9/../../../aarch64-linux-gnu/crtn.o
+        COLLECT_GCC_OPTIONS='-fopenmp' '-v' '-o' 'cmTC_224be' '-v' '-shared-libgcc' '-mlittle-endian' '-mabi=lp64' '-pthread'
+        make[1]: Leaving directory '/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-VbcW6K'
+        
+      exitCode: 0
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/usr/share/cmake-3.26/Modules/FindOpenMP.cmake:262 (message)"
+      - "/usr/share/cmake-3.26/Modules/FindOpenMP.cmake:483 (_OPENMP_GET_FLAGS)"
+      - "etc/cmake/dependencies.cmake:62 (find_package)"
+      - "CMakeLists.txt:75 (find_dependencies)"
+    message: |
+      Parsed CXX OpenMP implicit link information from above output:
+        link line regex: [^( *|.*[/\\])(ld|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\\]+-)?ld|collect2)[^/\\]*( |$)]
+        ignore line: [Change Dir: /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-VbcW6K]
+        ignore line: []
+        ignore line: [Run Build Command(s):/usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_224be/fast && /usr/bin/make  -f CMakeFiles/cmTC_224be.dir/build.make CMakeFiles/cmTC_224be.dir/build]
+        ignore line: [make[1]: Entering directory '/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-VbcW6K']
+        ignore line: [Building CXX object CMakeFiles/cmTC_224be.dir/OpenMPTryFlag.cpp.o]
+        ignore line: [/usr/bin/c++   -fopenmp -v -std=gnu++11 -o CMakeFiles/cmTC_224be.dir/OpenMPTryFlag.cpp.o -c /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-VbcW6K/OpenMPTryFlag.cpp]
+        ignore line: [Using built-in specs.]
+        ignore line: [COLLECT_GCC=/usr/bin/c++]
+        ignore line: [Target: aarch64-linux-gnu]
+        ignore line: [Configured with: ../src/configure -v --with-pkgversion='Ubuntu 9.3.0-17ubuntu1~20.04' --with-bugurl=file:///usr/share/doc/gcc-9/README.Bugs --enable-languages=c ada c++ go d fortran objc obj-c++ gm2 --prefix=/usr --with-gcc-major-version-only --program-suffix=-9 --program-prefix=aarch64-linux-gnu- --enable-shared --enable-linker-build-id --libexecdir=/usr/lib --without-included-gettext --enable-threads=posix --libdir=/usr/lib --enable-nls --enable-clocale=gnu --enable-libstdcxx-debug --enable-libstdcxx-time=yes --with-default-libstdcxx-abi=new --enable-gnu-unique-object --disable-libquadmath --disable-libquadmath-support --enable-plugin --enable-default-pie --with-system-zlib --with-target-system-zlib=auto --enable-objc-gc=auto --enable-multiarch --enable-fix-cortex-a53-843419 --disable-werror --enable-checking=release --build=aarch64-linux-gnu --host=aarch64-linux-gnu --target=aarch64-linux-gnu]
+        ignore line: [Thread model: posix]
+        ignore line: [gcc version 9.3.0 (Ubuntu 9.3.0-17ubuntu1~20.04) ]
+        ignore line: [COLLECT_GCC_OPTIONS='-fopenmp' '-v' '-std=gnu++11' '-o' 'CMakeFiles/cmTC_224be.dir/OpenMPTryFlag.cpp.o' '-c' '-shared-libgcc' '-mlittle-endian' '-mabi=lp64' '-pthread']
+        ignore line: [ /usr/lib/gcc/aarch64-linux-gnu/9/cc1plus -quiet -v -imultiarch aarch64-linux-gnu -D_GNU_SOURCE -D_REENTRANT /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-VbcW6K/OpenMPTryFlag.cpp -quiet -dumpbase OpenMPTryFlag.cpp -mlittle-endian -mabi=lp64 -auxbase-strip CMakeFiles/cmTC_224be.dir/OpenMPTryFlag.cpp.o -std=gnu++11 -version -fopenmp -fasynchronous-unwind-tables -fstack-protector-strong -Wformat -Wformat-security -fstack-clash-protection -o /tmp/ccHxmNDw.s]
+        ignore line: [GNU C++11 (Ubuntu 9.3.0-17ubuntu1~20.04) version 9.3.0 (aarch64-linux-gnu)]
+        ignore line: [	compiled by GNU C version 9.3.0  GMP version 6.2.0  MPFR version 4.0.2  MPC version 1.1.0  isl version isl-0.22.1-GMP]
+        ignore line: []
+        ignore line: [GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072]
+        ignore line: [ignoring duplicate directory "/usr/include/aarch64-linux-gnu/c++/9"]
+        ignore line: [ignoring nonexistent directory "/usr/local/include/aarch64-linux-gnu"]
+        ignore line: [ignoring nonexistent directory "/usr/lib/gcc/aarch64-linux-gnu/9/include-fixed"]
+        ignore line: [ignoring nonexistent directory "/usr/lib/gcc/aarch64-linux-gnu/9/../../../../aarch64-linux-gnu/include"]
+        ignore line: [#include "..." search starts here:]
+        ignore line: [#include <...> search starts here:]
+        ignore line: [ /usr/include/c++/9]
+        ignore line: [ /usr/include/aarch64-linux-gnu/c++/9]
+        ignore line: [ /usr/include/c++/9/backward]
+        ignore line: [ /usr/lib/gcc/aarch64-linux-gnu/9/include]
+        ignore line: [ /usr/local/include]
+        ignore line: [ /usr/include/aarch64-linux-gnu]
+        ignore line: [ /usr/include]
+        ignore line: [End of search list.]
+        ignore line: [GNU C++11 (Ubuntu 9.3.0-17ubuntu1~20.04) version 9.3.0 (aarch64-linux-gnu)]
+        ignore line: [	compiled by GNU C version 9.3.0  GMP version 6.2.0  MPFR version 4.0.2  MPC version 1.1.0  isl version isl-0.22.1-GMP]
+        ignore line: []
+        ignore line: [GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072]
+        ignore line: [Compiler executable checksum: bd4e2981e4def5b847601e40ab985a50]
+        ignore line: [COLLECT_GCC_OPTIONS='-fopenmp' '-v' '-std=gnu++11' '-o' 'CMakeFiles/cmTC_224be.dir/OpenMPTryFlag.cpp.o' '-c' '-shared-libgcc' '-mlittle-endian' '-mabi=lp64' '-pthread']
+        ignore line: [ as -v -EL -mabi=lp64 -o CMakeFiles/cmTC_224be.dir/OpenMPTryFlag.cpp.o /tmp/ccHxmNDw.s]
+        ignore line: [GNU assembler version 2.34 (aarch64-linux-gnu) using BFD version (GNU Binutils for Ubuntu) 2.34]
+        ignore line: [COMPILER_PATH=/usr/lib/gcc/aarch64-linux-gnu/9/:/usr/lib/gcc/aarch64-linux-gnu/9/:/usr/lib/gcc/aarch64-linux-gnu/:/usr/lib/gcc/aarch64-linux-gnu/9/:/usr/lib/gcc/aarch64-linux-gnu/]
+        ignore line: [LIBRARY_PATH=/usr/lib/gcc/aarch64-linux-gnu/9/:/usr/lib/gcc/aarch64-linux-gnu/9/../../../aarch64-linux-gnu/:/usr/lib/gcc/aarch64-linux-gnu/9/../../../../lib/:/lib/aarch64-linux-gnu/:/lib/../lib/:/usr/lib/aarch64-linux-gnu/:/usr/lib/../lib/:/usr/lib/gcc/aarch64-linux-gnu/9/../../../:/lib/:/usr/lib/]
+        ignore line: [COLLECT_GCC_OPTIONS='-fopenmp' '-v' '-std=gnu++11' '-o' 'CMakeFiles/cmTC_224be.dir/OpenMPTryFlag.cpp.o' '-c' '-shared-libgcc' '-mlittle-endian' '-mabi=lp64' '-pthread']
+        ignore line: [Linking CXX executable cmTC_224be]
+        ignore line: [/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_224be.dir/link.txt --verbose=1]
+        ignore line: [/usr/bin/c++  -fopenmp -v CMakeFiles/cmTC_224be.dir/OpenMPTryFlag.cpp.o -o cmTC_224be  -v ]
+        ignore line: [Using built-in specs.]
+        ignore line: [COLLECT_GCC=/usr/bin/c++]
+        ignore line: [COLLECT_LTO_WRAPPER=/usr/lib/gcc/aarch64-linux-gnu/9/lto-wrapper]
+        ignore line: [Target: aarch64-linux-gnu]
+        ignore line: [Configured with: ../src/configure -v --with-pkgversion='Ubuntu 9.3.0-17ubuntu1~20.04' --with-bugurl=file:///usr/share/doc/gcc-9/README.Bugs --enable-languages=c ada c++ go d fortran objc obj-c++ gm2 --prefix=/usr --with-gcc-major-version-only --program-suffix=-9 --program-prefix=aarch64-linux-gnu- --enable-shared --enable-linker-build-id --libexecdir=/usr/lib --without-included-gettext --enable-threads=posix --libdir=/usr/lib --enable-nls --enable-clocale=gnu --enable-libstdcxx-debug --enable-libstdcxx-time=yes --with-default-libstdcxx-abi=new --enable-gnu-unique-object --disable-libquadmath --disable-libquadmath-support --enable-plugin --enable-default-pie --with-system-zlib --with-target-system-zlib=auto --enable-objc-gc=auto --enable-multiarch --enable-fix-cortex-a53-843419 --disable-werror --enable-checking=release --build=aarch64-linux-gnu --host=aarch64-linux-gnu --target=aarch64-linux-gnu]
+        ignore line: [Thread model: posix]
+        ignore line: [gcc version 9.3.0 (Ubuntu 9.3.0-17ubuntu1~20.04) ]
+        ignore line: [COMPILER_PATH=/usr/lib/gcc/aarch64-linux-gnu/9/:/usr/lib/gcc/aarch64-linux-gnu/9/:/usr/lib/gcc/aarch64-linux-gnu/:/usr/lib/gcc/aarch64-linux-gnu/9/:/usr/lib/gcc/aarch64-linux-gnu/]
+        ignore line: [LIBRARY_PATH=/usr/lib/gcc/aarch64-linux-gnu/9/:/usr/lib/gcc/aarch64-linux-gnu/9/../../../aarch64-linux-gnu/:/usr/lib/gcc/aarch64-linux-gnu/9/../../../../lib/:/lib/aarch64-linux-gnu/:/lib/../lib/:/usr/lib/aarch64-linux-gnu/:/usr/lib/../lib/:/usr/lib/gcc/aarch64-linux-gnu/9/../../../:/lib/:/usr/lib/]
+        ignore line: [Reading specs from /usr/lib/gcc/aarch64-linux-gnu/9/libgomp.spec]
+        ignore line: [COLLECT_GCC_OPTIONS='-fopenmp' '-v' '-o' 'cmTC_224be' '-v' '-shared-libgcc' '-mlittle-endian' '-mabi=lp64' '-pthread']
+        link line: [ /usr/lib/gcc/aarch64-linux-gnu/9/collect2 -plugin /usr/lib/gcc/aarch64-linux-gnu/9/liblto_plugin.so -plugin-opt=/usr/lib/gcc/aarch64-linux-gnu/9/lto-wrapper -plugin-opt=-fresolution=/tmp/cc5jdASY.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lpthread -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --build-id --eh-frame-hdr --hash-style=gnu --as-needed -dynamic-linker /lib/ld-linux-aarch64.so.1 -X -EL -maarch64linux --fix-cortex-a53-843419 -pie -z now -z relro -o cmTC_224be /usr/lib/gcc/aarch64-linux-gnu/9/../../../aarch64-linux-gnu/Scrt1.o /usr/lib/gcc/aarch64-linux-gnu/9/../../../aarch64-linux-gnu/crti.o /usr/lib/gcc/aarch64-linux-gnu/9/crtbeginS.o -L/usr/lib/gcc/aarch64-linux-gnu/9 -L/usr/lib/gcc/aarch64-linux-gnu/9/../../../aarch64-linux-gnu -L/usr/lib/gcc/aarch64-linux-gnu/9/../../../../lib -L/lib/aarch64-linux-gnu -L/lib/../lib -L/usr/lib/aarch64-linux-gnu -L/usr/lib/../lib -L/usr/lib/gcc/aarch64-linux-gnu/9/../../.. CMakeFiles/cmTC_224be.dir/OpenMPTryFlag.cpp.o -lstdc++ -lm -lgomp -lgcc_s -lgcc -lpthread -lc -lgcc_s -lgcc /usr/lib/gcc/aarch64-linux-gnu/9/crtendS.o /usr/lib/gcc/aarch64-linux-gnu/9/../../../aarch64-linux-gnu/crtn.o]
+          arg [/usr/lib/gcc/aarch64-linux-gnu/9/collect2] ==> ignore
+          arg [-plugin] ==> ignore
+          arg [/usr/lib/gcc/aarch64-linux-gnu/9/liblto_plugin.so] ==> ignore
+          arg [-plugin-opt=/usr/lib/gcc/aarch64-linux-gnu/9/lto-wrapper] ==> ignore
+          arg [-plugin-opt=-fresolution=/tmp/cc5jdASY.res] ==> ignore
+          arg [-plugin-opt=-pass-through=-lgcc_s] ==> ignore
+          arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
+          arg [-plugin-opt=-pass-through=-lpthread] ==> ignore
+          arg [-plugin-opt=-pass-through=-lc] ==> ignore
+          arg [-plugin-opt=-pass-through=-lgcc_s] ==> ignore
+          arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
+          arg [--build-id] ==> ignore
+          arg [--eh-frame-hdr] ==> ignore
+          arg [--hash-style=gnu] ==> ignore
+          arg [--as-needed] ==> ignore
+          arg [-dynamic-linker] ==> ignore
+          arg [/lib/ld-linux-aarch64.so.1] ==> ignore
+          arg [-X] ==> ignore
+          arg [-EL] ==> ignore
+          arg [-maarch64linux] ==> ignore
+          arg [--fix-cortex-a53-843419] ==> ignore
+          arg [-pie] ==> ignore
+          arg [-znow] ==> ignore
+          arg [-zrelro] ==> ignore
+          arg [-o] ==> ignore
+          arg [cmTC_224be] ==> ignore
+          arg [-L/usr/lib/gcc/aarch64-linux-gnu/9] ==> dir [/usr/lib/gcc/aarch64-linux-gnu/9]
+          arg [-L/usr/lib/gcc/aarch64-linux-gnu/9/../../../aarch64-linux-gnu] ==> dir [/usr/lib/gcc/aarch64-linux-gnu/9/../../../aarch64-linux-gnu]
+          arg [-L/usr/lib/gcc/aarch64-linux-gnu/9/../../../../lib] ==> dir [/usr/lib/gcc/aarch64-linux-gnu/9/../../../../lib]
+          arg [-L/lib/aarch64-linux-gnu] ==> dir [/lib/aarch64-linux-gnu]
+          arg [-L/lib/../lib] ==> dir [/lib/../lib]
+          arg [-L/usr/lib/aarch64-linux-gnu] ==> dir [/usr/lib/aarch64-linux-gnu]
+          arg [-L/usr/lib/../lib] ==> dir [/usr/lib/../lib]
+          arg [-L/usr/lib/gcc/aarch64-linux-gnu/9/../../..] ==> dir [/usr/lib/gcc/aarch64-linux-gnu/9/../../..]
+          arg [CMakeFiles/cmTC_224be.dir/OpenMPTryFlag.cpp.o] ==> ignore
+          arg [-lstdc++] ==> lib [stdc++]
+          arg [-lm] ==> lib [m]
+          arg [-lgomp] ==> lib [gomp]
+          arg [-lgcc_s] ==> lib [gcc_s]
+          arg [-lgcc] ==> lib [gcc]
+          arg [-lpthread] ==> lib [pthread]
+          arg [-lc] ==> lib [c]
+          arg [-lgcc_s] ==> lib [gcc_s]
+          arg [-lgcc] ==> lib [gcc]
+        collapse library dir [/usr/lib/gcc/aarch64-linux-gnu/9] ==> [/usr/lib/gcc/aarch64-linux-gnu/9]
+        collapse library dir [/usr/lib/gcc/aarch64-linux-gnu/9/../../../aarch64-linux-gnu] ==> [/usr/lib/aarch64-linux-gnu]
+        collapse library dir [/usr/lib/gcc/aarch64-linux-gnu/9/../../../../lib] ==> [/usr/lib]
+        collapse library dir [/lib/aarch64-linux-gnu] ==> [/lib/aarch64-linux-gnu]
+        collapse library dir [/lib/../lib] ==> [/lib]
+        collapse library dir [/usr/lib/aarch64-linux-gnu] ==> [/usr/lib/aarch64-linux-gnu]
+        collapse library dir [/usr/lib/../lib] ==> [/usr/lib]
+        collapse library dir [/usr/lib/gcc/aarch64-linux-gnu/9/../../..] ==> [/usr/lib]
+        implicit libs: [stdc++;m;gomp;gcc_s;gcc;pthread;c;gcc_s;gcc]
+        implicit objs: []
+        implicit dirs: [/usr/lib/gcc/aarch64-linux-gnu/9;/usr/lib/aarch64-linux-gnu;/usr/lib;/lib/aarch64-linux-gnu;/lib]
+        implicit fwks: []
+      
+      
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/share/cmake-3.26/Modules/FindOpenMP.cmake:419 (try_compile)"
+      - "/usr/share/cmake-3.26/Modules/FindOpenMP.cmake:557 (_OPENMP_GET_SPEC_DATE)"
+      - "etc/cmake/dependencies.cmake:62 (find_package)"
+      - "CMakeLists.txt:75 (find_dependencies)"
+    description: "Detecting C OpenMP version"
+    directories:
+      source: "/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-CPKjRK"
+      binary: "/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-CPKjRK"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/github/graph/igraph-0.10.4/etc/cmake"
+    buildResult:
+      variable: "OpenMP_SPECTEST_C_"
+      cached: true
+      stdout: |
+        Change Dir: /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-CPKjRK
+        
+        Run Build Command(s):/usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_561e8/fast && /usr/bin/make  -f CMakeFiles/cmTC_561e8.dir/build.make CMakeFiles/cmTC_561e8.dir/build
+        make[1]: Entering directory '/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-CPKjRK'
+        Building C object CMakeFiles/cmTC_561e8.dir/OpenMPCheckVersion.c.o
+        /usr/bin/cc   -fopenmp -std=gnu99 -o CMakeFiles/cmTC_561e8.dir/OpenMPCheckVersion.c.o -c /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-CPKjRK/OpenMPCheckVersion.c
+        Linking C executable cmTC_561e8
+        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_561e8.dir/link.txt --verbose=1
+        /usr/bin/cc  -fopenmp CMakeFiles/cmTC_561e8.dir/OpenMPCheckVersion.c.o -o cmTC_561e8 
+        make[1]: Leaving directory '/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-CPKjRK'
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/share/cmake-3.26/Modules/FindOpenMP.cmake:419 (try_compile)"
+      - "/usr/share/cmake-3.26/Modules/FindOpenMP.cmake:557 (_OPENMP_GET_SPEC_DATE)"
+      - "etc/cmake/dependencies.cmake:62 (find_package)"
+      - "CMakeLists.txt:75 (find_dependencies)"
+    description: "Detecting CXX OpenMP version"
+    directories:
+      source: "/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-6HXMgM"
+      binary: "/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-6HXMgM"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: ""
+      CMAKE_CXX_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/github/graph/igraph-0.10.4/etc/cmake"
+    buildResult:
+      variable: "OpenMP_SPECTEST_CXX_"
+      cached: true
+      stdout: |
+        Change Dir: /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-6HXMgM
+        
+        Run Build Command(s):/usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_de465/fast && /usr/bin/make  -f CMakeFiles/cmTC_de465.dir/build.make CMakeFiles/cmTC_de465.dir/build
+        make[1]: Entering directory '/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-6HXMgM'
+        Building CXX object CMakeFiles/cmTC_de465.dir/OpenMPCheckVersion.cpp.o
+        /usr/bin/c++   -fopenmp -std=gnu++11 -o CMakeFiles/cmTC_de465.dir/OpenMPCheckVersion.cpp.o -c /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-6HXMgM/OpenMPCheckVersion.cpp
+        Linking CXX executable cmTC_de465
+        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_de465.dir/link.txt --verbose=1
+        /usr/bin/c++  -fopenmp CMakeFiles/cmTC_de465.dir/OpenMPCheckVersion.cpp.o -o cmTC_de465 
+        make[1]: Leaving directory '/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-6HXMgM'
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/share/cmake-3.26/Modules/CheckSymbolExists.cmake:145 (try_compile)"
+      - "/usr/share/cmake-3.26/Modules/CheckSymbolExists.cmake:71 (__CHECK_SYMBOL_EXISTS_IMPL)"
+      - "etc/cmake/dependencies.cmake:141 (check_symbol_exists)"
+      - "CMakeLists.txt:75 (find_dependencies)"
+    directories:
+      source: "/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-WvKQeL"
+      binary: "/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-WvKQeL"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/github/graph/igraph-0.10.4/etc/cmake"
+    buildResult:
+      variable: "SINH_FUNCTION_EXISTS"
+      cached: true
+      stdout: |
+        Change Dir: /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-WvKQeL
+        
+        Run Build Command(s):/usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_5a148/fast && /usr/bin/make  -f CMakeFiles/cmTC_5a148.dir/build.make CMakeFiles/cmTC_5a148.dir/build
+        make[1]: Entering directory '/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-WvKQeL'
+        Building C object CMakeFiles/cmTC_5a148.dir/CheckSymbolExists.c.o
+        /usr/bin/cc   -std=gnu99 -o CMakeFiles/cmTC_5a148.dir/CheckSymbolExists.c.o -c /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-WvKQeL/CheckSymbolExists.c
+        Linking C executable cmTC_5a148
+        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_5a148.dir/link.txt --verbose=1
+        /usr/bin/cc CMakeFiles/cmTC_5a148.dir/CheckSymbolExists.c.o -o cmTC_5a148 
+        /usr/bin/ld: CMakeFiles/cmTC_5a148.dir/CheckSymbolExists.c.o: in function `main':
+        CheckSymbolExists.c:(.text+0x14): undefined reference to `sinh'
+        /usr/bin/ld: CheckSymbolExists.c:(.text+0x18): undefined reference to `sinh'
+        collect2: error: ld returned 1 exit status
+        make[1]: *** [CMakeFiles/cmTC_5a148.dir/build.make:99: cmTC_5a148] Error 1
+        make[1]: Leaving directory '/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-WvKQeL'
+        make: *** [Makefile:127: cmTC_5a148/fast] Error 2
+        
+      exitCode: 2
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/share/cmake-3.26/Modules/CheckSymbolExists.cmake:145 (try_compile)"
+      - "/usr/share/cmake-3.26/Modules/CheckSymbolExists.cmake:71 (__CHECK_SYMBOL_EXISTS_IMPL)"
+      - "etc/cmake/dependencies.cmake:145 (check_symbol_exists)"
+      - "CMakeLists.txt:75 (find_dependencies)"
+    directories:
+      source: "/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-FcKHAL"
+      binary: "/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-FcKHAL"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/github/graph/igraph-0.10.4/etc/cmake"
+    buildResult:
+      variable: "SINH_FUNCTION_EXISTS"
+      cached: true
+      stdout: |
+        Change Dir: /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-FcKHAL
+        
+        Run Build Command(s):/usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_2f875/fast && /usr/bin/make  -f CMakeFiles/cmTC_2f875.dir/build.make CMakeFiles/cmTC_2f875.dir/build
+        make[1]: Entering directory '/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-FcKHAL'
+        Building C object CMakeFiles/cmTC_2f875.dir/CheckSymbolExists.c.o
+        /usr/bin/cc   -std=gnu99 -o CMakeFiles/cmTC_2f875.dir/CheckSymbolExists.c.o -c /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-FcKHAL/CheckSymbolExists.c
+        Linking C executable cmTC_2f875
+        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_2f875.dir/link.txt --verbose=1
+        /usr/bin/cc CMakeFiles/cmTC_2f875.dir/CheckSymbolExists.c.o -o cmTC_2f875  -lm 
+        make[1]: Leaving directory '/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-FcKHAL'
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/share/cmake-3.26/Modules/CheckSymbolExists.cmake:145 (try_compile)"
+      - "/usr/share/cmake-3.26/Modules/CheckSymbolExists.cmake:71 (__CHECK_SYMBOL_EXISTS_IMPL)"
+      - "CMakeLists.txt:87 (check_symbol_exists)"
+    checks:
+      - "Looking for strcasecmp"
+    directories:
+      source: "/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-YdYhnM"
+      binary: "/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-YdYhnM"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/github/graph/igraph-0.10.4/etc/cmake"
+    buildResult:
+      variable: "HAVE_STRCASECMP"
+      cached: true
+      stdout: |
+        Change Dir: /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-YdYhnM
+        
+        Run Build Command(s):/usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_8c13c/fast && /usr/bin/make  -f CMakeFiles/cmTC_8c13c.dir/build.make CMakeFiles/cmTC_8c13c.dir/build
+        make[1]: Entering directory '/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-YdYhnM'
+        Building C object CMakeFiles/cmTC_8c13c.dir/CheckSymbolExists.c.o
+        /usr/bin/cc   -std=gnu99 -o CMakeFiles/cmTC_8c13c.dir/CheckSymbolExists.c.o -c /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-YdYhnM/CheckSymbolExists.c
+        Linking C executable cmTC_8c13c
+        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_8c13c.dir/link.txt --verbose=1
+        /usr/bin/cc CMakeFiles/cmTC_8c13c.dir/CheckSymbolExists.c.o -o cmTC_8c13c  -lm 
+        make[1]: Leaving directory '/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-YdYhnM'
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/share/cmake-3.26/Modules/CheckSymbolExists.cmake:145 (try_compile)"
+      - "/usr/share/cmake-3.26/Modules/CheckSymbolExists.cmake:71 (__CHECK_SYMBOL_EXISTS_IMPL)"
+      - "CMakeLists.txt:88 (check_symbol_exists)"
+    checks:
+      - "Looking for strncasecmp"
+    directories:
+      source: "/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-sm3G0J"
+      binary: "/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-sm3G0J"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/github/graph/igraph-0.10.4/etc/cmake"
+    buildResult:
+      variable: "HAVE_STRNCASECMP"
+      cached: true
+      stdout: |
+        Change Dir: /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-sm3G0J
+        
+        Run Build Command(s):/usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_c96d7/fast && /usr/bin/make  -f CMakeFiles/cmTC_c96d7.dir/build.make CMakeFiles/cmTC_c96d7.dir/build
+        make[1]: Entering directory '/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-sm3G0J'
+        Building C object CMakeFiles/cmTC_c96d7.dir/CheckSymbolExists.c.o
+        /usr/bin/cc   -std=gnu99 -o CMakeFiles/cmTC_c96d7.dir/CheckSymbolExists.c.o -c /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-sm3G0J/CheckSymbolExists.c
+        Linking C executable cmTC_c96d7
+        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_c96d7.dir/link.txt --verbose=1
+        /usr/bin/cc CMakeFiles/cmTC_c96d7.dir/CheckSymbolExists.c.o -o cmTC_c96d7  -lm 
+        make[1]: Leaving directory '/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-sm3G0J'
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/share/cmake-3.26/Modules/CheckSymbolExists.cmake:145 (try_compile)"
+      - "/usr/share/cmake-3.26/Modules/CheckSymbolExists.cmake:71 (__CHECK_SYMBOL_EXISTS_IMPL)"
+      - "CMakeLists.txt:89 (check_symbol_exists)"
+    checks:
+      - "Looking for _stricmp"
+    directories:
+      source: "/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-xZ1bYL"
+      binary: "/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-xZ1bYL"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/github/graph/igraph-0.10.4/etc/cmake"
+    buildResult:
+      variable: "HAVE__STRICMP"
+      cached: true
+      stdout: |
+        Change Dir: /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-xZ1bYL
+        
+        Run Build Command(s):/usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_870da/fast && /usr/bin/make  -f CMakeFiles/cmTC_870da.dir/build.make CMakeFiles/cmTC_870da.dir/build
+        make[1]: Entering directory '/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-xZ1bYL'
+        Building C object CMakeFiles/cmTC_870da.dir/CheckSymbolExists.c.o
+        /usr/bin/cc   -std=gnu99 -o CMakeFiles/cmTC_870da.dir/CheckSymbolExists.c.o -c /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-xZ1bYL/CheckSymbolExists.c
+        /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-xZ1bYL/CheckSymbolExists.c: In function 'main':
+        /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-xZ1bYL/CheckSymbolExists.c:8:19: error: '_stricmp' undeclared (first use in this function); did you mean 'strncmp'?
+            8 |   return ((int*)(&_stricmp))[argc];
+              |                   ^~~~~~~~
+              |                   strncmp
+        /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-xZ1bYL/CheckSymbolExists.c:8:19: note: each undeclared identifier is reported only once for each function it appears in
+        make[1]: *** [CMakeFiles/cmTC_870da.dir/build.make:78: CMakeFiles/cmTC_870da.dir/CheckSymbolExists.c.o] Error 1
+        make[1]: Leaving directory '/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-xZ1bYL'
+        make: *** [Makefile:127: cmTC_870da/fast] Error 2
+        
+      exitCode: 2
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/share/cmake-3.26/Modules/CheckSymbolExists.cmake:145 (try_compile)"
+      - "/usr/share/cmake-3.26/Modules/CheckSymbolExists.cmake:71 (__CHECK_SYMBOL_EXISTS_IMPL)"
+      - "CMakeLists.txt:90 (check_symbol_exists)"
+    checks:
+      - "Looking for _strnicmp"
+    directories:
+      source: "/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-0OQ8TK"
+      binary: "/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-0OQ8TK"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/github/graph/igraph-0.10.4/etc/cmake"
+    buildResult:
+      variable: "HAVE__STRNICMP"
+      cached: true
+      stdout: |
+        Change Dir: /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-0OQ8TK
+        
+        Run Build Command(s):/usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_89a1c/fast && /usr/bin/make  -f CMakeFiles/cmTC_89a1c.dir/build.make CMakeFiles/cmTC_89a1c.dir/build
+        make[1]: Entering directory '/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-0OQ8TK'
+        Building C object CMakeFiles/cmTC_89a1c.dir/CheckSymbolExists.c.o
+        /usr/bin/cc   -std=gnu99 -o CMakeFiles/cmTC_89a1c.dir/CheckSymbolExists.c.o -c /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-0OQ8TK/CheckSymbolExists.c
+        /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-0OQ8TK/CheckSymbolExists.c: In function 'main':
+        /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-0OQ8TK/CheckSymbolExists.c:8:19: error: '_strnicmp' undeclared (first use in this function); did you mean 'strncmp'?
+            8 |   return ((int*)(&_strnicmp))[argc];
+              |                   ^~~~~~~~~
+              |                   strncmp
+        /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-0OQ8TK/CheckSymbolExists.c:8:19: note: each undeclared identifier is reported only once for each function it appears in
+        make[1]: *** [CMakeFiles/cmTC_89a1c.dir/build.make:78: CMakeFiles/cmTC_89a1c.dir/CheckSymbolExists.c.o] Error 1
+        make[1]: Leaving directory '/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-0OQ8TK'
+        make: *** [Makefile:127: cmTC_89a1c/fast] Error 2
+        
+      exitCode: 2
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/share/cmake-3.26/Modules/CheckSymbolExists.cmake:145 (try_compile)"
+      - "/usr/share/cmake-3.26/Modules/CheckSymbolExists.cmake:71 (__CHECK_SYMBOL_EXISTS_IMPL)"
+      - "CMakeLists.txt:91 (check_symbol_exists)"
+    checks:
+      - "Looking for strdup"
+    directories:
+      source: "/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-AcDXaI"
+      binary: "/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-AcDXaI"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/github/graph/igraph-0.10.4/etc/cmake"
+    buildResult:
+      variable: "HAVE_STRDUP"
+      cached: true
+      stdout: |
+        Change Dir: /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-AcDXaI
+        
+        Run Build Command(s):/usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_5dabb/fast && /usr/bin/make  -f CMakeFiles/cmTC_5dabb.dir/build.make CMakeFiles/cmTC_5dabb.dir/build
+        make[1]: Entering directory '/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-AcDXaI'
+        Building C object CMakeFiles/cmTC_5dabb.dir/CheckSymbolExists.c.o
+        /usr/bin/cc   -std=gnu99 -o CMakeFiles/cmTC_5dabb.dir/CheckSymbolExists.c.o -c /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-AcDXaI/CheckSymbolExists.c
+        Linking C executable cmTC_5dabb
+        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_5dabb.dir/link.txt --verbose=1
+        /usr/bin/cc CMakeFiles/cmTC_5dabb.dir/CheckSymbolExists.c.o -o cmTC_5dabb  -lm 
+        make[1]: Leaving directory '/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-AcDXaI'
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/share/cmake-3.26/Modules/CheckSymbolExists.cmake:145 (try_compile)"
+      - "/usr/share/cmake-3.26/Modules/CheckSymbolExists.cmake:71 (__CHECK_SYMBOL_EXISTS_IMPL)"
+      - "CMakeLists.txt:92 (check_symbol_exists)"
+    checks:
+      - "Looking for strndup"
+    directories:
+      source: "/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-yur1WJ"
+      binary: "/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-yur1WJ"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/github/graph/igraph-0.10.4/etc/cmake"
+    buildResult:
+      variable: "HAVE_STRNDUP"
+      cached: true
+      stdout: |
+        Change Dir: /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-yur1WJ
+        
+        Run Build Command(s):/usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_dc2ad/fast && /usr/bin/make  -f CMakeFiles/cmTC_dc2ad.dir/build.make CMakeFiles/cmTC_dc2ad.dir/build
+        make[1]: Entering directory '/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-yur1WJ'
+        Building C object CMakeFiles/cmTC_dc2ad.dir/CheckSymbolExists.c.o
+        /usr/bin/cc   -std=gnu99 -o CMakeFiles/cmTC_dc2ad.dir/CheckSymbolExists.c.o -c /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-yur1WJ/CheckSymbolExists.c
+        Linking C executable cmTC_dc2ad
+        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_dc2ad.dir/link.txt --verbose=1
+        /usr/bin/cc CMakeFiles/cmTC_dc2ad.dir/CheckSymbolExists.c.o -o cmTC_dc2ad  -lm 
+        make[1]: Leaving directory '/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-yur1WJ'
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/share/cmake-3.26/Modules/CheckIncludeFiles.cmake:137 (try_compile)"
+      - "CMakeLists.txt:93 (check_include_files)"
+    checks:
+      - "Looking for include file xlocale.h"
+    directories:
+      source: "/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-SOewlM"
+      binary: "/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-SOewlM"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/github/graph/igraph-0.10.4/etc/cmake"
+    buildResult:
+      variable: "HAVE_XLOCALE"
+      cached: true
+      stdout: |
+        Change Dir: /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-SOewlM
+        
+        Run Build Command(s):/usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_52b12/fast && /usr/bin/make  -f CMakeFiles/cmTC_52b12.dir/build.make CMakeFiles/cmTC_52b12.dir/build
+        make[1]: Entering directory '/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-SOewlM'
+        Building C object CMakeFiles/cmTC_52b12.dir/HAVE_XLOCALE.c.o
+        /usr/bin/cc   -std=gnu99 -o CMakeFiles/cmTC_52b12.dir/HAVE_XLOCALE.c.o -c /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-SOewlM/HAVE_XLOCALE.c
+        /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-SOewlM/HAVE_XLOCALE.c:2:10: fatal error: xlocale.h: No such file or directory
+            2 | #include <xlocale.h>
+              |          ^~~~~~~~~~~
+        compilation terminated.
+        make[1]: *** [CMakeFiles/cmTC_52b12.dir/build.make:78: CMakeFiles/cmTC_52b12.dir/HAVE_XLOCALE.c.o] Error 1
+        make[1]: Leaving directory '/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-SOewlM'
+        make: *** [Makefile:127: cmTC_52b12/fast] Error 2
+        
+      exitCode: 2
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/share/cmake-3.26/Modules/CheckSymbolExists.cmake:145 (try_compile)"
+      - "/usr/share/cmake-3.26/Modules/CheckSymbolExists.cmake:71 (__CHECK_SYMBOL_EXISTS_IMPL)"
+      - "CMakeLists.txt:100 (check_symbol_exists)"
+    checks:
+      - "Looking for uselocale"
+    directories:
+      source: "/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-BB8rgL"
+      binary: "/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-BB8rgL"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/github/graph/igraph-0.10.4/etc/cmake"
+    buildResult:
+      variable: "HAVE_USELOCALE"
+      cached: true
+      stdout: |
+        Change Dir: /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-BB8rgL
+        
+        Run Build Command(s):/usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_b53f6/fast && /usr/bin/make  -f CMakeFiles/cmTC_b53f6.dir/build.make CMakeFiles/cmTC_b53f6.dir/build
+        make[1]: Entering directory '/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-BB8rgL'
+        Building C object CMakeFiles/cmTC_b53f6.dir/CheckSymbolExists.c.o
+        /usr/bin/cc   -std=gnu99 -o CMakeFiles/cmTC_b53f6.dir/CheckSymbolExists.c.o -c /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-BB8rgL/CheckSymbolExists.c
+        Linking C executable cmTC_b53f6
+        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_b53f6.dir/link.txt --verbose=1
+        /usr/bin/cc CMakeFiles/cmTC_b53f6.dir/CheckSymbolExists.c.o -o cmTC_b53f6  -lm 
+        make[1]: Leaving directory '/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-BB8rgL'
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/share/cmake-3.26/Modules/CheckSymbolExists.cmake:145 (try_compile)"
+      - "/usr/share/cmake-3.26/Modules/CheckSymbolExists.cmake:71 (__CHECK_SYMBOL_EXISTS_IMPL)"
+      - "CMakeLists.txt:102 (check_symbol_exists)"
+    checks:
+      - "Looking for _configthreadlocale"
+    directories:
+      source: "/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-9oKW5H"
+      binary: "/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-9oKW5H"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/github/graph/igraph-0.10.4/etc/cmake"
+    buildResult:
+      variable: "HAVE__CONFIGTHREADLOCALE"
+      cached: true
+      stdout: |
+        Change Dir: /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-9oKW5H
+        
+        Run Build Command(s):/usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_e8c9f/fast && /usr/bin/make  -f CMakeFiles/cmTC_e8c9f.dir/build.make CMakeFiles/cmTC_e8c9f.dir/build
+        make[1]: Entering directory '/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-9oKW5H'
+        Building C object CMakeFiles/cmTC_e8c9f.dir/CheckSymbolExists.c.o
+        /usr/bin/cc   -std=gnu99 -o CMakeFiles/cmTC_e8c9f.dir/CheckSymbolExists.c.o -c /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-9oKW5H/CheckSymbolExists.c
+        /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-9oKW5H/CheckSymbolExists.c: In function 'main':
+        /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-9oKW5H/CheckSymbolExists.c:8:19: error: '_configthreadlocale' undeclared (first use in this function)
+            8 |   return ((int*)(&_configthreadlocale))[argc];
+              |                   ^~~~~~~~~~~~~~~~~~~
+        /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-9oKW5H/CheckSymbolExists.c:8:19: note: each undeclared identifier is reported only once for each function it appears in
+        make[1]: *** [CMakeFiles/cmTC_e8c9f.dir/build.make:78: CMakeFiles/cmTC_e8c9f.dir/CheckSymbolExists.c.o] Error 1
+        make[1]: Leaving directory '/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-9oKW5H'
+        make: *** [Makefile:127: cmTC_e8c9f/fast] Error 2
+        
+      exitCode: 2
+  -
+    kind: "try_run-v1"
+    backtrace:
+      - "etc/cmake/ieee754_endianness.cmake:21 (try_run)"
+      - "CMakeLists.txt:107 (include)"
+    directories:
+      source: "/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeTmp"
+      binary: "/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeTmp"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/github/graph/igraph-0.10.4/etc/cmake"
+    buildResult:
+      variable: "IEEE754_DOUBLE_ENDIANNESS_TEST_COMPILES"
+      cached: true
+      stdout: |
+        Change Dir: /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeTmp
+        
+        Run Build Command(s):/usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_ed2db/fast && /usr/bin/make  -f CMakeFiles/cmTC_ed2db.dir/build.make CMakeFiles/cmTC_ed2db.dir/build
+        make[1]: Entering directory '/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeTmp'
+        Building C object CMakeFiles/cmTC_ed2db.dir/ieee754_endianness_check.c.o
+        /usr/bin/cc   -std=gnu99 -o CMakeFiles/cmTC_ed2db.dir/ieee754_endianness_check.c.o -c /github/graph/igraph-0.10.4/etc/cmake/ieee754_endianness_check.c
+        Linking C executable cmTC_ed2db
+        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_ed2db.dir/link.txt --verbose=1
+        /usr/bin/cc CMakeFiles/cmTC_ed2db.dir/ieee754_endianness_check.c.o -o cmTC_ed2db 
+        make[1]: Leaving directory '/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeTmp'
+        
+      exitCode: 0
+    runResult:
+      variable: "IEEE754_DOUBLE_ENDIANNESS_TEST_EXIT_CODE"
+      cached: true
+      stdout: |
+        OK
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/share/cmake-3.26/Modules/Internal/CheckSourceCompiles.cmake:101 (try_compile)"
+      - "/usr/share/cmake-3.26/Modules/CheckCXXSourceCompiles.cmake:76 (cmake_check_source_compiles)"
+      - "etc/cmake/uint128_support.cmake:7 (check_cxx_source_compiles)"
+      - "CMakeLists.txt:108 (include)"
+    checks:
+      - "Performing Test HAVE__UMUL128"
+    directories:
+      source: "/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-TGSB9J"
+      binary: "/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-TGSB9J"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: ""
+      CMAKE_CXX_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/github/graph/igraph-0.10.4/etc/cmake"
+    buildResult:
+      variable: "HAVE__UMUL128"
+      cached: true
+      stdout: |
+        Change Dir: /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-TGSB9J
+        
+        Run Build Command(s):/usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_7e925/fast && /usr/bin/make  -f CMakeFiles/cmTC_7e925.dir/build.make CMakeFiles/cmTC_7e925.dir/build
+        make[1]: Entering directory '/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-TGSB9J'
+        Building CXX object CMakeFiles/cmTC_7e925.dir/src.cxx.o
+        /usr/bin/c++ -DHAVE__UMUL128  -std=gnu++11 -o CMakeFiles/cmTC_7e925.dir/src.cxx.o -c /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-TGSB9J/src.cxx
+        /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-TGSB9J/src.cxx:2:14: fatal error: intrin.h: No such file or directory
+            2 |     #include <intrin.h>
+              |              ^~~~~~~~~~
+        compilation terminated.
+        make[1]: *** [CMakeFiles/cmTC_7e925.dir/build.make:78: CMakeFiles/cmTC_7e925.dir/src.cxx.o] Error 1
+        make[1]: Leaving directory '/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-TGSB9J'
+        make: *** [Makefile:127: cmTC_7e925/fast] Error 2
+        
+      exitCode: 2
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/share/cmake-3.26/Modules/Internal/CheckSourceCompiles.cmake:101 (try_compile)"
+      - "/usr/share/cmake-3.26/Modules/CheckCXXSourceCompiles.cmake:76 (cmake_check_source_compiles)"
+      - "etc/cmake/uint128_support.cmake:22 (check_cxx_source_compiles)"
+      - "CMakeLists.txt:108 (include)"
+    checks:
+      - "Performing Test HAVE___UMULH"
+    directories:
+      source: "/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-GCQU0H"
+      binary: "/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-GCQU0H"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: ""
+      CMAKE_CXX_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/github/graph/igraph-0.10.4/etc/cmake"
+    buildResult:
+      variable: "HAVE___UMULH"
+      cached: true
+      stdout: |
+        Change Dir: /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-GCQU0H
+        
+        Run Build Command(s):/usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_794fd/fast && /usr/bin/make  -f CMakeFiles/cmTC_794fd.dir/build.make CMakeFiles/cmTC_794fd.dir/build
+        make[1]: Entering directory '/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-GCQU0H'
+        Building CXX object CMakeFiles/cmTC_794fd.dir/src.cxx.o
+        /usr/bin/c++ -DHAVE___UMULH  -std=gnu++11 -o CMakeFiles/cmTC_794fd.dir/src.cxx.o -c /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-GCQU0H/src.cxx
+        /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-GCQU0H/src.cxx:2:14: fatal error: intrin.h: No such file or directory
+            2 |     #include <intrin.h>
+              |              ^~~~~~~~~~
+        compilation terminated.
+        make[1]: *** [CMakeFiles/cmTC_794fd.dir/build.make:78: CMakeFiles/cmTC_794fd.dir/src.cxx.o] Error 1
+        make[1]: Leaving directory '/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-GCQU0H'
+        make: *** [Makefile:127: cmTC_794fd/fast] Error 2
+        
+      exitCode: 2
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/share/cmake-3.26/Modules/CheckIncludeFileCXX.cmake:94 (try_compile)"
+      - "/usr/share/cmake-3.26/Modules/CheckTypeSize.cmake:256 (check_include_file_cxx)"
+      - "etc/cmake/uint128_support.cmake:36 (check_type_size)"
+      - "CMakeLists.txt:108 (include)"
+    checks:
+      - "Looking for C++ include sys/types.h"
+    directories:
+      source: "/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-DsYZnJ"
+      binary: "/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-DsYZnJ"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: ""
+      CMAKE_CXX_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/github/graph/igraph-0.10.4/etc/cmake"
+    buildResult:
+      variable: "HAVE_SYS_TYPES_H"
+      cached: true
+      stdout: |
+        Change Dir: /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-DsYZnJ
+        
+        Run Build Command(s):/usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_69b81/fast && /usr/bin/make  -f CMakeFiles/cmTC_69b81.dir/build.make CMakeFiles/cmTC_69b81.dir/build
+        make[1]: Entering directory '/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-DsYZnJ'
+        Building CXX object CMakeFiles/cmTC_69b81.dir/CheckIncludeFile.cxx.o
+        /usr/bin/c++   -std=gnu++11 -o CMakeFiles/cmTC_69b81.dir/CheckIncludeFile.cxx.o -c /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-DsYZnJ/CheckIncludeFile.cxx
+        Linking CXX executable cmTC_69b81
+        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_69b81.dir/link.txt --verbose=1
+        /usr/bin/c++ CMakeFiles/cmTC_69b81.dir/CheckIncludeFile.cxx.o -o cmTC_69b81 
+        make[1]: Leaving directory '/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-DsYZnJ'
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/share/cmake-3.26/Modules/CheckIncludeFileCXX.cmake:94 (try_compile)"
+      - "/usr/share/cmake-3.26/Modules/CheckTypeSize.cmake:261 (check_include_file_cxx)"
+      - "etc/cmake/uint128_support.cmake:36 (check_type_size)"
+      - "CMakeLists.txt:108 (include)"
+    checks:
+      - "Looking for C++ include stdint.h"
+    directories:
+      source: "/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-YxUhnI"
+      binary: "/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-YxUhnI"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: ""
+      CMAKE_CXX_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/github/graph/igraph-0.10.4/etc/cmake"
+    buildResult:
+      variable: "HAVE_STDINT_H"
+      cached: true
+      stdout: |
+        Change Dir: /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-YxUhnI
+        
+        Run Build Command(s):/usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_bdc1e/fast && /usr/bin/make  -f CMakeFiles/cmTC_bdc1e.dir/build.make CMakeFiles/cmTC_bdc1e.dir/build
+        make[1]: Entering directory '/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-YxUhnI'
+        Building CXX object CMakeFiles/cmTC_bdc1e.dir/CheckIncludeFile.cxx.o
+        /usr/bin/c++   -std=gnu++11 -o CMakeFiles/cmTC_bdc1e.dir/CheckIncludeFile.cxx.o -c /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-YxUhnI/CheckIncludeFile.cxx
+        Linking CXX executable cmTC_bdc1e
+        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_bdc1e.dir/link.txt --verbose=1
+        /usr/bin/c++ CMakeFiles/cmTC_bdc1e.dir/CheckIncludeFile.cxx.o -o cmTC_bdc1e 
+        make[1]: Leaving directory '/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-YxUhnI'
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/share/cmake-3.26/Modules/CheckIncludeFileCXX.cmake:94 (try_compile)"
+      - "/usr/share/cmake-3.26/Modules/CheckTypeSize.cmake:262 (check_include_file_cxx)"
+      - "etc/cmake/uint128_support.cmake:36 (check_type_size)"
+      - "CMakeLists.txt:108 (include)"
+    checks:
+      - "Looking for C++ include stddef.h"
+    directories:
+      source: "/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-wPqdAM"
+      binary: "/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-wPqdAM"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: ""
+      CMAKE_CXX_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/github/graph/igraph-0.10.4/etc/cmake"
+    buildResult:
+      variable: "HAVE_STDDEF_H"
+      cached: true
+      stdout: |
+        Change Dir: /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-wPqdAM
+        
+        Run Build Command(s):/usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_d490c/fast && /usr/bin/make  -f CMakeFiles/cmTC_d490c.dir/build.make CMakeFiles/cmTC_d490c.dir/build
+        make[1]: Entering directory '/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-wPqdAM'
+        Building CXX object CMakeFiles/cmTC_d490c.dir/CheckIncludeFile.cxx.o
+        /usr/bin/c++   -std=gnu++11 -o CMakeFiles/cmTC_d490c.dir/CheckIncludeFile.cxx.o -c /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-wPqdAM/CheckIncludeFile.cxx
+        Linking CXX executable cmTC_d490c
+        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_d490c.dir/link.txt --verbose=1
+        /usr/bin/c++ CMakeFiles/cmTC_d490c.dir/CheckIncludeFile.cxx.o -o cmTC_d490c 
+        make[1]: Leaving directory '/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-wPqdAM'
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/share/cmake-3.26/Modules/CheckTypeSize.cmake:148 (try_compile)"
+      - "/usr/share/cmake-3.26/Modules/CheckTypeSize.cmake:273 (__check_type_size_impl)"
+      - "etc/cmake/uint128_support.cmake:36 (check_type_size)"
+      - "CMakeLists.txt:108 (include)"
+    checks:
+      - "Check size of __uint128_t"
+    directories:
+      source: "/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-irwINI"
+      binary: "/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-irwINI"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: ""
+      CMAKE_CXX_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/github/graph/igraph-0.10.4/etc/cmake"
+    buildResult:
+      variable: "HAVE_UINT128"
+      cached: true
+      stdout: |
+        Change Dir: /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-irwINI
+        
+        Run Build Command(s):/usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_f58b9/fast && /usr/bin/make  -f CMakeFiles/cmTC_f58b9.dir/build.make CMakeFiles/cmTC_f58b9.dir/build
+        make[1]: Entering directory '/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-irwINI'
+        Building CXX object CMakeFiles/cmTC_f58b9.dir/UINT128.cpp.o
+        /usr/bin/c++   -std=gnu++11 -o CMakeFiles/cmTC_f58b9.dir/UINT128.cpp.o -c /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-irwINI/UINT128.cpp
+        Linking CXX executable cmTC_f58b9
+        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_f58b9.dir/link.txt --verbose=1
+        /usr/bin/c++ CMakeFiles/cmTC_f58b9.dir/UINT128.cpp.o -o cmTC_f58b9 
+        make[1]: Leaving directory '/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-irwINI'
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/share/cmake-3.26/Modules/Internal/CheckSourceCompiles.cmake:101 (try_compile)"
+      - "/usr/share/cmake-3.26/Modules/CheckCXXSourceCompiles.cmake:76 (cmake_check_source_compiles)"
+      - "etc/cmake/safe_math_support.cmake:7 (check_cxx_source_compiles)"
+      - "CMakeLists.txt:109 (include)"
+    checks:
+      - "Performing Test HAVE_BUILTIN_OVERFLOW"
+    directories:
+      source: "/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-ibcThJ"
+      binary: "/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-ibcThJ"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: ""
+      CMAKE_CXX_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/github/graph/igraph-0.10.4/etc/cmake"
+    buildResult:
+      variable: "HAVE_BUILTIN_OVERFLOW"
+      cached: true
+      stdout: |
+        Change Dir: /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-ibcThJ
+        
+        Run Build Command(s):/usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_a0a8e/fast && /usr/bin/make  -f CMakeFiles/cmTC_a0a8e.dir/build.make CMakeFiles/cmTC_a0a8e.dir/build
+        make[1]: Entering directory '/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-ibcThJ'
+        Building CXX object CMakeFiles/cmTC_a0a8e.dir/src.cxx.o
+        /usr/bin/c++ -DHAVE_BUILTIN_OVERFLOW  -std=gnu++11 -o CMakeFiles/cmTC_a0a8e.dir/src.cxx.o -c /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-ibcThJ/src.cxx
+        Linking CXX executable cmTC_a0a8e
+        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_a0a8e.dir/link.txt --verbose=1
+        /usr/bin/c++ CMakeFiles/cmTC_a0a8e.dir/src.cxx.o -o cmTC_a0a8e 
+        make[1]: Leaving directory '/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-ibcThJ'
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/share/cmake-3.26/Modules/CheckSymbolExists.cmake:145 (try_compile)"
+      - "/usr/share/cmake-3.26/Modules/CheckCXXSymbolExists.cmake:77 (__CHECK_SYMBOL_EXISTS_IMPL)"
+      - "etc/cmake/pkgconfig_helpers.cmake:32 (check_cxx_symbol_exists)"
+      - "src/CMakeLists.txt:428 (include)"
+    checks:
+      - "Looking for _LIBCPP_VERSION"
+    directories:
+      source: "/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-sBwjYH"
+      binary: "/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-sBwjYH"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: ""
+      CMAKE_CXX_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/github/graph/igraph-0.10.4/etc/cmake"
+    buildResult:
+      variable: "USING_LIBCXX"
+      cached: true
+      stdout: |
+        Change Dir: /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-sBwjYH
+        
+        Run Build Command(s):/usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_f69e4/fast && /usr/bin/make  -f CMakeFiles/cmTC_f69e4.dir/build.make CMakeFiles/cmTC_f69e4.dir/build
+        make[1]: Entering directory '/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-sBwjYH'
+        Building CXX object CMakeFiles/cmTC_f69e4.dir/CheckSymbolExists.cxx.o
+        /usr/bin/c++   -std=gnu++11 -o CMakeFiles/cmTC_f69e4.dir/CheckSymbolExists.cxx.o -c /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-sBwjYH/CheckSymbolExists.cxx
+        /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-sBwjYH/CheckSymbolExists.cxx: In function 'int main(int, char**)':
+        /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-sBwjYH/CheckSymbolExists.cxx:8:19: error: '_LIBCPP_VERSION' was not declared in this scope
+            8 |   return ((int*)(&_LIBCPP_VERSION))[argc];
+              |                   ^~~~~~~~~~~~~~~
+        make[1]: *** [CMakeFiles/cmTC_f69e4.dir/build.make:78: CMakeFiles/cmTC_f69e4.dir/CheckSymbolExists.cxx.o] Error 1
+        make[1]: Leaving directory '/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-sBwjYH'
+        make: *** [Makefile:127: cmTC_f69e4/fast] Error 2
+        
+      exitCode: 2
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/share/cmake-3.26/Modules/CheckSymbolExists.cmake:145 (try_compile)"
+      - "/usr/share/cmake-3.26/Modules/CheckCXXSymbolExists.cmake:77 (__CHECK_SYMBOL_EXISTS_IMPL)"
+      - "etc/cmake/pkgconfig_helpers.cmake:33 (check_cxx_symbol_exists)"
+      - "src/CMakeLists.txt:428 (include)"
+    checks:
+      - "Looking for __GLIBCXX__"
+    directories:
+      source: "/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-lIdSuL"
+      binary: "/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-lIdSuL"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: ""
+      CMAKE_CXX_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/github/graph/igraph-0.10.4/etc/cmake"
+    buildResult:
+      variable: "USING_LIBSTDCXX"
+      cached: true
+      stdout: |
+        Change Dir: /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-lIdSuL
+        
+        Run Build Command(s):/usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_689bc/fast && /usr/bin/make  -f CMakeFiles/cmTC_689bc.dir/build.make CMakeFiles/cmTC_689bc.dir/build
+        make[1]: Entering directory '/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-lIdSuL'
+        Building CXX object CMakeFiles/cmTC_689bc.dir/CheckSymbolExists.cxx.o
+        /usr/bin/c++   -std=gnu++11 -o CMakeFiles/cmTC_689bc.dir/CheckSymbolExists.cxx.o -c /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-lIdSuL/CheckSymbolExists.cxx
+        Linking CXX executable cmTC_689bc
+        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_689bc.dir/link.txt --verbose=1
+        /usr/bin/c++ CMakeFiles/cmTC_689bc.dir/CheckSymbolExists.cxx.o -o cmTC_689bc 
+        make[1]: Leaving directory '/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-lIdSuL'
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/share/cmake-3.26/Modules/Internal/CheckSourceCompiles.cmake:101 (try_compile)"
+      - "/usr/share/cmake-3.26/Modules/Internal/CheckCompilerFlag.cmake:18 (cmake_check_source_compiles)"
+      - "/usr/share/cmake-3.26/Modules/CheckCXXCompilerFlag.cmake:40 (cmake_check_compiler_flag)"
+      - "/usr/share/cmake-3.26/Modules/GenerateExportHeader.cmake:238 (check_cxx_compiler_flag)"
+      - "/usr/share/cmake-3.26/Modules/GenerateExportHeader.cmake:419 (_test_compiler_hidden_visibility)"
+      - "src/CMakeLists.txt:431 (generate_export_header)"
+    checks:
+      - "Performing Test COMPILER_HAS_HIDDEN_VISIBILITY"
+    directories:
+      source: "/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-Da6PqK"
+      binary: "/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-Da6PqK"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: ""
+      CMAKE_CXX_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/github/graph/igraph-0.10.4/etc/cmake"
+    buildResult:
+      variable: "COMPILER_HAS_HIDDEN_VISIBILITY"
+      cached: true
+      stdout: |
+        Change Dir: /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-Da6PqK
+        
+        Run Build Command(s):/usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_fdf0c/fast && /usr/bin/make  -f CMakeFiles/cmTC_fdf0c.dir/build.make CMakeFiles/cmTC_fdf0c.dir/build
+        make[1]: Entering directory '/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-Da6PqK'
+        Building CXX object CMakeFiles/cmTC_fdf0c.dir/src.cxx.o
+        /usr/bin/c++ -DCOMPILER_HAS_HIDDEN_VISIBILITY  -std=gnu++11   -fvisibility=hidden -o CMakeFiles/cmTC_fdf0c.dir/src.cxx.o -c /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-Da6PqK/src.cxx
+        Linking CXX executable cmTC_fdf0c
+        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_fdf0c.dir/link.txt --verbose=1
+        /usr/bin/c++ CMakeFiles/cmTC_fdf0c.dir/src.cxx.o -o cmTC_fdf0c 
+        make[1]: Leaving directory '/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-Da6PqK'
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/share/cmake-3.26/Modules/Internal/CheckSourceCompiles.cmake:101 (try_compile)"
+      - "/usr/share/cmake-3.26/Modules/Internal/CheckCompilerFlag.cmake:18 (cmake_check_source_compiles)"
+      - "/usr/share/cmake-3.26/Modules/CheckCXXCompilerFlag.cmake:40 (cmake_check_compiler_flag)"
+      - "/usr/share/cmake-3.26/Modules/GenerateExportHeader.cmake:239 (check_cxx_compiler_flag)"
+      - "/usr/share/cmake-3.26/Modules/GenerateExportHeader.cmake:419 (_test_compiler_hidden_visibility)"
+      - "src/CMakeLists.txt:431 (generate_export_header)"
+    checks:
+      - "Performing Test COMPILER_HAS_HIDDEN_INLINE_VISIBILITY"
+    directories:
+      source: "/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-QxaUnL"
+      binary: "/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-QxaUnL"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: ""
+      CMAKE_CXX_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/github/graph/igraph-0.10.4/etc/cmake"
+    buildResult:
+      variable: "COMPILER_HAS_HIDDEN_INLINE_VISIBILITY"
+      cached: true
+      stdout: |
+        Change Dir: /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-QxaUnL
+        
+        Run Build Command(s):/usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_0052d/fast && /usr/bin/make  -f CMakeFiles/cmTC_0052d.dir/build.make CMakeFiles/cmTC_0052d.dir/build
+        make[1]: Entering directory '/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-QxaUnL'
+        Building CXX object CMakeFiles/cmTC_0052d.dir/src.cxx.o
+        /usr/bin/c++ -DCOMPILER_HAS_HIDDEN_INLINE_VISIBILITY  -std=gnu++11   -fvisibility-inlines-hidden -o CMakeFiles/cmTC_0052d.dir/src.cxx.o -c /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-QxaUnL/src.cxx
+        Linking CXX executable cmTC_0052d
+        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_0052d.dir/link.txt --verbose=1
+        /usr/bin/c++ CMakeFiles/cmTC_0052d.dir/src.cxx.o -o cmTC_0052d 
+        make[1]: Leaving directory '/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-QxaUnL'
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/share/cmake-3.26/Modules/Internal/CheckSourceCompiles.cmake:101 (try_compile)"
+      - "/usr/share/cmake-3.26/Modules/CheckCXXSourceCompiles.cmake:76 (cmake_check_source_compiles)"
+      - "/usr/share/cmake-3.26/Modules/GenerateExportHeader.cmake:206 (check_cxx_source_compiles)"
+      - "/usr/share/cmake-3.26/Modules/GenerateExportHeader.cmake:263 (_check_cxx_compiler_attribute)"
+      - "/usr/share/cmake-3.26/Modules/GenerateExportHeader.cmake:420 (_test_compiler_has_deprecated)"
+      - "src/CMakeLists.txt:431 (generate_export_header)"
+    checks:
+      - "Performing Test COMPILER_HAS_DEPRECATED_ATTR"
+    directories:
+      source: "/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-amtgzK"
+      binary: "/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-amtgzK"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: ""
+      CMAKE_CXX_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/github/graph/igraph-0.10.4/etc/cmake"
+    buildResult:
+      variable: "COMPILER_HAS_DEPRECATED_ATTR"
+      cached: true
+      stdout: |
+        Change Dir: /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-amtgzK
+        
+        Run Build Command(s):/usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_0a104/fast && /usr/bin/make  -f CMakeFiles/cmTC_0a104.dir/build.make CMakeFiles/cmTC_0a104.dir/build
+        make[1]: Entering directory '/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-amtgzK'
+        Building CXX object CMakeFiles/cmTC_0a104.dir/src.cxx.o
+        /usr/bin/c++ -DCOMPILER_HAS_DEPRECATED_ATTR  -std=gnu++11 -o CMakeFiles/cmTC_0a104.dir/src.cxx.o -c /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-amtgzK/src.cxx
+        /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-amtgzK/src.cxx: In function 'int main()':
+        /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-amtgzK/src.cxx:2:34: warning: 'int somefunc()' is deprecated [-Wdeprecated-declarations]
+            2 |     int main() { return somefunc();}
+              |                                  ^
+        /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-amtgzK/src.cxx:1:37: note: declared here
+            1 | __attribute__((__deprecated__)) int somefunc() { return 0; }
+              |                                     ^~~~~~~~
+        /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-amtgzK/src.cxx:2:34: warning: 'int somefunc()' is deprecated [-Wdeprecated-declarations]
+            2 |     int main() { return somefunc();}
+              |                                  ^
+        /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-amtgzK/src.cxx:1:37: note: declared here
+            1 | __attribute__((__deprecated__)) int somefunc() { return 0; }
+              |                                     ^~~~~~~~
+        Linking CXX executable cmTC_0a104
+        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_0a104.dir/link.txt --verbose=1
+        /usr/bin/c++ CMakeFiles/cmTC_0a104.dir/src.cxx.o -o cmTC_0a104 
+        make[1]: Leaving directory '/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-amtgzK'
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/share/cmake-3.26/Modules/Internal/CheckSourceCompiles.cmake:101 (try_compile)"
+      - "/usr/share/cmake-3.26/Modules/Internal/CheckLinkerFlag.cmake:37 (cmake_check_source_compiles)"
+      - "/usr/share/cmake-3.26/Modules/CheckLinkerFlag.cmake:44 (cmake_check_linker_flag)"
+      - "tests/CMakeLists.txt:33 (check_linker_flag)"
+    checks:
+      - "Performing Test HAVE_ENABLE_NEW_DTAGS"
+    directories:
+      source: "/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-7kyBjM"
+      binary: "/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-7kyBjM"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_MODULE_PATH: "/github/graph/igraph-0.10.4/etc/cmake"
+    buildResult:
+      variable: "HAVE_ENABLE_NEW_DTAGS"
+      cached: true
+      stdout: |
+        Change Dir: /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-7kyBjM
+        
+        Run Build Command(s):/usr/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_ebc0d/fast && /usr/bin/make  -f CMakeFiles/cmTC_ebc0d.dir/build.make CMakeFiles/cmTC_ebc0d.dir/build
+        make[1]: Entering directory '/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-7kyBjM'
+        Building C object CMakeFiles/cmTC_ebc0d.dir/src.c.o
+        /usr/bin/cc -DHAVE_ENABLE_NEW_DTAGS  -std=gnu99 -o CMakeFiles/cmTC_ebc0d.dir/src.c.o -c /github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-7kyBjM/src.c
+        Linking C executable cmTC_ebc0d
+        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_ebc0d.dir/link.txt --verbose=1
+        /usr/bin/cc -Wl,--enable-new-dtags CMakeFiles/cmTC_ebc0d.dir/src.c.o -o cmTC_ebc0d 
+        make[1]: Leaving directory '/github/graph/igraph-0.10.4/build/CMakeFiles/CMakeScratch/TryCompile-7kyBjM'
+        
+      exitCode: 0
+...
