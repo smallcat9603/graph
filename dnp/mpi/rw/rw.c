@@ -10,6 +10,7 @@
 #include <time.h>
 #include <string.h>
 #include <unistd.h>
+#include <igraph/igraph.h>
 
 int jump(){
 
@@ -20,6 +21,24 @@ int walk(){
 }
 
 int main(int argc, char** argv) {
+
+  igraph_integer_t num_vertices = 1000;
+  igraph_integer_t num_edges = 1000;
+  igraph_real_t diameter;
+  igraph_t graph;
+
+  igraph_rng_seed(igraph_rng_default(), 42);
+
+  igraph_erdos_renyi_game(&graph, IGRAPH_ERDOS_RENYI_GNM,
+                          num_vertices, num_edges,
+                          IGRAPH_UNDIRECTED, IGRAPH_NO_LOOPS);
+
+  igraph_diameter(&graph, &diameter, NULL, NULL, NULL, NULL, IGRAPH_UNDIRECTED, /* unconn= */ true);
+  printf("Diameter of a random graph with average degree %g: %g\n",
+          2.0 * igraph_ecount(&graph) / igraph_vcount(&graph),
+          (double) diameter);
+
+  igraph_destroy(&graph);
 
 	int nwalkers = 1;
   int nsteps = 80;
@@ -47,6 +66,7 @@ int main(int argc, char** argv) {
     walker[0] = rank;
     MPI_Request req;
     MPI_Isend(walker, 1, MPI_INT, partner_rank, id, MPI_COMM_WORLD, &req);  
+    free(walker);
   }
 
   MPI_Status status;
@@ -69,6 +89,7 @@ int main(int argc, char** argv) {
         send[count] = send[count-1] + 1;
         MPI_Request req;
         MPI_Isend(send, count+1, MPI_INT, partner_rank, st.MPI_TAG, MPI_COMM_WORLD, &req);
+        free(send);
       }
       else{
         printf("rank = %d, walker = %d:\n", rank, st.MPI_TAG);
@@ -77,6 +98,7 @@ int main(int argc, char** argv) {
         }
         printf("\n");
       }
+      free(recv);
     } 
   }
 
