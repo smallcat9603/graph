@@ -70,12 +70,9 @@ int main(int argc, char** argv) {
         printf("\n");
       }
     } 
-
   }
 
-  end = MPI_Wtime();
-
-  printf("rank = %d, elapsed = %f\n", rank, end-start-tail);              
+  printf("rank = %d, elapsed = %f\n", rank, end-start);              
 
   MPI_Finalize();
 }
