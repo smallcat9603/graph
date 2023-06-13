@@ -11,6 +11,14 @@
 #include <string.h>
 #include <unistd.h>
 
+int jump(){
+
+}
+
+int walk(){
+
+}
+
 int main(int argc, char** argv) {
 
 	int nwalkers = 1;
@@ -63,7 +71,7 @@ int main(int argc, char** argv) {
         MPI_Isend(send, count+1, MPI_INT, partner_rank, st.MPI_TAG, MPI_COMM_WORLD, &req);
       }
       else{
-        printf("rank = %d:\n", rank);
+        printf("rank = %d, walker = %d:\n", rank, st.MPI_TAG);
         for(int i=0; i<count; i++){
           printf(" %d", recv[i]);
         }
