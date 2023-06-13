@@ -13,6 +13,11 @@
 
 int main(int argc, char** argv) {
 
+	int nwalkers = 1;
+  int nsteps = 80;
+	if(argc > 1) nwalkers = atoi(argv[1]);
+  if(argc > 2) nsteps = atoi(argv[2]); 
+
   MPI_Init(NULL, NULL);
 
   int rank;
@@ -20,45 +25,57 @@ int main(int argc, char** argv) {
   int size;
   MPI_Comm_size(MPI_COMM_WORLD, &size);
 
-  double start_time, end_time, last_received_time;
-  start_time = MPI_Wtime();
-  last_received_time = MPI_Wtime();
+  int walker_id_start = rank * nwalkers;
+  printf("rank = %d/%d, nwalkers = %d (%d-%d), nsteps = %d\n", rank, size, nwalkers, walker_id_start, walker_id_start+nwalkers-1, nsteps); 
 
-  int* send = (int*) malloc(sizeof(int)*2);
-  send[0] = rank;
-  send[1] = rank + 1;
+  double start, end, tail=3.0;
+  start = MPI_Wtime();
+  end = MPI_Wtime();
+
   int partner_rank = (rank+1)%2;
-  int count = 2;
+
+  for(int id=walker_id_start; id<walker_id_start+nwalkers; id++){
+    int* walker = (int*) malloc(sizeof(int)*1);
+    walker[0] = rank;
+    MPI_Request req;
+    MPI_Isend(walker, 1, MPI_INT, partner_rank, id, MPI_COMM_WORLD, &req);  
+  }
 
   MPI_Status status;
   int flag = 0;
 
-  while (count > 0){
-  MPI_Request req;
-  MPI_Isend(send, 2, MPI_INT, partner_rank, 0, MPI_COMM_WORLD, &req);  
-  count--;
-  }
-
-  while (MPI_Wtime() - last_received_time < 3) {
+  while(MPI_Wtime() - end < tail) {
 
     MPI_Iprobe(MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &flag, &status);
-    if (flag) {
-      int received_count;
-      MPI_Get_count(&status, MPI_INT, &received_count);
-      printf("rank = %d, received_count=%d\n", rank, received_count);
-      last_received_time = MPI_Wtime();
-      MPI_Request req_recv;
+    if(flag) {
+      int count;
+      MPI_Get_count(&status, MPI_INT, &count);
+      // printf("rank = %d, count=%d\n", rank, count);
+      int* recv = (int*) malloc(sizeof(int)*count);
       MPI_Status st;
-      int* recv = (int*) malloc(sizeof(int)*2);
-      MPI_Irecv(recv, received_count, MPI_INT, MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &req_recv);
-      printf("rank=%d, recv[0]=%d, recv[1]=%d\n", rank, recv[0], recv[1]);
+      MPI_Recv(recv, count, MPI_INT, MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &st);
+      end = MPI_Wtime();
+      if(count < nsteps){
+        int* send = (int*)malloc(sizeof(int)*(count+1));
+        memmove(send, recv, sizeof(int)*count);
+        send[count] = send[count-1] + 1;
+        MPI_Request req;
+        MPI_Isend(send, count+1, MPI_INT, partner_rank, st.MPI_TAG, MPI_COMM_WORLD, &req);
+      }
+      else{
+        printf("rank = %d:\n", rank);
+        for(int i=0; i<count; i++){
+          printf(" %d", recv[i]);
+        }
+        printf("\n");
+      }
     } 
 
   }
 
-  end_time = MPI_Wtime();
+  end = MPI_Wtime();
 
-  printf("rank = %d, elapsed = %f\n", rank, end_time-start_time);              
+  printf("rank = %d, elapsed = %f\n", rank, end-start-tail);              
 
   MPI_Finalize();
 }
