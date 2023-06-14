@@ -12,7 +12,7 @@
 #include <unistd.h>
 #include <igraph/igraph.h>
 
-int* map_nodes_in_edgelist(const char* file, const char* file_new, int* nnodes) {
+void map_nodes_in_edgelist(const char* file, const char* file_new, int* nnodes, int** node_map) {
   FILE *fp;
 
   //read file
@@ -71,7 +71,9 @@ int* map_nodes_in_edgelist(const char* file, const char* file_new, int* nnodes) 
   fclose(fp);
 
   *nnodes = num_new;
-  return nodes_new;
+  *node_map = (int*)malloc(sizeof(int)*num_new);
+  for(int i=0; i<num_new; i++) (*node_map)[i] = nodes_new[i];
+
 }
 
 void read_edgelist(igraph_t* graph, const char* file, bool directed){
@@ -95,7 +97,7 @@ int walk(){
 }
 
 int main(int argc, char** argv) {
-  char graphbase[100] = "facebook";
+  char graphbase[192] = "facebook";
 	int nwalkers = 1;
   int nsteps = 80;
   if(argc > 1) strcpy(graphbase, argv[1]);
@@ -125,17 +127,36 @@ int main(int argc, char** argv) {
     else if(strcmp(graphbase, "livejournal") == 0) sprintf(graphbase, "../../pyro/rw/data/%d/soc-LiveJournal1_directed.undirected.connected", size);
   }
 
-  char file[100];
-  char file_new[100];
+  char file[256];
+  char file_new[256];
   sprintf(file, "%s.txt", graphbase);
   if(size > 1) sprintf(file, "%s.sub%d.txt", graphbase, rank);
   sprintf(file_new, "%s.sub%d.x.txt", graphbase, rank);
   int nnodes;
-  int* node_map = map_nodes_in_edgelist(file, file_new, &nnodes);
+  int* node_map;
+  map_nodes_in_edgelist(file, file_new, &nnodes, &node_map);
   igraph_t graph;
   read_edgelist(&graph, file_new, false); //true=directed, false=undirected
   printf("generated graph from file %s\n", file_new);
-  printf("nnodes = %ld, nedges = %ld\n", igraph_vcount(&graph), igraph_ecount(&graph));
+
+  // check graph
+  igraph_bool_t connected;
+  igraph_connectedness_t mode = IGRAPH_WEAK;
+  igraph_is_connected(&graph, &connected, mode);
+  if(connected){
+    printf("Graph is connected\n");
+    printf("nnodes = %ld, nedges = %ld\n", igraph_vcount(&graph), igraph_ecount(&graph));
+  }
+  else{
+    printf("Graph is not connected\n");
+    igraph_vector_int_t membership;
+    igraph_vector_int_t csize;
+    igraph_integer_t no;
+    igraph_connectedness_t mode = IGRAPH_WEAK;
+    igraph_connected_components(&graph, &membership, &csize, &no, mode);
+    printf("Graph is composed of %ld components", no);
+    exit(0);
+  }
 
   double start, end, tail=3.0;
   start = MPI_Wtime();
