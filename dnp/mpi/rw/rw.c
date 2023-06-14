@@ -87,6 +87,26 @@ void read_edgelist(igraph_t* graph, const char* file, bool directed){
   fclose(fp);
 }
 
+void check_graph(igraph_t* graph){
+  igraph_bool_t connected;
+  igraph_connectedness_t mode = IGRAPH_WEAK;
+  igraph_is_connected(graph, &connected, mode);
+  if(connected){
+    printf("Graph is connected\n");
+    printf("nnodes = %ld, nedges = %ld\n", igraph_vcount(graph), igraph_ecount(graph));
+  }
+  else{
+    printf("Graph is not connected\n");
+    igraph_vector_int_t membership;
+    igraph_vector_int_t csize;
+    igraph_integer_t no;
+    igraph_connectedness_t mode = IGRAPH_WEAK;
+    igraph_connected_components(graph, &membership, &csize, &no, mode);
+    printf("Graph is composed of %ld components", no);
+    exit(0);
+  }
+}
+
 
 int jump(){
 
@@ -140,23 +160,7 @@ int main(int argc, char** argv) {
   printf("generated graph from file %s\n", file_new);
 
   // check graph
-  igraph_bool_t connected;
-  igraph_connectedness_t mode = IGRAPH_WEAK;
-  igraph_is_connected(&graph, &connected, mode);
-  if(connected){
-    printf("Graph is connected\n");
-    printf("nnodes = %ld, nedges = %ld\n", igraph_vcount(&graph), igraph_ecount(&graph));
-  }
-  else{
-    printf("Graph is not connected\n");
-    igraph_vector_int_t membership;
-    igraph_vector_int_t csize;
-    igraph_integer_t no;
-    igraph_connectedness_t mode = IGRAPH_WEAK;
-    igraph_connected_components(&graph, &membership, &csize, &no, mode);
-    printf("Graph is composed of %ld components", no);
-    exit(0);
-  }
+  check_graph(&graph);
 
   double start, end, tail=3.0;
   start = MPI_Wtime();
