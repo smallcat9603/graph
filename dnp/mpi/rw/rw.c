@@ -6,10 +6,7 @@
 
 #include <mpi.h>
 #include <stdio.h>
-#include <stdlib.h>
-#include <time.h>
 #include <string.h>
-#include <unistd.h>
 #include <igraph/igraph.h>
 
 void map_nodes_in_edgelist(const char* file, const char* file_new, int* nnodes, int** node_map) {
