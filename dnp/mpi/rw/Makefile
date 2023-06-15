@@ -12,9 +12,3 @@ rw : rw.c algo.c file.c rt.c
 
 clean :
 	${RM} -f ${PROG} 
-
-
-
-
-
-
