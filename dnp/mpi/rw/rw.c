@@ -1,189 +1,18 @@
-//
-// by smallcat 20230609
-// 
-// 
-//
+/********************************************************************
+ This program is for mpi random walk.
+ ----------------------------------------------
+ Email : huyao0107@gmail.com
+ ---------------------------------------------------------------
+********************************************************************/
 
 #include <mpi.h>
 #include <stdio.h>
 #include <string.h>
 #include <igraph/igraph.h>
 
-void map_nodes_in_edgelist(const char* file, const char* file_new, int* nnodes, int** node_map) {
-  FILE *fp;
-
-  //read file
-  fp = fopen(file, "r");
-  if (fp == NULL) {
-      printf("there is something wrong with opening %s\n", file);
-      exit(0);
-  }
-  int src, dst;
-  int num = 0;
-  int* nodes = NULL;
-  while (fscanf(fp, "%d %d", &src, &dst) == 2) {
-    num = num + 2;
-    nodes = (int*)realloc(nodes, sizeof(int)*num);
-    nodes[num-2] = src;
-    nodes[num-1] = dst;
-  }
-  fclose(fp);
-
-  int num_new = num;
-  int nodes_new[num_new];
-  for (int i = 0; i < num_new; i++) nodes_new[i] = nodes[i];
-
-  //remove duplicates in nodes
-  for(int i=0; i<num_new-1; i++)	
-	{ 
-    for(int j=i+1; j<num_new; j++){
-      if(nodes_new[i] == nodes_new[j])
-      { 
-        for(int k=j; k<num_new-1; k++) nodes_new[k] = nodes_new[k+1];
-        num_new--;
-        j--;
-      }
-    }
-  }
-
-  //write to file_new
-  fp = fopen(file_new, "w");
-  for(int i = 0; i < num; i=i+2){
-    int src = nodes[i], dst = nodes[i+1];
-    int src_new, dst_new;
-    int cnt = 0;
-    for(int j = 0; j < num_new; j++){
-      if(src == nodes_new[j]){
-        src_new = j;
-        cnt++;
-      }
-      if(dst == nodes_new[j]){
-        dst_new = j;
-        cnt++;
-      }
-      if(cnt == 2) break;
-    }
-    fprintf(fp, "%d %d\n", src_new, dst_new);
-  }
-  fclose(fp);
-
-  *nnodes = num_new;
-  *node_map = (int*)malloc(sizeof(int)*num_new);
-  for(int i=0; i<num_new; i++) (*node_map)[i] = nodes_new[i];
-
-}
-
-void read_edgelist(igraph_t* graph, const char* file, bool directed){
-  FILE* fp;
-  fp = fopen(file, "r");
-  if (file == NULL) {
-      printf("there is something wrong with opening %s\n", file);
-      exit(0);
-  }
-  igraph_read_graph_edgelist(graph, fp, 0, directed);
-  fclose(fp);
-}
-
-//58 "[(107, 1), (1684, 1), (3173, 1)]" --> src = 58, dst_server[] = {107, 1, 1684, 1, 3173, 1}
-typedef struct {
-    int src;
-    int* dst_server;
-    int num; //number of elements in dst_server
-} rt;
-
-void insert_rt(rt **dict, int idx, int key, int* value, int num) {
-  rt *newDict = realloc(*dict, (idx + 1) * sizeof(rt));
-  if (newDict == NULL) {
-    printf("Error: Failed to allocate memory.\n");
-    exit(0);
-  }
-
-  *dict = newDict;
-  (*dict)[idx].src = key;
-  (*dict)[idx].dst_server = value;
-  (*dict)[idx].num = num;
-}
-
-int get_rt(rt *dict, int size, int key) {
-  for (int i = 0; i < size; i++) {
-    if (dict[i].src == key) {
-      return i;
-    }
-  }
-  printf("Error: No key exists.\n");
-  exit(0);
-}
-
-//parse line in rt file, e.g., 58 "[(107, 1), (1684, 1), (3173, 1)]"
-void parseLine(const char *line, int *src, int **dst_server, int *num) {
-  sscanf(line, "%d", src);
-
-  const char *start = strchr(line, '[');
-  const char *end = strchr(line, ']');
-  if (start == NULL || end == NULL || end <= start) {
-    *dst_server = NULL;
-    *num = 0;
-    exit(0);
-  }
-
-  int length = end - start - 1;
-  if(length == 0) {
-    *dst_server = NULL;
-    *num = 0;
-    exit(0);
-  }
-
-  //temp: (107, 1), (1684, 1), (3173, 1)
-  char *temp = (char *)malloc(length + 1);
-  strncpy(temp, start + 1, length);
-  temp[length] = '\0';
-
-  *num = 0;
-  for(int i = 0; i < length; i++) {
-    if (temp[i] == '(') {
-      (*num)++;
-    }
-  }
-  *num *= 2;
-
-  *dst_server = (int *)malloc(*num * sizeof(int));
-
-  char *token = strtok(temp, ")");
-  sscanf(token, "(%d, %d", &(*dst_server)[0], &(*dst_server)[1]);
-  int index = 2;
-  while (token = strtok(NULL, ")")) {
-      sscanf(token, ", (%d, %d", &(*dst_server)[index], &(*dst_server)[index+1]);
-      index += 2;
-  }
-
-  free(temp);
-}
-
-void read_rt(const char* file, rt** dict, int* rt_size){
-  FILE* fp;
-  fp = fopen(file, "r");
-  if (file == NULL) {
-      printf("there is something wrong with opening %s\n", file);
-      exit(0);
-  }
-
-  int idx = 0;
-  char *line = NULL;
-  size_t line_length = 0;
-  
-  while (getline(&line, &line_length, fp) != -1) {
-    int src;
-    int* dst_server;
-    int num;
-    parseLine(line, &src, &dst_server, &num);
-    insert_rt(dict, idx, src, dst_server, num);
-    idx++;
-  }
-  *rt_size = idx;
-  
-  free(line);  
-  fclose(fp);
-}
+#include "algo.h"
+#include "file.h"
+#include "rt.h"
 
 void check_graph(igraph_t* graph){
   igraph_bool_t connected;
@@ -203,15 +32,6 @@ void check_graph(igraph_t* graph){
     printf("Graph is composed of %ld components", no);
     exit(0);
   }
-}
-
-
-int jump(){
-
-}
-
-int walk(){
-
 }
 
 int main(int argc, char** argv) {
