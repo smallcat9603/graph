@@ -114,29 +114,10 @@ int main(int argc, char** argv) {
     if(flag) {
       int count;
       MPI_Get_count(&status, MPI_INT, &count);
-      // printf("rank = %d, count=%d\n", rank, count);
       int* recv = (int*) malloc(sizeof(int)*count);
-      // MPI_Status st;
       MPI_Recv(recv, count, MPI_INT, MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
       end = MPI_Wtime();
       walk(&graph, dict, rt_size, &recv, &count, node_map, nnodes, &paths, &npaths);
-      
-      // if(count < nsteps){
-      //   int* send = (int*)malloc(sizeof(int)*(count+1));
-      //   memmove(send, recv, sizeof(int)*count);
-      //   send[count] = send[count-1] + 1;
-      //   MPI_Request req;
-      //   MPI_Isend(send, count+1, MPI_INT, partner_rank, st.MPI_TAG, MPI_COMM_WORLD, &req);
-      //   free(send);
-      // }
-      // else{
-      //   printf("rank = %d, walker = %d:\n", rank, st.MPI_TAG);
-      //   for(int i=0; i<count; i++){
-      //     printf(" %d", recv[i]);
-      //   }
-      //   printf("\n");
-      // }
-      // free(recv);
     }
   }
 
