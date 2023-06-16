@@ -19,35 +19,34 @@ void insert_rt(rt **dict, int idx, int key, int* value, int num) {
 
   *dict = newDict;
   (*dict)[idx].src = key;
-  (*dict)[idx].dst_server = value;
+  (*dict)[idx].dst_proc = value;
   (*dict)[idx].num = num;
 }
 
-int get_rt(rt *dict, int size, int key) {
-  for (int i = 0; i < size; i++) {
+int get_rt(rt *dict, int rt_size, int key) {
+  for (int i = 0; i < rt_size; i++) {
     if (dict[i].src == key) {
       return i;
     }
   }
-  printf("Error: No key exists.\n");
-  exit(0);
+  return -1;
 }
 
 //parse line in rt file, e.g., 58 "[(107, 1), (1684, 1), (3173, 1)]"
-void parseLine(const char *line, int *src, int **dst_server, int *num) {
+void parseLine(const char *line, int *src, int **dst_proc, int *num) {
   sscanf(line, "%d", src);
 
   const char *start = strchr(line, '[');
   const char *end = strchr(line, ']');
   if (start == NULL || end == NULL || end <= start) {
-    *dst_server = NULL;
+    *dst_proc = NULL;
     *num = 0;
     exit(0);
   }
 
   int length = end - start - 1;
   if(length == 0) {
-    *dst_server = NULL;
+    *dst_proc = NULL;
     *num = 0;
     exit(0);
   }
@@ -65,13 +64,13 @@ void parseLine(const char *line, int *src, int **dst_server, int *num) {
   }
   *num *= 2;
 
-  *dst_server = (int *)malloc(*num * sizeof(int));
+  *dst_proc = (int *)malloc(*num * sizeof(int));
 
   char *token = strtok(temp, ")");
-  sscanf(token, "(%d, %d", &(*dst_server)[0], &(*dst_server)[1]);
+  sscanf(token, "(%d, %d", &(*dst_proc)[0], &(*dst_proc)[1]);
   int index = 2;
   while (token = strtok(NULL, ")")) {
-      sscanf(token, ", (%d, %d", &(*dst_server)[index], &(*dst_server)[index+1]);
+      sscanf(token, ", (%d, %d", &(*dst_proc)[index], &(*dst_proc)[index+1]);
       index += 2;
   }
 
@@ -92,10 +91,10 @@ void read_rt(const char* file, rt** dict, int* rt_size){
   
   while (getline(&line, &line_length, fp) != -1) {
     int src;
-    int* dst_server;
+    int* dst_proc;
     int num;
-    parseLine(line, &src, &dst_server, &num);
-    insert_rt(dict, idx, src, dst_server, num);
+    parseLine(line, &src, &dst_proc, &num);
+    insert_rt(dict, idx, src, dst_proc, num);
     idx++;
   }
   *rt_size = idx;

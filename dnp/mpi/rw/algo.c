@@ -4,12 +4,102 @@
 // 
 //
 
+#include <mpi.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include <string.h>
+#include <igraph/igraph.h>
+
 #include "algo.h"
 
-int jump(){
+void nexthop_roulette(igraph_t* graph, rt* dict, int rt_size, int* node_map, int cur_local, int cur_global, int* next_local_node, int* next_global_node, int* next_global_proc){
+    igraph_vector_int_t neighbors_in;
+    igraph_vector_int_init(&neighbors_in, 0);
+    igraph_neighbors(graph, &neighbors_in, (igraph_integer_t)cur_local, IGRAPH_ALL);
+    int nneighbors_in = igraph_vector_int_size(&neighbors_in);
+    int* neighbors_out = NULL;
+    int nneighbors_out = 0;
+    int idx = get_rt(dict, rt_size, cur_global);
+    if(idx != -1){
+        neighbors_out = dict[idx].dst_proc;
+        nneighbors_out = dict[idx].num/2;
+    }
+    int nneighbors = nneighbors_in + nneighbors_out;
+    srand(time(NULL));
+    int next_idx = rand()%nneighbors; 
+    if(next_idx < nneighbors_in){ // next node is inside 
+        *next_local_node = VECTOR(neighbors_in)[idx];
+        *next_global_node = node_map[*next_local_node];
+    }
+    else{ // next node is outside
+        int next_global_node_idx = (next_idx-nneighbors_in)*2;
+        *next_global_node = neighbors_out[next_global_node_idx];
+        *next_global_proc = neighbors_out[next_global_node_idx+1];
+    }  
+}
+
+void walk(igraph_t* graph, rt* dict, int rt_size, int** walker, int* len, int* node_map, int nnodes, int** paths, int *npaths){
+    int next_local_node = -1, next_global_node = -1, next_global_proc = -1;
+    int id = (*walker)[0];
+    int LEN = RSV_INTS + HOPS;
+    srand(time(NULL));
+
+    while(next_global_proc == -1 && *len < LEN){ //walk inside
+        int cur_local = -1, cur_global = -1;
+        if(*len == RSV_INTS){ //starting point of walker
+            printf("Walker%d gets started to walk.\n", id);
+            cur_local = rand() % (int)igraph_vcount(graph);
+            cur_global = node_map[cur_local];
+            if(cur_local == -1 || cur_global == -1){
+                printf("there is something wrong with idx local --> global\n");
+                exit(0);
+            } 
+            (*len)++;
+            *walker = (int*)realloc(*walker, sizeof(int)*(*len));
+            (*walker)[*len-1] = cur_global;
+        }
+        else{
+            cur_global = (*walker)[*len-1];
+            for(int i = 0; i < nnodes; i++){
+                if(node_map[i] == cur_global){
+                    cur_local = i;
+                    break;
+                }
+            }
+        }
+        nexthop_roulette(graph, dict, rt_size, node_map, cur_local, cur_global, &next_local_node, &next_global_node, &next_global_proc);
+        (*len)++;
+        *walker = (int*)realloc(*walker, sizeof(int)*(*len));
+        (*walker)[*len-1] = next_global_node;        
+    }
+
+    if(*len >= LEN){
+        printf("Finished. Walker%d stopped.\n", id);
+        (*walker)[2] = (int)time(NULL);
+        (*npaths)++;
+        *paths = (int*)realloc(*paths, sizeof(int)*(*len)*(*npaths));
+        memmove(*paths+(*len)*(*npaths-1), *walker, sizeof(int)*(*len));
+        free(*walker);
+    }
+    else if(next_local_node == -1){ //walk outside
+        (*walker)[3] += 1;
+        
+        MPI_Request req;
+        MPI_Isend(*walker, *len, MPI_INT, next_global_proc, id, MPI_COMM_WORLD, &req);  
+        free(*walker);
+    }
+    else{
+        printf("Something is wrong for Walker%d\n", id);
+        exit(0);       
+    }
 
 }
 
-int walk(){
-
+void gen_walker(int** walker, int id, int len){
+    *walker = (int*) malloc(sizeof(int)*len);
+    (*walker)[0] = id; 
+    (*walker)[1] = (int)time(NULL); //start
+    (*walker)[2] = (int)time(NULL); //end
+    (*walker)[3] = 0; //go_out
 }

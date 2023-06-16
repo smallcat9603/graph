@@ -49,8 +49,8 @@ int main(int argc, char** argv) {
   int size;
   MPI_Comm_size(MPI_COMM_WORLD, &size);
 
-  int walker_id_start = rank * nwalkers;
-  printf("rank = %d/%d, nwalkers = %d (%d-%d), nsteps = %d\n", rank, size, nwalkers, walker_id_start, walker_id_start+nwalkers-1, nsteps); 
+  int id_start = rank * nwalkers;
+  printf("rank = %d/%d, nwalkers = %d (%d-%d), nsteps = %d\n", rank, size, nwalkers, id_start, id_start+nwalkers-1, nsteps); 
 
   if(size < 2){
     if(strcmp(graphbase, "facebook") == 0) strcpy(graphbase, "../../pyro/rw/data/facebook_combined_undirected_connected");
@@ -94,14 +94,15 @@ int main(int argc, char** argv) {
   start = MPI_Wtime();
   end = MPI_Wtime();
 
-  int partner_rank = (rank+1)%2;
+  int* paths = NULL;
+  int npaths = 0;
 
-  for(int id=walker_id_start; id<walker_id_start+nwalkers; id++){
-    int* walker = (int*) malloc(sizeof(int)*1);
-    walker[0] = rank;
-    MPI_Request req;
-    MPI_Isend(walker, 1, MPI_INT, partner_rank, id, MPI_COMM_WORLD, &req);  
-    free(walker);
+  // start walkers
+  for(int id=id_start; id<id_start+nwalkers; id++){
+    int* walker;
+    int len = RSV_INTS;
+    gen_walker(&walker, id, len);
+    walk(&graph, dict, rt_size, &walker, &len, node_map, nnodes, &paths, &npaths);
   }
 
   MPI_Status status;
@@ -115,26 +116,28 @@ int main(int argc, char** argv) {
       MPI_Get_count(&status, MPI_INT, &count);
       // printf("rank = %d, count=%d\n", rank, count);
       int* recv = (int*) malloc(sizeof(int)*count);
-      MPI_Status st;
-      MPI_Recv(recv, count, MPI_INT, MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &st);
+      // MPI_Status st;
+      MPI_Recv(recv, count, MPI_INT, MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
       end = MPI_Wtime();
-      if(count < nsteps){
-        int* send = (int*)malloc(sizeof(int)*(count+1));
-        memmove(send, recv, sizeof(int)*count);
-        send[count] = send[count-1] + 1;
-        MPI_Request req;
-        MPI_Isend(send, count+1, MPI_INT, partner_rank, st.MPI_TAG, MPI_COMM_WORLD, &req);
-        free(send);
-      }
-      else{
-        printf("rank = %d, walker = %d:\n", rank, st.MPI_TAG);
-        for(int i=0; i<count; i++){
-          printf(" %d", recv[i]);
-        }
-        printf("\n");
-      }
-      free(recv);
-    } 
+      walk(&graph, dict, rt_size, &recv, &count, node_map, nnodes, &paths, &npaths);
+      
+      // if(count < nsteps){
+      //   int* send = (int*)malloc(sizeof(int)*(count+1));
+      //   memmove(send, recv, sizeof(int)*count);
+      //   send[count] = send[count-1] + 1;
+      //   MPI_Request req;
+      //   MPI_Isend(send, count+1, MPI_INT, partner_rank, st.MPI_TAG, MPI_COMM_WORLD, &req);
+      //   free(send);
+      // }
+      // else{
+      //   printf("rank = %d, walker = %d:\n", rank, st.MPI_TAG);
+      //   for(int i=0; i<count; i++){
+      //     printf(" %d", recv[i]);
+      //   }
+      //   printf("\n");
+      // }
+      // free(recv);
+    }
   }
 
   printf("rank = %d, elapsed = %f\n", rank, end-start);              
