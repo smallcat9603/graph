@@ -97,6 +97,8 @@ int main(int argc, char** argv) {
   int* paths = NULL;
   int npaths = 0;
 
+  srand(time(NULL));
+
   // start walkers
   for(int id=id_start; id<id_start+nwalkers; id++){
     int* walker;
