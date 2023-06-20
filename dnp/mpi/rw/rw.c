@@ -101,7 +101,7 @@ int main(int argc, char** argv) {
 
   // start walkers
   for(int id=id_start; id<id_start+nwalkers; id++){
-    int* walker;
+    int* walker = NULL;
     int len = RSV_INTS;
     gen_walker(&walker, id, len);
     walk(&graph, dict, rt_size, &walker, &len, node_map, nnodes, &paths, &npaths, nsteps);

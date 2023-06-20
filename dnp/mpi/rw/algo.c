@@ -74,26 +74,23 @@ void walk(igraph_t* graph, rt* dict, int rt_size, int** walker, int* len, int* n
         nexthop_roulette(graph, dict, rt_size, node_map, cur_local, cur_global, &next_local_node, &next_global_node, &next_global_proc);
         (*len)++;
         *walker = (int*)realloc(*walker, sizeof(int)*(*len));
-        (*walker)[*len-1] = next_global_node;        
+        (*walker)[*len-1] = next_global_node;      
     }
 
     if(*len >= LEN){
         printf("Finished. Walker%d stopped.\n", id);
         (*walker)[2] = (int)time(NULL);
-        // for(int i = 0; i < *len; i++){
-        //     printf("%d ", (*walker)[i]);
-        // }
-        // printf("\n");
         (*npaths)++;
         *paths = (int*)realloc(*paths, sizeof(int)*(*len)*(*npaths));
         memmove(*paths+(*len)*(*npaths-1), *walker, sizeof(int)*(*len));
         free(*walker);
     }
     else if(next_local_node == -1){ //walk outside
-        (*walker)[3] += 1;
-        
-        MPI_Request req;
-        MPI_Isend(*walker, *len, MPI_INT, next_global_proc, 0, MPI_COMM_WORLD, &req);  
+        (*walker)[3] += 1;       
+        // MPI_Request req;
+        // MPI_Isend(*walker, *len, MPI_INT, next_global_proc, 0, MPI_COMM_WORLD, &req);  
+        // use block communication instead of non-block one, otherwise recv will have chance to receive multiple isends at once
+        MPI_Send(*walker, *len, MPI_INT, next_global_proc, 0, MPI_COMM_WORLD);
         free(*walker);
     }
     else{
