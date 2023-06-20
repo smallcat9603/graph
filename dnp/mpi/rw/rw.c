@@ -102,7 +102,7 @@ int main(int argc, char** argv) {
     int* walker;
     int len = RSV_INTS;
     gen_walker(&walker, id, len);
-    walk(&graph, dict, rt_size, &walker, &len, node_map, nnodes, &paths, &npaths);
+    walk(&graph, dict, rt_size, &walker, &len, node_map, nnodes, &paths, &npaths, nsteps);
   }
 
   MPI_Status status;
@@ -117,7 +117,7 @@ int main(int argc, char** argv) {
       int* recv = (int*) malloc(sizeof(int)*count);
       MPI_Recv(recv, count, MPI_INT, MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
       end = MPI_Wtime();
-      walk(&graph, dict, rt_size, &recv, &count, node_map, nnodes, &paths, &npaths);
+      walk(&graph, dict, rt_size, &recv, &count, node_map, nnodes, &paths, &npaths, nsteps);
     }
   }
 

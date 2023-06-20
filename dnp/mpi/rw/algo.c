@@ -40,10 +40,10 @@ void nexthop_roulette(igraph_t* graph, rt* dict, int rt_size, int* node_map, int
     }  
 }
 
-void walk(igraph_t* graph, rt* dict, int rt_size, int** walker, int* len, int* node_map, int nnodes, int** paths, int *npaths){
+void walk(igraph_t* graph, rt* dict, int rt_size, int** walker, int* len, int* node_map, int nnodes, int** paths, int *npaths, int nsteps){
     int next_local_node = -1, next_global_node = -1, next_global_proc = -1;
     int id = (*walker)[0];
-    int LEN = RSV_INTS + HOPS;
+    int LEN = RSV_INTS + nsteps;
     srand(time(NULL));
 
     while(next_global_proc == -1 && *len < LEN){ //walk inside
