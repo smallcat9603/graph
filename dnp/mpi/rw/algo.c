@@ -30,7 +30,7 @@ void nexthop_roulette(igraph_t* graph, rt* dict, int rt_size, int* node_map, int
     int next_idx = rand()%nneighbors; 
     *next_local_node = -1, *next_global_node = -1, *next_global_proc = -1;
     if(next_idx < nneighbors_in){ // next node is inside 
-        *next_local_node = VECTOR(neighbors_in)[idx];
+        *next_local_node = (int)VECTOR(neighbors_in)[next_idx];
         *next_global_node = node_map[*next_local_node];
     }
     else{ // next node is outside
