@@ -69,6 +69,10 @@ void walk(igraph_t* graph, rt* dict, int rt_size, int** walker, int* len, int* n
                 }
             }
         }
+        if(cur_local == -1 || cur_global == -1){
+            printf("there is something wrong with idx global --> local\n");
+            exit(0);
+        } 
         nexthop_roulette(graph, dict, rt_size, node_map, cur_local, cur_global, &next_local_node, &next_global_node, &next_global_proc);
         (*len)++;
         *walker = (int*)realloc(*walker, sizeof(int)*(*len));
@@ -87,7 +91,7 @@ void walk(igraph_t* graph, rt* dict, int rt_size, int** walker, int* len, int* n
         (*walker)[3] += 1;
         
         MPI_Request req;
-        MPI_Isend(*walker, *len, MPI_INT, next_global_proc, id, MPI_COMM_WORLD, &req);  
+        MPI_Isend(*walker, *len, MPI_INT, next_global_proc, 0, MPI_COMM_WORLD, &req);  
         free(*walker);
     }
     else{

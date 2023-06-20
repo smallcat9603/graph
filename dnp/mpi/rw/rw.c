@@ -110,12 +110,12 @@ int main(int argc, char** argv) {
 
   while(MPI_Wtime() - end < tail) {
 
-    MPI_Iprobe(MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &flag, &status);
+    MPI_Iprobe(MPI_ANY_SOURCE, 0, MPI_COMM_WORLD, &flag, &status);
     if(flag) {
       int count;
       MPI_Get_count(&status, MPI_INT, &count);
       int* recv = (int*) malloc(sizeof(int)*count);
-      MPI_Recv(recv, count, MPI_INT, MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
+      MPI_Recv(recv, count, MPI_INT, MPI_ANY_SOURCE, 0, MPI_COMM_WORLD, &status);
       end = MPI_Wtime();
       walk(&graph, dict, rt_size, &recv, &count, node_map, nnodes, &paths, &npaths, nsteps);
     }
