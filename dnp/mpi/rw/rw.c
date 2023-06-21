@@ -126,6 +126,12 @@ int main(int argc, char** argv) {
   }
 
   end = MPI_Wtime();
+
+  if (remove(file_new) == 0) {
+    printf("deleted %s\n", file_new);
+  } else {
+    printf("%s deletion failed\n", file_new);
+  }
   
   if (rank == 0) {
     // printf("Sum of npaths: %d\n", sum_npaths);
