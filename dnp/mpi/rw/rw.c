@@ -96,6 +96,7 @@ int main(int argc, char** argv) {
 
   int* paths = NULL;
   int npaths = 0;
+  int sum_npaths = 0;
 
   srand(time(NULL));
 
@@ -121,6 +122,11 @@ int main(int argc, char** argv) {
       end = MPI_Wtime();
       walk(&graph, dict, rt_size, &recv, &count, node_map, nnodes, &paths, &npaths, nsteps);
     }
+  }
+
+  MPI_Reduce(&npaths, &sum_npaths, 1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
+  if (rank == 0) {
+      printf("Sum of npaths: %d\n", sum_npaths);
   }
 
   printf("rank = %d, elapsed = %f\n", rank, end-start);              
