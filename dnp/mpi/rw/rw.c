@@ -108,6 +108,13 @@ int main(int argc, char** argv) {
 
   end = MPI_Wtime();
 
+  //delete temporal .x.txt
+  if (remove(file_new) == 0) {
+    printf("deleted %s\n", file_new);
+  } else {
+    printf("%s deletion failed\n", file_new);
+  }
+
   //gather results from each process
   int buf_npaths[size];
   MPI_Gather(&npaths, 1, MPI_INT, buf_npaths, 1, MPI_INT, 0, MPI_COMM_WORLD);
@@ -129,13 +136,6 @@ int main(int argc, char** argv) {
   int buf_size = sum_npaths * LEN;
   int buf_paths[buf_size];
   MPI_Gatherv(paths, npaths*LEN, MPI_INT, buf_paths, buf_npaths, displacements, MPI_INT, 0, MPI_COMM_WORLD);
-
-  //delete temporal .x.txt
-  if (remove(file_new) == 0) {
-    printf("deleted %s\n", file_new);
-  } else {
-    printf("%s deletion failed\n", file_new);
-  }
   
   //print result
   if (rank == 0) {
