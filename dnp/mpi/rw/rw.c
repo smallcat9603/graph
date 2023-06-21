@@ -49,6 +49,7 @@ int main(int argc, char** argv) {
   int size;
   MPI_Comm_size(MPI_COMM_WORLD, &size);
 
+  int total_nwalkers = nwalkers * size;
   int id_start = rank * nwalkers;
   printf("rank = %d/%d, nwalkers = %d (%d-%d), nsteps = %d\n", rank, size, nwalkers, id_start, id_start+nwalkers-1, nsteps); 
 
@@ -90,15 +91,14 @@ int main(int argc, char** argv) {
     printf("read rt file %s\n", file_rt);
   }
 
-  double start, end, tail=3.0;
-  start = MPI_Wtime();
-  end = MPI_Wtime();
-
   int* paths = NULL;
   int npaths = 0;
   int sum_npaths = 0;
 
   srand(time(NULL));
+
+  double start, end;
+  start = MPI_Wtime();
 
   // start walkers
   for(int id=id_start; id<id_start+nwalkers; id++){
@@ -111,25 +111,26 @@ int main(int argc, char** argv) {
   MPI_Status status;
   int flag = 0;
 
-  while(MPI_Wtime() - end < tail) {
-
+  while(sum_npaths < total_nwalkers) {
     MPI_Iprobe(MPI_ANY_SOURCE, 0, MPI_COMM_WORLD, &flag, &status);
     if(flag) {
       int count;
       MPI_Get_count(&status, MPI_INT, &count);
       int* recv = (int*) malloc(sizeof(int)*count);
       MPI_Recv(recv, count, MPI_INT, MPI_ANY_SOURCE, 0, MPI_COMM_WORLD, &status);
-      end = MPI_Wtime();
       walk(&graph, dict, rt_size, &recv, &count, node_map, nnodes, &paths, &npaths, nsteps);
     }
+    // MPI_Reduce(&npaths, &sum_npaths, 1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
+    // MPI_Bcast(&sum_npaths, 1, MPI_INT, 0, MPI_COMM_WORLD);
+    MPI_Allreduce(&npaths, &sum_npaths, 1, MPI_INT, MPI_SUM, MPI_COMM_WORLD);
   }
 
-  MPI_Reduce(&npaths, &sum_npaths, 1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
+  end = MPI_Wtime();
+  
   if (rank == 0) {
-      printf("Sum of npaths: %d\n", sum_npaths);
-  }
-
-  printf("rank = %d, elapsed = %f\n", rank, end-start);              
+    // printf("Sum of npaths: %d\n", sum_npaths);
+    printf("rank = %d, elapsed = %f\n", rank, end-start); 
+  }             
 
   MPI_Finalize();
 }
