@@ -108,9 +108,9 @@ int main(int argc, char** argv) {
     walk(&graph, dict, rt_size, &walker, &len, node_map, nnodes, &paths, &npaths, nsteps);
   }
 
+  //recv and walk
   MPI_Status status;
   int flag = 0;
-
   while(sum_npaths < total_nwalkers) {
     MPI_Iprobe(MPI_ANY_SOURCE, 0, MPI_COMM_WORLD, &flag, &status);
     if(flag) {
@@ -122,19 +122,53 @@ int main(int argc, char** argv) {
     }
     // MPI_Reduce(&npaths, &sum_npaths, 1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
     // MPI_Bcast(&sum_npaths, 1, MPI_INT, 0, MPI_COMM_WORLD);
+    // MPI_Reduce + MPI_Bcast
     MPI_Allreduce(&npaths, &sum_npaths, 1, MPI_INT, MPI_SUM, MPI_COMM_WORLD);
   }
 
   end = MPI_Wtime();
 
+  //gather results from each process
+  int buf_npaths[size];
+  MPI_Gather(&npaths, 1, MPI_INT, buf_npaths, 1, MPI_INT, 0, MPI_COMM_WORLD);
+
+  int displacements[size];
+  displacements[0] = 0;
+  for(int i = 1; i < size; i++){
+    displacements[i] = 0;
+    for(int j = 0; j < i; j++){
+      displacements[i] += buf_npaths[j];
+    } 
+  }
+
+  int LEN = RSV_INTS + nsteps;
+  for(int i = 0; i < size; i++){
+    buf_npaths[i] *= LEN;
+    displacements[i] *= LEN;
+  }
+  int buf_size = sum_npaths * LEN;
+  int buf_paths[buf_size];
+  MPI_Gatherv(paths, npaths*LEN, MPI_INT, buf_paths, buf_npaths, displacements, MPI_INT, 0, MPI_COMM_WORLD);
+
+  //delete temporal .x.txt
   if (remove(file_new) == 0) {
     printf("deleted %s\n", file_new);
   } else {
     printf("%s deletion failed\n", file_new);
   }
   
+  //print result
   if (rank == 0) {
-    // printf("Sum of npaths: %d\n", sum_npaths);
+    char log[256];
+    sprintf(log, "log/%d_%s_w%d_s%d_p%d.txt", (int)end, argv[1], nwalkers, nsteps, size);
+    FILE* fp = fopen(log, "w");
+    for(int i = 0; i < buf_size; i++)
+    {
+      fprintf(fp, "%d ", buf_paths[i]);
+      if((i+1)%LEN == 0) fprintf(fp, "\n");
+    }
+    fclose(fp);
+    printf("%s generated.\n", log); 
     printf("rank = %d, elapsed = %f\n", rank, end-start); 
   }             
 
