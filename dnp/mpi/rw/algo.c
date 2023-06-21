@@ -80,6 +80,10 @@ void walk(igraph_t* graph, rt* dict, int rt_size, int** walker, int* len, int* n
     if(*len >= LEN){
         printf("Finished. Walker%d stopped.\n", id);
         (*walker)[2] = (int)time(NULL);
+        // for(int i=0; i<*len; i++){
+        //     printf("%d ", (*walker)[i]);
+        // }
+        // printf("\n");
         (*npaths)++;
         *paths = (int*)realloc(*paths, sizeof(int)*(*len)*(*npaths));
         memmove(*paths+(*len)*(*npaths-1), *walker, sizeof(int)*(*len));
