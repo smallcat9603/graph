@@ -18,9 +18,11 @@ int main(int argc, char** argv) {
   char graphbase[192] = "facebook";
 	int nwalkers = 1;
   int nsteps = 80;
+  int entire_or_partition = 0; // entire --> 1, partition --> 0
   if(argc > 1) strcpy(graphbase, argv[1]);
 	if(argc > 2) nwalkers = atoi(argv[2]);
   if(argc > 3) nsteps = atoi(argv[3]); 
+  if(argc > 4) entire_or_partition = atoi(argv[4]);
 
   MPI_Init(NULL, NULL);
 
@@ -31,9 +33,9 @@ int main(int argc, char** argv) {
 
   int total_nwalkers = nwalkers * size;
   int id_start = rank * nwalkers;
-  printf("rank = %d/%d, nwalkers = %d (%d-%d), nsteps = %d\n", rank, size, nwalkers, id_start, id_start+nwalkers-1, nsteps); 
+  printf("rank = %d/%d, nwalkers = %d (%d-%d), nsteps = %d, entire_or_partition = %d\n", rank, size, nwalkers, id_start, id_start+nwalkers-1, nsteps, entire_or_partition); 
 
-  if(size < 2){
+  if(size < 2 || entire_or_partition > 0){
     if(strcmp(graphbase, "facebook") == 0) strcpy(graphbase, "../../pyro/rw/data/facebook_combined_undirected_connected");
     else if(strcmp(graphbase, "git") == 0) strcpy(graphbase, "../../pyro/rw/data/musae_git_edges_undirected.connected");
     else if(strcmp(graphbase, "twitch") == 0) strcpy(graphbase, "../../pyro/rw/data/large_twitch_edges_undirected.connected");
@@ -50,7 +52,7 @@ int main(int argc, char** argv) {
   char file_new[256];
   sprintf(file, "%s.txt", graphbase);
   sprintf(file_new, "%s.x.txt", graphbase);
-  if(size > 1){
+  if(size > 1 && entire_or_partition == 0){
     sprintf(file, "%s.sub%d.txt", graphbase, rank);
     sprintf(file_new, "%s.sub%d.x.txt", graphbase, rank);
   }
@@ -68,7 +70,7 @@ int main(int argc, char** argv) {
   char file_rt[256];
   rt* dict = NULL;
   int rt_size = 0;
-  if(size > 1){
+  if(size > 1 && entire_or_partition == 0){
     sprintf(file_rt, "%s.rt%d.txt", graphbase, rank);
     read_rt(file_rt, &dict, &rt_size);
     printf("read rt file %s\n", file_rt);
@@ -143,7 +145,7 @@ int main(int argc, char** argv) {
   //print result
   if (rank == 0) {
     char log[256];
-    sprintf(log, "log/%d_%s_w%d_s%d_p%d.txt", (int)end, argv[1], nwalkers, nsteps, size);
+    sprintf(log, "log/%d_%s_w%d_s%d_p%d_e%d.txt", (int)end, argv[1], nwalkers, nsteps, size, entire_or_partition);
     FILE* fp = fopen(log, "w");
     for(int i = 0; i < buf_size; i++)
     {
