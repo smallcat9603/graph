@@ -49,8 +49,11 @@ int main(int argc, char** argv) {
   char file[256];
   char file_new[256];
   sprintf(file, "%s.txt", graphbase);
-  if(size > 1) sprintf(file, "%s.sub%d.txt", graphbase, rank);
-  sprintf(file_new, "%s.sub%d.x.txt", graphbase, rank);
+  sprintf(file_new, "%s.x.txt", graphbase);
+  if(size > 1){
+    sprintf(file, "%s.sub%d.txt", graphbase, rank);
+    sprintf(file_new, "%s.sub%d.x.txt", graphbase, rank);
+  }
   int nnodes;
   int* node_map;
   map_nodes_in_edgelist(file, file_new, &nnodes, &node_map);
