@@ -56,8 +56,8 @@ int main(int argc, char** argv) {
     sprintf(file, "%s.sub%d.txt", graphbase, rank);
     sprintf(file_new, "%s.sub%d.x.txt", graphbase, rank);
   }
-  int nnodes;
-  int* node_map;
+  int nnodes = 0;
+  int* node_map = NULL;
   map_nodes_in_edgelist(file, file_new, &nnodes, &node_map);
   igraph_t graph;
   read_edgelist(&graph, file_new, false); //true=directed, false=undirected
