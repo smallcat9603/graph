@@ -139,7 +139,8 @@ int main(int argc, char** argv) {
     displacements[i] *= LEN;
   }
   int buf_size = sum_npaths * LEN;
-  int buf_paths[buf_size];
+  // int buf_paths[buf_size]; --> error if buf_size is too large
+  int* buf_paths = (int*) malloc(sizeof(int)*buf_size);
   MPI_Gatherv(paths, npaths*LEN, MPI_INT, buf_paths, buf_npaths, displacements, MPI_INT, 0, MPI_COMM_WORLD);
   
   //print result
