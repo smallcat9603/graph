@@ -44,9 +44,19 @@ void map_nodes_in_edgelist(const char* file, const char* file_new, int* nnodes, 
       }      
     }
     else{
-      (*nnodes)++;
+      (*nnodes)++; // *nnodes = 1
       *node_map = (int*)malloc(sizeof(int)*(*nnodes));
       (*node_map)[(*nnodes)-1] = src;
+      for(i = 0; i < *nnodes; i++){
+        if(dst == (*node_map)[i]){
+          break;
+        }
+      }
+      if(i == *nnodes){
+        (*nnodes)++;
+        *node_map = (int*)realloc(*node_map, sizeof(int)*(*nnodes));
+        (*node_map)[(*nnodes)-1] = dst;
+      }     
     }
   }
   fclose(fp);
