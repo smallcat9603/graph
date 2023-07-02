@@ -1,7 +1,5 @@
 from graphdatascience import GraphDataScience
 import pandas as pd
-import numpy as np
-import igraph as ig
 
 import warnings
 warnings.simplefilter(action='ignore', category=FutureWarning)
