@@ -3,13 +3,13 @@ import pandas as pd
 import numpy as np
 import igraph as ig
 
-# import warnings
-# warnings.simplefilter(action='ignore', category=FutureWarning)
+import warnings
+warnings.simplefilter(action='ignore', category=FutureWarning)
 
 from pyspark.shell import spark # spark does not work well in ipynb
 from pyspark.ml import Pipeline 
 from pyspark.ml.classification import RandomForestClassifier 
-from pyspark.ml.feature import StringIndexer, VectorAssembler 
+from pyspark.ml.feature import VectorAssembler 
 from pyspark.ml.evaluation import BinaryClassificationEvaluator
 from pyspark.sql.types import * 
 from pyspark.sql import functions as F
@@ -242,8 +242,8 @@ def train_model(fields, training_data):
     return model
 
 basic_model = train_model(["commonAuthors"], training_data)
-eval_df = spark.createDataFrame([(0,), (1,), (2,), (10,), (100,)], ['commonAuthors'])
-basic_model.transform(eval_df).select("commonAuthors", "probability", "prediction").show(truncate=False)
+# eval_df = spark.createDataFrame([(0,), (1,), (2,), (10,), (100,)], ['commonAuthors'])
+# basic_model.transform(eval_df).select("commonAuthors", "probability", "prediction").show(truncate=False)
 
 def evaluate_model(model, test_data): 
     # Execute the model against the test set 
