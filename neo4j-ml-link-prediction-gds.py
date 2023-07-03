@@ -122,6 +122,11 @@ gds.run_cypher(query)
 # # 4. Project Graph
 ####################################
 
+exists_result = gds.graph.exists("myGraph")
+if exists_result["exists"]:
+    G = gds.graph.get("myGraph")
+    G.drop()
+
 G, _ = gds.graph.project(
     "myGraph",
     ["Author"],
@@ -205,14 +210,23 @@ G, _ = gds.graph.project(
 # # 5. Create a Machine Learning Pipeline
 ####################################
 
+exists_result = gds.beta.pipeline.exists("lp_pipe_fastrp")
+if exists_result["exists"]:
+    lp_pipe_fastrp = gds.pipeline.get("lp_pipe_fastrp")
+    lp_pipe_fastrp.drop()
+
 lp_pipe_fastrp = gds.lp_pipe("lp_pipe_fastrp")
 lp_pipe_fastrp.addNodeProperty(
-    "fastRP",
+    "beta.hashgnn",
     mutateProperty="embedding",
-    embeddingDimension=512,
+    featureProperties=["trianglesTrain", "trianglesTest", "coefficientTrain", "coefficientTest", "partitionTrain", "partitionTest", "louvainTrain", "louvainTest"],
+    heterogeneous=True,
+    iterations=4,
+    embeddingDensity=8,
+    binarizeFeatures={"dimension": 8, "threshold": 0},
     randomSeed=42,
 )
-lp_pipe_fastrp.addFeature("hadamard", nodeProperties=["embedding", "trianglesTrain", "trianglesTest", "coefficientTrain", "coefficientTest", "partitionTrain", "partitionTest", "louvainTrain", "louvainTest"])
+lp_pipe_fastrp.addFeature("hadamard", nodeProperties=["embedding"])
 lp_pipe_fastrp.configureSplit(testFraction=0.2, validationFolds=5)
 lp_pipe_fastrp.addRandomForest(numberOfDecisionTrees=30, maxDepth=10)
 
