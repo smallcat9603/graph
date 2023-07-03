@@ -231,14 +231,10 @@ lp_model_fastrp, lp_stats_fastrp = lp_pipe_fastrp.train(
 # # 7. Predict Links
 ####################################
 
-print("hehe")
-
 metrics = lp_model_fastrp.metrics()
 assert "AUCPR" in metrics
 mutate_result = lp_model_fastrp.predict_mutate(G, topN=5, mutateRelationshipType="PRED_REL")
 assert mutate_result["relationshipsWritten"] == 5 * 2  # Undirected relationships
-
-print("haha")
 
 ####################################
 # # (postprocessing) free up memory
