@@ -1,10 +1,6 @@
 from graphdatascience import GraphDataScience
 import pandas as pd
 
-from sklearn.metrics import roc_curve, auc 
-from collections import Counter
-from cycler import cycler 
-
 import matplotlib.pyplot as plt
 plt.style.use('fivethirtyeight') 
 
