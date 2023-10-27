@@ -1,16 +1,17 @@
 # smallcat 231027
+#
+# transform data in data/ to json format
 
 import pandas as pd
 import json
-import sys, getopt
-import time
+import sys, getopt, os
 
 def printUsage():
-    print('Usage: python3 nx-compose.py <inputfile1> <inputfile2>')
+    print('Usage: python3 data_to_json.py')
 
 def main(argv):
     try:
-        opts, args = getopt.getopt(argv, "h") # opts = [("-h", " ")], args = [inputfile1, inputfile2]
+        opts, args = getopt.getopt(argv, "h") # opts = [("-h", " ")], args = []
     except getopt.GetoptError:
         printUsage()
         sys.exit(1)
@@ -21,40 +22,55 @@ def main(argv):
         else:
             printUsage()
             sys.exit(1)
-    if len(args) != 2:
+    if len(args) > 0:
             printUsage()
             sys.exit(1)       
 
+    files = os.listdir("data")
+    files_with_out = [file for file in files if "_out.txt" in file]
+    files_with_tfidf = [file for file in files if "_tfidf.txt" in file]
+    
     result = {}
 
-    input_file = "001_out.txt"
-    with open(input_file, 'r') as file:
-        for line in file:
-            line = eval(line)
-            len = len(line)
-            key = line[0]
-            if key not in result:
-                result[key] = {}
-                splits = line[1].split("-")
-                result[key]
+    for input_file in files_with_out:
+        with open(input_file, 'r') as file:
+            for line in file:
+                line = eval(line)
+                newKey = False
+                if line[0] not in result:
+                    elements = line[1].split("-")
+                    result[line[0]] = {elements[0]:{elements[1]:{"lines": [elements[2]]}}}  
+                    newKey = True              
+                for i in range(1, len(line)):
+                    if i == 1 and newKey == True:
+                        continue
+                    elements = line[i].split("-")
+                    if elements[0] not in result[line[0]]:
+                        result[line[0]][elements[0]] = {elements[1]:{"lines": [elements[2]]}}
+                    elif elements[1] not in result[line[0]][elements[0]]:
+                        result[line[0]][elements[0]][elements[1]] = {"lines": [elements[2]]}
+                    elif elements[2] not in result[line[0]][elements[0]][elements[1]]["lines"]:
+                        result[line[0]][elements[0]][elements[1]]["lines"].append(elements[2])
 
-            # 确保每行至少有三个元素，以便进行转换
-            if len(line) >= 3:
-                key1, key2, value = line
-                value = int(value)  # 将值转换为整数
-
-                # 构建嵌套的字典结构
-                if key1 not in result:
-                    result[key1] = {}
-                if key2 not in result[key1]:
-                    result[key1][key2] = {}
-                result[key1][key2][line[1]] = value
-
-    # 保存为JSON文件
-    with open('output.json', 'w') as json_file:
+    for input_file in files_with_tfidf:
+        with open(input_file, 'r') as file: 
+            ref = []
+            for line in file:
+                line = eval(line)
+                if line[0] not in result:
+                    ref = line
+                else:
+                    for i in (1, len(line)):
+                        if float(line[i]) > 0:
+                            element0 = ref[i].split("-")[0]
+                            element1 = ref[i].split("-")[1].split(".")[0]
+                            if "tfidf" not in result[line[0]][element0][element1]:
+                                result[line[0]][element0][element1]["tfidf"] = float(line[i])
+                            
+    with open('data.json', 'w') as json_file:
         json.dump(result, json_file, indent=4)
 
-    print("JSON文件已保存")
+    print("saved in data.json")
 
 
 if __name__ == "__main__":
