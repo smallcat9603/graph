@@ -35,7 +35,7 @@ def main(argv):
     result = {} # stored in json file
     blacklist = [] # rare cases where a noun does not appear in any articles (e.g., 001_out.txt)
 
-    # read xxx_out.txt
+    # read 00x_out.txt
     for input_file in files_out:
         filename = dir+"/"+input_file
         with open(filename, 'r') as file:
@@ -61,7 +61,7 @@ def main(argv):
                     elif int(elements[2]) not in result[line[0]][elements[0]][elements[1]]["lines"]:
                         result[line[0]][elements[0]][elements[1]]["lines"].append(int(elements[2]))
 
-    # read xxx_tfidf.txt
+    # read 00x_tfidf.txt
     for input_file in files_tfidf:
         filename = dir+"/"+input_file
         with open(filename, 'r') as file: 
