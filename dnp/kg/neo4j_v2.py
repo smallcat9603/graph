@@ -7,6 +7,11 @@ import streamlit as st
 ### neo4j desktop v5.11.0 ###
 ##############################
 
+if 'reboot' not in st.session_state:
+   st.session_state["reboot"] = False
+if st.session_state["reboot"] == True:
+   sys.exit(0)
+
 st.sidebar.title(__file__.split("/")[-1])
 
 host = "bolt://localhost:7687"
@@ -589,33 +594,7 @@ st.write(gds.run_cypher(query))
 ### free up memory ###
 ##############################
 
-# def free_up_memory():
-#     query = """
-#     MATCH (n) DETACH DELETE n
-#     """
-#     gds.run_cypher(query)
-#     gds.close()
-#     st.sidebar.write("gds closed")
-#     exit(0)
-# st.sidebar.button("Free up memory", type="primary", on_click=free_up_memory) 
-
-# button_clicked = st.session_state.get("button_clicked", False)
-# if not button_clicked:
-#     button_clicked = st.sidebar.button("Free up memory")
-# if button_clicked:
-#     G.drop()
-#     query = """
-#     MATCH (n) DETACH DELETE n
-#     """
-#     gds.run_cypher(query)
-#     gds.close()
-#     st.sidebar.write("gds closed")
-#     st.session_state.button_clicked = True
-# else:
-#     st.sidebar.write("Memory not released")
-
-
-if st.sidebar.button("Free up memory", type="primary"):
+def free_up_memory():
     exists_result = gds.graph.exists(graph_name)
     if exists_result["exists"]:
         G = gds.graph.get(graph_name)
@@ -626,5 +605,5 @@ if st.sidebar.button("Free up memory", type="primary"):
     gds.run_cypher(query)
     gds.close()
     st.sidebar.write("gds closed")
-else:
-    st.sidebar.write("Memory not released")
+    st.session_state["reboot"] = True
+st.sidebar.button("Free up memory", type="primary", on_click=free_up_memory) 
