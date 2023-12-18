@@ -24,6 +24,10 @@ st.sidebar.write(gds.version())
 
 graph_name = "testgraph" # project graph name
 
+@st.cache_data
+def cypher(query):
+   return gds.run_cypher(query)
+
 ##############################
 ### parameters ###
 ##############################
@@ -67,7 +71,7 @@ query = """
 CREATE CONSTRAINT id_unique IF NOT EXISTS 
 For (a:Article) REQUIRE a.url IS UNIQUE;
 """
-gds.run_cypher(query)
+cypher(query)
 
 ##############################
 ### Create Article-[Noun]-Article Graph ###
@@ -88,7 +92,7 @@ if DATA_CLASS == "DNP" and DATA_TYPE == "TXT":
     query = f"""
     MERGE (a:Article {{ name: "{node}", url: "{file}", body: "{content}" }})
     """
-    gds.run_cypher(query)
+    cypher(query)
 else:
   query = f"""
   CALL apoc.periodic.iterate(
@@ -113,7 +117,7 @@ else:
   YIELD batches, total, timeTaken, committedOperations
   RETURN batches, total, timeTaken, committedOperations
   """
-  gds.run_cypher(query)
+  cypher(query)
 
 ##############################
 ### set phrase and salience properties ###
@@ -139,24 +143,24 @@ YIELD batches, total, timeTaken, committedOperations
 RETURN batches, total, timeTaken, committedOperations
 """
 st.header("set phrase and salience properties")
-st.write(gds.run_cypher(query))
+st.write(cypher(query))
 
 ##############################
 ### create noun-url relationships ###
 ##############################
 
-query = """
+query = f"""
 MATCH (a:Article)
 WHERE a.processed IS NOT NULL
-FOREACH (word IN a.phrase[0..$nphrase] |
-  MERGE (n:Noun {name: word})
+FOREACH (word IN a.phrase[0..{nphrase}] |
+  MERGE (n:Noun {{name: word}})
   MERGE (a)-[r:CONTAINS]-(n)
   SET r.rank = apoc.coll.indexOf(a.phrase, word) + 1
   SET r.score = a.salience[apoc.coll.indexOf(a.phrase, word)]
-  SET r.weight = $nphrase - apoc.coll.indexOf(a.phrase, word)
+  SET r.weight = {nphrase} - apoc.coll.indexOf(a.phrase, word)
 )
 """
-gds.run_cypher(query, {'nphrase': nphrase})
+cypher(query)
 
 ##############################
 ### query ###
@@ -171,17 +175,17 @@ if DATA_CLASS == "DNP" and DATA_TYPE == "TXT":
     query = f"""
     MERGE (q:Query {{ name: "{QUERY_NAME}", url: "{QUERY_URL}", body: "{content}" }})
     """
-    gds.run_cypher(query)
+    cypher(query)
 else:
   for QUERY_NAME, QUERY_URL in QUERY_DICT.items():
-    query = """
-    MERGE (q:Query {name: $name, url: $url})
+    query = f"""
+    MERGE (q:Query {{name: {QUERY_NAME}, url: {QUERY_URL}}})
     WITH q
-    CALL apoc.load.html(i.url, {
+    CALL apoc.load.html(i.url, {{
     title: "title",
     h2: "h2",
     body: "body p"
-    })
+    }})
     YIELD value
     WITH q,
         reduce(texts = "", n IN range(0, size(value.body)-1) | texts + " " + coalesce(value.body[n].text, "")) AS body,
@@ -189,7 +193,7 @@ else:
     SET q.body = body, q.title = title
     RETURN q.title, q.body
     """
-    gds.run_cypher(query, {"name": QUERY_NAME, "url": QUERY_URL})
+    cypher(query)
     
 # set phrase and salience properties (Query)
 query = f"""
@@ -205,21 +209,21 @@ UNWIND value.entities AS entity
 SET node.phrase = coalesce(node.phrase, []) + entity['name']
 SET node.salience = coalesce(node.salience, []) + entity['salience']
 """
-gds.run_cypher(query)
+cypher(query)
 
 # create noun-article relationships (Query)
-query = """
+query = f"""
 MATCH (q:Query)
 WHERE q.processed IS NOT NULL
-FOREACH (word IN q.phrase[0..$nphrase] |
-  MERGE (n:Noun {name: word})
+FOREACH (word IN q.phrase[0..{nphrase}] |
+  MERGE (n:Noun {{name: word}})
   MERGE (q)-[r:CONTAINS]-(n)
   SET r.rank = apoc.coll.indexOf(q.phrase, word) + 1
   SET r.score = q.salience[apoc.coll.indexOf(q.phrase, word)]
-  SET r.weight = $nphrase - apoc.coll.indexOf(q.phrase, word)
+  SET r.weight = {nphrase} - apoc.coll.indexOf(q.phrase, word)
 )
 """
-gds.run_cypher(query, {'nphrase': nphrase})
+cypher(query)
 
 ##############################
 ### evaluate (naive by rank) ###
@@ -232,28 +236,28 @@ ORDER BY Query, Similarity DESC
 LIMIT 10
 """
 st.header("evaluate (naive by rank)")
-st.write(gds.run_cypher(query))
+st.write(cypher(query))
 
 ##############################
 ### create article-article relationships ###
 ##############################
 
-query = """
+query = f"""
 MATCH (a1:Article), (a2:Article)
-WHERE a1 <> a2 AND any(x IN a1.phrase[0..$nphrase] WHERE x IN a2.phrase[0..$nphrase])
+WHERE a1 <> a2 AND any(x IN a1.phrase[0..{nphrase}] WHERE x IN a2.phrase[0..{nphrase}])
 MERGE (a1)-[r:CORRELATES]-(a2)
-SET r.common = [x IN a1.phrase[0..$nphrase] WHERE x IN a2.phrase[0..$nphrase]]
+SET r.common = [x IN a1.phrase[0..{nphrase}] WHERE x IN a2.phrase[0..{nphrase}]]
 """
-gds.run_cypher(query, {'nphrase': nphrase})
+cypher(query)
 
 #query
-query = """
+query = f"""
 MATCH (q:Query), (a:Article)
-WHERE any(x IN q.phrase[0..$nphrase] WHERE x IN a.phrase[0..$nphrase])
+WHERE any(x IN q.phrase[0..{nphrase}] WHERE x IN a.phrase[0..{nphrase}])
 MERGE (q)-[r:CORRELATES]-(a)
-SET r.common = [x IN q.phrase[0..$nphrase] WHERE x IN a.phrase[0..$nphrase]]
+SET r.common = [x IN q.phrase[0..{nphrase}] WHERE x IN a.phrase[0..{nphrase}]]
 """
-gds.run_cypher(query, {'nphrase': nphrase})
+cypher(query)
 
 ##############################
 ### evaluate (still naive by salience) ###
@@ -268,7 +272,7 @@ ORDER BY Query, Similarity DESC
 LIMIT 10
 """
 st.header("evaluate (still naive by salience)")
-st.write(gds.run_cypher(query))
+st.write(cypher(query))
 
 ##############################
 ### project graph to memory ###
@@ -333,7 +337,7 @@ ORDER BY Query, Similarity DESC
 LIMIT 10
 """
 st.header("evaluate (jaccard similarity)")
-st.write(gds.run_cypher(query))
+st.write(cypher(query))
 
 ##############################
 ### node similarity (OVERLAP) ###
@@ -364,7 +368,7 @@ ORDER BY Query, Similarity DESC
 LIMIT 10
 """
 st.header("evaluate (overlap similarity)")
-st.write(gds.run_cypher(query))
+st.write(cypher(query))
 
 ##############################
 ### node similarity (COSINE) ###
@@ -395,7 +399,7 @@ ORDER BY Query, Similarity DESC
 LIMIT 10
 """
 st.header("evaluate (cosine similarity)")
-st.write(gds.run_cypher(query))
+st.write(cypher(query))
 
 ##############################
 ### ppr (personalized pagerank) ###
@@ -428,7 +432,7 @@ ORDER BY Query, ppr DESC
 LIMIT 10
 """
 st.header("evaluate (ppr)")
-st.write(gds.run_cypher(query))
+st.write(cypher(query))
 
 ##############################
 ### 1. node embedding ###
@@ -567,7 +571,7 @@ ORDER BY Query, Similarity DESC
 LIMIT 10
 """
 st.header("evaluate (fastrp)")
-st.write(gds.run_cypher(query))
+st.write(cypher(query))
 
 # node2vec
 query = """
@@ -577,7 +581,7 @@ ORDER BY Query, Similarity DESC
 LIMIT 10
 """
 st.header("evaluate (node2vec)")
-st.write(gds.run_cypher(query))
+st.write(cypher(query))
 
 # hashgnn
 query = """
@@ -587,7 +591,7 @@ ORDER BY Query, Similarity DESC
 LIMIT 10
 """
 st.header("evaluate (hashgnn)")
-st.write(gds.run_cypher(query))
+st.write(cypher(query))
 
 
 ##############################
@@ -602,7 +606,7 @@ def free_up_memory():
     query = """
     MATCH (n) DETACH DELETE n
     """
-    gds.run_cypher(query)
+    cypher(query)
     gds.close()
     st.sidebar.write("gds closed")
     st.session_state["reboot"] = True
