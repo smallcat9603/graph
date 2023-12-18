@@ -29,6 +29,24 @@ def cypher(query):
    return gds.run_cypher(query)
 
 ##############################
+### free up memory ###
+##############################
+
+def free_up_memory():
+    exists_result = gds.graph.exists(graph_name)
+    if exists_result["exists"]:
+        G = gds.graph.get(graph_name)
+        G.drop()    
+    query = """
+    MATCH (n) DETACH DELETE n
+    """
+    cypher(query)
+    gds.close()
+    st.sidebar.write("gds closed")
+    st.session_state["reboot"] = True
+st.sidebar.button("Free up memory", type="primary", on_click=free_up_memory) 
+
+##############################
 ### parameters ###
 ##############################
 
@@ -438,126 +456,136 @@ st.write(cypher(query))
 ### 1. node embedding ###
 ##############################
 
-# fastrp
-result = gds.fastRP.stream(
-    G,
-    randomSeed=42,
-    embeddingDimension=16,
-    relationshipWeightProperty="weight",
-    iterationWeights=[1, 1, 1],
-)
+@st.cache_data
+def node_embedding():
 
-# node2vec
-result = gds.node2vec.stream(
-    G,
-    randomSeed=42,
-    embeddingDimension=16,
-    relationshipWeightProperty="weight",
-    iterations=3,
-)
+    # fastrp
+    result = gds.fastRP.stream(
+        G,
+        randomSeed=42,
+        embeddingDimension=16,
+        relationshipWeightProperty="weight",
+        iterationWeights=[1, 1, 1],
+    )
 
-# hashgnn
-result = gds.beta.hashgnn.stream(
-    G,
-    iterations = 3,
-    embeddingDensity = 8,
-    generateFeatures = {"dimension": 16, "densityLevel": 1},
-    randomSeed = 42,
-)
+    # node2vec
+    result = gds.node2vec.stream(
+        G,
+        randomSeed=42,
+        embeddingDimension=16,
+        relationshipWeightProperty="weight",
+        iterations=3,
+    )
 
-# st.write(f"Embedding vectors: {result['embedding']}")
+    # hashgnn
+    result = gds.beta.hashgnn.stream(
+        G,
+        iterations = 3,
+        embeddingDensity = 8,
+        generateFeatures = {"dimension": 16, "densityLevel": 1},
+        randomSeed = 42,
+    )
 
-# fastrp
-result = gds.fastRP.mutate(
-    G,
-    mutateProperty="embedding_fastrp",
-    randomSeed=42,
-    embeddingDimension=16,
-    relationshipWeightProperty="weight", # each relationship should have
-    iterationWeights=[1, 1, 1],
-)
+    # st.write(f"Embedding vectors: {result['embedding']}")
 
-# node2vec
-result = gds.node2vec.mutate(
-    G,
-    mutateProperty="embedding_node2vec",
-    randomSeed=42,
-    embeddingDimension=16,
-    relationshipWeightProperty="weight",
-    iterations=3,
-)
+    # fastrp
+    result = gds.fastRP.mutate(
+        G,
+        mutateProperty="embedding_fastrp",
+        randomSeed=42,
+        embeddingDimension=16,
+        relationshipWeightProperty="weight", # each relationship should have
+        iterationWeights=[1, 1, 1],
+    )
 
-# hashgnn
-result = gds.beta.hashgnn.mutate(
-    G,
-    mutateProperty="embedding_hashgnn",
-    randomSeed=42,
-    heterogeneous=True,
-    iterations=3,
-    embeddingDensity=8,
-    # opt1
-    generateFeatures={"dimension": 16, "densityLevel": 1},
-    # # opt2 not work
-    # binarizeFeatures={"dimension": 16, "threshold": 0},
-    # featureProperties=['phrase', 'salience'], # each node should have
-)
+    # node2vec
+    result = gds.node2vec.mutate(
+        G,
+        mutateProperty="embedding_node2vec",
+        randomSeed=42,
+        embeddingDimension=16,
+        relationshipWeightProperty="weight",
+        iterations=3,
+    )
 
-st.header("1. node embedding")
-st.write(f"Number of embedding vectors produced: {result['nodePropertiesWritten']}")
+    # hashgnn
+    result = gds.beta.hashgnn.mutate(
+        G,
+        mutateProperty="embedding_hashgnn",
+        randomSeed=42,
+        heterogeneous=True,
+        iterations=3,
+        embeddingDensity=8,
+        # opt1
+        generateFeatures={"dimension": 16, "densityLevel": 1},
+        # # opt2 not work
+        # binarizeFeatures={"dimension": 16, "threshold": 0},
+        # featureProperties=['phrase', 'salience'], # each node should have
+    )
+
+    st.header("1. node embedding")
+    st.write(f"Number of embedding vectors produced: {result['nodePropertiesWritten']}")
+
+node_embedding()
 
 ##############################
 ### 2. kNN ###
 ##############################
 
-# fastrp
-result = gds.knn.filtered.write(
-    G,
-    topK=10,
-    nodeProperties=["embedding_fastrp"],
-    randomSeed=42, # Note that concurrency must be set to 1 when setting this parameter.
-    concurrency=1,
-    sampleRate=1.0,
-    deltaThreshold=0.0,
-    writeRelationshipType="SIMILAR_FASTRP",
-    writeProperty="score",
-    sourceNodeFilter="Query",
-    targetNodeFilter="Article",
-)
+@st.cache_data
+def kNN():
 
-# node2vec
-result = gds.knn.filtered.write(
-    G,
-    topK=10,
-    nodeProperties=["embedding_node2vec"],
-    randomSeed=42, # Note that concurrency must be set to 1 when setting this parameter.
-    concurrency=1,
-    sampleRate=1.0,
-    deltaThreshold=0.0,
-    writeRelationshipType="SIMILAR_NODE2VEC",
-    writeProperty="score",
-    sourceNodeFilter="Query",
-    targetNodeFilter="Article",
-)
+    # fastrp
+    result = gds.knn.filtered.write(
+        G,
+        topK=10,
+        nodeProperties=["embedding_fastrp"],
+        randomSeed=42, # Note that concurrency must be set to 1 when setting this parameter.
+        concurrency=1,
+        sampleRate=1.0,
+        deltaThreshold=0.0,
+        writeRelationshipType="SIMILAR_FASTRP",
+        writeProperty="score",
+        sourceNodeFilter="Query",
+        targetNodeFilter="Article",
+    )
 
-# hashgnn
-result = gds.knn.filtered.write(
-    G,
-    topK=10,
-    nodeProperties=["embedding_hashgnn"],
-    randomSeed=42, # Note that concurrency must be set to 1 when setting this parameter.
-    concurrency=1,
-    sampleRate=1.0,
-    deltaThreshold=0.0,
-    writeRelationshipType="SIMILAR_HASHGNN",
-    writeProperty="score",
-    sourceNodeFilter="Query",
-    targetNodeFilter="Article",
-)
+    # node2vec
+    result = gds.knn.filtered.write(
+        G,
+        topK=10,
+        nodeProperties=["embedding_node2vec"],
+        randomSeed=42, # Note that concurrency must be set to 1 when setting this parameter.
+        concurrency=1,
+        sampleRate=1.0,
+        deltaThreshold=0.0,
+        writeRelationshipType="SIMILAR_NODE2VEC",
+        writeProperty="score",
+        sourceNodeFilter="Query",
+        targetNodeFilter="Article",
+    )
 
-st.header("2. kNN")
-st.write(f"Relationships produced: {result['relationshipsWritten']}")
-st.write(f"Nodes compared: {result['nodesCompared']}")
-st.write(f"Mean similarity: {result['similarityDistribution']['mean']}")
+    # hashgnn
+    result = gds.knn.filtered.write(
+        G,
+        topK=10,
+        nodeProperties=["embedding_hashgnn"],
+        randomSeed=42, # Note that concurrency must be set to 1 when setting this parameter.
+        concurrency=1,
+        sampleRate=1.0,
+        deltaThreshold=0.0,
+        writeRelationshipType="SIMILAR_HASHGNN",
+        writeProperty="score",
+        sourceNodeFilter="Query",
+        targetNodeFilter="Article",
+    )
+
+    st.header("2. kNN")
+    st.write(f"Relationships produced: {result['relationshipsWritten']}")
+    st.write(f"Nodes compared: {result['nodesCompared']}")
+    st.write(f"Mean similarity: {result['similarityDistribution']['mean']}")
+
+kNN()
 
 ##############################
 ### evaluate (node embedding + knn) ###
@@ -593,21 +621,32 @@ LIMIT 10
 st.header("evaluate (hashgnn)")
 st.write(cypher(query))
 
-
 ##############################
-### free up memory ###
+### interaction ###
 ##############################
 
-def free_up_memory():
-    exists_result = gds.graph.exists(graph_name)
-    if exists_result["exists"]:
-        G = gds.graph.get(graph_name)
-        G.drop()    
-    query = """
-    MATCH (n) DETACH DELETE n
+st.header("UI Interaction (test)")
+
+col1, col2, col3 = st.columns(3)
+with col1:
+    query_node = st.selectbox("Query node", ("C-1", "C-2", "C-3", "C-4"))
+with col2:
+    similarity_method = st.selectbox("Similarity method", ("JACCARD", "OVERLAP", "COSINE", "PPR"))
+with col3:
+    limit = st.selectbox("Limit", ("5", "10", "20"))
+st.write("The top-" + limit + " similar nodes for query " + query_node + " are ranked as follows (" + similarity_method + ")")
+if similarity_method == "PPR":
+    query = f"""
+    MATCH (q:Query)-[r:CORRELATES]-(a:Article) WHERE q.name = "{query_node}"
+    RETURN q.name AS Query, a.name AS Article, a.url AS URL, a.pr{str(int(query_node.split("-")[-1])-1)} AS ppr
+    ORDER BY ppr DESC
+    LIMIT {limit}
     """
-    cypher(query)
-    gds.close()
-    st.sidebar.write("gds closed")
-    st.session_state["reboot"] = True
-st.sidebar.button("Free up memory", type="primary", on_click=free_up_memory) 
+else:
+    query = f"""
+    MATCH (q:Query)-[r:SIMILAR_{similarity_method}]-(a:Article) WHERE q.name = "{query_node}"
+    RETURN q.name AS Query, a.name AS Article, a.url AS URL, r.score AS Similarity
+    ORDER BY Similarity DESC
+    LIMIT {limit}
+    """
+st.write(cypher(query))
