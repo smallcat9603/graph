@@ -330,19 +330,24 @@ st.write(f"Graph '{G.name()}' memory_usage: {G.memory_usage()}")
 ### node similarity (JACCARD) ###
 ##############################
 
-result = gds.nodeSimilarity.filtered.write(
-    G,
-    similarityMetric='JACCARD', # default
-    writeRelationshipType='SIMILAR_JACCARD',
-    writeProperty='score',
-    relationshipWeightProperty="weight",
-    sourceNodeFilter="Query",
-    targetNodeFilter="Article",
-)
-st.header("node similarity (JACCARD)")
-st.write(f"Relationships produced: {result['relationshipsWritten']}")
-st.write(f"Nodes compared: {result['nodesCompared']}")
-st.write(f"Mean similarity: {result['similarityDistribution']['mean']}")
+@st.cache_data
+def write_nodesimilarity_jaccard():
+
+    result = gds.nodeSimilarity.filtered.write(
+        G,
+        similarityMetric='JACCARD', # default
+        writeRelationshipType='SIMILAR_JACCARD',
+        writeProperty='score',
+        relationshipWeightProperty="weight",
+        sourceNodeFilter="Query",
+        targetNodeFilter="Article",
+    )
+    st.header("node similarity (JACCARD)")
+    st.write(f"Relationships produced: {result['relationshipsWritten']}")
+    st.write(f"Nodes compared: {result['nodesCompared']}")
+    st.write(f"Mean similarity: {result['similarityDistribution']['mean']}")
+
+write_nodesimilarity_jaccard()
 
 ##############################
 ### evaluate (jaccard similarity) ###
@@ -361,19 +366,24 @@ st.write(cypher(query))
 ### node similarity (OVERLAP) ###
 ##############################
 
-result = gds.nodeSimilarity.filtered.write(
-    G,
-    similarityMetric='OVERLAP',
-    writeRelationshipType='SIMILAR_OVERLAP',
-    writeProperty='score',
-    relationshipWeightProperty="weight",
-    sourceNodeFilter="Query",
-    targetNodeFilter="Article",
-)
-st.header("node similarity (OVERLAP)")
-st.write(f"Relationships produced: {result['relationshipsWritten']}")
-st.write(f"Nodes compared: {result['nodesCompared']}")
-st.write(f"Mean similarity: {result['similarityDistribution']['mean']}")
+@st.cache_data
+def write_nodesimilarity_overlap():
+
+    result = gds.nodeSimilarity.filtered.write(
+        G,
+        similarityMetric='OVERLAP',
+        writeRelationshipType='SIMILAR_OVERLAP',
+        writeProperty='score',
+        relationshipWeightProperty="weight",
+        sourceNodeFilter="Query",
+        targetNodeFilter="Article",
+    )
+    st.header("node similarity (OVERLAP)")
+    st.write(f"Relationships produced: {result['relationshipsWritten']}")
+    st.write(f"Nodes compared: {result['nodesCompared']}")
+    st.write(f"Mean similarity: {result['similarityDistribution']['mean']}")
+
+write_nodesimilarity_overlap()
 
 ##############################
 ### evaluate (overlap similarity) ###
@@ -392,19 +402,24 @@ st.write(cypher(query))
 ### node similarity (COSINE) ###
 ##############################
 
-result = gds.nodeSimilarity.filtered.write(
-    G,
-    similarityMetric='COSINE',
-    writeRelationshipType='SIMILAR_COSINE',
-    writeProperty='score',
-    relationshipWeightProperty="weight",
-    sourceNodeFilter="Query",
-    targetNodeFilter="Article",
-)
-st.header("node similarity (COSINE)")
-st.write(f"Relationships produced: {result['relationshipsWritten']}")
-st.write(f"Nodes compared: {result['nodesCompared']}")
-st.write(f"Mean similarity: {result['similarityDistribution']['mean']}")
+@st.cache_data
+def write_nodesimilarity_cosine():
+
+    result = gds.nodeSimilarity.filtered.write(
+        G,
+        similarityMetric='COSINE',
+        writeRelationshipType='SIMILAR_COSINE',
+        writeProperty='score',
+        relationshipWeightProperty="weight",
+        sourceNodeFilter="Query",
+        targetNodeFilter="Article",
+    )
+    st.header("node similarity (COSINE)")
+    st.write(f"Relationships produced: {result['relationshipsWritten']}")
+    st.write(f"Nodes compared: {result['nodesCompared']}")
+    st.write(f"Mean similarity: {result['similarityDistribution']['mean']}")
+
+write_nodesimilarity_cosine()
 
 ##############################
 ### evaluate (cosine similarity) ###
@@ -423,19 +438,24 @@ st.write(cypher(query))
 ### ppr (personalized pagerank) ###
 ##############################
 
-st.header("ppr (personalized pagerank)")
-for idx, name in enumerate(list(QUERY_DICT.keys())):
-    nodeid = gds.find_node_id(labels=["Query"], properties={"name": name})
-    result = gds.pageRank.write(
-        G,
-        writeProperty="pr"+str(idx),
-        maxIterations=20,
-        dampingFactor=0.85,
-        relationshipWeightProperty='weight',
-        sourceNodes=[nodeid]
-    )   
-    st.write(f"Node properties written: {result['nodePropertiesWritten']}")
-    st.write(f"Mean: {result['centralityDistribution']['mean']}")
+@st.cache_data
+def write_nodesimilarity_ppr():
+
+    st.header("ppr (personalized pagerank)")
+    for idx, name in enumerate(list(QUERY_DICT.keys())):
+        nodeid = gds.find_node_id(labels=["Query"], properties={"name": name})
+        result = gds.pageRank.write(
+            G,
+            writeProperty="pr"+str(idx),
+            maxIterations=20,
+            dampingFactor=0.85,
+            relationshipWeightProperty='weight',
+            sourceNodes=[nodeid]
+        )   
+        st.write(f"Node properties written: {result['nodePropertiesWritten']}")
+        st.write(f"Mean: {result['centralityDistribution']['mean']}")
+
+write_nodesimilarity_ppr()
 
 ##############################
 ### evaluate (ppr) ###
@@ -641,7 +661,7 @@ if similarity_method == "PPR":
     RETURN q.name AS Query, a.name AS Article, a.url AS URL, a.pr{str(int(query_node.split("-")[-1])-1)} AS ppr
     ORDER BY ppr DESC
     LIMIT {limit}
-    """
+    """ 
 else:
     query = f"""
     MATCH (q:Query)-[r:SIMILAR_{similarity_method}]-(a:Article) WHERE q.name = "{query_node}"
@@ -649,4 +669,5 @@ else:
     ORDER BY Similarity DESC
     LIMIT {limit}
     """
+st.code(query)    
 st.write(cypher(query))
