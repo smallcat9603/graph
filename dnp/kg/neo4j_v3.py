@@ -651,7 +651,11 @@ st.write(cypher(query))
 ### export to csv ###
 ##############################
 
-
+query = f"""
+CALL apoc.export.csv.all("{graph_name}.csv", {{}})
+"""
+st.header("export to csv")
+st.write(cypher(query))
 
 ##############################
 ### interaction ###
