@@ -14,9 +14,10 @@ import streamlit as st
 
 st.sidebar.title(__file__.split("/")[-1])
 
-host = "neo4j+s://ee5a232d.databases.neo4j.io"
+# sandbox
+host = "bolt://3.228.13.111:7687"
 user = "neo4j"
-password= "DRRTp_E878v7O0xGfrMqEcWHZ3rM2SdmJ6_IqHRPKag"
+password= "centers-operators-tips"
 
 gds = GraphDataScience(host, auth=(user, password))
 st.sidebar.header("gds version")
