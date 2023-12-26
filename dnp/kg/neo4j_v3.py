@@ -61,6 +61,7 @@ KEY = "AIzaSyAPQNUpCCFrsJhX2A-CgvOG4fDWlxuA8ec" # api key
 nphrase = st.sidebar.slider("Number of nouns extracted from each article", 1, 100, 50)
 DATA_CLASS = st.sidebar.radio("Data class", ["DNP", "WIKI_FP100", "WIKI_P100"])
 DATA_TYPE = st.sidebar.radio("Data type (currently txt is used for dnp data)", ["TXT", "URL"])
+DATA_LOAD = st.sidebar.radio("Data load", ["Offline", "Online"])
 DATA_URL = "" # input data
 QUERY_DICT = {} # query dict {QUERY_NAME: QUERY_URL}
 if DATA_CLASS == "DNP":
@@ -147,25 +148,37 @@ else:
 ### set phrase and salience properties ###
 ##############################
 
-query = f"""
-CALL apoc.periodic.iterate(
-  "MATCH (a:Article)
-   WHERE a.processed IS NULL
-   RETURN a",
-  "CALL apoc.nlp.gcp.entities.stream([item in $_batch | item.a], {{
-     nodeProperty: 'body',
-     key: '{KEY}'
-   }})
-   YIELD node, value
-   SET node.processed = true
-   WITH node, value
-   UNWIND value.entities AS entity
-   SET node.phrase = coalesce(node.phrase, []) + entity['name']
-   SET node.salience = coalesce(node.salience, []) + entity['salience']",
-  {{batchMode: "BATCH_SINGLE", batchSize: 10}})
-YIELD batches, total, timeTaken, committedOperations
-RETURN batches, total, timeTaken, committedOperations
-"""
+if DATA_LOAD == "Offline":
+    query = f"""
+    LOAD CSV WITH HEADERS FROM "file:///{graph_name}.csv" AS row
+    WITH row
+    WHERE row.name STARTS WITH "B-" AND toInteger(split(row.name, "-")[1]) >= 1 AND toInteger(split(row.name, "-")[1]) <= 100
+    MATCH (a:Article {{name: row.name}}) WHERE a.processed IS NULL
+    SET a.processed = true
+    SET a.phrase = apoc.convert.fromJsonList(row.phrase)
+    SET a.salience = apoc.convert.fromJsonList(row.salience)
+    RETURN COUNT(a) AS Processed
+    """
+elif DATA_LOAD == "Online":
+    query = f"""
+    CALL apoc.periodic.iterate(
+    "MATCH (a:Article)
+    WHERE a.processed IS NULL
+    RETURN a",
+    "CALL apoc.nlp.gcp.entities.stream([item in $_batch | item.a], {{
+        nodeProperty: 'body',
+        key: '{KEY}'
+    }})
+    YIELD node, value
+    SET node.processed = true
+    WITH node, value
+    UNWIND value.entities AS entity
+    SET node.phrase = coalesce(node.phrase, []) + entity['name']
+    SET node.salience = coalesce(node.salience, []) + entity['salience']",
+    {{batchMode: "BATCH_SINGLE", batchSize: 10}})
+    YIELD batches, total, timeTaken, committedOperations
+    RETURN batches, total, timeTaken, committedOperations
+    """
 st.header("set phrase and salience properties")
 st.write(cypher(query))
 
@@ -220,19 +233,30 @@ else:
     cypher(query)
     
 # set phrase and salience properties (Query)
-query = f"""
-MATCH (q:Query)
-CALL apoc.nlp.gcp.entities.stream(q, {{
- nodeProperty: 'body',
- key: '{KEY}'
-}})
-YIELD node, value
-SET node.processed = true
-WITH node, value
-UNWIND value.entities AS entity
-SET node.phrase = coalesce(node.phrase, []) + entity['name']
-SET node.salience = coalesce(node.salience, []) + entity['salience']
-"""
+if DATA_LOAD == "Offline":
+    query = f"""
+    LOAD CSV WITH HEADERS FROM "file:///{graph_name}.csv" AS row
+    WITH row
+    WHERE row.name IN {list(QUERY_DICT.keys())}
+    MATCH (q:Query {{name: row.name}})
+    SET q.processed = true
+    SET q.phrase = apoc.convert.fromJsonList(row.phrase)
+    SET q.salience = apoc.convert.fromJsonList(row.salience)
+    """
+elif DATA_LOAD == "Online":
+    query = f"""
+    MATCH (q:Query)
+    CALL apoc.nlp.gcp.entities.stream(q, {{
+    nodeProperty: 'body',
+    key: '{KEY}'
+    }})
+    YIELD node, value
+    SET node.processed = true
+    WITH node, value
+    UNWIND value.entities AS entity
+    SET node.phrase = coalesce(node.phrase, []) + entity['name']
+    SET node.salience = coalesce(node.salience, []) + entity['salience']
+    """
 cypher(query)
 
 # create noun-article relationships (Query)
