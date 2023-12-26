@@ -12,19 +12,21 @@ if 'reboot' not in st.session_state:
 if st.session_state["reboot"] == True:
    sys.exit(0)
 
-st.sidebar.title(__file__.split("/")[-1])
+st.sidebar.title("Graph Data App")
 
-# sandbox
-host = "bolt://3.228.13.111:7687"
-user = "neo4j"
-password= "centers-operators-tips"
-
-# # desktop
-# host = "bolt://localhost:7687"
-# user = "neo4j"
-# password= "j4oenj4oen"
-
+filename = __file__.split("/")[-1]
+if filename.startswith("neo4j"):
+    # desktop
+    host = "bolt://localhost:7687"
+    user = "neo4j"
+    password= "j4oenj4oen"
+elif filename.startswith("app"):
+    # sandbox
+    host = "bolt://3.228.13.111:7687"
+    user = "neo4j"
+    password= "centers-operators-tips"
 gds = GraphDataScience(host, auth=(user, password))
+
 st.sidebar.header("gds version")
 st.sidebar.write(gds.version())
 
@@ -50,14 +52,15 @@ def free_up_memory():
     gds.close()
     st.sidebar.write("gds closed")
     st.session_state["reboot"] = True
+
 st.sidebar.button("Free up memory", type="primary", on_click=free_up_memory) 
 
 ##############################
 ### parameters ###
 ##############################
 
-st.sidebar.header("parameters")
 KEY = "AIzaSyAPQNUpCCFrsJhX2A-CgvOG4fDWlxuA8ec" # api key
+st.sidebar.header("parameters")
 nphrase = st.sidebar.slider("Number of nouns extracted from each article", 1, 100, 50)
 DATA_CLASS = st.sidebar.radio("Data class", ["DNP", "WIKI_FP100", "WIKI_P100"])
 DATA_TYPE = st.sidebar.radio("Data type (currently txt is used for dnp data)", ["TXT", "URL"])
