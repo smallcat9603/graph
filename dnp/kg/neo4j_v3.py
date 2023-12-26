@@ -19,10 +19,10 @@ host = "bolt://3.228.13.111:7687"
 user = "neo4j"
 password= "centers-operators-tips"
 
-# desktop
-host = "bolt://localhost:7687"
-user = "neo4j"
-password= "j4oenj4oen"
+# # desktop
+# host = "bolt://localhost:7687"
+# user = "neo4j"
+# password= "j4oenj4oen"
 
 gds = GraphDataScience(host, auth=(user, password))
 st.sidebar.header("gds version")
@@ -150,7 +150,7 @@ else:
 
 if DATA_LOAD == "Offline":
     query = f"""
-    LOAD CSV WITH HEADERS FROM "file:///{graph_name}.csv" AS row
+    LOAD CSV WITH HEADERS FROM "https://raw.githubusercontent.com/smallcat9603/graph/main/dnp/kg/data/{graph_name}.csv" AS row
     WITH row
     WHERE row.name STARTS WITH "B-" AND toInteger(split(row.name, "-")[1]) >= 1 AND toInteger(split(row.name, "-")[1]) <= 100
     MATCH (a:Article {{name: row.name}}) WHERE a.processed IS NULL
@@ -235,7 +235,7 @@ else:
 # set phrase and salience properties (Query)
 if DATA_LOAD == "Offline":
     query = f"""
-    LOAD CSV WITH HEADERS FROM "file:///{graph_name}.csv" AS row
+    LOAD CSV WITH HEADERS FROM "https://raw.githubusercontent.com/smallcat9603/graph/main/dnp/kg/data/{graph_name}.csv" AS row
     WITH row
     WHERE row.name IN {list(QUERY_DICT.keys())}
     MATCH (q:Query {{name: row.name}})
@@ -675,11 +675,11 @@ st.write(cypher(query))
 ### export to csv ###
 ##############################
 
-query = f"""
-CALL apoc.export.csv.all("{graph_name}.csv", {{}})
-"""
-st.header("export to csv")
-st.write(cypher(query))
+# query = f"""
+# CALL apoc.export.csv.all("{graph_name}.csv", {{}})
+# """
+# st.header("export to csv")
+# st.write(cypher(query))
 
 ##############################
 ### interaction ###
