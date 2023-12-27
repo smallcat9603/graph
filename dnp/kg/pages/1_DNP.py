@@ -88,7 +88,7 @@ else:
 
 if DATA_LOAD == "Offline":
     query = f"""
-    LOAD CSV WITH HEADERS FROM "https://raw.githubusercontent.com/smallcat9603/graph/main/dnp/kg/data/{__file__.split("/")[-1].split("_")[-1]}.csv" AS row
+    LOAD CSV WITH HEADERS FROM "https://raw.githubusercontent.com/smallcat9603/graph/main/dnp/kg/data/{__file__.split("/")[-1].split(".")[0].split("_")[-1]}.csv" AS row
     WITH row
     WHERE row.name STARTS WITH "B-" AND toInteger(split(row.name, "-")[1]) >= 1 AND toInteger(split(row.name, "-")[1]) <= 100
     MATCH (a:Article {{name: row.name}}) WHERE a.processed IS NULL
@@ -173,7 +173,7 @@ else:
 # set phrase and salience properties (Query)
 if DATA_LOAD == "Offline":
     query = f"""
-    LOAD CSV WITH HEADERS FROM "https://raw.githubusercontent.com/smallcat9603/graph/main/dnp/kg/data/{__file__.split("/")[-1].split("_")[-1]}.csv" AS row
+    LOAD CSV WITH HEADERS FROM "https://raw.githubusercontent.com/smallcat9603/graph/main/dnp/kg/data/{__file__.split("/")[-1].split(".")[0].split("_")[-1]}.csv" AS row
     WITH row
     WHERE row.name IN {list(QUERY_DICT.keys())}
     MATCH (q:Query {{name: row.name}})
@@ -560,7 +560,7 @@ st.write(cypher(query))
 ##############################
 
 # query = f"""
-# CALL apoc.export.csv.all("{__file__.split("/")[-1].split("_")[-1]}.csv", {{}})
+# CALL apoc.export.csv.all("{__file__.split("/")[-1].split(".")[0].split("_")[-1]}.csv", {{}})
 # """
 # st.header("export to csv")
 # st.write(cypher(query))
