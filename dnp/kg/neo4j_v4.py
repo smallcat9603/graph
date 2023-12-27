@@ -59,7 +59,7 @@ st.button("Free up memory", type="primary", on_click=free_up_memory)
 ### parameters ###
 ##############################
 
-KEY = "AIzaSyAPQNUpCCFrsJhX2A-CgvOG4fDWlxuA8ec" # api key
+st.session_state["KEY"] = "AIzaSyAPQNUpCCFrsJhX2A-CgvOG4fDWlxuA8ec" # api key
 st.header("parameters")
 nphrase = st.slider("Number of nouns extracted from each article", 1, 100, 50)
 DATA_CLASS = st.radio("Data class", ["DNP", "WIKI_FP100", "WIKI_P100"])
@@ -170,7 +170,7 @@ elif DATA_LOAD == "Online":
     RETURN a",
     "CALL apoc.nlp.gcp.entities.stream([item in $_batch | item.a], {{
         nodeProperty: 'body',
-        key: '{KEY}'
+        key: '{st.session_state["KEY"]}'
     }})
     YIELD node, value
     SET node.processed = true
@@ -251,7 +251,7 @@ elif DATA_LOAD == "Online":
     MATCH (q:Query)
     CALL apoc.nlp.gcp.entities.stream(q, {{
     nodeProperty: 'body',
-    key: '{KEY}'
+    key: '{st.session_state["KEY"]}'
     }})
     YIELD node, value
     SET node.processed = true
