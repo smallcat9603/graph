@@ -12,7 +12,7 @@ if 'reboot' not in st.session_state:
 if st.session_state["reboot"] == True:
    sys.exit(0)
 
-st.sidebar.title("Graph Data App")
+st.title("Graph Data App")
 
 filename = __file__.split("/")[-1]
 if filename.startswith("neo4j"):
@@ -27,8 +27,8 @@ elif filename.startswith("app"):
     password= "centers-operators-tips"
 gds = GraphDataScience(host, auth=(user, password))
 
-st.sidebar.header("gds version")
-st.sidebar.write(gds.version())
+st.header("gds version")
+st.write(gds.version())
 
 graph_name = "testgraph" # project graph name
 
@@ -50,21 +50,21 @@ def free_up_memory():
     """
     cypher(query)
     gds.close()
-    st.sidebar.write("gds closed")
+    st.write("gds closed")
     st.session_state["reboot"] = True
 
-st.sidebar.button("Free up memory", type="primary", on_click=free_up_memory) 
+st.button("Free up memory", type="primary", on_click=free_up_memory) 
 
 ##############################
 ### parameters ###
 ##############################
 
 KEY = "AIzaSyAPQNUpCCFrsJhX2A-CgvOG4fDWlxuA8ec" # api key
-st.sidebar.header("parameters")
-nphrase = st.sidebar.slider("Number of nouns extracted from each article", 1, 100, 50)
-DATA_CLASS = st.sidebar.radio("Data class", ["DNP", "WIKI_FP100", "WIKI_P100"])
-DATA_TYPE = st.sidebar.radio("Data type (currently txt is used for dnp data)", ["TXT", "URL"])
-DATA_LOAD = st.sidebar.radio("Data load", ["Offline", "Online"])
+st.header("parameters")
+nphrase = st.slider("Number of nouns extracted from each article", 1, 100, 50)
+DATA_CLASS = st.radio("Data class", ["DNP", "WIKI_FP100", "WIKI_P100"])
+DATA_TYPE = st.radio("Data type (currently txt is used for dnp data)", ["TXT", "URL"])
+DATA_LOAD = st.radio("Data load", ["Offline", "Online"])
 DATA_URL = "" # input data
 QUERY_DICT = {} # query dict {QUERY_NAME: QUERY_URL}
 if DATA_CLASS == "DNP":
@@ -90,10 +90,10 @@ else:
     print("DATA ERROR")
     sys.exit(1)
 
-st.sidebar.header("data url")
-st.sidebar.write(DATA_URL)
+st.header("data url")
+st.write(DATA_URL)
 st.header("query dict")
-st.write(QUERY_DICT)
+st.table(QUERY_DICT)
 
 query = """
 CREATE CONSTRAINT id_unique IF NOT EXISTS 
@@ -383,19 +383,6 @@ def write_nodesimilarity_jaccard():
 write_nodesimilarity_jaccard()
 
 ##############################
-### evaluate (jaccard similarity) ###
-##############################
-
-query = """
-MATCH (q:Query)-[r:SIMILAR_JACCARD]-(a:Article)
-RETURN q.name AS Query, a.name AS Article, a.url AS URL, a.grp AS Group, a.grp1 AS Group1, r.score AS Similarity
-ORDER BY Query, Similarity DESC
-LIMIT 10
-"""
-st.header("evaluate (jaccard similarity)")
-st.write(cypher(query))
-
-##############################
 ### node similarity (OVERLAP) ###
 ##############################
 
@@ -417,19 +404,6 @@ def write_nodesimilarity_overlap():
     st.write(f"Mean similarity: {result['similarityDistribution']['mean']}")
 
 write_nodesimilarity_overlap()
-
-##############################
-### evaluate (overlap similarity) ###
-##############################
-
-query = """
-MATCH (q:Query)-[r:SIMILAR_OVERLAP]-(a:Article)
-RETURN q.name AS Query, a.name AS Article, a.url AS URL, a.grp AS Group, a.grp1 AS Group1, r.score AS Similarity
-ORDER BY Query, Similarity DESC
-LIMIT 10
-"""
-st.header("evaluate (overlap similarity)")
-st.write(cypher(query))
 
 ##############################
 ### node similarity (COSINE) ###
@@ -455,19 +429,6 @@ def write_nodesimilarity_cosine():
 write_nodesimilarity_cosine()
 
 ##############################
-### evaluate (cosine similarity) ###
-##############################
-
-query = """
-MATCH (q:Query)-[r:SIMILAR_COSINE]-(a:Article)
-RETURN q.name AS Query, a.name AS Article, a.url AS URL, a.grp AS Group, a.grp1 AS Group1, r.score AS Similarity
-ORDER BY Query, Similarity DESC
-LIMIT 10
-"""
-st.header("evaluate (cosine similarity)")
-st.write(cypher(query))
-
-##############################
 ### ppr (personalized pagerank) ###
 ##############################
 
@@ -489,21 +450,6 @@ def write_nodesimilarity_ppr():
         st.write(f"Mean: {result['centralityDistribution']['mean']}")
 
 write_nodesimilarity_ppr()
-
-##############################
-### evaluate (ppr) ###
-##############################
-
-query_idx = 0 
-query_one = list(QUERY_DICT.keys())[query_idx]
-query = f"""
-MATCH (q:Query)-[r:CORRELATES]-(a:Article) WHERE q.name = "{query_one}"
-RETURN q.name AS Query, a.name AS Article, a.url AS URL, a.grp AS Group, a.grp1 AS Group1, a.pr{query_idx} AS ppr
-ORDER BY Query, ppr DESC
-LIMIT 10
-"""
-st.header("evaluate (ppr)")
-st.write(cypher(query))
 
 ##############################
 ### 1. node embedding ###
