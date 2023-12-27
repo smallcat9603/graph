@@ -90,7 +90,7 @@ if DATA_LOAD == "Offline":
     query = f"""
     LOAD CSV WITH HEADERS FROM "https://raw.githubusercontent.com/smallcat9603/graph/main/dnp/kg/data/{__file__.split("/")[-1].split(".")[0].split("_")[-1]}.csv" AS row
     WITH row
-    WHERE row.name STARTS WITH "B-" AND toInteger(split(row.name, "-")[1]) >= 1 AND toInteger(split(row.name, "-")[1]) <= 100
+    WHERE row._labels = ":Article"
     MATCH (a:Article {{name: row.name}}) WHERE a.processed IS NULL
     SET a.processed = true
     SET a.phrase = apoc.convert.fromJsonList(row.phrase)
@@ -175,7 +175,7 @@ if DATA_LOAD == "Offline":
     query = f"""
     LOAD CSV WITH HEADERS FROM "https://raw.githubusercontent.com/smallcat9603/graph/main/dnp/kg/data/{__file__.split("/")[-1].split(".")[0].split("_")[-1]}.csv" AS row
     WITH row
-    WHERE row.name IN {list(QUERY_DICT.keys())}
+    WHERE row._labels = ":Query"
     MATCH (q:Query {{name: row.name}})
     SET q.processed = true
     SET q.phrase = apoc.convert.fromJsonList(row.phrase)

@@ -3,7 +3,7 @@ import streamlit as st
 st.header("parameters")
 nphrase = st.slider("Number of nouns extracted from each article", 1, 100, 50)
 DATA_TYPE = st.radio("Data type", ["URL"])
-DATA_LOAD = st.radio("Data load", ["Online", "Offline"])
+DATA_LOAD = st.radio("Data load", ["Offline", "Online"])
 DATA_URL = "" # input data
 QUERY_DICT = {} # query dict {QUERY_NAME: QUERY_URL}
 DATA_URL = "https://raw.githubusercontent.com/smallcat9603/graph/main/dnp/kg/data/wikidata_persons_100.csv"  
@@ -65,7 +65,7 @@ if DATA_LOAD == "Offline":
     query = f"""
     LOAD CSV WITH HEADERS FROM "https://raw.githubusercontent.com/smallcat9603/graph/main/dnp/kg/data/{__file__.split("/")[-1].split(".")[0].split("_")[-1]}.csv" AS row
     WITH row
-    WHERE row.name STARTS WITH "B-" AND toInteger(split(row.name, "-")[1]) >= 1 AND toInteger(split(row.name, "-")[1]) <= 100
+    WHERE row._labels = ":Article"
     MATCH (a:Article {{name: row.name}}) WHERE a.processed IS NULL
     SET a.processed = true
     SET a.phrase = apoc.convert.fromJsonList(row.phrase)
@@ -139,7 +139,7 @@ if DATA_LOAD == "Offline":
     query = f"""
     LOAD CSV WITH HEADERS FROM "https://raw.githubusercontent.com/smallcat9603/graph/main/dnp/kg/data/{__file__.split("/")[-1].split(".")[0].split("_")[-1]}.csv" AS row
     WITH row
-    WHERE row.name IN {list(QUERY_DICT.keys())}
+    WHERE row._labels = ":Query"
     MATCH (q:Query {{name: row.name}})
     SET q.processed = true
     SET q.phrase = apoc.convert.fromJsonList(row.phrase)
