@@ -4,22 +4,12 @@ import streamlit as st
 
 st.header("parameters")
 nphrase = st.slider("Number of nouns extracted from each article", 1, 100, 50)
-DATA_TYPE = st.radio("Data type (currently txt is used for dnp data)", ["TXT", "URL"])
-DATA_LOAD = st.radio("Data load", ["Offline", "Online"])
+DATA_TYPE = st.radio("Data type", ["URL"])
+DATA_LOAD = st.radio("Data load", ["Online", "Offline"])
 DATA_URL = "" # input data
 QUERY_DICT = {} # query dict {QUERY_NAME: QUERY_URL}
-if DATA_TYPE == "TXT":
-    DATA_URL = os.path.dirname(os.path.dirname(__file__)) + "/data/newsrelease_B-1-100_C-1-4/"
-    QUERY_DICT["C-1"] = DATA_URL + "C-1.txt"
-    QUERY_DICT["C-2"] = DATA_URL + "C-2.txt"
-    QUERY_DICT["C-3"] = DATA_URL + "C-3.txt"
-    QUERY_DICT["C-4"] = DATA_URL + "C-4.txt"
-elif DATA_TYPE == "URL":
-    DATA_URL = "https://raw.githubusercontent.com/smallcat9603/graph/main/dnp/kg/data/articles.csv"
-    QUERY_DICT["C-1"] = "https://www.holdings.toppan.com/ja/news/2023/10/newsrelease231004_1.html"
-    QUERY_DICT["C-2"] = "https://www.holdings.toppan.com/ja/news/2023/10/newsrelease231004_2.html"
-    QUERY_DICT["C-3"] = "https://www.holdings.toppan.com/ja/news/2023/10/newsrelease231004_3.html"
-    QUERY_DICT["C-4"] = "https://www.holdings.toppan.com/ja/news/2023/10/newsrelease231003_1.html"
+DATA_URL = "https://raw.githubusercontent.com/smallcat9603/graph/main/dnp/kg/data/wikidata_footballplayer_100.csv"
+QUERY_DICT["Thierry Henry"] = "https://en.wikipedia.org/wiki/Thierry_Henry"
 
 st.header("data url")
 st.write(DATA_URL)
@@ -44,43 +34,30 @@ cypher(query)
 ### create url nodes (article, person, ...) ###
 ##############################
 
-if DATA_TYPE == "TXT":
-  for idx in range(1, 101):
-    node = "B-" + str(idx)
-    file = DATA_URL + node + ".txt"
-    content = ""
-    with open(file, 'r') as f:
-      content = f.read()
-      content = re.sub('\n+', ' ', content)
-    query = f"""
-    MERGE (a:Article {{ name: "{node}", url: "{file}", body: "{content}" }})
-    """
-    cypher(query)
-else:
-  query = f"""
-  CALL apoc.periodic.iterate(
-    "LOAD CSV WITH HEADERS FROM '{DATA_URL}' AS row
-    RETURN row",
-    "MERGE (a:Article {{name: row.id, url: row.url}})
-    SET a.grp = CASE WHEN 'occupation' IN keys(row) THEN row.occupation ELSE null END
-    SET a.grp1 = CASE WHEN 'nationality' IN keys(row) THEN row.nationality ELSE null END
-    WITH a
-    CALL apoc.load.html(a.url, {{
-      title: 'title',
-      h2: 'h2',
-      body: 'body p'
-    }})
-    YIELD value
-    WITH a,
-          reduce(texts = '', n IN range(0, size(value.body)-1) | texts + ' ' + coalesce(value.body[n].text, '')) AS body,
-          value.title[0].text AS title
-    SET a.body = body, a.title = title",
-    {{batchSize: 5, parallel: true}}
-  )
-  YIELD batches, total, timeTaken, committedOperations
-  RETURN batches, total, timeTaken, committedOperations
-  """
-  cypher(query)
+query = f"""
+CALL apoc.periodic.iterate(
+"LOAD CSV WITH HEADERS FROM '{DATA_URL}' AS row
+RETURN row",
+"MERGE (a:Article {{name: row.id, url: row.url}})
+SET a.grp = CASE WHEN 'occupation' IN keys(row) THEN row.occupation ELSE null END
+SET a.grp1 = CASE WHEN 'nationality' IN keys(row) THEN row.nationality ELSE null END
+WITH a
+CALL apoc.load.html(a.url, {{
+    title: 'title',
+    h2: 'h2',
+    body: 'body p'
+}})
+YIELD value
+WITH a,
+        reduce(texts = '', n IN range(0, size(value.body)-1) | texts + ' ' + coalesce(value.body[n].text, '')) AS body,
+        value.title[0].text AS title
+SET a.body = body, a.title = title",
+{{batchSize: 5, parallel: true}}
+)
+YIELD batches, total, timeTaken, committedOperations
+RETURN batches, total, timeTaken, committedOperations
+"""
+cypher(query)
 
 ##############################
 ### set phrase and salience properties ###
@@ -141,18 +118,7 @@ cypher(query)
 ### query ###
 ##############################
 
-if DATA_TYPE == "TXT":
-  for QUERY_NAME, QUERY_URL in QUERY_DICT.items():
-    content = ""
-    with open(QUERY_URL, 'r') as f:
-      content = f.read()
-      content = re.sub('\n+', ' ', content)
-    query = f"""
-    MERGE (q:Query {{ name: "{QUERY_NAME}", url: "{QUERY_URL}", body: "{content}" }})
-    """
-    cypher(query)
-else:
-  for QUERY_NAME, QUERY_URL in QUERY_DICT.items():
+for QUERY_NAME, QUERY_URL in QUERY_DICT.items():
     query = f"""
     MERGE (q:Query {{name: "{QUERY_NAME}", url: "{QUERY_URL}"}})
     WITH q
@@ -574,7 +540,7 @@ st.header("UI Interaction (test)")
 st.subheader("Node Similarity")
 col1, col2, col3 = st.columns(3)
 with col1:
-    query_node = st.selectbox("Query node", ("C-1", "C-2", "C-3", "C-4"))
+    query_node = st.selectbox("Query node", ("Thierry Henry", "C-2", "C-3", "C-4"))
 with col2:
     similarity_method = st.selectbox("Similarity method", ("JACCARD", "OVERLAP", "COSINE", "PPR"))
 with col3:
@@ -597,35 +563,8 @@ else:
 st.code(query)    
 st.write(cypher(query))
 
-st.subheader("Multiple Queries")
-col1, col2, col3 = st.columns(3)
-with col1:
-    query_nodes = st.multiselect("Query node", ["C-1", "C-2", "C-3", "C-4"], ["C-1", "C-2"])
-with col2:
-    similarity_method = st.selectbox("Similarity method", ("JACCARD", "OVERLAP", "COSINE", "PPR"), key="sm")
-with col3:
-    limit = st.selectbox("Limit", ("5", "10", "20"), key="lim")
-st.write("The top-" + limit + " similar nodes for queries " + ', '.join(query_nodes) + " are ranked as follows (" + similarity_method + ")")
-ppr_attr = ["pr" + str(int(item.replace("C-", ""))-1) for item in query_nodes]
-if similarity_method == "PPR":
-    query = f"""
-    MATCH (q:Query)-[r:CORRELATES]-(a:Article) WHERE q.name IN {query_nodes}
-    RETURN COLLECT(q.name) AS Query, a.name AS Article, REDUCE(s = 0, pr IN {ppr_attr} | s + a[pr]) AS ppr
-    ORDER BY ppr DESC
-    LIMIT {limit}
-    """ 
-else:
-    query = f"""
-    MATCH (q:Query)-[r:SIMILAR_{similarity_method}]-(a:Article) WHERE q.name IN {query_nodes}
-    RETURN COLLECT(q.name) AS Query, a.name AS Article, SUM(r.score) AS Similarity
-    ORDER BY Similarity DESC
-    LIMIT {limit}
-    """
-st.code(query)    
-st.write(cypher(query))
-
 st.subheader("Related Articles")
-noun = st.text_input("Keyword", "環境")
+noun = st.text_input("Keyword", "football")
 query = f"""
 MATCH (n:Noun)-[]-(a:Article) WHERE n.name CONTAINS "{noun}"
 WITH DISTINCT a AS distinctArticle, n

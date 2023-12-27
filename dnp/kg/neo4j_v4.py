@@ -218,9 +218,9 @@ st.session_state["KEY"] = "AIzaSyAPQNUpCCFrsJhX2A-CgvOG4fDWlxuA8ec" # api key
 # else:
 #   for QUERY_NAME, QUERY_URL in QUERY_DICT.items():
 #     query = f"""
-#     MERGE (q:Query {{name: {QUERY_NAME}, url: {QUERY_URL}}})
+#     MERGE (q:Query {{name: "{QUERY_NAME}", url: "{QUERY_URL}"}})
 #     WITH q
-#     CALL apoc.load.html(i.url, {{
+#     CALL apoc.load.html(q.url, {{
 #     title: "title",
 #     h2: "h2",
 #     body: "body p"
