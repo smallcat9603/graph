@@ -7,7 +7,7 @@ import streamlit as st
 ### neo4j desktop v5.11.0 ###
 ##############################
 
-if 'reboot' not in st.session_state:
+if "reboot" not in st.session_state:
    st.session_state["reboot"] = False
 if st.session_state["reboot"] == True:
    sys.exit(0)
@@ -25,31 +25,31 @@ elif filename.startswith("app"):
     host = "bolt://3.228.13.111:7687"
     user = "neo4j"
     password= "centers-operators-tips"
-gds = GraphDataScience(host, auth=(user, password))
+st.session_state["gds"] = GraphDataScience(host, auth=(user, password))
 
 st.header("gds version")
-st.write(gds.version())
+st.write(st.session_state["gds"].version())
 
 graph_name = "testgraph" # project graph name
 
 @st.cache_data
 def cypher(query):
-   return gds.run_cypher(query)
+   return st.session_state["gds"].run_cypher(query)
 
 ##############################
 ### free up memory ###
 ##############################
 
 def free_up_memory():
-    exists_result = gds.graph.exists(graph_name)
+    exists_result = st.session_state["gds"].graph.exists(graph_name)
     if exists_result["exists"]:
-        G = gds.graph.get(graph_name)
+        G = st.session_state["gds"].graph.get(graph_name)
         G.drop()    
     query = """
     MATCH (n) DETACH DELETE n
     """
     cypher(query)
-    gds.close()
+    st.session_state["gds"].close()
     st.write("gds closed")
     st.session_state["reboot"] = True
 
@@ -344,11 +344,11 @@ relationship_projection = {
 #     }
 # }
 
-exists_result = gds.graph.exists(graph_name)
+exists_result = st.session_state["gds"].graph.exists(graph_name)
 if exists_result["exists"]:
-    G = gds.graph.get(graph_name)
+    G = st.session_state["gds"].graph.get(graph_name)
     G.drop()
-G, result = gds.graph.project(graph_name, node_projection, relationship_projection)
+G, result = st.session_state["gds"].graph.project(graph_name, node_projection, relationship_projection)
 st.header("project graph to memory")
 st.write(f"The projection took {result['projectMillis']} ms")
 st.write(f"Graph '{G.name()}' node count: {G.node_count()}")
@@ -366,7 +366,7 @@ st.write(f"Graph '{G.name()}' memory_usage: {G.memory_usage()}")
 @st.cache_data
 def write_nodesimilarity_jaccard():
 
-    result = gds.nodeSimilarity.filtered.write(
+    result = st.session_state["gds"].nodeSimilarity.filtered.write(
         G,
         similarityMetric='JACCARD', # default
         writeRelationshipType='SIMILAR_JACCARD',
@@ -389,7 +389,7 @@ write_nodesimilarity_jaccard()
 @st.cache_data
 def write_nodesimilarity_overlap():
 
-    result = gds.nodeSimilarity.filtered.write(
+    result = st.session_state["gds"].nodeSimilarity.filtered.write(
         G,
         similarityMetric='OVERLAP',
         writeRelationshipType='SIMILAR_OVERLAP',
@@ -412,7 +412,7 @@ write_nodesimilarity_overlap()
 @st.cache_data
 def write_nodesimilarity_cosine():
 
-    result = gds.nodeSimilarity.filtered.write(
+    result = st.session_state["gds"].nodeSimilarity.filtered.write(
         G,
         similarityMetric='COSINE',
         writeRelationshipType='SIMILAR_COSINE',
@@ -437,8 +437,8 @@ def write_nodesimilarity_ppr():
 
     st.header("ppr (personalized pagerank)")
     for idx, name in enumerate(list(QUERY_DICT.keys())):
-        nodeid = gds.find_node_id(labels=["Query"], properties={"name": name})
-        result = gds.pageRank.write(
+        nodeid = st.session_state["gds"].find_node_id(labels=["Query"], properties={"name": name})
+        result = st.session_state["gds"].pageRank.write(
             G,
             writeProperty="pr"+str(idx),
             maxIterations=20,
@@ -459,7 +459,7 @@ write_nodesimilarity_ppr()
 def node_embedding():
 
     # fastrp
-    result = gds.fastRP.stream(
+    result = st.session_state["gds"].fastRP.stream(
         G,
         randomSeed=42,
         embeddingDimension=16,
@@ -468,7 +468,7 @@ def node_embedding():
     )
 
     # node2vec
-    result = gds.node2vec.stream(
+    result = st.session_state["gds"].node2vec.stream(
         G,
         randomSeed=42,
         embeddingDimension=16,
@@ -477,7 +477,7 @@ def node_embedding():
     )
 
     # hashgnn
-    result = gds.beta.hashgnn.stream(
+    result = st.session_state["gds"].beta.hashgnn.stream(
         G,
         iterations = 3,
         embeddingDensity = 8,
@@ -488,7 +488,7 @@ def node_embedding():
     # st.write(f"Embedding vectors: {result['embedding']}")
 
     # fastrp
-    result = gds.fastRP.mutate(
+    result = st.session_state["gds"].fastRP.mutate(
         G,
         mutateProperty="embedding_fastrp",
         randomSeed=42,
@@ -498,7 +498,7 @@ def node_embedding():
     )
 
     # node2vec
-    result = gds.node2vec.mutate(
+    result = st.session_state["gds"].node2vec.mutate(
         G,
         mutateProperty="embedding_node2vec",
         randomSeed=42,
@@ -508,7 +508,7 @@ def node_embedding():
     )
 
     # hashgnn
-    result = gds.beta.hashgnn.mutate(
+    result = st.session_state["gds"].beta.hashgnn.mutate(
         G,
         mutateProperty="embedding_hashgnn",
         randomSeed=42,
@@ -535,7 +535,7 @@ node_embedding()
 def kNN():
 
     # fastrp
-    result = gds.knn.filtered.write(
+    result = st.session_state["gds"].knn.filtered.write(
         G,
         topK=10,
         nodeProperties=["embedding_fastrp"],
@@ -550,7 +550,7 @@ def kNN():
     )
 
     # node2vec
-    result = gds.knn.filtered.write(
+    result = st.session_state["gds"].knn.filtered.write(
         G,
         topK=10,
         nodeProperties=["embedding_node2vec"],
@@ -565,7 +565,7 @@ def kNN():
     )
 
     # hashgnn
-    result = gds.knn.filtered.write(
+    result = st.session_state["gds"].knn.filtered.write(
         G,
         topK=10,
         nodeProperties=["embedding_hashgnn"],
