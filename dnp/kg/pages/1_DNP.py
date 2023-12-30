@@ -313,6 +313,18 @@ G, result = st.session_state["gds"].graph.project(st.session_state["graph_name"]
 # st.write(f"Graph '{G.name()}' memory_usage: {G.memory_usage()}")
 
 ##############################
+### graph statistics ###
+##############################
+
+st.header("Graph Statistics")
+
+col1, col2, col3, col4 = st.columns(4)
+col1.metric("# Nodes", str(G.node_count()))
+col2.metric("# Edges", str(G.relationship_count()))
+col3.metric("Density", str(G.density()))
+col4.metric("Memory", str(G.memory_usage()))
+
+##############################
 ### node similarity (JACCARD) ###
 ##############################
 
@@ -590,77 +602,79 @@ LIMIT 10
 
 st.header("UI Interaction (test)")
 
-st.subheader("Node Similarity")
-col1, col2, col3 = st.columns(3)
-with col1:
-    query_node = st.selectbox("Query node", ("C-1", "C-2", "C-3", "C-4"))
-with col2:
-    similarity_method = st.selectbox("Similarity method", ("JACCARD", "OVERLAP", "COSINE", "PPR"))
-with col3:
-    limit = st.selectbox("Limit", ("5", "10", "20"))
-st.write("The top-" + limit + " similar nodes for query " + query_node + " are ranked as follows (" + similarity_method + ")")
-if similarity_method == "PPR":
+tab1, tab2, tab3, tab4 = st.tabs(["Node Similarity", "Multiple Queries", "Related Articles", "Common Keywords"])
+
+with tab1:
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        query_node = st.selectbox("Query node", ("C-1", "C-2", "C-3", "C-4"))
+    with col2:
+        similarity_method = st.selectbox("Similarity method", ("JACCARD", "OVERLAP", "COSINE", "PPR"))
+    with col3:
+        limit = st.selectbox("Limit", ("5", "10", "20"))
+    st.write("The top-" + limit + " similar nodes for query " + query_node + " are ranked as follows (" + similarity_method + ")")
+    if similarity_method == "PPR":
+        query = f"""
+        MATCH (q:Query)-[r:CORRELATES]-(a:Article) WHERE q.name = "{query_node}"
+        RETURN q.name AS Query, a.name AS Article, a.url AS URL, a.pr{str(int(query_node.split("-")[-1])-1)} AS ppr
+        ORDER BY ppr DESC
+        LIMIT {limit}
+        """ 
+    else:
+        query = f"""
+        MATCH (q:Query)-[r:SIMILAR_{similarity_method}]-(a:Article) WHERE q.name = "{query_node}"
+        RETURN q.name AS Query, a.name AS Article, a.url AS URL, r.score AS Similarity
+        ORDER BY Similarity DESC
+        LIMIT {limit}
+        """
+    st.code(query)    
+    st.write(cypher(query))
+
+with tab2:
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        query_nodes = st.multiselect("Query node", ["C-1", "C-2", "C-3", "C-4"], ["C-1", "C-2"])
+    with col2:
+        similarity_method = st.selectbox("Similarity method", ("JACCARD", "OVERLAP", "COSINE", "PPR"), key="sm")
+    with col3:
+        limit = st.selectbox("Limit", ("5", "10", "20"), key="lim")
+    st.write("The top-" + limit + " similar nodes for queries " + ', '.join(query_nodes) + " are ranked as follows (" + similarity_method + ")")
+    ppr_attr = ["pr" + str(int(item.replace("C-", ""))-1) for item in query_nodes]
+    if similarity_method == "PPR":
+        query = f"""
+        MATCH (q:Query)-[r:CORRELATES]-(a:Article) WHERE q.name IN {query_nodes}
+        RETURN COLLECT(q.name) AS Query, a.name AS Article, REDUCE(s = 0, pr IN {ppr_attr} | s + a[pr]) AS ppr
+        ORDER BY ppr DESC
+        LIMIT {limit}
+        """ 
+    else:
+        query = f"""
+        MATCH (q:Query)-[r:SIMILAR_{similarity_method}]-(a:Article) WHERE q.name IN {query_nodes}
+        RETURN COLLECT(q.name) AS Query, a.name AS Article, SUM(r.score) AS Similarity
+        ORDER BY Similarity DESC
+        LIMIT {limit}
+        """
+    st.code(query)    
+    st.write(cypher(query))
+
+with tab3:
+    noun = st.text_input("Keyword", "環境")
     query = f"""
-    MATCH (q:Query)-[r:CORRELATES]-(a:Article) WHERE q.name = "{query_node}"
-    RETURN q.name AS Query, a.name AS Article, a.url AS URL, a.pr{str(int(query_node.split("-")[-1])-1)} AS ppr
-    ORDER BY ppr DESC
-    LIMIT {limit}
-    """ 
-else:
-    query = f"""
-    MATCH (q:Query)-[r:SIMILAR_{similarity_method}]-(a:Article) WHERE q.name = "{query_node}"
-    RETURN q.name AS Query, a.name AS Article, a.url AS URL, r.score AS Similarity
-    ORDER BY Similarity DESC
-    LIMIT {limit}
+    MATCH (n:Noun)-[]-(a:Article) WHERE n.name CONTAINS "{noun}"
+    WITH DISTINCT a AS distinctArticle, n
+    RETURN n.name AS Keyword, COUNT(distinctArticle) AS articleCount, COLLECT(distinctArticle.name) AS articles
+    ORDER BY articleCount DESC
     """
-# st.code(query)    
-st.write(cypher(query))
+    st.code(query)    
+    st.write(cypher(query))
 
-st.subheader("Multiple Queries")
-col1, col2, col3 = st.columns(3)
-with col1:
-    query_nodes = st.multiselect("Query node", ["C-1", "C-2", "C-3", "C-4"], ["C-1", "C-2"])
-with col2:
-    similarity_method = st.selectbox("Similarity method", ("JACCARD", "OVERLAP", "COSINE", "PPR"), key="sm")
-with col3:
-    limit = st.selectbox("Limit", ("5", "10", "20"), key="lim")
-st.write("The top-" + limit + " similar nodes for queries " + ', '.join(query_nodes) + " are ranked as follows (" + similarity_method + ")")
-ppr_attr = ["pr" + str(int(item.replace("C-", ""))-1) for item in query_nodes]
-if similarity_method == "PPR":
+with tab4:
     query = f"""
-    MATCH (q:Query)-[r:CORRELATES]-(a:Article) WHERE q.name IN {query_nodes}
-    RETURN COLLECT(q.name) AS Query, a.name AS Article, REDUCE(s = 0, pr IN {ppr_attr} | s + a[pr]) AS ppr
-    ORDER BY ppr DESC
-    LIMIT {limit}
-    """ 
-else:
-    query = f"""
-    MATCH (q:Query)-[r:SIMILAR_{similarity_method}]-(a:Article) WHERE q.name IN {query_nodes}
-    RETURN COLLECT(q.name) AS Query, a.name AS Article, SUM(r.score) AS Similarity
-    ORDER BY Similarity DESC
-    LIMIT {limit}
+    MATCH (n:Noun)-[]-(a:Article)
+    RETURN n.name AS Keyword, COUNT(a) AS articleCount, COLLECT(a.name) AS articles
+    ORDER BY articleCount DESC
     """
-# st.code(query)    
-st.write(cypher(query))
-
-st.subheader("Related Articles")
-noun = st.text_input("Keyword", "環境")
-query = f"""
-MATCH (n:Noun)-[]-(a:Article) WHERE n.name CONTAINS "{noun}"
-WITH DISTINCT a AS distinctArticle, n
-RETURN n.name AS Keyword, COUNT(distinctArticle) AS articleCount, COLLECT(distinctArticle.name) AS articles
-ORDER BY articleCount DESC
-"""
-# st.code(query)    
-st.write(cypher(query))
-
-st.subheader("Common Keywords")
-query = f"""
-MATCH (n:Noun)-[]-(a:Article)
-RETURN n.name AS Keyword, COUNT(a) AS articleCount, COLLECT(a.name) AS articles
-ORDER BY articleCount DESC
-"""
-# st.code(query)    
-st.write(cypher(query))
+    st.code(query)    
+    st.write(cypher(query))
 
 progress_bar.progress(100, text="Finished")
