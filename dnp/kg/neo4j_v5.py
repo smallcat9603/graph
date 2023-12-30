@@ -48,8 +48,8 @@ def free_up_memory():
     """
     cypher(query)
     st.session_state["gds"].close()
-    st.write("gds closed")
-    st.write("Click 'Clear cache (C)' and 'Rerun (R)'")
+    st.header("gds closed")
+    st.info("Click 'Clear cache (C)' and 'Rerun (R)'")
     st.session_state["reboot"] = True
 
 st.button("Free up memory", type="primary", on_click=free_up_memory) 

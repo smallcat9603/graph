@@ -2,9 +2,9 @@ import os
 import re
 import streamlit as st
 
-st.header("parameters")
+st.header("Parameters")
 nphrase = st.slider("Number of nouns extracted from each article", 1, 100, 50)
-DATA_TYPE = st.radio("Data type (currently txt is used for dnp data)", ["TXT", "URL"])
+DATA_TYPE = st.radio("Data type", ["TXT", "URL"])
 DATA_LOAD = st.radio("Data load", ["Offline", "Online"])
 DATA_URL = "" # input data
 QUERY_DICT = {} # query dict {QUERY_NAME: QUERY_URL}
@@ -21,9 +21,9 @@ elif DATA_TYPE == "URL":
     QUERY_DICT["C-3"] = "https://www.holdings.toppan.com/ja/news/2023/10/newsrelease231004_3.html"
     QUERY_DICT["C-4"] = "https://www.holdings.toppan.com/ja/news/2023/10/newsrelease231003_1.html"
 
-st.header("data url")
+st.header("Data Source")
 st.write(DATA_URL)
-st.header("query dict")
+st.header("Query Dict")
 st.table(QUERY_DICT)
 
 @st.cache_data
@@ -40,9 +40,14 @@ cypher(query)
 ### Create Article-[Noun]-Article Graph ###
 ##############################
 
+st.header("Progress")
+progress_bar = st.progress(0, text="Initialize...")
+
 ##############################
 ### create url nodes (article, person, ...) ###
 ##############################
+
+progress_bar.progress(10, text="Create url nodes...")
 
 if DATA_TYPE == "TXT":
   for idx in range(1, 101):
@@ -85,6 +90,8 @@ else:
 ##############################
 ### set phrase and salience properties ###
 ##############################
+  
+progress_bar.progress(20, text="Set phrase and salience properties...")
 
 if DATA_LOAD == "Offline":
     query = f"""
@@ -117,12 +124,13 @@ elif DATA_LOAD == "Online":
     YIELD batches, total, timeTaken, committedOperations
     RETURN batches, total, timeTaken, committedOperations
     """
-st.header("set phrase and salience properties")
 st.write(cypher(query))
 
 ##############################
 ### create noun-url relationships ###
 ##############################
+
+progress_bar.progress(30, text="Create noun-url relationships...")
 
 query = f"""
 MATCH (a:Article)
@@ -140,6 +148,8 @@ cypher(query)
 ##############################
 ### query ###
 ##############################
+
+progress_bar.progress(40, text="Create query nodes...")
 
 if DATA_TYPE == "TXT":
   for QUERY_NAME, QUERY_URL in QUERY_DICT.items():
@@ -169,6 +179,8 @@ else:
     RETURN q.title, q.body
     """
     cypher(query)
+
+progress_bar.progress(50, text="Set phrase and salience properties (Query)...")
     
 # set phrase and salience properties (Query)
 if DATA_LOAD == "Offline":
@@ -196,6 +208,8 @@ elif DATA_LOAD == "Online":
     SET node.salience = coalesce(node.salience, []) + entity['salience']
     """
 cypher(query)
+
+progress_bar.progress(60, text="Create noun-article relationships (Query)...")
 
 # create noun-article relationships (Query)
 query = f"""
@@ -227,6 +241,8 @@ st.write(cypher(query))
 ##############################
 ### create article-article relationships ###
 ##############################
+
+progress_bar.progress(70, text="Create article-article relationships...")
 
 query = f"""
 MATCH (a1:Article), (a2:Article)
@@ -264,6 +280,8 @@ st.write(cypher(query))
 ### project graph to memory ###
 ##############################
 
+progress_bar.progress(80, text="Project graph to memory...")
+
 node_projection = ["Query", "Article", "Noun"]
 # # why raising error "java.lang.UnsupportedOperationException: Loading of values of type StringArray is currently not supported" ???
 # node_projection = {"Query": {"properties": 'phrase'}, "Article": {"properties": 'phrase'}, "Noun": {}}
@@ -284,15 +302,15 @@ if exists_result["exists"]:
     G = st.session_state["gds"].graph.get(st.session_state["graph_name"])
     G.drop()
 G, result = st.session_state["gds"].graph.project(st.session_state["graph_name"], node_projection, relationship_projection)
-st.header("project graph to memory")
-st.write(f"The projection took {result['projectMillis']} ms")
-st.write(f"Graph '{G.name()}' node count: {G.node_count()}")
-st.write(f"Graph '{G.name()}' node labels: {G.node_labels()}")
-st.write(f"Graph '{G.name()}' relationship count: {G.relationship_count()}")
-st.write(f"Graph '{G.name()}' degree distribution: {G.degree_distribution()}")
-st.write(f"Graph '{G.name()}' density: {G.density()}")
-st.write(f"Graph '{G.name()}' size in bytes: {G.size_in_bytes()}")
-st.write(f"Graph '{G.name()}' memory_usage: {G.memory_usage()}")
+# st.header("project graph to memory")
+# st.write(f"The projection took {result['projectMillis']} ms")
+# st.write(f"Graph '{G.name()}' node count: {G.node_count()}")
+# st.write(f"Graph '{G.name()}' node labels: {G.node_labels()}")
+# st.write(f"Graph '{G.name()}' relationship count: {G.relationship_count()}")
+# st.write(f"Graph '{G.name()}' degree distribution: {G.degree_distribution()}")
+# st.write(f"Graph '{G.name()}' density: {G.density()}")
+# st.write(f"Graph '{G.name()}' size in bytes: {G.size_in_bytes()}")
+# st.write(f"Graph '{G.name()}' memory_usage: {G.memory_usage()}")
 
 ##############################
 ### node similarity (JACCARD) ###
@@ -310,10 +328,10 @@ def write_nodesimilarity_jaccard():
         sourceNodeFilter="Query",
         targetNodeFilter="Article",
     )
-    st.header("node similarity (JACCARD)")
-    st.write(f"Relationships produced: {result['relationshipsWritten']}")
-    st.write(f"Nodes compared: {result['nodesCompared']}")
-    st.write(f"Mean similarity: {result['similarityDistribution']['mean']}")
+    # st.header("node similarity (JACCARD)")
+    # st.write(f"Relationships produced: {result['relationshipsWritten']}")
+    # st.write(f"Nodes compared: {result['nodesCompared']}")
+    # st.write(f"Mean similarity: {result['similarityDistribution']['mean']}")
 
 write_nodesimilarity_jaccard()
 
@@ -333,10 +351,10 @@ def write_nodesimilarity_overlap():
         sourceNodeFilter="Query",
         targetNodeFilter="Article",
     )
-    st.header("node similarity (OVERLAP)")
-    st.write(f"Relationships produced: {result['relationshipsWritten']}")
-    st.write(f"Nodes compared: {result['nodesCompared']}")
-    st.write(f"Mean similarity: {result['similarityDistribution']['mean']}")
+    # st.header("node similarity (OVERLAP)")
+    # st.write(f"Relationships produced: {result['relationshipsWritten']}")
+    # st.write(f"Nodes compared: {result['nodesCompared']}")
+    # st.write(f"Mean similarity: {result['similarityDistribution']['mean']}")
 
 write_nodesimilarity_overlap()
 
@@ -356,10 +374,10 @@ def write_nodesimilarity_cosine():
         sourceNodeFilter="Query",
         targetNodeFilter="Article",
     )
-    st.header("node similarity (COSINE)")
-    st.write(f"Relationships produced: {result['relationshipsWritten']}")
-    st.write(f"Nodes compared: {result['nodesCompared']}")
-    st.write(f"Mean similarity: {result['similarityDistribution']['mean']}")
+    # st.header("node similarity (COSINE)")
+    # st.write(f"Relationships produced: {result['relationshipsWritten']}")
+    # st.write(f"Nodes compared: {result['nodesCompared']}")
+    # st.write(f"Mean similarity: {result['similarityDistribution']['mean']}")
 
 write_nodesimilarity_cosine()
 
@@ -369,8 +387,7 @@ write_nodesimilarity_cosine()
 
 @st.cache_data
 def write_nodesimilarity_ppr():
-
-    st.header("ppr (personalized pagerank)")
+    # st.header("ppr (personalized pagerank)")
     for idx, name in enumerate(list(QUERY_DICT.keys())):
         nodeid = st.session_state["gds"].find_node_id(labels=["Query"], properties={"name": name})
         result = st.session_state["gds"].pageRank.write(
@@ -381,14 +398,16 @@ def write_nodesimilarity_ppr():
             relationshipWeightProperty='weight',
             sourceNodes=[nodeid]
         )   
-        st.write(f"Node properties written: {result['nodePropertiesWritten']}")
-        st.write(f"Mean: {result['centralityDistribution']['mean']}")
+        # st.write(f"Node properties written: {result['nodePropertiesWritten']}")
+        # st.write(f"Mean: {result['centralityDistribution']['mean']}")
 
 write_nodesimilarity_ppr()
 
 ##############################
 ### 1. node embedding ###
 ##############################
+
+progress_bar.progress(90, text="Node embedding...")
 
 @st.cache_data
 def node_embedding():
@@ -457,8 +476,8 @@ def node_embedding():
         # featureProperties=['phrase', 'salience'], # each node should have
     )
 
-    st.header("1. node embedding")
-    st.write(f"Number of embedding vectors produced: {result['nodePropertiesWritten']}")
+    # st.header("1. node embedding")
+    # st.write(f"Number of embedding vectors produced: {result['nodePropertiesWritten']}")
 
 node_embedding()
 
@@ -514,10 +533,10 @@ def kNN():
         targetNodeFilter="Article",
     )
 
-    st.header("2. kNN")
-    st.write(f"Relationships produced: {result['relationshipsWritten']}")
-    st.write(f"Nodes compared: {result['nodesCompared']}")
-    st.write(f"Mean similarity: {result['similarityDistribution']['mean']}")
+    # st.header("2. kNN")
+    # st.write(f"Relationships produced: {result['relationshipsWritten']}")
+    # st.write(f"Nodes compared: {result['nodesCompared']}")
+    # st.write(f"Mean similarity: {result['similarityDistribution']['mean']}")
 
 kNN()
 
@@ -532,8 +551,8 @@ RETURN q.name AS Query, a.name AS Article, a.url AS URL, a.grp AS Group, a.grp1 
 ORDER BY Query, Similarity DESC
 LIMIT 10
 """
-st.header("evaluate (fastrp)")
-st.write(cypher(query))
+# st.header("evaluate (fastrp)")
+# st.write(cypher(query))
 
 # node2vec
 query = """
@@ -542,8 +561,8 @@ RETURN q.name AS Query, a.name AS Article, a.url AS URL, a.grp AS Group, a.grp1 
 ORDER BY Query, Similarity DESC
 LIMIT 10
 """
-st.header("evaluate (node2vec)")
-st.write(cypher(query))
+# st.header("evaluate (node2vec)")
+# st.write(cypher(query))
 
 # hashgnn
 query = """
@@ -552,8 +571,8 @@ RETURN q.name AS Query, a.name AS Article, a.url AS URL, a.grp AS Group, a.grp1 
 ORDER BY Query, Similarity DESC
 LIMIT 10
 """
-st.header("evaluate (hashgnn)")
-st.write(cypher(query))
+# st.header("evaluate (hashgnn)")
+# st.write(cypher(query))
 
 ##############################
 ### export to csv ###
@@ -594,7 +613,7 @@ else:
     ORDER BY Similarity DESC
     LIMIT {limit}
     """
-st.code(query)    
+# st.code(query)    
 st.write(cypher(query))
 
 st.subheader("Multiple Queries")
@@ -621,7 +640,7 @@ else:
     ORDER BY Similarity DESC
     LIMIT {limit}
     """
-st.code(query)    
+# st.code(query)    
 st.write(cypher(query))
 
 st.subheader("Related Articles")
@@ -632,7 +651,7 @@ WITH DISTINCT a AS distinctArticle, n
 RETURN n.name AS Keyword, COUNT(distinctArticle) AS articleCount, COLLECT(distinctArticle.name) AS articles
 ORDER BY articleCount DESC
 """
-st.code(query)    
+# st.code(query)    
 st.write(cypher(query))
 
 st.subheader("Common Keywords")
@@ -641,5 +660,7 @@ MATCH (n:Noun)-[]-(a:Article)
 RETURN n.name AS Keyword, COUNT(a) AS articleCount, COLLECT(a.name) AS articles
 ORDER BY articleCount DESC
 """
-st.code(query)    
+# st.code(query)    
 st.write(cypher(query))
+
+progress_bar.progress(100, text="Finished")
