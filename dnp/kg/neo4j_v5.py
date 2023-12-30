@@ -9,7 +9,7 @@ import streamlit as st
 if "reboot" not in st.session_state:
    st.session_state["reboot"] = False
 if st.session_state["reboot"] == True:
-   sys.exit(0)
+   st.stop()
 
 st.title("Graph Data App")
 
