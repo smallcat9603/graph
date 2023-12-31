@@ -9,6 +9,8 @@ QUERY_DICT = {} # query dict {QUERY_NAME: QUERY_URL}
 DATA_URL = "https://raw.githubusercontent.com/smallcat9603/graph/main/dnp/kg/data/wikidata_footballplayer_100.csv"
 QUERY_DICT["Thierry Henry"] = "https://en.wikipedia.org/wiki/Thierry_Henry"
 
+FILE_NAME = __file__.split("/")[-1].split(".")[0].split("_")[-1]
+
 st.header("data url")
 st.write(DATA_URL)
 st.header("query dict")
@@ -63,7 +65,7 @@ cypher(query)
 
 if DATA_LOAD == "Offline":
     query = f"""
-    LOAD CSV WITH HEADERS FROM "https://raw.githubusercontent.com/smallcat9603/graph/main/dnp/kg/data/{__file__.split("/")[-1].split(".")[0].split("_")[-1]}.csv" AS row
+    LOAD CSV WITH HEADERS FROM "https://raw.githubusercontent.com/smallcat9603/graph/main/dnp/kg/data/{FILE_NAME}.csv" AS row
     WITH row
     WHERE row._labels = ":Article"
     MATCH (a:Article {{name: row.name}}) WHERE a.processed IS NULL
@@ -137,7 +139,7 @@ for QUERY_NAME, QUERY_URL in QUERY_DICT.items():
 # set phrase and salience properties (Query)
 if DATA_LOAD == "Offline":
     query = f"""
-    LOAD CSV WITH HEADERS FROM "https://raw.githubusercontent.com/smallcat9603/graph/main/dnp/kg/data/{__file__.split("/")[-1].split(".")[0].split("_")[-1]}.csv" AS row
+    LOAD CSV WITH HEADERS FROM "https://raw.githubusercontent.com/smallcat9603/graph/main/dnp/kg/data/{FILE_NAME}.csv" AS row
     WITH row
     WHERE row._labels = ":Query"
     MATCH (q:Query {{name: row.name}})
@@ -524,7 +526,7 @@ st.write(cypher(query))
 ##############################
 
 # query = f"""
-# CALL apoc.export.csv.all("{__file__.split("/")[-1].split(".")[0].split("_")[-1]}.csv", {{}})
+# CALL apoc.export.csv.all("{FILE_NAME}.csv", {{}})
 # """
 # st.header("export to csv")
 # st.write(cypher(query))
