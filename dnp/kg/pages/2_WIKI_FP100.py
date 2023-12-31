@@ -30,9 +30,14 @@ cypher(query)
 ### Create Article-[Noun]-Article Graph ###
 ##############################
 
+st.header("Progress")
+progress_bar = st.progress(0, text="Initialize...")
+
 ##############################
 ### create url nodes (article, person, ...) ###
 ##############################
+
+progress_bar.progress(10, text="Create url nodes...")
 
 query = f"""
 CALL apoc.periodic.iterate(
@@ -62,6 +67,8 @@ cypher(query)
 ##############################
 ### set phrase and salience properties ###
 ##############################
+
+progress_bar.progress(20, text="Set phrase and salience properties...")
 
 if DATA_LOAD == "Offline":
     query = f"""
@@ -101,6 +108,8 @@ st.write(cypher(query))
 ### create noun-url relationships ###
 ##############################
 
+progress_bar.progress(30, text="Create noun-url relationships...")
+
 query = f"""
 MATCH (a:Article)
 WHERE a.processed IS NOT NULL
@@ -117,6 +126,8 @@ cypher(query)
 ##############################
 ### query ###
 ##############################
+
+progress_bar.progress(40, text="Create query nodes...")
 
 for QUERY_NAME, QUERY_URL in QUERY_DICT.items():
     query = f"""
@@ -135,6 +146,8 @@ for QUERY_NAME, QUERY_URL in QUERY_DICT.items():
     RETURN q.title, q.body
     """
     cypher(query)
+
+progress_bar.progress(50, text="Set phrase and salience properties (Query)...")
     
 # set phrase and salience properties (Query)
 if DATA_LOAD == "Offline":
@@ -162,6 +175,8 @@ elif DATA_LOAD == "Online":
     SET node.salience = coalesce(node.salience, []) + entity['salience']
     """
 cypher(query)
+
+progress_bar.progress(60, text="Create noun-article relationships (Query)...")
 
 # create noun-article relationships (Query)
 query = f"""
@@ -193,6 +208,8 @@ st.write(cypher(query))
 ##############################
 ### create article-article relationships ###
 ##############################
+
+progress_bar.progress(70, text="Create article-article relationships...")
 
 query = f"""
 MATCH (a1:Article), (a2:Article)
@@ -229,6 +246,8 @@ st.write(cypher(query))
 ##############################
 ### project graph to memory ###
 ##############################
+
+progress_bar.progress(80, text="Project graph to memory...")
 
 node_projection = ["Query", "Article", "Noun"]
 # # why raising error "java.lang.UnsupportedOperationException: Loading of values of type StringArray is currently not supported" ???
@@ -355,6 +374,8 @@ write_nodesimilarity_ppr()
 ##############################
 ### 1. node embedding ###
 ##############################
+
+progress_bar.progress(90, text="Node embedding...")
 
 @st.cache_data
 def node_embedding():
@@ -582,3 +603,5 @@ ORDER BY articleCount DESC
 """
 st.code(query)    
 st.write(cypher(query))
+
+progress_bar.progress(100, text="Finished")
