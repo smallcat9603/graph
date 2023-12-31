@@ -4,6 +4,7 @@ st.header("parameters")
 nphrase = st.slider("Number of nouns extracted from each article", 1, 100, 50)
 DATA_TYPE = st.radio("Data type", ["URL"])
 DATA_LOAD = st.radio("Data load", ["Offline", "Online"])
+OUTPUT = st.radio("OUTPUT", ["Simple", "Verbose"])
 DATA_URL = "" # input data
 QUERY_DICT = {} # query dict {QUERY_NAME: QUERY_URL}
 DATA_URL = "https://raw.githubusercontent.com/smallcat9603/graph/main/dnp/kg/data/wikidata_persons_100.csv"  
@@ -101,8 +102,11 @@ elif DATA_LOAD == "Online":
     YIELD batches, total, timeTaken, committedOperations
     RETURN batches, total, timeTaken, committedOperations
     """
-st.header("set phrase and salience properties")
-st.write(cypher(query))
+
+if OUTPUT == "Simple":
+    cypher(query)
+elif OUTPUT == "Verbose":
+    st.write(cypher(query))
 
 ##############################
 ### create noun-url relationships ###
@@ -202,8 +206,10 @@ RETURN q.name AS Query, a.name AS Article, a.url AS URL, a.grp AS Group, a.grp1 
 ORDER BY Query, Similarity DESC
 LIMIT 10
 """
-st.header("evaluate (naive by rank)")
-st.write(cypher(query))
+
+if OUTPUT == "Verbose":
+    st.header("evaluate (naive by rank)")
+    st.write(cypher(query))
 
 ##############################
 ### create article-article relationships ###
@@ -240,8 +246,10 @@ RETURN q.name AS Query, a.name AS Article, a.url AS URL, a.grp AS Group, a.grp1 
 ORDER BY Query, Similarity DESC
 LIMIT 10
 """
-st.header("evaluate (still naive by salience)")
-st.write(cypher(query))
+
+if OUTPUT == "Verbose":
+    st.header("evaluate (still naive by salience)")
+    st.write(cypher(query))
 
 ##############################
 ### project graph to memory ###
@@ -559,7 +567,7 @@ st.button("Save graph data", on_click=save_graph_data)
 ### interaction ###
 ##############################
 
-st.header("UI Interaction (test)")
+st.header("UI Interaction")
 
 st.subheader("Node Similarity")
 col1, col2, col3 = st.columns(3)
@@ -607,4 +615,4 @@ ORDER BY articleCount DESC
 st.code(query)    
 st.write(cypher(query))
 
-progress_bar.progress(100, text="Finished")
+progress_bar.progress(100, text="Finished. Graph data can be queried.")

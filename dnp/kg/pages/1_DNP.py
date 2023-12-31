@@ -6,6 +6,7 @@ st.header("Parameters")
 nphrase = st.slider("Number of nouns extracted from each article", 1, 100, 50)
 DATA_TYPE = st.radio("Data type", ["TXT", "URL"])
 DATA_LOAD = st.radio("Data load", ["Offline", "Online"])
+OUTPUT = st.radio("OUTPUT", ["Simple", "Verbose"])
 DATA_URL = "" # input data
 QUERY_DICT = {} # query dict {QUERY_NAME: QUERY_URL}
 if DATA_TYPE == "TXT":
@@ -126,7 +127,11 @@ elif DATA_LOAD == "Online":
     YIELD batches, total, timeTaken, committedOperations
     RETURN batches, total, timeTaken, committedOperations
     """
-st.write(cypher(query))
+
+if OUTPUT == "Simple":
+    cypher(query)
+elif OUTPUT == "Verbose":
+    st.write(cypher(query))
 
 ##############################
 ### create noun-url relationships ###
@@ -237,8 +242,10 @@ RETURN q.name AS Query, a.name AS Article, a.url AS URL, a.grp AS Group, a.grp1 
 ORDER BY Query, Similarity DESC
 LIMIT 10
 """
-st.header("evaluate (naive by rank)")
-st.write(cypher(query))
+
+if OUTPUT == "Verbose":
+    st.header("evaluate (naive by rank)")
+    st.write(cypher(query))
 
 ##############################
 ### create article-article relationships ###
@@ -275,8 +282,10 @@ RETURN q.name AS Query, a.name AS Article, a.url AS URL, a.grp AS Group, a.grp1 
 ORDER BY Query, Similarity DESC
 LIMIT 10
 """
-st.header("evaluate (still naive by salience)")
-st.write(cypher(query))
+
+if OUTPUT == "Verbose":
+    st.header("evaluate (still naive by salience)")
+    st.write(cypher(query))
 
 ##############################
 ### project graph to memory ###
@@ -605,7 +614,7 @@ st.button("Save graph data", on_click=save_graph_data)
 ### interaction ###
 ##############################
 
-st.header("UI Interaction (test)")
+st.header("UI Interaction")
 
 tab1, tab2, tab3, tab4 = st.tabs(["Node Similarity", "Multiple Queries", "Related Articles", "Common Keywords"])
 
@@ -682,4 +691,4 @@ with tab4:
     st.code(query)    
     st.write(cypher(query))
 
-progress_bar.progress(100, text="Finished")
+progress_bar.progress(100, text="Finished. Graph data can be queried.")
