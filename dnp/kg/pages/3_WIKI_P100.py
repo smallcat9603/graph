@@ -546,11 +546,14 @@ st.write(cypher(query))
 ### export to csv ###
 ##############################
 
-# query = f"""
-# CALL apoc.export.csv.all("{FILE_NAME}.csv", {{}})
-# """
-# st.header("export to csv")
-# st.write(cypher(query))
+def save_graph_data():
+    query = f"""
+    CALL apoc.export.csv.all("{FILE_NAME}.csv", {{}})
+    """
+    # st.header("export to csv")
+    st.write(cypher(query))
+
+st.button("Save graph data", on_click=save_graph_data) 
 
 ##############################
 ### interaction ###
