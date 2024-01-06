@@ -4,6 +4,9 @@ from langchain.embeddings import OpenAIEmbeddings
 from langchain.graphs import Neo4jGraph
 from langchain.agents import AgentType, initialize_agent
 from langchain.chains.conversation.memory import ConversationBufferWindowMemory
+from langchain.vectorstores.neo4j_vector import Neo4jVector
+from langchain.chains import RetrievalQA
+from langchain.tools import Tool
 
 llm = ChatOpenAI(
     openai_api_key=st.secrets["OPENAI_API_KEY"],
@@ -20,18 +23,63 @@ graph = Neo4jGraph(
     password=st.secrets["NEO4J_PASSWORD"],
 )
 
-tools = []
+neo4jvector = Neo4jVector.from_existing_index(
+    embeddings,                              # (1)
+    url=st.secrets["NEO4J_URI"],             # (2)
+    username=st.secrets["NEO4J_USERNAME"],   # (3)
+    password=st.secrets["NEO4J_PASSWORD"],   # (4)
+    index_name="moviePlots",                 # (5)
+    node_label="Movie",                      # (6)
+    text_node_property="plot",               # (7)
+    embedding_node_property="plotEmbedding", # (8)
+    retrieval_query="""
+    RETURN
+    node.plot AS text,
+    score,
+    {
+        title: node.title,
+        directors: [ (person)-[:DIRECTED]->(node) | person.name ],
+        actors: [ (person)-[r:ACTED_IN]->(node) | [person.name, r.role] ],
+        tmdbId: node.tmdbId,
+        source: 'https://www.themoviedb.org/movie/'+ node.tmdbId
+    } AS metadata
+    """
+)
+
+retriever = neo4jvector.as_retriever()
+
+kg_qa = RetrievalQA.from_chain_type(
+    llm,                  # (1)
+    chain_type="stuff",   # (2)
+    retriever=retriever,  # (3)
+)
+
+tools = [
+    Tool.from_function(
+        name="Vector Search Index",  # (1)
+        description="Provides information about movie plots using Vector Search", # (2)
+        func = kg_qa, # (3)
+    )
+]
 memory = ConversationBufferWindowMemory(
     memory_key='chat_history',
     k=5,
     return_messages=True,
 )
+SYSTEM_MESSAGE = """
+You are a movie expert providing information about movies.
+Be as helpful as possible and return as much information as possible.
+Do not answer any questions that do not relate to movies, actors or directors.
+
+Do not answer any questions using your pre-trained knowledge, only use the information provided in the context.
+"""
 agent = initialize_agent(
     tools,
     llm,
     memory=memory,
     verbose=True,
     agent=AgentType.CHAT_CONVERSATIONAL_REACT_DESCRIPTION,
+    agent_kwargs={"system_message": SYSTEM_MESSAGE}
 )
 
 def generate_response(prompt):
