@@ -7,6 +7,7 @@ from langchain.chains.conversation.memory import ConversationBufferWindowMemory
 from langchain.vectorstores.neo4j_vector import Neo4jVector
 from langchain.chains import RetrievalQA
 from langchain.tools import Tool
+from langchain.chains import GraphCypherQAChain
 
 llm = ChatOpenAI(
     openai_api_key=st.secrets["OPENAI_API_KEY"],
@@ -54,12 +55,22 @@ kg_qa = RetrievalQA.from_chain_type(
     retriever=retriever,  # (3)
 )
 
+cypher_qa = GraphCypherQAChain.from_llm(
+    llm,          # (1)
+    graph=graph,  # (2)
+)
+
 tools = [
     Tool.from_function(
         name="Vector Search Index",  # (1)
         description="Provides information about movie plots using Vector Search", # (2)
         func = kg_qa, # (3)
-    )
+    ),
+    Tool.from_function(
+        name="Graph Cypher QA Chain",  # (1)
+        description="Provides information about Movies including their Actors, Directors and User reviews", # (2)
+        func = cypher_qa, # (3)
+    ),
 ]
 memory = ConversationBufferWindowMemory(
     memory_key='chat_history',
@@ -142,3 +153,4 @@ if prompt := st.chat_input("What is up?"):
 
     # Generate a response
     handle_submit(prompt)
+
