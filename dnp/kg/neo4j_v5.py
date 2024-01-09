@@ -15,14 +15,14 @@ st.title("Graph Data App")
 filename = __file__.split("/")[-1]
 if filename.startswith("neo4j"):
     # desktop
-    host = "bolt://localhost:7687"
-    user = "neo4j"
-    password= "j4oenj4oen"
+    host = st.secrets["NEO4J_LOCAL"]
+    user = st.secrets["NEO4J_LOCAL_USER"]
+    password = st.secrets["NEO4J_LOCAL_PASSWORD"]
 elif filename.startswith("app"):
     # sandbox
-    host = "bolt://3.228.13.111:7687"
-    user = "neo4j"
-    password= "centers-operators-tips"
+    host = st.secrets["NEO4J_SANDBOX"]
+    user = st.secrets["NEO4J_SANDBOX_USER"]
+    password = st.secrets["NEO4J_SANDBOX_PASSWORD"]
 st.session_state["gds"] = GraphDataScience(host, auth=(user, password))
 
 st.header("gds version")
