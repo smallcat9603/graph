@@ -26,14 +26,14 @@ graph = Neo4jGraph(
 )
 
 neo4jvector = Neo4jVector.from_existing_index(
-    embeddings,                              # (1)
-    url=st.secrets["NEO4J_URI"],             # (2)
-    username=st.secrets["NEO4J_USERNAME"],   # (3)
-    password=st.secrets["NEO4J_PASSWORD"],   # (4)
-    index_name="moviePlots",                 # (5)
-    node_label="Movie",                      # (6)
-    text_node_property="plot",               # (7)
-    embedding_node_property="plotEmbedding", # (8)
+    embeddings,                              
+    url=st.secrets["NEO4J_URI"],             
+    username=st.secrets["NEO4J_USERNAME"],   
+    password=st.secrets["NEO4J_PASSWORD"],   
+    index_name="moviePlots",                 
+    node_label="Movie",                      
+    text_node_property="plot",               
+    embedding_node_property="plotEmbedding", 
     retrieval_query="""
     RETURN
     node.plot AS text,
@@ -51,9 +51,9 @@ neo4jvector = Neo4jVector.from_existing_index(
 retriever = neo4jvector.as_retriever()
 
 kg_qa = RetrievalQA.from_chain_type(
-    llm,                  # (1)
-    chain_type="stuff",   # (2)
-    retriever=retriever,  # (3)
+    llm,                  
+    chain_type="stuff",   
+    retriever=retriever,  
 )
 
 CYPHER_GENERATION_TEMPLATE = """
@@ -100,22 +100,22 @@ Question:
 cypher_prompt = PromptTemplate.from_template(CYPHER_GENERATION_TEMPLATE)
 
 cypher_qa = GraphCypherQAChain.from_llm(
-    llm,          # (1)
-    graph=graph,  # (2)
+    llm,          
+    graph=graph,  
     verbose=True,
     cypher_prompt=cypher_prompt,
 )
 
 tools = [
     Tool.from_function(
-        name="Vector Search Index",  # (1)
-        description="Provides information about movie plots using Vector Search", # (2)
-        func = kg_qa, # (3)
+        name="Vector Search Index",  
+        description="Provides information about movie plots using Vector Search", 
+        func = kg_qa, 
     ),
     Tool.from_function(
-        name="Graph Cypher QA Chain",  # (1)
-        description="Provides information about Movies including their Actors, Directors and User reviews", # (2)
-        func = cypher_qa, # (3)
+        name="Graph Cypher QA Chain",  
+        description="Provides information about Movies including their Actors, Directors and User reviews", 
+        func = cypher_qa, 
     ),
 ]
 memory = ConversationBufferWindowMemory(
