@@ -90,7 +90,7 @@ elif DATA_LOAD == "Online":
     RETURN a",
     "CALL apoc.nlp.gcp.entities.stream([item in $_batch | item.a], {{
         nodeProperty: 'body',
-        key: '{st.session_state["KEY"]}'
+        key: '{st.secrets["GCP_API_KEY"]}'
     }})
     YIELD node, value
     SET node.processed = true
@@ -169,7 +169,7 @@ elif DATA_LOAD == "Online":
     MATCH (q:Query)
     CALL apoc.nlp.gcp.entities.stream(q, {{
     nodeProperty: 'body',
-    key: '{st.session_state["KEY"]}'
+    key: '{st.secrets["GCP_API_KEY"]}'
     }})
     YIELD node, value
     SET node.processed = true

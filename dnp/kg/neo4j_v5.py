@@ -53,9 +53,3 @@ def free_up_memory():
     st.session_state["reboot"] = True
 
 st.button("Free up memory", type="primary", on_click=free_up_memory) 
-
-##############################
-### parameters ###
-##############################
-
-st.session_state["KEY"] = "AIzaSyAPQNUpCCFrsJhX2A-CgvOG4fDWlxuA8ec" # api key
