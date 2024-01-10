@@ -15,45 +15,51 @@ llm = ChatOpenAI(
     model=st.secrets["OPENAI_MODEL"],
 )
 
-embeddings = OpenAIEmbeddings(
-    openai_api_key=st.secrets["OPENAI_API_KEY"]
-)
+# embeddings = OpenAIEmbeddings(
+#     openai_api_key=st.secrets["OPENAI_API_KEY"]
+# )
 
-neo4jvector = Neo4jVector.from_existing_index(
-    embeddings,                              
-    url=st.secrets["NEO4J_URI"],             
-    username=st.secrets["NEO4J_USERNAME"],   
-    password=st.secrets["NEO4J_PASSWORD"],   
-    index_name="moviePlots",                 
-    node_label="Movie",                      
-    text_node_property="plot",               
-    embedding_node_property="plotEmbedding", 
-    retrieval_query="""
-    RETURN
-    node.plot AS text,
-    score,
-    {
-        title: node.title,
-        directors: [ (person)-[:DIRECTED]->(node) | person.name ],
-        actors: [ (person)-[r:ACTED_IN]->(node) | [person.name, r.role] ],
-        tmdbId: node.tmdbId,
-        source: 'https://www.themoviedb.org/movie/'+ node.tmdbId
-    } AS metadata
-    """
-)
+# neo4jvector = Neo4jVector.from_existing_index(
+#     embeddings,                              
+#     url=st.secrets["NEO4J_URI"],             
+#     username=st.secrets["NEO4J_USERNAME"],   
+#     password=st.secrets["NEO4J_PASSWORD"],   
+#     index_name="moviePlots",                 
+#     node_label="Movie",                      
+#     text_node_property="plot",               
+#     embedding_node_property="plotEmbedding", 
+#     retrieval_query="""
+#     RETURN
+#     node.plot AS text,
+#     score,
+#     {
+#         title: node.title,
+#         directors: [ (person)-[:DIRECTED]->(node) | person.name ],
+#         actors: [ (person)-[r:ACTED_IN]->(node) | [person.name, r.role] ],
+#         tmdbId: node.tmdbId,
+#         source: 'https://www.themoviedb.org/movie/'+ node.tmdbId
+#     } AS metadata
+#     """
+# )
 
-retriever = neo4jvector.as_retriever()
+# retriever = neo4jvector.as_retriever()
 
-kg_qa = RetrievalQA.from_chain_type(
-    llm,                  
-    chain_type="stuff",   
-    retriever=retriever,  
-)
+# kg_qa = RetrievalQA.from_chain_type(
+#     llm,                  
+#     chain_type="stuff",   
+#     retriever=retriever,  
+# )
 
+url=st.secrets["NEO4J_LOCAL"]
+username=st.secrets["NEO4J_LOCAL_USER"]
+password=st.secrets["NEO4J_LOCAL_PASSWORD"]
 graph = Neo4jGraph(
-    url=st.secrets["NEO4J_URI"],
-    username=st.secrets["NEO4J_USERNAME"],
-    password=st.secrets["NEO4J_PASSWORD"],
+    # url=st.secrets["NEO4J_URI"],
+    # username=st.secrets["NEO4J_USERNAME"],
+    # password=st.secrets["NEO4J_PASSWORD"],
+    url=url,
+    username=username,
+    password=password,
 )
 
 CYPHER_GENERATION_TEMPLATE = """
@@ -97,6 +103,29 @@ Question:
 {question}
 """
 
+CYPHER_GENERATION_TEMPLATE = """
+You are an expert Neo4j Developer translating user questions into Cypher to answer questions about node similarity and provide recommendations.
+Convert the user's question based on the schema.
+
+Use only the provided relationship types and properties in the schema.
+Do not use any other relationship types or properties that are not provided.
+
+Example Cypher Statements:
+
+1. How to find the most similar node to Query node "C-1":
+```
+MATCH (q:Query)-[r:SIMILAR_JACCARD]-(a:Article) WHERE q.name = "C-1"
+RETURN q.name AS Query, a.name AS Article, a.url AS URL, r.score AS Similarity
+ORDER BY Similarity DESC
+```
+
+Schema:
+{schema}
+
+Question:
+{question}
+"""
+
 cypher_prompt = PromptTemplate.from_template(CYPHER_GENERATION_TEMPLATE)
 
 cypher_qa = GraphCypherQAChain.from_llm(
@@ -107,15 +136,20 @@ cypher_qa = GraphCypherQAChain.from_llm(
 )
 
 tools = [
+    # Tool.from_function(
+    #     name="Vector Search Index",  
+    #     description="Provides information about movie plots using Vector Search", 
+    #     func = kg_qa, 
+    # ),
+    # Tool.from_function(
+    #     name="Graph Cypher QA Chain",  
+    #     description="Provides information about Movies including their Actors, Directors and User reviews", 
+    #     func = cypher_qa, 
+    # ),
     Tool.from_function(
-        name="Vector Search Index",  
-        description="Provides information about movie plots using Vector Search", 
-        func = kg_qa, 
-    ),
-    Tool.from_function(
-        name="Graph Cypher QA Chain",  
-        description="Provides information about Movies including their Actors, Directors and User reviews", 
-        func = cypher_qa, 
+    name="Graph Cypher QA Chain",  
+    description="Provides information", 
+    func = cypher_qa, 
     ),
 ]
 memory = ConversationBufferWindowMemory(
@@ -127,6 +161,12 @@ SYSTEM_MESSAGE = """
 You are a movie expert providing information about movies.
 Be as helpful as possible and return as much information as possible.
 Do not answer any questions that do not relate to movies, actors or directors.
+
+Do not answer any questions using your pre-trained knowledge, only use the information provided in the context.
+"""
+SYSTEM_MESSAGE = """
+You are a expert providing information about node similariy.
+Be as helpful as possible and return as much information as possible.
 
 Do not answer any questions using your pre-trained knowledge, only use the information provided in the context.
 """
