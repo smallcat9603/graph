@@ -19,12 +19,6 @@ embeddings = OpenAIEmbeddings(
     openai_api_key=st.secrets["OPENAI_API_KEY"]
 )
 
-graph = Neo4jGraph(
-    url=st.secrets["NEO4J_URI"],
-    username=st.secrets["NEO4J_USERNAME"],
-    password=st.secrets["NEO4J_PASSWORD"],
-)
-
 neo4jvector = Neo4jVector.from_existing_index(
     embeddings,                              
     url=st.secrets["NEO4J_URI"],             
@@ -54,6 +48,12 @@ kg_qa = RetrievalQA.from_chain_type(
     llm,                  
     chain_type="stuff",   
     retriever=retriever,  
+)
+
+graph = Neo4jGraph(
+    url=st.secrets["NEO4J_URI"],
+    username=st.secrets["NEO4J_USERNAME"],
+    password=st.secrets["NEO4J_PASSWORD"],
 )
 
 CYPHER_GENERATION_TEMPLATE = """
