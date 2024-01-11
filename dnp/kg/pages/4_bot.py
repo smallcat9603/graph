@@ -10,6 +10,11 @@ from langchain.tools import Tool
 from langchain.chains import GraphCypherQAChain
 from langchain.prompts.prompt import PromptTemplate
 
+if 'data' not in st.session_state:
+   st.title("No Graph Data")
+else:
+   st.title(f"{st.session_state['data']} Robot")
+
 llm = ChatOpenAI(
     openai_api_key=st.secrets["OPENAI_API_KEY"],
     model=st.secrets["OPENAI_MODEL"],

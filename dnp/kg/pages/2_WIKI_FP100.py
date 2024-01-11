@@ -616,3 +616,5 @@ st.code(query)
 st.write(cypher(query))
 
 progress_bar.progress(100, text="Finished. Graph data can be queried.")
+
+st.session_state["data"] = "WIKI_FP100"
