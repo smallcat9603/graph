@@ -670,7 +670,8 @@ with tab2:
         LIMIT {limit}
         """
     st.code(query)    
-    st.write(cypher(query))
+    result = cypher(query)
+    st.write(result)
 
 with tab3:
     noun = st.text_input("Keyword", "環境")
@@ -681,7 +682,8 @@ with tab3:
     ORDER BY articleCount DESC
     """
     st.code(query)    
-    st.write(cypher(query))
+    result = cypher(query)
+    st.write(result)
 
 with tab4:
     query = f"""
@@ -690,7 +692,8 @@ with tab4:
     ORDER BY articleCount DESC
     """
     st.code(query)    
-    st.write(cypher(query))
+    result = cypher(query)
+    st.write(result)
 
 progress_bar.progress(100, text="Finished. Graph data can be queried.")
 

@@ -593,7 +593,8 @@ else:
     LIMIT {limit}
     """
 st.code(query)    
-st.write(cypher(query))
+result = cypher(query)
+st.write(result)
 
 st.subheader("Related Articles")
 noun = st.text_input("Keyword", "politician")
@@ -604,7 +605,8 @@ RETURN n.name AS Keyword, COUNT(distinctArticle) AS articleCount, COLLECT(distin
 ORDER BY articleCount DESC
 """
 st.code(query)    
-st.write(cypher(query))
+result = cypher(query)
+st.write(result)
 
 st.subheader("Common Keywords")
 query = f"""
@@ -613,7 +615,8 @@ RETURN n.name AS Keyword, COUNT(a) AS articleCount, COLLECT(a.name) AS articles
 ORDER BY articleCount DESC
 """
 st.code(query)    
-st.write(cypher(query))
+result = cypher(query)
+st.write(result)
 
 progress_bar.progress(100, text="Finished. Graph data can be queried.")
 
