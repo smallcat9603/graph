@@ -630,8 +630,8 @@ with tab1:
     if similarity_method == "PPR":
         query = f"""
         MATCH (q:Query)-[r:CORRELATES]-(a:Article) WHERE q.name = "{query_node}"
-        RETURN q.name AS Query, a.name AS Article, a.url AS URL, a.pr{str(int(query_node.split("-")[-1])-1)} AS ppr
-        ORDER BY ppr DESC
+        RETURN q.name AS Query, a.name AS Article, a.url AS URL, a.pr{str(int(query_node.split("-")[-1])-1)} AS Similarity
+        ORDER BY Similarity DESC
         LIMIT {limit}
         """ 
     else:
@@ -642,7 +642,8 @@ with tab1:
         LIMIT {limit}
         """
     st.code(query)    
-    st.write(cypher(query))
+    result = cypher(query)
+    st.write(result)
 
 with tab2:
     col1, col2, col3 = st.columns(3)
@@ -657,8 +658,8 @@ with tab2:
     if similarity_method == "PPR":
         query = f"""
         MATCH (q:Query)-[r:CORRELATES]-(a:Article) WHERE q.name IN {query_nodes}
-        RETURN COLLECT(q.name) AS Query, a.name AS Article, REDUCE(s = 0, pr IN {ppr_attr} | s + a[pr]) AS ppr
-        ORDER BY ppr DESC
+        RETURN COLLECT(q.name) AS Query, a.name AS Article, REDUCE(s = 0, pr IN {ppr_attr} | s + a[pr]) AS Similarity
+        ORDER BY Similarity DESC
         LIMIT {limit}
         """ 
     else:
