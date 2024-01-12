@@ -15,8 +15,14 @@ if 'data' not in st.session_state:
 else:
    st.title(f"{st.session_state['data']} Robot")
 
+form = st.form('my_form')
+openai_api_key = form.text_input('OpenAI API Key', type='password')
+submitted = form.form_submit_button('Submit')
+if submitted and not openai_api_key.startswith('sk-'):
+    form.warning('Please enter your OpenAI API key!', icon='⚠')
+
 llm = ChatOpenAI(
-    openai_api_key=st.secrets["OPENAI_API_KEY"],
+    openai_api_key=openai_api_key,
     model=st.secrets["OPENAI_MODEL"],
 )
 
@@ -163,7 +169,7 @@ def write_message(role, content, save = True):
 # Set up Session State
 if "messages" not in st.session_state:
     st.session_state.messages = [
-        {"role": "assistant", "content": "Hi, I'm the GraphAcademy Chatbot!  How can I help you?"},
+        {"role": "assistant", "content": "Hi, I'm the Chatbot!  How can I help you?"},
     ]
 
 # Submit handler
