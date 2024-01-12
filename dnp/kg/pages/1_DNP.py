@@ -1,12 +1,13 @@
 import os
 import re
 import streamlit as st
+import pandas as pd
 
 st.header("Parameters")
 nphrase = st.slider("Number of nouns extracted from each article", 1, 100, 50)
 DATA_TYPE = st.radio("Data type", ["TXT", "URL"])
 DATA_LOAD = st.radio("Data load", ["Offline", "Online"])
-OUTPUT = st.radio("OUTPUT", ["Simple", "Verbose"])
+OUTPUT = st.radio("Output", ["Simple", "Verbose"])
 DATA_URL = "" # input data
 QUERY_DICT = {} # query dict {QUERY_NAME: QUERY_URL}
 if DATA_TYPE == "TXT":
@@ -641,9 +642,19 @@ with tab1:
         ORDER BY Similarity DESC
         LIMIT {limit}
         """
-    st.code(query)    
+    if OUTPUT == "Verbose":
+        st.code(query)    
     result = cypher(query)
-    st.write(result)
+    tab01, tab02 = st.tabs(["Chart", "Table"])
+    with tab01:
+        df = pd.DataFrame(
+            data=list(result["Similarity"]),
+            columns=["Similarity Score"],
+            index=result["Article"],
+        )
+        st.bar_chart(df)
+    with tab02:
+        st.write(result)
 
 with tab2:
     col1, col2, col3 = st.columns(3)
@@ -669,9 +680,19 @@ with tab2:
         ORDER BY Similarity DESC
         LIMIT {limit}
         """
-    st.code(query)    
+    if OUTPUT == "Verbose":
+        st.code(query)    
     result = cypher(query)
-    st.write(result)
+    tab01, tab02 = st.tabs(["Chart", "Table"])
+    with tab01:
+        df = pd.DataFrame(
+            data=list(result["Similarity"]),
+            columns=["Similarity Score"],
+            index=result["Article"],
+        )
+        st.bar_chart(df)
+    with tab02:
+        st.write(result)
 
 with tab3:
     noun = st.text_input("Keyword", "環境")
@@ -681,7 +702,8 @@ with tab3:
     RETURN n.name AS Keyword, COUNT(distinctArticle) AS articleCount, COLLECT(distinctArticle.name) AS articles
     ORDER BY articleCount DESC
     """
-    st.code(query)    
+    if OUTPUT == "Verbose":
+        st.code(query)    
     result = cypher(query)
     st.write(result)
 
@@ -691,7 +713,8 @@ with tab4:
     RETURN n.name AS Keyword, COUNT(a) AS articleCount, COLLECT(a.name) AS articles
     ORDER BY articleCount DESC
     """
-    st.code(query)    
+    if OUTPUT == "Verbose":
+        st.code(query)    
     result = cypher(query)
     st.write(result)
 

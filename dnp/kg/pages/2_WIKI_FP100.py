@@ -1,10 +1,11 @@
 import streamlit as st
+import pandas as pd
 
 st.header("parameters")
 nphrase = st.slider("Number of nouns extracted from each article", 1, 100, 50)
 DATA_TYPE = st.radio("Data type", ["URL"])
 DATA_LOAD = st.radio("Data load", ["Offline", "Online"])
-OUTPUT = st.radio("OUTPUT", ["Simple", "Verbose"])
+OUTPUT = st.radio("Output", ["Simple", "Verbose"])
 DATA_URL = "" # input data
 QUERY_DICT = {} # query dict {QUERY_NAME: QUERY_URL}
 DATA_URL = "https://raw.githubusercontent.com/smallcat9603/graph/main/dnp/kg/data/wikidata_footballplayer_100.csv"
@@ -594,7 +595,16 @@ else:
     """
 st.code(query)    
 result = cypher(query)
-st.write(result)
+tab01, tab02 = st.tabs(["Chart", "Table"])
+with tab01:
+    df = pd.DataFrame(
+        data=list(result["Similarity"]),
+        columns=["Similarity Score"],
+        index=result["Article"],
+    )
+    st.bar_chart(df)
+with tab02:
+    st.write(result)
 
 st.subheader("Related Articles")
 noun = st.text_input("Keyword", "football")
