@@ -351,6 +351,7 @@ def write_nodesimilarity_jaccard():
         relationshipWeightProperty="weight",
         sourceNodeFilter="Query",
         targetNodeFilter="Article",
+        topK=100,
     )
     # st.header("node similarity (JACCARD)")
     # st.write(f"Relationships produced: {result['relationshipsWritten']}")
@@ -374,6 +375,7 @@ def write_nodesimilarity_overlap():
         relationshipWeightProperty="weight",
         sourceNodeFilter="Query",
         targetNodeFilter="Article",
+        topK=100,
     )
     # st.header("node similarity (OVERLAP)")
     # st.write(f"Relationships produced: {result['relationshipsWritten']}")
@@ -397,6 +399,7 @@ def write_nodesimilarity_cosine():
         relationshipWeightProperty="weight",
         sourceNodeFilter="Query",
         targetNodeFilter="Article",
+        topK=100,
     )
     # st.header("node similarity (COSINE)")
     # st.write(f"Relationships produced: {result['relationshipsWritten']}")
@@ -626,7 +629,7 @@ with tab1:
     with col2:
         similarity_method = st.selectbox("Similarity method", ("JACCARD", "OVERLAP", "COSINE", "PPR"))
     with col3:
-        limit = st.selectbox("Limit", ("5", "10", "20"))
+        limit = st.selectbox("Limit", ("5", "10", "15", "20"))
     st.write("The top-" + limit + " similar nodes for query " + query_node + " are ranked as follows (" + similarity_method + ")")
     if similarity_method == "PPR":
         query = f"""
@@ -663,7 +666,7 @@ with tab2:
     with col2:
         similarity_method = st.selectbox("Similarity method", ("JACCARD", "OVERLAP", "COSINE", "PPR"), key="sm")
     with col3:
-        limit = st.selectbox("Limit", ("5", "10", "20"), key="lim")
+        limit = st.selectbox("Limit", ("5", "10", "15", "20"), key="lim")
     st.write("The top-" + limit + " similar nodes for queries " + ', '.join(query_nodes) + " are ranked as follows (" + similarity_method + ")")
     ppr_attr = ["pr" + str(int(item.replace("C-", ""))-1) for item in query_nodes]
     if similarity_method == "PPR":
