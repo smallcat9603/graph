@@ -5,9 +5,9 @@ import pandas as pd
 
 st.header("Parameters")
 nphrase = st.slider("Number of nouns extracted from each article", 1, 100, 50)
-DATA_TYPE = st.radio("Data type", ["TXT", "URL"], horizontal=True)
-DATA_LOAD = st.radio("Data load", ["Offline", "Online"], horizontal=True)
-OUTPUT = st.radio("Output", ["Simple", "Verbose"], horizontal=True)
+DATA_TYPE = st.radio("Data type", ["TXT", "URL"], horizontal=True, captions=["currently used only for dnp data", "parse html to retrive content"])
+DATA_LOAD = st.radio("Data load", ["Offline", "Semi-Online", "Online"], horizontal=True, captions=["load nodes and relationships from local", "load nodes from local and create relationships during runtime", "create nodes and relationships during runtime"])
+OUTPUT = st.radio("Output", ["Simple", "Verbose"], horizontal=True, captions=["user mode", "develeper mode (esp. for debug)"])
 DATA_URL = "" # input data
 QUERY_DICT = {} # query dict {QUERY_NAME: QUERY_URL}
 if DATA_TYPE == "TXT":
