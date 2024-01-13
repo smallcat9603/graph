@@ -3,9 +3,9 @@ import pandas as pd
 
 st.header("parameters")
 nphrase = st.slider("Number of nouns extracted from each article", 1, 100, 50)
-DATA_TYPE = st.radio("Data type", ["URL"])
-DATA_LOAD = st.radio("Data load", ["Offline", "Online"])
-OUTPUT = st.radio("Output", ["Simple", "Verbose"])
+DATA_TYPE = st.radio("Data type", ["URL"], horizontal=True)
+DATA_LOAD = st.radio("Data load", ["Offline", "Online"], horizontal=True)
+OUTPUT = st.radio("Output", ["Simple", "Verbose"], horizontal=True)
 DATA_URL = "" # input data
 QUERY_DICT = {} # query dict {QUERY_NAME: QUERY_URL}
 DATA_URL = "https://raw.githubusercontent.com/smallcat9603/graph/main/dnp/kg/data/wikidata_persons_100.csv"  
