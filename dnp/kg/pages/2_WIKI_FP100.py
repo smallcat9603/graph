@@ -555,12 +555,14 @@ st.header("evaluate (hashgnn)")
 st.write(cypher(query))
 
 ##############################
-### export to csv ###
+### export to csv in import/ ###
 ##############################
 
+# no bulkImport: all in one
+# use bulkImport to generate multiple files categorized by node label and relationship type
 def save_graph_data():
     query = f"""
-    CALL apoc.export.csv.all("{FILE_NAME}.csv", {{}})
+    CALL apoc.export.csv.all("{FILE_NAME}.csv", {{bulkImport: true}})
     """
     # st.header("export to csv")
     st.write(cypher(query))
