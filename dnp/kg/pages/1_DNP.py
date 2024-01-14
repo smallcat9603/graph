@@ -27,10 +27,11 @@ elif DATA_TYPE == "URL":
 
 FILE_NAME = __file__.split("/")[-1].split(".")[0].split("_")[-1]
 
-st.header("Data Source")
-st.write(DATA_URL)
-st.header("Query Dict")
-st.table(QUERY_DICT)
+if OUTPUT == "Verbose":
+    st.header("Data Source")
+    st.write(DATA_URL)
+    st.header("Query Dict")
+    st.table(QUERY_DICT)
 
 @st.cache_data
 def cypher(query):

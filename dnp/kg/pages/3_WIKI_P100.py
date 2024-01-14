@@ -13,10 +13,11 @@ QUERY_DICT["Joe Biden"] = "https://en.wikipedia.org/wiki/Joe_Biden"
 
 FILE_NAME = __file__.split("/")[-1].split(".")[0].split("_")[-1]
 
-st.header("data url")
-st.write(DATA_URL)
-st.header("query dict")
-st.table(QUERY_DICT)
+if OUTPUT == "Verbose":
+    st.header("data url")
+    st.write(DATA_URL)
+    st.header("query dict")
+    st.table(QUERY_DICT)
 
 @st.cache_data
 def cypher(query):
