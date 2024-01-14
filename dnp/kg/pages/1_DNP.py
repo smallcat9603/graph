@@ -7,7 +7,7 @@ st.header("Parameters")
 nphrase = st.slider("Number of nouns extracted from each article", 1, 100, 50)
 DATA_TYPE = st.radio("Data type", ["TXT", "URL"], horizontal=True, captions=["currently used only for dnp data", "parse html to retrive content"])
 # offline opt1: neo4j-admin database dump/load, require to stop neo4j server
-# offline opt2: export/import to/from csv, bug
+# offline opt2: apoc.export.csv.all/apoc.import.csv, bug
 DATA_LOAD = st.radio("Data load", ["Offline", "Semi-Online", "Online"], horizontal=True, captions=["load nodes and relationships from local (bug)", "load nodes from local and create relationships during runtime (avoid to use gcp api, fast)", "create nodes and relationships during runtime (use gcp api, slow)"], index=1)
 OUTPUT = st.radio("Output", ["Simple", "Verbose"], horizontal=True, captions=["user mode", "develeper mode (esp. for debug)"])
 DATA_URL = "" # input data
