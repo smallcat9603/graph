@@ -6,9 +6,8 @@ import pandas as pd
 st.header("Parameters")
 nphrase = st.slider("Number of nouns extracted from each article", 1, 100, 50)
 DATA_TYPE = st.radio("Data type", ["TXT", "URL"], horizontal=True, captions=["currently used only for dnp data", "parse html to retrive content"])
-# offline opt1: neo4j-admin database dump/load, require to stop neo4j server
-# offline opt2: apoc.export.csv.all/apoc.import.csv, bug
-DATA_LOAD = st.radio("Data load", ["Offline", "Semi-Online", "Online"], horizontal=True, captions=["load nodes and relationships from local (bug)", "load nodes from local and create relationships during runtime (avoid to use gcp api, fast)", "create nodes and relationships during runtime (use gcp api, slow)"], index=1)
+# offline opt: neo4j-admin database dump/load, require to stop neo4j server
+DATA_LOAD = st.radio("Data load", ["Offline", "Semi-Online", "Online"], horizontal=True, captions=["load nodes and relationships from local (avoid to use gcp api, very fast)", "load nodes from local and create relationships during runtime (avoid to use gcp api, fast)", "create nodes and relationships during runtime (use gcp api, slow)"], index=0)
 OUTPUT = st.radio("Output", ["Simple", "Verbose"], horizontal=True, captions=["user mode", "develeper mode (esp. for debug)"])
 DATA_URL = "" # input data
 QUERY_DICT = {} # query dict {QUERY_NAME: QUERY_URL}
@@ -78,8 +77,39 @@ def import_graph_data():
     result = cypher(query)
     return result
 
+# convert string to value
+# TODO: n.phrase not converted to stringlist via MATCH (n) WHERE n.phrase IS NOT NULL
+# TODO: r.common not converted to stringlist via MATCH ()-[r:CORRELATES]-() WHERE r.common IS NOT NULL
+def post_process():
+    query = f"""
+    MATCH (n) WHERE n.pr0 IS NOT NULL
+    SET n.pr0 = toFloat(n.pr0)
+    SET n.pr1 = toFloat(n.pr1)
+    SET n.pr2 = toFloat(n.pr2)
+    SET n.pr3 = toFloat(n.pr3)
+    """
+    cypher(query)
+    query = f"""
+    MATCH (n) WHERE n.phrase IS NOT NULL
+    SET n.salience = apoc.convert.fromJsonList(n.salience)
+    """
+    cypher(query)
+    query = f"""
+    MATCH ()-[r:CONTAINS]-() WHERE r.rank IS NOT NULL
+    SET r.rank = toInteger(r.rank)
+    SET r.weight = toInteger(r.weight)
+    SET r.score = toFloat(r.score)
+    """
+    cypher(query)
+    query = f"""
+    MATCH ()-[r]-() WHERE type(r) =~ 'SIMILAR_.*'
+    SET r.score = toFloat(r.score)
+    """
+    cypher(query)
+
 if DATA_LOAD == "Offline":
     result = import_graph_data()
+    post_process()
     if OUTPUT == "Verbose":
         st.info("Importing nodes and relationships from csv files finished")
         st.write(result)
