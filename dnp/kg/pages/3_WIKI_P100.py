@@ -1,10 +1,12 @@
 import streamlit as st
 import pandas as pd
+import os
 
 st.header("parameters")
 nphrase = st.slider("Number of nouns extracted from each article", 1, 100, 50)
 DATA_TYPE = st.radio("Data type", ["URL"], horizontal=True, captions=["parse html to retrive content"])
-DATA_LOAD = st.radio("Data load", ["Semi-Online", "Online"], horizontal=True, captions=["load nodes from local and create relationships during runtime (avoid to use gcp api, fast)", "create nodes and relationships during runtime (use gcp api, slow)"])
+# offline opt: neo4j-admin database dump/load, require to stop neo4j server
+DATA_LOAD = st.radio("Data load", ["Offline", "Semi-Online", "Online"], horizontal=True, captions=["load nodes and relationships from local (avoid to use gcp api, very fast)", "load nodes from local and create relationships during runtime (avoid to use gcp api, fast)", "create nodes and relationships during runtime (use gcp api, slow)"], index=0)
 OUTPUT = st.radio("Output", ["Simple", "Verbose"], horizontal=True, captions=["user mode", "develeper mode (esp. for debug)"])
 DATA_URL = "" # input data
 QUERY_DICT = {} # query dict {QUERY_NAME: QUERY_URL}
@@ -30,6 +32,78 @@ For (a:Article) REQUIRE a.url IS UNIQUE;
 cypher(query)
 
 ##############################
+### Import CSV ###
+##############################
+
+query = """
+CALL dbms.listConfig() YIELD name, value
+WHERE name = 'server.directories.import'
+RETURN value AS importFolderPath
+"""
+result = cypher(query)
+importFolderPath = result["importFolderPath"][0]
+
+filenames_nodes = []
+filenames_relationships =[]
+for filename in os.listdir(importFolderPath):
+    if filename.startswith(FILE_NAME+".nodes.") and filename.endswith(".csv"):
+        filenames_nodes.append(filename)
+    if filename.startswith(FILE_NAME+".relationships.") and filename.endswith(".csv"):
+        filenames_relationships.append(filename)
+
+def import_graph_data():
+    query = "CALL apoc.import.csv(["
+    for idx, filename in enumerate(filenames_nodes):
+        if idx < len(filenames_nodes)-1:
+            query += f"{{fileName: 'file:/{filename}', labels: ['{filename.split('.')[-2]}']}}, "
+        else:
+            query += f"{{fileName: 'file:/{filename}', labels: ['{filename.split('.')[-2]}']}}], ["
+    for idx, filename in enumerate(filenames_relationships):
+        if idx < len(filenames_relationships)-1:
+            query += f"{{fileName: 'file:/{filename}', type: '{filename.split('.')[-2]}'}}, "
+        else:
+            query += f"{{fileName: 'file:/{filename}', type: '{filename.split('.')[-2]}'}}], {{}})"
+    result = cypher(query)
+    return result
+
+# convert string to value
+# TODO: n.phrase not converted to stringlist via MATCH (n) WHERE n.phrase IS NOT NULL
+# TODO: r.common not converted to stringlist via MATCH ()-[r:CORRELATES]-() WHERE r.common IS NOT NULL
+def post_process():
+    query = f"""
+    MATCH (n) WHERE n.pr0 IS NOT NULL
+    SET n.pr0 = toFloat(n.pr0)
+    SET n.pr1 = toFloat(n.pr1)
+    SET n.pr2 = toFloat(n.pr2)
+    SET n.pr3 = toFloat(n.pr3)
+    """
+    cypher(query)
+    query = f"""
+    MATCH (n) WHERE n.phrase IS NOT NULL
+    SET n.salience = apoc.convert.fromJsonList(n.salience)
+    """
+    cypher(query)
+    query = f"""
+    MATCH ()-[r:CONTAINS]-() WHERE r.rank IS NOT NULL
+    SET r.rank = toInteger(r.rank)
+    SET r.weight = toInteger(r.weight)
+    SET r.score = toFloat(r.score)
+    """
+    cypher(query)
+    query = f"""
+    MATCH ()-[r]-() WHERE type(r) =~ 'SIMILAR_.*'
+    SET r.score = toFloat(r.score)
+    """
+    cypher(query)
+
+if DATA_LOAD == "Offline":
+    result = import_graph_data()
+    post_process()
+    if OUTPUT == "Verbose":
+        st.info("Importing nodes and relationships from csv files finished")
+        st.write(result)
+
+##############################
 ### Create Article-[Noun]-Article Graph ###
 ##############################
 
@@ -42,30 +116,32 @@ progress_bar = st.progress(0, text="Initialize...")
 
 progress_bar.progress(10, text="Create url nodes...")
 
-query = f"""
-CALL apoc.periodic.iterate(
-"LOAD CSV WITH HEADERS FROM '{DATA_URL}' AS row
-RETURN row",
-"MERGE (a:Article {{name: row.id, url: row.url}})
-SET a.grp = CASE WHEN 'occupation' IN keys(row) THEN row.occupation ELSE null END
-SET a.grp1 = CASE WHEN 'nationality' IN keys(row) THEN row.nationality ELSE null END
-WITH a
-CALL apoc.load.html(a.url, {{
-    title: 'title',
-    h2: 'h2',
-    body: 'body p'
-}})
-YIELD value
-WITH a,
-        reduce(texts = '', n IN range(0, size(value.body)-1) | texts + ' ' + coalesce(value.body[n].text, '')) AS body,
-        value.title[0].text AS title
-SET a.body = body, a.title = title",
-{{batchSize: 5, parallel: true}}
-)
-YIELD batches, total, timeTaken, committedOperations
-RETURN batches, total, timeTaken, committedOperations
-"""
-cypher(query)
+if DATA_LOAD != "Offline":
+
+    query = f"""
+    CALL apoc.periodic.iterate(
+    "LOAD CSV WITH HEADERS FROM '{DATA_URL}' AS row
+    RETURN row",
+    "MERGE (a:Article {{name: row.id, url: row.url}})
+    SET a.grp = CASE WHEN 'occupation' IN keys(row) THEN row.occupation ELSE null END
+    SET a.grp1 = CASE WHEN 'nationality' IN keys(row) THEN row.nationality ELSE null END
+    WITH a
+    CALL apoc.load.html(a.url, {{
+        title: 'title',
+        h2: 'h2',
+        body: 'body p'
+    }})
+    YIELD value
+    WITH a,
+            reduce(texts = '', n IN range(0, size(value.body)-1) | texts + ' ' + coalesce(value.body[n].text, '')) AS body,
+            value.title[0].text AS title
+    SET a.body = body, a.title = title",
+    {{batchSize: 5, parallel: true}}
+    )
+    YIELD batches, total, timeTaken, committedOperations
+    RETURN batches, total, timeTaken, committedOperations
+    """
+    cypher(query)
 
 ##############################
 ### set phrase and salience properties ###
@@ -84,6 +160,9 @@ if DATA_LOAD == "Semi-Online":
     SET a.salience = apoc.convert.fromJsonList(row.salience)
     RETURN COUNT(a) AS Processed
     """
+    result = cypher(query)
+    if OUTPUT == "Verbose":
+        st.write(result)
 elif DATA_LOAD == "Online":
     query = f"""
     CALL apoc.periodic.iterate(
@@ -104,11 +183,9 @@ elif DATA_LOAD == "Online":
     YIELD batches, total, timeTaken, committedOperations
     RETURN batches, total, timeTaken, committedOperations
     """
-
-if OUTPUT == "Simple":
-    cypher(query)
-elif OUTPUT == "Verbose":
-    st.write(cypher(query))
+    result = cypher(query)
+    if OUTPUT == "Verbose":
+        st.write(result)
 
 ##############################
 ### create noun-url relationships ###
@@ -116,18 +193,20 @@ elif OUTPUT == "Verbose":
 
 progress_bar.progress(30, text="Create noun-url relationships...")
 
-query = f"""
-MATCH (a:Article)
-WHERE a.processed IS NOT NULL
-FOREACH (word IN a.phrase[0..{nphrase}] |
-  MERGE (n:Noun {{name: word}})
-  MERGE (a)-[r:CONTAINS]-(n)
-  SET r.rank = apoc.coll.indexOf(a.phrase, word) + 1
-  SET r.score = a.salience[apoc.coll.indexOf(a.phrase, word)]
-  SET r.weight = {nphrase} - apoc.coll.indexOf(a.phrase, word)
-)
-"""
-cypher(query)
+if DATA_LOAD != "Offline":
+
+    query = f"""
+    MATCH (a:Article)
+    WHERE a.processed IS NOT NULL
+    FOREACH (word IN a.phrase[0..{nphrase}] |
+    MERGE (n:Noun {{name: word}})
+    MERGE (a)-[r:CONTAINS]-(n)
+    SET r.rank = apoc.coll.indexOf(a.phrase, word) + 1
+    SET r.score = a.salience[apoc.coll.indexOf(a.phrase, word)]
+    SET r.weight = {nphrase} - apoc.coll.indexOf(a.phrase, word)
+    )
+    """
+    cypher(query)
 
 ##############################
 ### query ###
@@ -135,23 +214,25 @@ cypher(query)
 
 progress_bar.progress(40, text="Create query nodes...")
 
-for QUERY_NAME, QUERY_URL in QUERY_DICT.items():
-    query = f"""
-    MERGE (q:Query {{name: "{QUERY_NAME}", url: "{QUERY_URL}"}})
-    WITH q
-    CALL apoc.load.html(q.url, {{
-    title: "title",
-    h2: "h2",
-    body: "body p"
-    }})
-    YIELD value
-    WITH q,
-        reduce(texts = "", n IN range(0, size(value.body)-1) | texts + " " + coalesce(value.body[n].text, "")) AS body,
-        value.title[0].text AS title
-    SET q.body = body, q.title = title
-    RETURN q.title, q.body
-    """
-    cypher(query)
+if DATA_LOAD != "Offline":
+
+    for QUERY_NAME, QUERY_URL in QUERY_DICT.items():
+        query = f"""
+        MERGE (q:Query {{name: "{QUERY_NAME}", url: "{QUERY_URL}"}})
+        WITH q
+        CALL apoc.load.html(q.url, {{
+        title: "title",
+        h2: "h2",
+        body: "body p"
+        }})
+        YIELD value
+        WITH q,
+            reduce(texts = "", n IN range(0, size(value.body)-1) | texts + " " + coalesce(value.body[n].text, "")) AS body,
+            value.title[0].text AS title
+        SET q.body = body, q.title = title
+        RETURN q.title, q.body
+        """
+        cypher(query)
     
 progress_bar.progress(50, text="Set phrase and salience properties (Query)...")
 
@@ -184,19 +265,21 @@ cypher(query)
 
 progress_bar.progress(60, text="Create noun-article relationships (Query)...")
 
-# create noun-article relationships (Query)
-query = f"""
-MATCH (q:Query)
-WHERE q.processed IS NOT NULL
-FOREACH (word IN q.phrase[0..{nphrase}] |
-  MERGE (n:Noun {{name: word}})
-  MERGE (q)-[r:CONTAINS]-(n)
-  SET r.rank = apoc.coll.indexOf(q.phrase, word) + 1
-  SET r.score = q.salience[apoc.coll.indexOf(q.phrase, word)]
-  SET r.weight = {nphrase} - apoc.coll.indexOf(q.phrase, word)
-)
-"""
-cypher(query)
+if DATA_LOAD != "Offline":
+
+    # create noun-article relationships (Query)
+    query = f"""
+    MATCH (q:Query)
+    WHERE q.processed IS NOT NULL
+    FOREACH (word IN q.phrase[0..{nphrase}] |
+    MERGE (n:Noun {{name: word}})
+    MERGE (q)-[r:CONTAINS]-(n)
+    SET r.rank = apoc.coll.indexOf(q.phrase, word) + 1
+    SET r.score = q.salience[apoc.coll.indexOf(q.phrase, word)]
+    SET r.weight = {nphrase} - apoc.coll.indexOf(q.phrase, word)
+    )
+    """
+    cypher(query)
 
 ##############################
 ### evaluate (naive by rank) ###
@@ -219,22 +302,24 @@ if OUTPUT == "Verbose":
 
 progress_bar.progress(70, text="Create article-article relationships...")
 
-query = f"""
-MATCH (a1:Article), (a2:Article)
-WHERE a1 <> a2 AND any(x IN a1.phrase[0..{nphrase}] WHERE x IN a2.phrase[0..{nphrase}])
-MERGE (a1)-[r:CORRELATES]-(a2)
-SET r.common = [x IN a1.phrase[0..{nphrase}] WHERE x IN a2.phrase[0..{nphrase}]]
-"""
-cypher(query)
+if DATA_LOAD != "Offline":
 
-#query
-query = f"""
-MATCH (q:Query), (a:Article)
-WHERE any(x IN q.phrase[0..{nphrase}] WHERE x IN a.phrase[0..{nphrase}])
-MERGE (q)-[r:CORRELATES]-(a)
-SET r.common = [x IN q.phrase[0..{nphrase}] WHERE x IN a.phrase[0..{nphrase}]]
-"""
-cypher(query)
+    query = f"""
+    MATCH (a1:Article), (a2:Article)
+    WHERE a1 <> a2 AND any(x IN a1.phrase[0..{nphrase}] WHERE x IN a2.phrase[0..{nphrase}])
+    MERGE (a1)-[r:CORRELATES]-(a2)
+    SET r.common = [x IN a1.phrase[0..{nphrase}] WHERE x IN a2.phrase[0..{nphrase}]]
+    """
+    cypher(query)
+
+    #query
+    query = f"""
+    MATCH (q:Query), (a:Article)
+    WHERE any(x IN q.phrase[0..{nphrase}] WHERE x IN a.phrase[0..{nphrase}])
+    MERGE (q)-[r:CORRELATES]-(a)
+    SET r.common = [x IN q.phrase[0..{nphrase}] WHERE x IN a.phrase[0..{nphrase}]]
+    """
+    cypher(query)
 
 ##############################
 ### evaluate (still naive by salience) ###
@@ -311,7 +396,8 @@ def write_nodesimilarity_jaccard():
     st.write(f"Nodes compared: {result['nodesCompared']}")
     st.write(f"Mean similarity: {result['similarityDistribution']['mean']}")
 
-write_nodesimilarity_jaccard()
+if DATA_LOAD != "Offline":
+    write_nodesimilarity_jaccard()
 
 ##############################
 ### node similarity (OVERLAP) ###
@@ -335,7 +421,8 @@ def write_nodesimilarity_overlap():
     st.write(f"Nodes compared: {result['nodesCompared']}")
     st.write(f"Mean similarity: {result['similarityDistribution']['mean']}")
 
-write_nodesimilarity_overlap()
+if DATA_LOAD != "Offline":
+    write_nodesimilarity_overlap()
 
 ##############################
 ### node similarity (COSINE) ###
@@ -359,7 +446,8 @@ def write_nodesimilarity_cosine():
     st.write(f"Nodes compared: {result['nodesCompared']}")
     st.write(f"Mean similarity: {result['similarityDistribution']['mean']}")
 
-write_nodesimilarity_cosine()
+if DATA_LOAD != "Offline":
+    write_nodesimilarity_cosine()
 
 ##############################
 ### ppr (personalized pagerank) ###
@@ -382,7 +470,8 @@ def write_nodesimilarity_ppr():
         st.write(f"Node properties written: {result['nodePropertiesWritten']}")
         st.write(f"Mean: {result['centralityDistribution']['mean']}")
 
-write_nodesimilarity_ppr()
+if DATA_LOAD != "Offline":
+    write_nodesimilarity_ppr()
 
 ##############################
 ### 1. node embedding ###
@@ -519,7 +608,8 @@ def kNN():
     st.write(f"Nodes compared: {result['nodesCompared']}")
     st.write(f"Mean similarity: {result['similarityDistribution']['mean']}")
 
-kNN()
+if DATA_LOAD != "Offline":
+    kNN()
 
 ##############################
 ### evaluate (node embedding + knn) ###
@@ -563,10 +653,16 @@ st.write(cypher(query))
 # use bulkImport to generate multiple files categorized by node label and relationship type
 def save_graph_data():
     query = f"""
-    CALL apoc.export.csv.all("{FILE_NAME}.csv", {{bulkImport: true}})
+    CALL apoc.export.csv.all("{FILE_NAME}.csv", {{}}) 
     """
-    # st.header("export to csv")
-    st.write(cypher(query))
+    result_allinone = cypher(query)
+    query = f"""
+    CALL apoc.export.csv.all("{FILE_NAME}.csv", {{bulkImport: true}}) 
+    """
+    result_bulkimport = cypher(query)
+    if OUTPUT == "Verbose":
+        st.write(cypher(result_allinone))
+        st.write(cypher(result_bulkimport))
 
 st.button("Save graph data", on_click=save_graph_data) 
 
@@ -576,63 +672,68 @@ st.button("Save graph data", on_click=save_graph_data)
 
 st.header("UI Interaction")
 
-st.subheader("Node Similarity")
-col1, col2, col3 = st.columns(3)
-with col1:
-    query_node = st.selectbox("Query node", ("Joe Biden", "C-2", "C-3", "C-4"))
-with col2:
-    similarity_method = st.selectbox("Similarity method", ("JACCARD", "OVERLAP", "COSINE", "PPR"))
-with col3:
-    limit = st.selectbox("Limit", ("5", "10", "15", "20"))
-st.write("The top-" + limit + " similar nodes for query " + query_node + " are ranked as follows (" + similarity_method + ")")
-if similarity_method == "PPR":
+tab1, tab2, tab3 = st.tabs(["Node Similarity", "Related Articles", "Common Keywords"])
+
+with tab1:
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        query_node = st.selectbox("Query node", ("Joe Biden", "C-2", "C-3", "C-4"))
+    with col2:
+        similarity_method = st.selectbox("Similarity method", ("JACCARD", "OVERLAP", "COSINE", "PPR"))
+    with col3:
+        limit = st.selectbox("Limit", ("5", "10", "15", "20"))
+    st.write("The top-" + limit + " similar nodes for query " + query_node + " are ranked as follows (" + similarity_method + ")")
+    if similarity_method == "PPR":
+        query = f"""
+        MATCH (q:Query)-[r:CORRELATES]-(a:Article) WHERE q.name = "{query_node}"
+        RETURN q.name AS Query, a.name AS Article, a.url AS URL, a.pr{str(int(query_node.split("-")[-1])-1)} AS Similarity
+        ORDER BY Similarity DESC
+        LIMIT {limit}
+        """ 
+    else:
+        query = f"""
+        MATCH (q:Query)-[r:SIMILAR_{similarity_method}]-(a:Article) WHERE q.name = "{query_node}"
+        RETURN q.name AS Query, a.name AS Article, a.url AS URL, r.score AS Similarity
+        ORDER BY Similarity DESC
+        LIMIT {limit}
+        """
+    if OUTPUT == "Verbose":
+        st.code(query)    
+    result = cypher(query)
+    tab01, tab02 = st.tabs(["Chart", "Table"])
+    with tab01:
+        df = pd.DataFrame(
+            data=list(result["Similarity"]),
+            columns=["Similarity Score"],
+            index=result["Article"],
+        )
+        st.bar_chart(df)
+    with tab02:
+        st.write(result)
+
+with tab2:
+    noun = st.text_input("Keyword", "politician")
     query = f"""
-    MATCH (q:Query)-[r:CORRELATES]-(a:Article) WHERE q.name = "{query_node}"
-    RETURN q.name AS Query, a.name AS Article, a.url AS URL, a.pr{str(int(query_node.split("-")[-1])-1)} AS Similarity
-    ORDER BY Similarity DESC
-    LIMIT {limit}
-    """ 
-else:
-    query = f"""
-    MATCH (q:Query)-[r:SIMILAR_{similarity_method}]-(a:Article) WHERE q.name = "{query_node}"
-    RETURN q.name AS Query, a.name AS Article, a.url AS URL, r.score AS Similarity
-    ORDER BY Similarity DESC
-    LIMIT {limit}
+    MATCH (n:Noun)-[]-(a:Article) WHERE n.name CONTAINS "{noun}"
+    WITH DISTINCT a AS distinctArticle, n
+    RETURN n.name AS Keyword, COUNT(distinctArticle) AS articleCount, COLLECT(distinctArticle.name) AS articles
+    ORDER BY articleCount DESC
     """
-st.code(query)    
-result = cypher(query)
-tab01, tab02 = st.tabs(["Chart", "Table"])
-with tab01:
-    df = pd.DataFrame(
-        data=list(result["Similarity"]),
-        columns=["Similarity Score"],
-        index=result["Article"],
-    )
-    st.bar_chart(df)
-with tab02:
+    if OUTPUT == "Verbose":
+        st.code(query)    
+    result = cypher(query)
     st.write(result)
 
-st.subheader("Related Articles")
-noun = st.text_input("Keyword", "politician")
-query = f"""
-MATCH (n:Noun)-[]-(a:Article) WHERE n.name CONTAINS "{noun}"
-WITH DISTINCT a AS distinctArticle, n
-RETURN n.name AS Keyword, COUNT(distinctArticle) AS articleCount, COLLECT(distinctArticle.name) AS articles
-ORDER BY articleCount DESC
-"""
-st.code(query)    
-result = cypher(query)
-st.write(result)
-
-st.subheader("Common Keywords")
-query = f"""
-MATCH (n:Noun)-[]-(a:Article)
-RETURN n.name AS Keyword, COUNT(a) AS articleCount, COLLECT(a.name) AS articles
-ORDER BY articleCount DESC
-"""
-st.code(query)    
-result = cypher(query)
-st.write(result)
+with tab3:
+    query = f"""
+    MATCH (n:Noun)-[]-(a:Article)
+    RETURN n.name AS Keyword, COUNT(a) AS articleCount, COLLECT(a.name) AS articles
+    ORDER BY articleCount DESC
+    """
+    if OUTPUT == "Verbose":
+        st.code(query)    
+    result = cypher(query)
+    st.write(result)
 
 progress_bar.progress(100, text="Finished. Graph data can be queried.")
 
