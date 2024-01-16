@@ -117,6 +117,7 @@ if DATA_LOAD == "Offline":
 st.divider()
 st.title("Progress")
 progress_bar = st.progress(0, text="Initialize...")
+container_status = st.container(border=False)
 
 ##############################
 ### create url nodes (article, person, ...) ###
@@ -755,6 +756,7 @@ with tab4:
 
 st.divider()
 
-progress_bar.progress(100, text="Finished. Graph data can be queried.")
+progress_bar.progress(100, text="Finished.")
+container_status.success("Graph data can be queried.")
 
 st.session_state["data"] = "WIKI_P100"
