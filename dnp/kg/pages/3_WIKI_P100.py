@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import os
+import time
 
 st.title("Parameters")
 form = st.form("parameters")
@@ -117,6 +118,7 @@ if DATA_LOAD == "Offline":
 st.divider()
 st.title("Progress")
 progress_bar = st.progress(0, text="Initialize...")
+start_time = time.perf_counter()
 container_status = st.container(border=False)
 
 ##############################
@@ -757,6 +759,8 @@ with tab4:
 st.divider()
 
 progress_bar.progress(100, text="Finished.")
-container_status.success("Graph data can be queried.")
+end_time = time.perf_counter()
+execution_time_ms = (end_time - start_time) * 1000
+container_status.success(f"Loading finished: {execution_time_ms:.1f} ms. Graph data can be queried.")
 
 st.session_state["data"] = "WIKI_P100"
