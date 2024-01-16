@@ -125,6 +125,7 @@ if DATA_LOAD == "Offline":
 ### Create Article-[Noun]-Article Graph ###
 ##############################
 
+st.divider()
 st.title("Progress")
 progress_bar = st.progress(0, text="Initialize...")
 
@@ -384,6 +385,7 @@ G, result = st.session_state["gds"].graph.project(st.session_state["graph_name"]
 ### graph statistics ###
 ##############################
 
+st.divider()
 st.title("Graph Statistics")
 
 col1, col2, col3, col4 = st.columns(4)
@@ -688,6 +690,7 @@ st.button("Save graph data", on_click=save_graph_data)
 ### interaction ###
 ##############################
 
+st.divider()
 st.title("UI Interaction")
 
 tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs(["Node Similarity", "Multiple Queries", "Related Articles", "Common Keywords", "Naive by Rank", "Naive by Salience"])
@@ -817,6 +820,8 @@ with tab5:
 #         st.code(query)
 #     result = cypher(query)
 #     st.write(result)
+
+st.divider()
 
 progress_bar.progress(100, text="Finished. Graph data can be queried.")
 
