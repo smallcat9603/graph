@@ -4,11 +4,17 @@ import streamlit as st
 import pandas as pd
 
 st.header("Parameters")
-nphrase = st.slider("Number of nouns extracted from each article", 1, 100, 50)
-DATA_TYPE = st.radio("Data type", ["TXT", "URL"], horizontal=True, captions=["currently used only for dnp data", "parse html to retrive content"])
+form = st.form("parameters")
+nphrase = form.slider("Number of nouns extracted from each article", 1, 100, 50)
+DATA_TYPE = form.radio("Data type", ["TXT", "URL"], horizontal=True, captions=["currently used only for dnp data", "parse html to retrive content"])
 # offline opt: neo4j-admin database dump/load, require to stop neo4j server
-DATA_LOAD = st.radio("Data load", ["Offline", "Semi-Online", "Online"], horizontal=True, captions=["load nodes and relationships from local (avoid to use gcp api, very fast)", "load nodes from local and create relationships during runtime (avoid to use gcp api, fast)", "create nodes and relationships during runtime (use gcp api, slow)"], index=0)
-OUTPUT = st.radio("Output", ["Simple", "Verbose"], horizontal=True, captions=["user mode", "develeper mode (esp. for debug)"])
+DATA_LOAD = form.radio("Data load", ["Offline", "Semi-Online", "Online"], horizontal=True, captions=["load nodes and relationships from local (avoid to use gcp api, very fast)", "load nodes from local and create relationships during runtime (avoid to use gcp api, fast)", "create nodes and relationships during runtime (use gcp api, slow)"], index=0)
+OUTPUT = form.radio("Output", ["Simple", "Verbose"], horizontal=True, captions=["user mode", "develeper mode (esp. for debug)"])
+
+run = form.form_submit_button("Run")
+if not run:
+    st.stop()
+
 DATA_URL = "" # input data
 QUERY_DICT = {} # query dict {QUERY_NAME: QUERY_URL}
 if DATA_TYPE == "TXT":
