@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import os
 
-st.header("Parameters")
+st.title("Parameters")
 form = st.form("parameters")
 nphrase = form.slider("Number of nouns extracted from each article (50 if Offline is selected)", 1, 100, 50)
 DATA_TYPE = form.radio("Data type", ["URL"], horizontal=True, captions=["parse html to retrive content"])
@@ -23,9 +23,9 @@ QUERY_DICT["Joe Biden"] = "https://en.wikipedia.org/wiki/Joe_Biden"
 FILE_NAME = __file__.split("/")[-1].split(".")[0].split("_")[-1]
 
 if OUTPUT == "Verbose":
-    st.header("data url")
+    st.title("data url")
     st.write(DATA_URL)
-    st.header("query dict")
+    st.title("query dict")
     st.table(QUERY_DICT)
 
 @st.cache_data
@@ -114,7 +114,7 @@ if DATA_LOAD == "Offline":
 ### Create Article-[Noun]-Article Graph ###
 ##############################
 
-st.header("Progress")
+st.title("Progress")
 progress_bar = st.progress(0, text="Initialize...")
 
 ##############################
@@ -339,7 +339,7 @@ if exists_result["exists"]:
     G = st.session_state["gds"].graph.get(st.session_state["graph_name"])
     G.drop()
 G, result = st.session_state["gds"].graph.project(st.session_state["graph_name"], node_projection, relationship_projection)
-# st.header("project graph to memory")
+# st.title("project graph to memory")
 # st.write(f"The projection took {result['projectMillis']} ms")
 # st.write(f"Graph '{G.name()}' node count: {G.node_count()}")
 # st.write(f"Graph '{G.name()}' node labels: {G.node_labels()}")
@@ -353,7 +353,7 @@ G, result = st.session_state["gds"].graph.project(st.session_state["graph_name"]
 ### graph statistics ###
 ##############################
 
-st.header("Graph Statistics")
+st.title("Graph Statistics")
 
 col1, col2, col3, col4 = st.columns(4)
 col1.metric("# Nodes", str(G.node_count()))
@@ -378,7 +378,7 @@ def write_nodesimilarity_jaccard():
         targetNodeFilter="Article",
         topK=100,
     )
-    st.header("node similarity (JACCARD)")
+    st.title("node similarity (JACCARD)")
     st.write(f"Relationships produced: {result['relationshipsWritten']}")
     st.write(f"Nodes compared: {result['nodesCompared']}")
     st.write(f"Mean similarity: {result['similarityDistribution']['mean']}")
@@ -403,7 +403,7 @@ def write_nodesimilarity_overlap():
         targetNodeFilter="Article",
         topK=100,
     )
-    st.header("node similarity (OVERLAP)")
+    st.title("node similarity (OVERLAP)")
     st.write(f"Relationships produced: {result['relationshipsWritten']}")
     st.write(f"Nodes compared: {result['nodesCompared']}")
     st.write(f"Mean similarity: {result['similarityDistribution']['mean']}")
@@ -428,7 +428,7 @@ def write_nodesimilarity_cosine():
         targetNodeFilter="Article",
         topK=100,
     )
-    st.header("node similarity (COSINE)")
+    st.title("node similarity (COSINE)")
     st.write(f"Relationships produced: {result['relationshipsWritten']}")
     st.write(f"Nodes compared: {result['nodesCompared']}")
     st.write(f"Mean similarity: {result['similarityDistribution']['mean']}")
@@ -443,7 +443,7 @@ if DATA_LOAD != "Offline":
 @st.cache_data
 def write_nodesimilarity_ppr():
 
-    st.header("ppr (personalized pagerank)")
+    st.title("ppr (personalized pagerank)")
     for idx, name in enumerate(list(QUERY_DICT.keys())):
         nodeid = st.session_state["gds"].find_node_id(labels=["Query"], properties={"name": name})
         result = st.session_state["gds"].pageRank.write(
@@ -533,7 +533,7 @@ def node_embedding():
         # featureProperties=['phrase', 'salience'], # each node should have
     )
 
-    st.header("1. node embedding")
+    st.title("1. node embedding")
     st.write(f"Number of embedding vectors produced: {result['nodePropertiesWritten']}")
 
 if DATA_LOAD != "Offline":
@@ -591,7 +591,7 @@ def kNN():
         targetNodeFilter="Article",
     )
 
-    st.header("2. kNN")
+    st.title("2. kNN")
     st.write(f"Relationships produced: {result['relationshipsWritten']}")
     st.write(f"Nodes compared: {result['nodesCompared']}")
     st.write(f"Mean similarity: {result['similarityDistribution']['mean']}")
@@ -610,7 +610,7 @@ RETURN q.name AS Query, a.name AS Article, a.url AS URL, a.grp AS Group, a.grp1 
 ORDER BY Query, Similarity DESC
 LIMIT 10
 """
-# st.header("evaluate (fastrp)")
+# st.title("evaluate (fastrp)")
 # st.write(cypher(query))
 
 # node2vec
@@ -620,7 +620,7 @@ RETURN q.name AS Query, a.name AS Article, a.url AS URL, a.grp AS Group, a.grp1 
 ORDER BY Query, Similarity DESC
 LIMIT 10
 """
-# st.header("evaluate (node2vec)")
+# st.title("evaluate (node2vec)")
 # st.write(cypher(query))
 
 # hashgnn
@@ -630,7 +630,7 @@ RETURN q.name AS Query, a.name AS Article, a.url AS URL, a.grp AS Group, a.grp1 
 ORDER BY Query, Similarity DESC
 LIMIT 10
 """
-# st.header("evaluate (hashgnn)")
+# st.title("evaluate (hashgnn)")
 # st.write(cypher(query))
 
 ##############################
@@ -658,7 +658,7 @@ st.button("Save graph data", on_click=save_graph_data)
 ### interaction ###
 ##############################
 
-st.header("UI Interaction")
+st.title("UI Interaction")
 
 tab1, tab2, tab3, tab4, tab5 = st.tabs(["Node Similarity", "Related Articles", "Common Keywords", "Naive by Rank", "Naive by Salience"])
 
