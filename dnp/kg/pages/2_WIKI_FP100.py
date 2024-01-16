@@ -4,7 +4,7 @@ import os
 
 st.header("Parameters")
 form = st.form("parameters")
-nphrase = form.slider("Number of nouns extracted from each article", 1, 100, 50)
+nphrase = form.slider("Number of nouns extracted from each article (50 if Offline is selected)", 1, 100, 50)
 DATA_TYPE = form.radio("Data type", ["URL"], horizontal=True, captions=["parse html to retrive content"])
 # offline opt: neo4j-admin database dump/load, require to stop neo4j server
 DATA_LOAD = form.radio("Data load", ["Offline", "Semi-Online", "Online"], horizontal=True, captions=["load nodes and relationships from local (avoid to use gcp api, very fast)", "load nodes from local and create relationships during runtime (avoid to use gcp api, fast)", "create nodes and relationships during runtime (use gcp api, slow)"], index=0)
