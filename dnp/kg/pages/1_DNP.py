@@ -9,6 +9,7 @@ nphrase = form.slider("Number of nouns extracted from each article", 1, 100, 50)
 DATA_TYPE = form.radio("Data type", ["TXT", "URL"], horizontal=True, captions=["currently used only for dnp data", "parse html to retrive content"])
 # offline opt: neo4j-admin database dump/load, require to stop neo4j server
 DATA_LOAD = form.radio("Data load", ["Offline", "Semi-Online", "Online"], horizontal=True, captions=["load nodes and relationships from local (avoid to use gcp api, very fast)", "load nodes from local and create relationships during runtime (avoid to use gcp api, fast)", "create nodes and relationships during runtime (use gcp api, slow)"], index=0)
+gcp_api_key = form.text_input('GCP API Key (for Online)', type='password')
 OUTPUT = form.radio("Output", ["Simple", "Verbose"], horizontal=True, captions=["user mode", "develeper mode (esp. for debug)"])
 
 run = form.form_submit_button("Run")
@@ -200,7 +201,7 @@ elif DATA_LOAD == "Online":
     RETURN a",
     "CALL apoc.nlp.gcp.entities.stream([item in $_batch | item.a], {{
         nodeProperty: 'body',
-        key: '{st.secrets["GCP_API_KEY"]}'
+        key: '{gcp_api_key}'
     }})
     YIELD node, value
     SET node.processed = true
@@ -291,7 +292,7 @@ elif DATA_LOAD == "Online":
     MATCH (q:Query)
     CALL apoc.nlp.gcp.entities.stream(q, {{
     nodeProperty: 'body',
-    key: '{st.secrets["GCP_API_KEY"]}'
+    key: '{gcp_api_key}'
     }})
     YIELD node, value
     SET node.processed = true
