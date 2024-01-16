@@ -289,21 +289,6 @@ if DATA_LOAD != "Offline":
     cypher(query)
 
 ##############################
-### evaluate (naive by rank) ###
-##############################
-
-query = """
-MATCH (q:Query)-[r:CONTAINS]-(n:Noun)-[c:CONTAINS]-(a:Article)
-RETURN q.name AS Query, a.name AS Article, a.url AS URL, a.grp AS Group, a.grp1 AS Group1, collect(n.name) AS Common, SUM((1.0/r.rank)*(1.0/c.rank)) AS Similarity 
-ORDER BY Query, Similarity DESC
-LIMIT 10
-"""
-
-if OUTPUT == "Verbose":
-    st.header("evaluate (naive by rank)")
-    st.write(cypher(query))
-
-##############################
 ### create article-article relationships ###
 ##############################
 
@@ -327,23 +312,6 @@ if DATA_LOAD != "Offline":
     SET r.common = [x IN q.phrase[0..{nphrase}] WHERE x IN a.phrase[0..{nphrase}]]
     """
     cypher(query)
-
-##############################
-### evaluate (still naive by salience) ###
-##############################
-
-query = """
-MATCH (q:Query)-[r:CORRELATES]-(a:Article)
-WITH q, r, a, reduce(s = 0.0, word IN r.common | 
-s + q.salience[apoc.coll.indexOf(q.phrase, word)] + a.salience[apoc.coll.indexOf(a.phrase, word)]) AS Similarity
-RETURN q.name AS Query, a.name AS Article, a.url AS URL, a.grp AS Group, a.grp1 AS Group1, r.common, Similarity 
-ORDER BY Query, Similarity DESC
-LIMIT 10
-"""
-
-if OUTPUT == "Verbose":
-    st.header("evaluate (still naive by salience)")
-    st.write(cypher(query))
 
 ##############################
 ### project graph to memory ###
@@ -679,7 +647,7 @@ st.button("Save graph data", on_click=save_graph_data)
 
 st.header("UI Interaction")
 
-tab1, tab2, tab3 = st.tabs(["Node Similarity", "Related Articles", "Common Keywords"])
+tab1, tab2, tab3, tab4, tab5 = st.tabs(["Node Similarity", "Related Articles", "Common Keywords", "Naive by Rank", "Naive by Salience"])
 
 with tab1:
     col1, col2, col3 = st.columns(3)
@@ -741,6 +709,33 @@ with tab3:
         st.code(query)    
     result = cypher(query)
     st.write(result)
+
+with tab4:
+    query = """
+    MATCH (q:Query)-[r:CONTAINS]-(n:Noun)-[c:CONTAINS]-(a:Article)
+    RETURN q.name AS Query, a.name AS Article, a.url AS URL, a.grp AS Group, a.grp1 AS Group1, collect(n.name) AS Common, SUM((1.0/r.rank)*(1.0/c.rank)) AS Similarity 
+    ORDER BY Query, Similarity DESC
+    LIMIT 10
+    """
+    if OUTPUT == "Verbose":
+        st.code(query)    
+    result = cypher(query)
+    st.write(result)
+
+# # not work well for offline
+# with tab5:
+#     query = """
+#     MATCH (q:Query)-[r:CORRELATES]-(a:Article)
+#     WITH q, r, a, reduce(s = 0.0, word IN r.common | 
+#     s + q.salience[apoc.coll.indexOf(q.phrase, word)] + a.salience[apoc.coll.indexOf(a.phrase, word)]) AS Similarity
+#     RETURN q.name AS Query, a.name AS Article, a.url AS URL, a.grp AS Group, a.grp1 AS Group1, r.common, Similarity 
+#     ORDER BY Query, Similarity DESC
+#     LIMIT 10
+#     """
+#     if OUTPUT == "Verbose":
+#         st.code(query)    
+#     result = cypher(query)
+#     st.write(result)
 
 progress_bar.progress(100, text="Finished. Graph data can be queried.")
 
