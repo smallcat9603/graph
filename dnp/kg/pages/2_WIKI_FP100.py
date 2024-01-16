@@ -655,7 +655,7 @@ def save_graph_data():
         st.write(cypher(result_allinone))
         st.write(cypher(result_bulkimport))
 
-st.button("Save graph data", on_click=save_graph_data) 
+st.button("Save graph data (.csv)", on_click=save_graph_data) 
 
 ##############################
 ### interaction ###
