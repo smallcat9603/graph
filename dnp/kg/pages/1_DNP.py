@@ -566,7 +566,8 @@ def node_embedding():
     # st.header("1. node embedding")
     # st.write(f"Number of embedding vectors produced: {result['nodePropertiesWritten']}")
 
-node_embedding()
+if DATA_LOAD != "Offline":
+    node_embedding()
 
 ##############################
 ### 2. kNN ###

@@ -339,15 +339,27 @@ if exists_result["exists"]:
     G = st.session_state["gds"].graph.get(st.session_state["graph_name"])
     G.drop()
 G, result = st.session_state["gds"].graph.project(st.session_state["graph_name"], node_projection, relationship_projection)
-st.header("project graph to memory")
-st.write(f"The projection took {result['projectMillis']} ms")
-st.write(f"Graph '{G.name()}' node count: {G.node_count()}")
-st.write(f"Graph '{G.name()}' node labels: {G.node_labels()}")
-st.write(f"Graph '{G.name()}' relationship count: {G.relationship_count()}")
-st.write(f"Graph '{G.name()}' degree distribution: {G.degree_distribution()}")
-st.write(f"Graph '{G.name()}' density: {G.density()}")
-st.write(f"Graph '{G.name()}' size in bytes: {G.size_in_bytes()}")
-st.write(f"Graph '{G.name()}' memory_usage: {G.memory_usage()}")
+# st.header("project graph to memory")
+# st.write(f"The projection took {result['projectMillis']} ms")
+# st.write(f"Graph '{G.name()}' node count: {G.node_count()}")
+# st.write(f"Graph '{G.name()}' node labels: {G.node_labels()}")
+# st.write(f"Graph '{G.name()}' relationship count: {G.relationship_count()}")
+# st.write(f"Graph '{G.name()}' degree distribution: {G.degree_distribution()}")
+# st.write(f"Graph '{G.name()}' density: {G.density()}")
+# st.write(f"Graph '{G.name()}' size in bytes: {G.size_in_bytes()}")
+# st.write(f"Graph '{G.name()}' memory_usage: {G.memory_usage()}")
+
+##############################
+### graph statistics ###
+##############################
+
+st.header("Graph Statistics")
+
+col1, col2, col3, col4 = st.columns(4)
+col1.metric("# Nodes", str(G.node_count()))
+col2.metric("# Edges", str(G.relationship_count()))
+col3.metric("Density", str(G.density()))
+col4.metric("Memory", str(G.memory_usage()))
 
 ##############################
 ### node similarity (JACCARD) ###
@@ -524,7 +536,8 @@ def node_embedding():
     st.header("1. node embedding")
     st.write(f"Number of embedding vectors produced: {result['nodePropertiesWritten']}")
 
-node_embedding()
+if DATA_LOAD != "Offline":
+    node_embedding()
 
 ##############################
 ### 2. kNN ###
@@ -597,8 +610,8 @@ RETURN q.name AS Query, a.name AS Article, a.url AS URL, a.grp AS Group, a.grp1 
 ORDER BY Query, Similarity DESC
 LIMIT 10
 """
-st.header("evaluate (fastrp)")
-st.write(cypher(query))
+# st.header("evaluate (fastrp)")
+# st.write(cypher(query))
 
 # node2vec
 query = """
@@ -607,8 +620,8 @@ RETURN q.name AS Query, a.name AS Article, a.url AS URL, a.grp AS Group, a.grp1 
 ORDER BY Query, Similarity DESC
 LIMIT 10
 """
-st.header("evaluate (node2vec)")
-st.write(cypher(query))
+# st.header("evaluate (node2vec)")
+# st.write(cypher(query))
 
 # hashgnn
 query = """
@@ -617,8 +630,8 @@ RETURN q.name AS Query, a.name AS Article, a.url AS URL, a.grp AS Group, a.grp1 
 ORDER BY Query, Similarity DESC
 LIMIT 10
 """
-st.header("evaluate (hashgnn)")
-st.write(cypher(query))
+# st.header("evaluate (hashgnn)")
+# st.write(cypher(query))
 
 ##############################
 ### export to csv in import/ ###
