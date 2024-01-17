@@ -5,6 +5,9 @@ import time
 
 DATA = __file__.split("/")[-1].split(".")[0].split("_")[-1]
 
+st.title(f"{DATA} Dataset")
+st.info("This database includes wikipedia pages of 100 persons, consisting of 25 athletes, 25 engineers, 25 actors, and 25 politicians.")
+
 st.title("Parameters")
 form = st.form("parameters")
 nphrase = form.slider("Number of nouns extracted from each article (50 if Offline is selected)", 1, 100, 50)
