@@ -6,12 +6,12 @@ import streamlit as st
 ##############################
 
 st.markdown("""
-            **Author:** Yao Hu (huyao0107@gmail.com)
+            **Author:** smallcat (huyao0107@gmail.com)
 
             © 2024 Keio Univ. All rights reserved.
 """)
 
-st.title("Welcome to Graph Data App!")
+st.title(":cat2: Welcome to Graph Data App!")
 
 filename = __file__.split("/")[-1]
 if filename.startswith("neo4j"):
