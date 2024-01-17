@@ -5,11 +5,6 @@ import streamlit as st
 ### neo4j desktop v5.11.0 ###
 ##############################
 
-if "reboot" not in st.session_state:
-   st.session_state["reboot"] = False
-if st.session_state["reboot"] == True:
-   st.stop()
-
 st.title("Graph Data App")
 
 filename = __file__.split("/")[-1]
@@ -25,8 +20,10 @@ elif filename.startswith("app"):
     password = st.secrets["NEO4J_SANDBOX_PASSWORD"]
 st.session_state["gds"] = GraphDataScience(host, auth=(user, password))
 
-st.header("gds version")
-st.write(st.session_state["gds"].version())
+st.success(f"Connection successful to GDBS server: {host}") 
+st.info(f"GDS version: {st.session_state['gds'].version()}")
+st.divider()
+st.caption("When switching between graph databases, 'Reset' the GDBS server status first!")
 
 st.session_state["graph_name"] = "testgraph" # project graph name
 
@@ -34,11 +31,7 @@ st.session_state["graph_name"] = "testgraph" # project graph name
 def cypher(query):
    return st.session_state["gds"].run_cypher(query)
 
-##############################
-### free up memory ###
-##############################
-
-def free_up_memory():
+if st.button("Reset", type="primary"):
     exists_result = st.session_state["gds"].graph.exists(st.session_state["graph_name"])
     if exists_result["exists"]:
         G = st.session_state["gds"].graph.get(st.session_state["graph_name"])
@@ -47,9 +40,5 @@ def free_up_memory():
     MATCH (n) DETACH DELETE n
     """
     cypher(query)
-    st.session_state["gds"].close()
-    st.header("gds closed")
-    st.info("Click 'Clear cache (C)' and 'Rerun (R)'")
-    st.session_state["reboot"] = True
-
-st.button("Free up memory", type="primary", on_click=free_up_memory) 
+    st.cache_data.clear() # clear cache data via @st.cache_data, not including st.session_state
+    st.success("Cache cleared! Now you can load graph data!")
