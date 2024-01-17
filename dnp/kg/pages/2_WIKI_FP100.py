@@ -3,6 +3,8 @@ import pandas as pd
 import os
 import time
 
+DATA = __file__.split("/")[-1].split(".")[0].split("_")[-1]
+
 st.title("Parameters")
 form = st.form("parameters")
 nphrase = form.slider("Number of nouns extracted from each article (50 if Offline is selected)", 1, 100, 50)
@@ -12,16 +14,18 @@ DATA_LOAD = form.radio("Data load", ["Offline", "Semi-Online", "Online"], horizo
 gcp_api_key = form.text_input('GCP API Key (for Online)', type='password')
 OUTPUT = form.radio("Output", ["Simple", "Verbose"], horizontal=True, captions=["user mode", "develeper mode (esp. for debug)"])
 
-run = form.form_submit_button("Run")
-if not run:
+run_disabled = False
+if "data" in st.session_state and st.session_state["data"] != DATA:
+    run_disabled = True
+    form.warning("Please 'Reset' the database status first before you 'Run'!")
+run = form.form_submit_button("Run", type="primary", disabled=run_disabled)
+if not run and ("data" not in st.session_state or st.session_state["data"] != DATA):
     st.stop()
 
 DATA_URL = "" # input data
 QUERY_DICT = {} # query dict {QUERY_NAME: QUERY_URL}
 DATA_URL = "https://raw.githubusercontent.com/smallcat9603/graph/main/dnp/kg/data/wikidata_footballplayer_100.csv"
 QUERY_DICT["Thierry Henry"] = "https://en.wikipedia.org/wiki/Thierry_Henry"
-
-FILE_NAME = __file__.split("/")[-1].split(".")[0].split("_")[-1]
 
 if OUTPUT == "Verbose":
     st.title("data url")
@@ -54,9 +58,9 @@ importFolderPath = result["importFolderPath"][0]
 filenames_nodes = []
 filenames_relationships =[]
 for filename in os.listdir(importFolderPath):
-    if filename.startswith(FILE_NAME+".nodes.") and filename.endswith(".csv"):
+    if filename.startswith(DATA+".nodes.") and filename.endswith(".csv"):
         filenames_nodes.append(filename)
-    if filename.startswith(FILE_NAME+".relationships.") and filename.endswith(".csv"):
+    if filename.startswith(DATA+".relationships.") and filename.endswith(".csv"):
         filenames_relationships.append(filename)
 
 def import_graph_data():
@@ -162,7 +166,7 @@ progress_bar.progress(20, text="Set phrase and salience properties...")
 
 if DATA_LOAD == "Semi-Online":
     query = f"""
-    LOAD CSV WITH HEADERS FROM "https://raw.githubusercontent.com/smallcat9603/graph/main/dnp/kg/data/{FILE_NAME}.csv" AS row
+    LOAD CSV WITH HEADERS FROM "https://raw.githubusercontent.com/smallcat9603/graph/main/dnp/kg/data/{DATA}.csv" AS row
     WITH row
     WHERE row._labels = ":Article"
     MATCH (a:Article {{name: row.name}}) WHERE a.processed IS NULL
@@ -250,7 +254,7 @@ progress_bar.progress(50, text="Set phrase and salience properties (Query)...")
 # set phrase and salience properties (Query)
 if DATA_LOAD == "Semi-Online":
     query = f"""
-    LOAD CSV WITH HEADERS FROM "https://raw.githubusercontent.com/smallcat9603/graph/main/dnp/kg/data/{FILE_NAME}.csv" AS row
+    LOAD CSV WITH HEADERS FROM "https://raw.githubusercontent.com/smallcat9603/graph/main/dnp/kg/data/{DATA}.csv" AS row
     WITH row
     WHERE row._labels = ":Query"
     MATCH (q:Query {{name: row.name}})
@@ -646,11 +650,11 @@ LIMIT 10
 # use bulkImport to generate multiple files categorized by node label and relationship type
 def save_graph_data():
     query = f"""
-    CALL apoc.export.csv.all("{FILE_NAME}.csv", {{}}) 
+    CALL apoc.export.csv.all("{DATA}.csv", {{}}) 
     """
     result_allinone = cypher(query)
     query = f"""
-    CALL apoc.export.csv.all("{FILE_NAME}.csv", {{bulkImport: true}}) 
+    CALL apoc.export.csv.all("{DATA}.csv", {{bulkImport: true}}) 
     """
     result_bulkimport = cypher(query)
     if OUTPUT == "Verbose":
@@ -763,4 +767,4 @@ end_time = time.perf_counter()
 execution_time_ms = (end_time - start_time) * 1000
 container_status.success(f"Loading finished: {execution_time_ms:.1f} ms. Graph data can be queried.")
 
-st.session_state["data"] = "WIKI_FP100"
+st.session_state["data"] = DATA

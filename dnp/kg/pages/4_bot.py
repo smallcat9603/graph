@@ -12,6 +12,7 @@ from langchain.prompts.prompt import PromptTemplate
 
 if 'data' not in st.session_state:
    st.title("No Graph Data")
+   st.warning("You should load graph data first!")
 else:
    st.title(f"{st.session_state['data']} Robot")
 
