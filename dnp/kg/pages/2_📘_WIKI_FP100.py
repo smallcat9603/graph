@@ -390,10 +390,11 @@ def write_nodesimilarity_jaccard():
         targetNodeFilter="Article",
         topK=100,
     )
-    st.title("node similarity (JACCARD)")
-    st.write(f"Relationships produced: {result['relationshipsWritten']}")
-    st.write(f"Nodes compared: {result['nodesCompared']}")
-    st.write(f"Mean similarity: {result['similarityDistribution']['mean']}")
+    if OUTPUT == "Verbose":
+        st.title("node similarity (JACCARD)")
+        st.write(f"Relationships produced: {result['relationshipsWritten']}")
+        st.write(f"Nodes compared: {result['nodesCompared']}")
+        st.write(f"Mean similarity: {result['similarityDistribution']['mean']}")
 
 if DATA_LOAD != "Offline":
     write_nodesimilarity_jaccard()
@@ -415,10 +416,11 @@ def write_nodesimilarity_overlap():
         targetNodeFilter="Article",
         topK=100,
     )
-    st.title("node similarity (OVERLAP)")
-    st.write(f"Relationships produced: {result['relationshipsWritten']}")
-    st.write(f"Nodes compared: {result['nodesCompared']}")
-    st.write(f"Mean similarity: {result['similarityDistribution']['mean']}")
+    if OUTPUT == "Verbose":
+        st.title("node similarity (OVERLAP)")
+        st.write(f"Relationships produced: {result['relationshipsWritten']}")
+        st.write(f"Nodes compared: {result['nodesCompared']}")
+        st.write(f"Mean similarity: {result['similarityDistribution']['mean']}")
 
 if DATA_LOAD != "Offline":
     write_nodesimilarity_overlap()
@@ -440,10 +442,11 @@ def write_nodesimilarity_cosine():
         targetNodeFilter="Article",
         topK=100,
     )
-    st.title("node similarity (COSINE)")
-    st.write(f"Relationships produced: {result['relationshipsWritten']}")
-    st.write(f"Nodes compared: {result['nodesCompared']}")
-    st.write(f"Mean similarity: {result['similarityDistribution']['mean']}")
+    if OUTPUT == "Verbose":
+        st.title("node similarity (COSINE)")
+        st.write(f"Relationships produced: {result['relationshipsWritten']}")
+        st.write(f"Nodes compared: {result['nodesCompared']}")
+        st.write(f"Mean similarity: {result['similarityDistribution']['mean']}")
 
 if DATA_LOAD != "Offline":
     write_nodesimilarity_cosine()
@@ -466,8 +469,9 @@ def write_nodesimilarity_ppr():
             relationshipWeightProperty='weight',
             sourceNodes=[nodeid]
         )   
-        st.write(f"Node properties written: {result['nodePropertiesWritten']}")
-        st.write(f"Mean: {result['centralityDistribution']['mean']}")
+        if OUTPUT == "Verbose":
+            st.write(f"Node properties written: {result['nodePropertiesWritten']}")
+            st.write(f"Mean: {result['centralityDistribution']['mean']}")
 
 if DATA_LOAD != "Offline":
     write_nodesimilarity_ppr()
@@ -508,7 +512,8 @@ def node_embedding():
         randomSeed = 42,
     )
 
-    # st.write(f"Embedding vectors: {result['embedding']}")
+    if OUTPUT == "Verbose":
+        st.write(f"Embedding vectors: {result['embedding']}")
 
     # fastrp
     result = st.session_state["gds"].fastRP.mutate(
@@ -545,8 +550,9 @@ def node_embedding():
         # featureProperties=['phrase', 'salience'], # each node should have
     )
 
-    st.title("1. node embedding")
-    st.write(f"Number of embedding vectors produced: {result['nodePropertiesWritten']}")
+    if OUTPUT == "Verbose":
+        st.title("1. node embedding")
+        st.write(f"Number of embedding vectors produced: {result['nodePropertiesWritten']}")
 
 if DATA_LOAD != "Offline":
     node_embedding()
@@ -603,10 +609,11 @@ def kNN():
         targetNodeFilter="Article",
     )
 
-    st.title("2. kNN")
-    st.write(f"Relationships produced: {result['relationshipsWritten']}")
-    st.write(f"Nodes compared: {result['nodesCompared']}")
-    st.write(f"Mean similarity: {result['similarityDistribution']['mean']}")
+    if OUTPUT == "Verbose":
+        st.title("2. kNN")
+        st.write(f"Relationships produced: {result['relationshipsWritten']}")
+        st.write(f"Nodes compared: {result['nodesCompared']}")
+        st.write(f"Mean similarity: {result['similarityDistribution']['mean']}")
 
 if DATA_LOAD != "Offline":
     kNN()
@@ -622,8 +629,10 @@ RETURN q.name AS Query, a.name AS Article, a.url AS URL, a.grp AS Group, a.grp1 
 ORDER BY Query, Similarity DESC
 LIMIT 10
 """
-# st.title("evaluate (fastrp)")
-# st.write(cypher(query))
+
+if OUTPUT == "Verbose":
+    st.title("evaluate (fastrp)")
+    st.write(cypher(query))
 
 # node2vec
 query = """
@@ -632,8 +641,10 @@ RETURN q.name AS Query, a.name AS Article, a.url AS URL, a.grp AS Group, a.grp1 
 ORDER BY Query, Similarity DESC
 LIMIT 10
 """
-# st.title("evaluate (node2vec)")
-# st.write(cypher(query))
+
+if OUTPUT == "Verbose":
+    st.title("evaluate (node2vec)")
+    st.write(cypher(query))
 
 # hashgnn
 query = """
@@ -642,8 +653,10 @@ RETURN q.name AS Query, a.name AS Article, a.url AS URL, a.grp AS Group, a.grp1 
 ORDER BY Query, Similarity DESC
 LIMIT 10
 """
-# st.title("evaluate (hashgnn)")
-# st.write(cypher(query))
+
+if OUTPUT == "Verbose":
+    st.title("evaluate (hashgnn)")
+    st.write(cypher(query))
 
 ##############################
 ### export to csv in import/ ###
