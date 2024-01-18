@@ -488,7 +488,7 @@ if DATA_LOAD != "Offline":
 
 @st.cache_data
 def write_nodesimilarity_ppr():
-    # st.title("ppr (personalized pagerank)")
+
     for idx, name in enumerate(list(QUERY_DICT.keys())):
         nodeid = st.session_state["gds"].find_node_id(labels=["Query"], properties={"name": name})
         result = st.session_state["gds"].pageRank.write(
