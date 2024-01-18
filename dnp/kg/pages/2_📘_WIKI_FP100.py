@@ -50,23 +50,23 @@ cypher(query)
 ### Import CSV ###
 ##############################
 
-query = """
-CALL dbms.listConfig() YIELD name, value
-WHERE name = 'server.directories.import'
-RETURN value AS importFolderPath
-"""
-result = cypher(query)
-importFolderPath = result["importFolderPath"][0]
-
-filenames_nodes = []
-filenames_relationships =[]
-for filename in os.listdir(importFolderPath):
-    if filename.startswith(DATA+".nodes.") and filename.endswith(".csv"):
-        filenames_nodes.append(filename)
-    if filename.startswith(DATA+".relationships.") and filename.endswith(".csv"):
-        filenames_relationships.append(filename)
-
 def import_graph_data():
+    query = """
+    CALL dbms.listConfig() YIELD name, value
+    WHERE name = 'server.directories.import'
+    RETURN value AS importFolderPath
+    """
+    result = cypher(query)
+    importFolderPath = result["importFolderPath"][0]
+
+    filenames_nodes = []
+    filenames_relationships =[]
+    for filename in os.listdir(importFolderPath):
+        if filename.startswith(DATA+".nodes.") and filename.endswith(".csv"):
+            filenames_nodes.append(filename)
+        if filename.startswith(DATA+".relationships.") and filename.endswith(".csv"):
+            filenames_relationships.append(filename)
+
     query = "CALL apoc.import.csv(["
     for idx, filename in enumerate(filenames_nodes):
         if idx < len(filenames_nodes)-1:
@@ -678,7 +678,7 @@ tab1, tab2, tab3, tab4, tab5 = st.tabs(["Node Similarity", "Related Articles", "
 with tab1:
     col1, col2, col3 = st.columns(3)
     with col1:
-        query_node = st.selectbox("Query node", ("Thierry Henry", "C-2", "C-3", "C-4"))
+        query_node = st.selectbox("Query node", ("Thierry Henry",))
     with col2:
         similarity_method = st.selectbox("Similarity method", ("JACCARD", "OVERLAP", "COSINE", "PPR"))
     with col3:
