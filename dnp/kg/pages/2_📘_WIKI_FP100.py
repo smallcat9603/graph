@@ -50,23 +50,23 @@ cypher(query)
 ### Import CSV ###
 ##############################
 
-query = """
-CALL dbms.listConfig() YIELD name, value
-WHERE name = 'server.directories.import'
-RETURN value AS importFolderPath
-"""
-result = cypher(query)
-importFolderPath = result["importFolderPath"][0]
-
-filenames_nodes = []
-filenames_relationships =[]
-for filename in os.listdir(importFolderPath):
-    if filename.startswith(DATA+".nodes.") and filename.endswith(".csv"):
-        filenames_nodes.append(filename)
-    if filename.startswith(DATA+".relationships.") and filename.endswith(".csv"):
-        filenames_relationships.append(filename)
-
 def import_graph_data():
+    query = """
+    CALL dbms.listConfig() YIELD name, value
+    WHERE name = 'server.directories.import'
+    RETURN value AS importFolderPath
+    """
+    result = cypher(query)
+    importFolderPath = result["importFolderPath"][0]
+
+    filenames_nodes = []
+    filenames_relationships =[]
+    for filename in os.listdir(importFolderPath):
+        if filename.startswith(DATA+".nodes.") and filename.endswith(".csv"):
+            filenames_nodes.append(filename)
+        if filename.startswith(DATA+".relationships.") and filename.endswith(".csv"):
+            filenames_relationships.append(filename)
+
     query = "CALL apoc.import.csv(["
     for idx, filename in enumerate(filenames_nodes):
         if idx < len(filenames_nodes)-1:
