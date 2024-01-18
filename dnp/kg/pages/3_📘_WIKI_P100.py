@@ -678,7 +678,7 @@ tab1, tab2, tab3, tab4, tab5 = st.tabs(["Node Similarity", "Related Articles", "
 with tab1:
     col1, col2, col3 = st.columns(3)
     with col1:
-        query_node = st.selectbox("Query node", ("Joe Biden", "C-2", "C-3", "C-4"))
+        query_node = st.selectbox("Query node", ("Joe Biden",))
     with col2:
         similarity_method = st.selectbox("Similarity method", ("JACCARD", "OVERLAP", "COSINE", "PPR"))
     with col3:
