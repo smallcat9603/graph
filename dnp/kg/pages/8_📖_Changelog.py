@@ -1,6 +1,8 @@
 import streamlit as st
 
 st.markdown("""
+            ## 240118
+            - "Reset" is always enabled in case of program interruption
             ## 240117
             - Optimized "Reset" procedure
             - Confirmed to reset gdbs status when switching between databases

@@ -6,7 +6,7 @@ import time
 DATA = __file__.split("/")[-1].split(".")[0].split("_")[-1]
 
 st.title(f"{DATA} Dataset")
-st.info("This database includes wikipedia pages of 100 persons, consisting of 25 athletes, 25 engineers, 25 actors, and 25 politicians.")
+st.info("This database includes wikipedia pages of 1000 persons, consisting of 100 athletes, 100 engineers, 100 actors, 100 politicians, 100 physicians, 100 scientists, 100 artists, 100 journalists, 100 soldiers, and 100 lawyers.")
 
 st.title("Parameters")
 form = st.form("parameters")
