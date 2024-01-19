@@ -1,6 +1,8 @@
 import streamlit as st
 
 st.markdown("""
+            ## 240119
+            - replaced st.bar_chart with pyplot
             ## 240118
             - "Reset" is always enabled in case of program interruption
             ## 240117
