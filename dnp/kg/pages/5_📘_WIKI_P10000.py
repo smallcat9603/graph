@@ -88,6 +88,10 @@ def post_process():
     query = f"""
     MATCH (n) WHERE n.pr0 IS NOT NULL
     SET n.pr0 = toFloat(n.pr0)
+    """
+    cypher(query)
+    query = f"""
+    MATCH (n) WHERE n.pr1 IS NOT NULL
     SET n.pr1 = toFloat(n.pr1)
     SET n.pr2 = toFloat(n.pr2)
     SET n.pr3 = toFloat(n.pr3)
@@ -729,7 +733,7 @@ with tab1:
     if similarity_method == "PPR":
         query = f"""
         MATCH (q:Query)-[r:CORRELATES]-(a:Article) WHERE q.name = "{query_node}"
-        RETURN q.name AS Query, a.name AS Article, a.url AS URL, a.pr{str(int(query_node.split("-")[-1])-1)} AS Similarity
+        RETURN q.name AS Query, a.name AS Article, a.url AS URL, a.pr0 AS Similarity
         ORDER BY Similarity DESC
         LIMIT {limit}
         """ 

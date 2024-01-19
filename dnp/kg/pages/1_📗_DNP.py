@@ -99,6 +99,10 @@ def post_process():
     query = f"""
     MATCH (n) WHERE n.pr0 IS NOT NULL
     SET n.pr0 = toFloat(n.pr0)
+    """
+    cypher(query)
+    query = f"""
+    MATCH (n) WHERE n.pr1 IS NOT NULL
     SET n.pr1 = toFloat(n.pr1)
     SET n.pr2 = toFloat(n.pr2)
     SET n.pr3 = toFloat(n.pr3)
