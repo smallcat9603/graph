@@ -197,7 +197,7 @@ elif DATA_LOAD == "Online":
     UNWIND value.entities AS entity
     SET node.phrase = coalesce(node.phrase, []) + entity['name']
     SET node.salience = coalesce(node.salience, []) + entity['salience']",
-    {{batchMode: "BATCH_SINGLE", batchSize: 10}})
+    {{batchMode: "BATCH_SINGLE", batchSize: 100, parallel: true}})
     YIELD batches, total, timeTaken, committedOperations
     RETURN batches, total, timeTaken, committedOperations
     """

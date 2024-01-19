@@ -18,7 +18,7 @@ with tab2:
 
 st.write("P100 vs P1000 vs P10000 (Online, nphrase=50)")
 # df = pd.DataFrame(
-#     data=[(3097, 8304, 0.00086, 25MiB), (), ()],
+#     data=[(284049.5 ms, 3097, 8304), (2258444.9 ms, 23095, 276383), (7622336.5 ms, 51193, 1172705)],
 #     columns=["Graph Construction Time (ms)"],
 #     index=["100", "1000", "10000"],
 # )
