@@ -1,8 +1,9 @@
+import streamlit as st
 import os
 import re
-import streamlit as st
-import pandas as pd
 import time
+import matplotlib.pyplot as plt
+import numpy as np
 
 DATA = __file__.split("/")[-1].split(".")[0].split("_")[-1]
 
@@ -747,6 +748,20 @@ st.session_state["data"] = DATA
 ### interaction ###
 ##############################
 
+def plot_similarity(query_node, similarity_method, limit):
+    fig, ax = plt.subplots()
+    articles = result["Article"]
+    y_pos = np.arange(len(articles))
+    similarities = result["Similarity"]
+
+    ax.barh(y_pos, similarities)
+    ax.set_yticks(y_pos, labels=articles)
+    ax.invert_yaxis()  # labels read top-to-bottom
+    ax.set_xlabel('Similarity Score')
+    ax.set_title(f'Similarity to {query_node} by {similarity_method} (Top-{limit})')
+
+    st.pyplot(fig)
+
 st.divider()
 st.title("UI Interaction")
 
@@ -780,12 +795,7 @@ with tab1:
     result = cypher(query)
     tab01, tab02 = st.tabs(["Chart", "Table"])
     with tab01:
-        df = pd.DataFrame(
-            data=list(result["Similarity"]),
-            columns=["Similarity Score"],
-            index=result["Article"],
-        )
-        st.bar_chart(df)
+        plot_similarity(query_node, similarity_method, limit)
     with tab02:
         st.write(result)
 
@@ -818,12 +828,7 @@ with tab2:
     result = cypher(query)
     tab01, tab02 = st.tabs(["Chart", "Table"])
     with tab01:
-        df = pd.DataFrame(
-            data=list(result["Similarity"]),
-            columns=["Similarity Score"],
-            index=result["Article"],
-        )
-        st.bar_chart(df)
+        plot_similarity(', '.join(query_nodes), similarity_method, limit)
     with tab02:
         st.write(result)
 
