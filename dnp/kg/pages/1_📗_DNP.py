@@ -395,14 +395,16 @@ G, result = st.session_state["gds"].graph.project(st.session_state["graph_name"]
 ### graph statistics ###
 ##############################
 
-st.divider()
-st.title("Graph Statistics")
+if OUTPUT == "Verbose":
 
-col1, col2, col3, col4 = st.columns(4)
-col1.metric("# Nodes", str(G.node_count()))
-col2.metric("# Edges", str(G.relationship_count()))
-col3.metric("Density", str(G.density()))
-col4.metric("Memory", str(G.memory_usage()))
+    st.divider()
+    st.title("Graph Statistics (project)")
+
+    col1, col2, col3, col4 = st.columns(4)
+    col1.metric("# Nodes", str(G.node_count()))
+    col2.metric("# Edges", str(G.relationship_count()))
+    col3.metric("Density", str(G.density()))
+    col4.metric("Memory", str(G.memory_usage()))
 
 ##############################
 ### node similarity (JACCARD) ###
@@ -692,6 +694,25 @@ if OUTPUT == "Verbose":
 ### export to csv in import/ ###
 ##############################
 
+st.divider()
+st.title("Graph Statistics")
+query = f"""
+CALL apoc.meta.stats()
+YIELD nodeCount, relCount, labels, relTypesCount
+RETURN nodeCount, relCount, labels, relTypesCount
+"""
+result = cypher(query)
+
+col1, col2 = st.columns(2)
+col1.metric("# Nodes", result["nodeCount"][0])
+col2.metric("# Edges", result["relCount"][0])
+
+col1, col2 = st.columns(2)
+with col1.expander("Node Labels"):
+    st.table(result["labels"][0])
+with col2.expander("Relationship Types"):
+    st.table(result["relTypesCount"][0])
+
 # no bulkImport: all in one
 # use bulkImport to generate multiple files categorized by node label and relationship type
 def save_graph_data():
@@ -707,7 +728,16 @@ def save_graph_data():
         st.write(cypher(result_allinone))
         st.write(cypher(result_bulkimport))
 
-st.button("Save graph data (.csv)", on_click=save_graph_data) 
+if OUTPUT == "Verbose":
+    st.caption("Save graph data including nodes and edges into csv files")
+    st.button("Save graph data (.csv)", on_click=save_graph_data) 
+
+progress_bar.progress(100, text="Finished.")
+end_time = time.perf_counter()
+execution_time_ms = (end_time - start_time) * 1000
+container_status.success(f"Loading finished: {execution_time_ms:.1f} ms. Graph data can be queried.")
+
+st.session_state["data"] = DATA
 
 ##############################
 ### interaction ###
@@ -845,10 +875,3 @@ with tab5:
 #     st.write(result)
 
 st.divider()
-
-progress_bar.progress(100, text="Finished.")
-end_time = time.perf_counter()
-execution_time_ms = (end_time - start_time) * 1000
-container_status.success(f"Loading finished: {execution_time_ms:.1f} ms. Graph data can be queried.")
-
-st.session_state["data"] = DATA
