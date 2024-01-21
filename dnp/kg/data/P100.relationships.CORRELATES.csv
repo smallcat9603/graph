@@ -1,0 +1,2994 @@
+:START_ID,:END_ID,:TYPE,common
+68264,68265,CORRELATES,"[Bill Clinton,American,Democratic Party,election,White House,mother]"
+68264,68266,CORRELATES,"[first,father]"
+68264,68268,CORRELATES,"[government.,presidency,president,father,mother]"
+68264,68270,CORRELATES,"[Democratic Party,president,administration,administration,mother,father,presidency]"
+68264,68272,CORRELATES,[American]
+68264,68273,CORRELATES,"[first,graduate school,American]"
+68264,68276,CORRELATES,"[presidency,presidency,American,U.S. Congress,administration,administration,father,White House,president,schools,president]"
+68264,68277,CORRELATES,"[student,father,mother,president,father]"
+68264,68278,CORRELATES,"[George W. Bush,American,father,administration,president,president,president,presidency]"
+68264,68280,CORRELATES,"[American,father,administration,administration,presidency,president,rights,administration]"
+68264,68281,CORRELATES,"[mother,mother]"
+68264,68282,CORRELATES,[first]
+68264,68283,CORRELATES,"[American,politician,presidency,president,law,election]"
+68264,68285,CORRELATES,"[president,student,president,student,president]"
+68264,68286,CORRELATES,"[father,presidency,government.]"
+68264,68287,CORRELATES,"[George W. Bush,election,father,law]"
+68264,68288,CORRELATES,"[office,office,Democratic Party,office,office]"
+68264,68289,CORRELATES,"[mother,George W. Bush,Bill Clinton,father,mother]"
+68264,68290,CORRELATES,"[father,election,election]"
+68264,68292,CORRELATES,"[Democratic Party,Bill Clinton,office,election,administration,administration,American]"
+68264,68294,CORRELATES,"[George W. Bush,Bill Clinton,president,father,father,father]"
+68264,68295,CORRELATES,[father]
+68264,68297,CORRELATES,"[presidency,American,president,White House,Democratic Party,administration,George W. Bush,president,president,presidency,administration,election,stepfather,office]"
+68264,68298,CORRELATES,"[politician,election,American,parents,law,election,election,law,office,Bill Clinton,election]"
+68264,68300,CORRELATES,"[office,Bill Clinton,American,mother,father]"
+68264,68301,CORRELATES,"[George W. Bush,election,election,election,election,election]"
+68264,68302,CORRELATES,"[American,presidency,mother,mother,president,White House,presidency,administration,parents]"
+68264,68304,CORRELATES,[election]
+68264,68305,CORRELATES,"[American,politician]"
+68264,68306,CORRELATES,[American]
+68264,68307,CORRELATES,"[American,first]"
+68264,68308,CORRELATES,[first]
+68264,68312,CORRELATES,[American]
+68264,68313,CORRELATES,"[Bill Clinton,father,law,Joe Biden]"
+68264,68315,CORRELATES,"[Illinois,American,father,president,election]"
+68264,68319,CORRELATES,[girls]
+68264,68322,CORRELATES,[American]
+68264,68324,CORRELATES,[father]
+68264,68327,CORRELATES,"[mother,American]"
+68264,68328,CORRELATES,[mother]
+68264,68329,CORRELATES,"[American,student]"
+68264,68330,CORRELATES,"[American,father]"
+68264,68332,CORRELATES,[father]
+68264,68333,CORRELATES,"[father,mother,father]"
+68264,68335,CORRELATES,[parents]
+68264,68336,CORRELATES,"[first,election]"
+68264,68338,CORRELATES,[American]
+68264,68340,CORRELATES,"[American,Illinois]"
+68264,68341,CORRELATES,[father]
+68264,68343,CORRELATES,"[Chicago,American]"
+68264,68344,CORRELATES,"[American,administration]"
+68264,68345,CORRELATES,[American]
+68264,68347,CORRELATES,[American]
+68264,68348,CORRELATES,"[American,father]"
+68264,68349,CORRELATES,"[American,first]"
+68264,68350,CORRELATES,[American]
+68264,68353,CORRELATES,[American]
+68264,68354,CORRELATES,[American]
+68264,68356,CORRELATES,"[American,Hawaii]"
+68264,68360,CORRELATES,"[American,father,mother,Hawaii]"
+68264,68361,CORRELATES,[American]
+68264,68362,CORRELATES,[American]
+68264,68363,CORRELATES,[American]
+68265,68266,CORRELATES,[Richard Nixon]
+68265,68268,CORRELATES,"[Washington, D.C.,mother]"
+68265,68270,CORRELATES,"[Democratic Party,mother]"
+68265,68272,CORRELATES,[American]
+68265,68273,CORRELATES,[American]
+68265,68276,CORRELATES,"[American,White House,campaign,time]"
+68265,68277,CORRELATES,[mother]
+68265,68278,CORRELATES,"[Richard Nixon,American,scandal,member]"
+68265,68280,CORRELATES,"[Richard Nixon,American,U.S. Senate,campaign,Washington, D.C.,members]"
+68265,68281,CORRELATES,"[mother,mother]"
+68265,68282,CORRELATES,"[program,program]"
+68265,68283,CORRELATES,"[U.S. Senate,American,Richard Nixon,Washington, D.C.,election]"
+68265,68287,CORRELATES,"[New York,U.S. Senate,election]"
+68265,68288,CORRELATES,"[New York,member,Democratic Party]"
+68265,68289,CORRELATES,"[mother,Bill Clinton,mother,woman]"
+68265,68290,CORRELATES,"[campaign,campaign,election,senator,election]"
+68265,68292,CORRELATES,"[New York,Democratic Party,Bill Clinton,election,program,American]"
+68265,68294,CORRELATES,"[Bill Clinton,daughter,senator,campaign]"
+68265,68296,CORRELATES,[member]
+68265,68297,CORRELATES,"[American,Arkansas,White House,Democratic Party,time,election,New York,program]"
+68265,68298,CORRELATES,"[election,American,member,election,election,Bill Clinton,campaign,election]"
+68265,68300,CORRELATES,"[Bill Clinton,American,mother]"
+68265,68301,CORRELATES,"[election,election,election,election,election]"
+68265,68302,CORRELATES,"[American,Richard Nixon,mother,campaign,mother,White House,Washington, D.C.]"
+68265,68303,CORRELATES,[program]
+68265,68304,CORRELATES,"[member,member,members,member,member,election,member,member]"
+68265,68305,CORRELATES,"[American,husband,nominee,Washington, D.C.]"
+68265,68306,CORRELATES,"[member,New York,American,member]"
+68265,68307,CORRELATES,[American]
+68265,68312,CORRELATES,[American]
+68265,68313,CORRELATES,[Bill Clinton]
+68265,68314,CORRELATES,[daughter]
+68265,68315,CORRELATES,"[American,Washington, D.C.,election]"
+68265,68318,CORRELATES,[daughter]
+68265,68319,CORRELATES,"[member,member,program,member,member,member]"
+68265,68320,CORRELATES,"[member,members,member]"
+68265,68322,CORRELATES,[American]
+68265,68325,CORRELATES,[members]
+68265,68327,CORRELATES,"[mother,American]"
+68265,68328,CORRELATES,[mother]
+68265,68329,CORRELATES,"[American,New York]"
+68265,68330,CORRELATES,"[American,New York]"
+68265,68333,CORRELATES,[mother]
+68265,68335,CORRELATES,[time]
+68265,68336,CORRELATES,"[member,member,election,member]"
+68265,68338,CORRELATES,"[woman,American,members]"
+68265,68340,CORRELATES,"[member,American]"
+68265,68342,CORRELATES,"[members,member]"
+68265,68343,CORRELATES,[American]
+68265,68344,CORRELATES,"[American,program]"
+68265,68345,CORRELATES,"[American,member]"
+68265,68347,CORRELATES,[American]
+68265,68348,CORRELATES,"[member,American,member]"
+68265,68349,CORRELATES,"[American,member]"
+68265,68350,CORRELATES,[American]
+68265,68353,CORRELATES,[American]
+68265,68354,CORRELATES,[American]
+68265,68356,CORRELATES,"[American,member,member]"
+68265,68360,CORRELATES,"[American,mother]"
+68265,68361,CORRELATES,[American]
+68265,68362,CORRELATES,"[American,members,member,women]"
+68265,68363,CORRELATES,[American]
+68266,68267,CORRELATES,"[career,career]"
+68266,68268,CORRELATES,[father]
+68266,68270,CORRELATES,[father]
+68266,68273,CORRELATES,[first]
+68266,68275,CORRELATES,[band]
+68266,68276,CORRELATES,[father]
+68266,68277,CORRELATES,"[father,family,father]"
+68266,68278,CORRELATES,"[Richard Nixon,father]"
+68266,68280,CORRELATES,"[Richard Nixon,father]"
+68266,68282,CORRELATES,[first]
+68266,68283,CORRELATES,[Richard Nixon]
+68266,68286,CORRELATES,[father]
+68266,68287,CORRELATES,[father]
+68266,68289,CORRELATES,"[family,father]"
+68266,68290,CORRELATES,[father]
+68266,68294,CORRELATES,"[family,family,father,father,father]"
+68266,68295,CORRELATES,"[father,family]"
+68266,68298,CORRELATES,[South Carolina]
+68266,68300,CORRELATES,[father]
+68266,68301,CORRELATES,[South Carolina]
+68266,68302,CORRELATES,"[Richard Nixon,family]"
+68266,68303,CORRELATES,"[career,release]"
+68266,68304,CORRELATES,"[singles,group]"
+68266,68305,CORRELATES,[death]
+68266,68307,CORRELATES,"[family,first]"
+68266,68308,CORRELATES,[first]
+68266,68313,CORRELATES,[father]
+68266,68314,CORRELATES,[career]
+68266,68315,CORRELATES,[father]
+68266,68320,CORRELATES,[group]
+68266,68322,CORRELATES,[death]
+68266,68323,CORRELATES,"[group,group,group,group]"
+68266,68324,CORRELATES,[father]
+68266,68325,CORRELATES,"[career,career]"
+68266,68329,CORRELATES,[family]
+68266,68330,CORRELATES,[father]
+68266,68332,CORRELATES,[father]
+68266,68333,CORRELATES,"[father,father,family]"
+68266,68335,CORRELATES,[release]
+68266,68336,CORRELATES,[first]
+68266,68338,CORRELATES,[family]
+68266,68341,CORRELATES,"[father,family]"
+68266,68342,CORRELATES,"[career,singles,singles,group,group,group]"
+68266,68348,CORRELATES,[father]
+68266,68349,CORRELATES,"[first,career,career]"
+68266,68351,CORRELATES,[career]
+68266,68354,CORRELATES,[career]
+68266,68356,CORRELATES,"[band,family]"
+68266,68357,CORRELATES,[South Carolina]
+68266,68359,CORRELATES,[career]
+68266,68360,CORRELATES,[father]
+68266,68362,CORRELATES,[family]
+68267,68268,CORRELATES,[history]
+68267,68269,CORRELATES,[Japanese]
+68267,68271,CORRELATES,[Japanese]
+68267,68272,CORRELATES,"[Japanese,article,article,Wikipedia,driver,auto racing]"
+68267,68273,CORRELATES,[Japanese]
+68267,68274,CORRELATES,"[Japanese,article,Wikipedia,auto racing]"
+68267,68275,CORRELATES,[Japanese]
+68267,68276,CORRELATES,"[history,event]"
+68267,68277,CORRELATES,"[son,Japanese]"
+68267,68278,CORRELATES,[son]
+68267,68279,CORRELATES,"[Japanese,1,2,3,1]"
+68267,68281,CORRELATES,[Japanese]
+68267,68282,CORRELATES,"[Japanese,article]"
+68267,68284,CORRELATES,"[Japanese,1,1]"
+68267,68285,CORRELATES,"[Japanese,son]"
+68267,68291,CORRELATES,[Japanese]
+68267,68296,CORRELATES,[Japanese]
+68267,68299,CORRELATES,[Japanese]
+68267,68303,CORRELATES,"[career,2009]"
+68267,68304,CORRELATES,[Japanese]
+68267,68307,CORRELATES,[Japanese]
+68267,68308,CORRELATES,[Japanese]
+68267,68309,CORRELATES,"[article,Japanese,Wikipedia]"
+68267,68310,CORRELATES,"[article,Japanese,Wikipedia]"
+68267,68311,CORRELATES,"[Japanese,Wikipedia,article,25,3,1,2]"
+68267,68312,CORRELATES,"[Japanese,article,Wikipedia,2,1,2009,3]"
+68267,68314,CORRELATES,"[Japanese,Saitama Prefecture,career,2009,2,1,1,2009,1,3]"
+68267,68315,CORRELATES,[history]
+68267,68316,CORRELATES,[Japanese]
+68267,68317,CORRELATES,"[Japanese,article,Wikipedia,1,1,1]"
+68267,68318,CORRELATES,[Japanese]
+68267,68319,CORRELATES,[Japanese]
+68267,68320,CORRELATES,[Japanese]
+68267,68321,CORRELATES,"[Japanese,25]"
+68267,68322,CORRELATES,[son]
+68267,68323,CORRELATES,"[Japanese,event,13]"
+68267,68324,CORRELATES,"[Japanese,article,Wikipedia]"
+68267,68325,CORRELATES,"[Japanese,career,career]"
+68267,68326,CORRELATES,"[Japanese,Saitama Prefecture]"
+68267,68327,CORRELATES,[2002]
+68267,68328,CORRELATES,"[Japanese,3,2,2,1,3]"
+68267,68330,CORRELATES,"[event,article,article]"
+68267,68331,CORRELATES,"[Japanese,article,Wikipedia,auto racing,2,3]"
+68267,68333,CORRELATES,[Japanese]
+68267,68334,CORRELATES,"[article,Japanese,Wikipedia]"
+68267,68335,CORRELATES,"[Japanese,event]"
+68267,68336,CORRELATES,[Japanese]
+68267,68337,CORRELATES,"[Japanese,1960]"
+68267,68339,CORRELATES,"[Japanese,article,Wikipedia,2002,2,2,1,1,2004,2002,3]"
+68267,68340,CORRELATES,"[article,Wikipedia,article,2,2,1]"
+68267,68341,CORRELATES,[Japanese]
+68267,68342,CORRELATES,"[career,event,Japanese]"
+68267,68343,CORRELATES,"[article,article,Wikipedia,3,2,1]"
+68267,68345,CORRELATES,"[article,article,Wikipedia,1,25,1]"
+68267,68346,CORRELATES,"[Japanese,article,article,Wikipedia,2009,3,2,2009,2009,1,21]"
+68267,68347,CORRELATES,"[article,Wikipedia,1]"
+68267,68349,CORRELATES,"[career,career]"
+68267,68351,CORRELATES,"[Japanese,career]"
+68267,68352,CORRELATES,"[Japanese,21,1,21,2,1,2]"
+68267,68353,CORRELATES,"[1,2]"
+68267,68354,CORRELATES,[career]
+68267,68355,CORRELATES,"[article,article,Wikipedia,history]"
+68267,68358,CORRELATES,"[article,article,Wikipedia]"
+68267,68359,CORRELATES,"[career,3,1,2]"
+68267,68360,CORRELATES,[Japanese]
+68267,68361,CORRELATES,[2003]
+68267,68362,CORRELATES,[list]
+68267,68363,CORRELATES,"[article,Wikipedia,article,1,3,2]"
+68268,68270,CORRELATES,"[president,mother,father,presidency]"
+68268,68276,CORRELATES,"[presidency,presidency,father,president,history,president]"
+68268,68277,CORRELATES,"[father,mother,president,father]"
+68268,68278,CORRELATES,"[President,father,president,president,president,presidency]"
+68268,68279,CORRELATES,[President]
+68268,68280,CORRELATES,"[father,Washington, D.C.,presidency,president]"
+68268,68281,CORRELATES,"[President,mother,mother]"
+68268,68283,CORRELATES,"[Washington, D.C.,presidency,president]"
+68268,68285,CORRELATES,"[president,president,president]"
+68268,68286,CORRELATES,"[British,father,French,forces,presidency,government.]"
+68268,68287,CORRELATES,[father]
+68268,68289,CORRELATES,"[mother,father,mother]"
+68268,68290,CORRELATES,"[father,North American,France]"
+68268,68294,CORRELATES,"[president,father,father,father]"
+68268,68295,CORRELATES,[father]
+68268,68296,CORRELATES,"[President,President,President,President]"
+68268,68297,CORRELATES,"[presidency,president,president,president,presidency,President]"
+68268,68299,CORRELATES,"[people,library]"
+68268,68300,CORRELATES,"[mother,father]"
+68268,68302,CORRELATES,"[presidency,mother,British,mother,president,presidency,Washington, D.C.]"
+68268,68305,CORRELATES,"[Washington, D.C.,President]"
+68268,68306,CORRELATES,"[Virginia,President]"
+68268,68313,CORRELATES,[father]
+68268,68315,CORRELATES,"[history,Washington, D.C.,father,president]"
+68268,68318,CORRELATES,[people]
+68268,68322,CORRELATES,"[people,France]"
+68268,68324,CORRELATES,[father]
+68268,68327,CORRELATES,[mother]
+68268,68328,CORRELATES,"[mother,British]"
+68268,68330,CORRELATES,[father]
+68268,68332,CORRELATES,[father]
+68268,68333,CORRELATES,"[father,people,mother,father]"
+68268,68341,CORRELATES,[father]
+68268,68348,CORRELATES,[father]
+68268,68355,CORRELATES,[history]
+68268,68356,CORRELATES,[descent]
+68268,68357,CORRELATES,[Virginia]
+68268,68360,CORRELATES,"[father,descent,descent,mother]"
+68269,68271,CORRELATES,"[company,Japanese]"
+68269,68272,CORRELATES,[Japanese]
+68269,68273,CORRELATES,[Japanese]
+68269,68274,CORRELATES,[Japanese]
+68269,68275,CORRELATES,[Japanese]
+68269,68277,CORRELATES,[Japanese]
+68269,68279,CORRELATES,[Japanese]
+68269,68280,CORRELATES,[life]
+68269,68281,CORRELATES,"[Japanese,company]"
+68269,68282,CORRELATES,"[Japanese,childhood]"
+68269,68284,CORRELATES,[Japanese]
+68269,68285,CORRELATES,[Japanese]
+68269,68289,CORRELATES,[school]
+68269,68291,CORRELATES,[Japanese]
+68269,68293,CORRELATES,[company]
+68269,68294,CORRELATES,[children]
+68269,68295,CORRELATES,"[company,school,company,company,company,company]"
+68269,68296,CORRELATES,[Japanese]
+68269,68298,CORRELATES,"[education,citation]"
+68269,68299,CORRELATES,[Japanese]
+68269,68300,CORRELATES,[company]
+68269,68304,CORRELATES,[Japanese]
+68269,68305,CORRELATES,"[school,school,school]"
+68269,68307,CORRELATES,"[Japanese,company,company,village,company,employees,company]"
+68269,68308,CORRELATES,"[Japanese,children,company,company]"
+68269,68309,CORRELATES,[Japanese]
+68269,68310,CORRELATES,[Japanese]
+68269,68311,CORRELATES,[Japanese]
+68269,68312,CORRELATES,[Japanese]
+68269,68314,CORRELATES,[Japanese]
+68269,68315,CORRELATES,"[children,children,children]"
+68269,68316,CORRELATES,[Japanese]
+68269,68317,CORRELATES,[Japanese]
+68269,68318,CORRELATES,"[Japanese,children]"
+68269,68319,CORRELATES,"[Japanese,citation]"
+68269,68320,CORRELATES,"[Japanese,citation,citation,citation,citation,citation,citation]"
+68269,68321,CORRELATES,[Japanese]
+68269,68322,CORRELATES,"[children,childhood,life,children]"
+68269,68323,CORRELATES,[Japanese]
+68269,68324,CORRELATES,"[Japanese,school]"
+68269,68325,CORRELATES,[Japanese]
+68269,68326,CORRELATES,[Japanese]
+68269,68328,CORRELATES,[Japanese]
+68269,68331,CORRELATES,"[Japanese,car]"
+68269,68333,CORRELATES,"[Japanese,life]"
+68269,68334,CORRELATES,[Japanese]
+68269,68335,CORRELATES,[Japanese]
+68269,68336,CORRELATES,"[Japanese,citation]"
+68269,68337,CORRELATES,"[Japanese,company]"
+68269,68338,CORRELATES,"[children,children]"
+68269,68339,CORRELATES,[Japanese]
+68269,68341,CORRELATES,[Japanese]
+68269,68342,CORRELATES,[Japanese]
+68269,68344,CORRELATES,"[education,education]"
+68269,68346,CORRELATES,[Japanese]
+68269,68351,CORRELATES,[Japanese]
+68269,68352,CORRELATES,"[Japanese,company]"
+68269,68353,CORRELATES,[citation]
+68269,68355,CORRELATES,[company]
+68269,68356,CORRELATES,"[citation,citation,citation]"
+68269,68357,CORRELATES,"[employees,company,employees]"
+68269,68360,CORRELATES,"[school,Japanese,citation,citation,citation]"
+68270,68276,CORRELATES,"[presidency,presidency,governor,administration,administration,father,president,president,wife,Republican Party]"
+68270,68277,CORRELATES,"[father,mother,president,father]"
+68270,68278,CORRELATES,"[Republican Party,father,administration,president,president,Vietnam War,president,wife,presidency]"
+68270,68280,CORRELATES,"[father,Dwight D. Eisenhower,administration,administration,Soviet Union,presidency,president,administration]"
+68270,68281,CORRELATES,"[mother,mother]"
+68270,68283,CORRELATES,"[presidency,president,Vietnam War]"
+68270,68285,CORRELATES,"[president,president,president,reputation]"
+68270,68286,CORRELATES,"[father,presidency]"
+68270,68287,CORRELATES,"[father,governor,governor,term]"
+68270,68288,CORRELATES,"[governor,governor,governor,Democratic Party,term,governor,conversation,governor,governor,governor,governor,governor]"
+68270,68289,CORRELATES,"[mother,father,mother]"
+68270,68290,CORRELATES,"[Republican Party,father,term,wife,governor,governor]"
+68270,68292,CORRELATES,"[Democratic Party,administration,governor,administration]"
+68270,68294,CORRELATES,"[president,father,father,father,Vietnam War]"
+68270,68295,CORRELATES,[father]
+68270,68296,CORRELATES,[wife]
+68270,68297,CORRELATES,"[presidency,president,Democratic Party,administration,governor,governor,president,president,presidency,administration,term,governor]"
+68270,68298,CORRELATES,"[governor,governor,governor,governor]"
+68270,68300,CORRELATES,"[governor,mother,father,governor]"
+68270,68301,CORRELATES,"[Republican Party,Congress,governor,governor,governor,governor,governor,governor]"
+68270,68302,CORRELATES,"[presidency,mother,mother,president,presidency,administration,response]"
+68270,68305,CORRELATES,[governor]
+68270,68306,CORRELATES,"[Dwight D. Eisenhower,Congress]"
+68270,68313,CORRELATES,[father]
+68270,68315,CORRELATES,"[Congress,Republican Party,father,president]"
+68270,68316,CORRELATES,[response]
+68270,68324,CORRELATES,[father]
+68270,68327,CORRELATES,[mother]
+68270,68328,CORRELATES,[mother]
+68270,68330,CORRELATES,[father]
+68270,68332,CORRELATES,[father]
+68270,68333,CORRELATES,"[father,mother,father]"
+68270,68341,CORRELATES,[father]
+68270,68344,CORRELATES,[administration]
+68270,68348,CORRELATES,"[response,father]"
+68270,68360,CORRELATES,"[father,mother]"
+68271,68272,CORRELATES,[Japanese]
+68271,68273,CORRELATES,[Japanese]
+68271,68274,CORRELATES,[Japanese]
+68271,68275,CORRELATES,"[Japanese,one,one]"
+68271,68277,CORRELATES,"[Japanese,one]"
+68271,68279,CORRELATES,[Japanese]
+68271,68281,CORRELATES,"[founder,Japanese,company]"
+68271,68282,CORRELATES,[Japanese]
+68271,68284,CORRELATES,[Japanese]
+68271,68285,CORRELATES,"[Japanese,world]"
+68271,68291,CORRELATES,[Japanese]
+68271,68293,CORRELATES,[company]
+68271,68295,CORRELATES,"[company,company,company,company,company]"
+68271,68296,CORRELATES,[Japanese]
+68271,68298,CORRELATES,[one]
+68271,68299,CORRELATES,[Japanese]
+68271,68300,CORRELATES,"[company,leaders]"
+68271,68302,CORRELATES,[one]
+68271,68304,CORRELATES,[Japanese]
+68271,68307,CORRELATES,"[Japanese,company,company,company,company]"
+68271,68308,CORRELATES,"[Japanese,company,company]"
+68271,68309,CORRELATES,[Japanese]
+68271,68310,CORRELATES,[Japanese]
+68271,68311,CORRELATES,[Japanese]
+68271,68312,CORRELATES,[Japanese]
+68271,68314,CORRELATES,[Japanese]
+68271,68316,CORRELATES,"[Japanese,world]"
+68271,68317,CORRELATES,"[Japanese,one,one]"
+68271,68318,CORRELATES,[Japanese]
+68271,68319,CORRELATES,[Japanese]
+68271,68320,CORRELATES,[Japanese]
+68271,68321,CORRELATES,[Japanese]
+68271,68322,CORRELATES,"[world,one]"
+68271,68323,CORRELATES,[Japanese]
+68271,68324,CORRELATES,[Japanese]
+68271,68325,CORRELATES,"[Japanese,one]"
+68271,68326,CORRELATES,[Japanese]
+68271,68328,CORRELATES,[Japanese]
+68271,68329,CORRELATES,[one]
+68271,68331,CORRELATES,[Japanese]
+68271,68333,CORRELATES,[Japanese]
+68271,68334,CORRELATES,[Japanese]
+68271,68335,CORRELATES,[Japanese]
+68271,68336,CORRELATES,[Japanese]
+68271,68337,CORRELATES,"[Japanese,company]"
+68271,68338,CORRELATES,[world]
+68271,68339,CORRELATES,"[Japanese,one]"
+68271,68341,CORRELATES,[Japanese]
+68271,68342,CORRELATES,"[Japanese,one]"
+68271,68346,CORRELATES,[Japanese]
+68271,68349,CORRELATES,[world]
+68271,68351,CORRELATES,[Japanese]
+68271,68352,CORRELATES,"[Japanese,company]"
+68271,68355,CORRELATES,[company]
+68271,68356,CORRELATES,[one]
+68271,68357,CORRELATES,[company]
+68271,68360,CORRELATES,[Japanese]
+68271,68361,CORRELATES,[one]
+68272,68273,CORRELATES,"[Japanese,American]"
+68272,68274,CORRELATES,"[Japanese,article,Wikipedia,Races,series,key,auto racing,Super GT,Races,pole position,italics,lap]"
+68272,68275,CORRELATES,[Japanese]
+68272,68276,CORRELATES,[American]
+68272,68277,CORRELATES,[Japanese]
+68272,68278,CORRELATES,[American]
+68272,68279,CORRELATES,[Japanese]
+68272,68280,CORRELATES,"[American,brother]"
+68272,68281,CORRELATES,[Japanese]
+68272,68282,CORRELATES,"[Japanese,article]"
+68272,68283,CORRELATES,[American]
+68272,68284,CORRELATES,[Japanese]
+68272,68285,CORRELATES,[Japanese]
+68272,68291,CORRELATES,[Japanese]
+68272,68292,CORRELATES,[American]
+68272,68296,CORRELATES,[Japanese]
+68272,68297,CORRELATES,[American]
+68272,68298,CORRELATES,[American]
+68272,68299,CORRELATES,[Japanese]
+68272,68300,CORRELATES,[American]
+68272,68302,CORRELATES,[American]
+68272,68303,CORRELATES,[series]
+68272,68304,CORRELATES,[Japanese]
+68272,68305,CORRELATES,[American]
+68272,68306,CORRELATES,[American]
+68272,68307,CORRELATES,"[Japanese,American]"
+68272,68308,CORRELATES,[Japanese]
+68272,68309,CORRELATES,"[article,Japanese,Wikipedia]"
+68272,68310,CORRELATES,"[article,Japanese,Wikipedia]"
+68272,68311,CORRELATES,"[Japanese,Wikipedia,article]"
+68272,68312,CORRELATES,"[Japanese,article,Wikipedia,American]"
+68272,68314,CORRELATES,[Japanese]
+68272,68315,CORRELATES,[American]
+68272,68316,CORRELATES,[Japanese]
+68272,68317,CORRELATES,"[Japanese,article,Wikipedia,series]"
+68272,68318,CORRELATES,[Japanese]
+68272,68319,CORRELATES,[Japanese]
+68272,68320,CORRELATES,[Japanese]
+68272,68321,CORRELATES,"[Japanese,series]"
+68272,68322,CORRELATES,[American]
+68272,68323,CORRELATES,[Japanese]
+68272,68324,CORRELATES,"[Japanese,article,Wikipedia]"
+68272,68325,CORRELATES,"[series,Japanese]"
+68272,68326,CORRELATES,"[Japanese,series,series]"
+68272,68327,CORRELATES,[American]
+68272,68328,CORRELATES,[Japanese]
+68272,68329,CORRELATES,[American]
+68272,68330,CORRELATES,"[American,article,article]"
+68272,68331,CORRELATES,"[Japanese,article,Wikipedia,Races,auto racing,Races,pole position,italics,lap]"
+68272,68333,CORRELATES,[Japanese]
+68272,68334,CORRELATES,"[article,Japanese,Wikipedia]"
+68272,68335,CORRELATES,[Japanese]
+68272,68336,CORRELATES,[Japanese]
+68272,68337,CORRELATES,[Japanese]
+68272,68338,CORRELATES,[American]
+68272,68339,CORRELATES,"[Japanese,article,Wikipedia]"
+68272,68340,CORRELATES,"[article,Wikipedia,American,article]"
+68272,68341,CORRELATES,"[Japanese,series]"
+68272,68342,CORRELATES,"[series,Japanese]"
+68272,68343,CORRELATES,"[article,article,Wikipedia,American]"
+68272,68344,CORRELATES,[American]
+68272,68345,CORRELATES,"[article,article,Wikipedia,American]"
+68272,68346,CORRELATES,"[Japanese,article,article,Wikipedia]"
+68272,68347,CORRELATES,"[article,American,Wikipedia]"
+68272,68348,CORRELATES,[American]
+68272,68349,CORRELATES,[American]
+68272,68350,CORRELATES,[American]
+68272,68351,CORRELATES,[Japanese]
+68272,68352,CORRELATES,[Japanese]
+68272,68353,CORRELATES,[American]
+68272,68354,CORRELATES,"[American,series]"
+68272,68355,CORRELATES,"[article,article,Wikipedia]"
+68272,68356,CORRELATES,[American]
+68272,68358,CORRELATES,"[article,article,Wikipedia]"
+68272,68360,CORRELATES,"[American,Japanese]"
+68272,68361,CORRELATES,[American]
+68272,68362,CORRELATES,[American]
+68272,68363,CORRELATES,"[article,Wikipedia,American,article]"
+68273,68274,CORRELATES,[Japanese]
+68273,68275,CORRELATES,[Japanese]
+68273,68276,CORRELATES,[American]
+68273,68277,CORRELATES,[Japanese]
+68273,68278,CORRELATES,"[American,part]"
+68273,68279,CORRELATES,[Japanese]
+68273,68280,CORRELATES,[American]
+68273,68281,CORRELATES,[Japanese]
+68273,68282,CORRELATES,"[Japanese,astronaut,JAXA,first,part,University of Tokyo,space,astronaut,part,mission specialist]"
+68273,68283,CORRELATES,[American]
+68273,68284,CORRELATES,[Japanese]
+68273,68285,CORRELATES,"[Japanese,University of Tokyo,lecturer]"
+68273,68287,CORRELATES,[part]
+68273,68290,CORRELATES,"[return,mission,mission]"
+68273,68291,CORRELATES,[Japanese]
+68273,68292,CORRELATES,[American]
+68273,68296,CORRELATES,[Japanese]
+68273,68297,CORRELATES,[American]
+68273,68298,CORRELATES,[American]
+68273,68299,CORRELATES,"[Japanese,disaster]"
+68273,68300,CORRELATES,"[mission,American]"
+68273,68302,CORRELATES,[American]
+68273,68304,CORRELATES,[Japanese]
+68273,68305,CORRELATES,[American]
+68273,68306,CORRELATES,[American]
+68273,68307,CORRELATES,"[Japanese,American,first]"
+68273,68308,CORRELATES,"[Japanese,first]"
+68273,68309,CORRELATES,[Japanese]
+68273,68310,CORRELATES,[Japanese]
+68273,68311,CORRELATES,[Japanese]
+68273,68312,CORRELATES,"[Japanese,University of Tokyo,American]"
+68273,68314,CORRELATES,[Japanese]
+68273,68315,CORRELATES,[American]
+68273,68316,CORRELATES,"[Japanese,lecturer]"
+68273,68317,CORRELATES,[Japanese]
+68273,68318,CORRELATES,[Japanese]
+68273,68319,CORRELATES,[Japanese]
+68273,68320,CORRELATES,"[Japanese,part]"
+68273,68321,CORRELATES,[Japanese]
+68273,68322,CORRELATES,[American]
+68273,68323,CORRELATES,[Japanese]
+68273,68324,CORRELATES,"[Japanese,mission,Earth]"
+68273,68325,CORRELATES,"[Japanese,part]"
+68273,68326,CORRELATES,[Japanese]
+68273,68327,CORRELATES,[American]
+68273,68328,CORRELATES,[Japanese]
+68273,68329,CORRELATES,[American]
+68273,68330,CORRELATES,"[American,part]"
+68273,68331,CORRELATES,[Japanese]
+68273,68333,CORRELATES,[Japanese]
+68273,68334,CORRELATES,[Japanese]
+68273,68335,CORRELATES,[Japanese]
+68273,68336,CORRELATES,"[Japanese,first]"
+68273,68337,CORRELATES,[Japanese]
+68273,68338,CORRELATES,[American]
+68273,68339,CORRELATES,[Japanese]
+68273,68340,CORRELATES,[American]
+68273,68341,CORRELATES,[Japanese]
+68273,68342,CORRELATES,[Japanese]
+68273,68343,CORRELATES,[American]
+68273,68344,CORRELATES,[American]
+68273,68345,CORRELATES,[American]
+68273,68346,CORRELATES,[Japanese]
+68273,68347,CORRELATES,[American]
+68273,68348,CORRELATES,[American]
+68273,68349,CORRELATES,"[American,first]"
+68273,68350,CORRELATES,[American]
+68273,68351,CORRELATES,[Japanese]
+68273,68352,CORRELATES,[Japanese]
+68273,68353,CORRELATES,[American]
+68273,68354,CORRELATES,[American]
+68273,68356,CORRELATES,"[American,part]"
+68273,68360,CORRELATES,"[American,Japanese]"
+68273,68361,CORRELATES,[American]
+68273,68362,CORRELATES,[American]
+68273,68363,CORRELATES,[American]
+68274,68275,CORRELATES,[Japanese]
+68274,68277,CORRELATES,[Japanese]
+68274,68279,CORRELATES,[Japanese]
+68274,68281,CORRELATES,[Japanese]
+68274,68282,CORRELATES,"[Japanese,article]"
+68274,68284,CORRELATES,[Japanese]
+68274,68285,CORRELATES,[Japanese]
+68274,68291,CORRELATES,[Japanese]
+68274,68296,CORRELATES,[Japanese]
+68274,68299,CORRELATES,[Japanese]
+68274,68303,CORRELATES,[series]
+68274,68304,CORRELATES,[Japanese]
+68274,68307,CORRELATES,[Japanese]
+68274,68308,CORRELATES,[Japanese]
+68274,68309,CORRELATES,"[article,Japanese,Wikipedia]"
+68274,68310,CORRELATES,"[article,Japanese,Wikipedia]"
+68274,68311,CORRELATES,"[Japanese,Wikipedia,article]"
+68274,68312,CORRELATES,"[Japanese,article,Wikipedia]"
+68274,68314,CORRELATES,"[Japanese,29]"
+68274,68316,CORRELATES,[Japanese]
+68274,68317,CORRELATES,"[Japanese,article,Wikipedia,series]"
+68274,68318,CORRELATES,[Japanese]
+68274,68319,CORRELATES,[Japanese]
+68274,68320,CORRELATES,[Japanese]
+68274,68321,CORRELATES,"[Japanese,series]"
+68274,68323,CORRELATES,[Japanese]
+68274,68324,CORRELATES,"[Japanese,article,Wikipedia]"
+68274,68325,CORRELATES,"[series,Japanese]"
+68274,68326,CORRELATES,"[Japanese,series,series]"
+68274,68328,CORRELATES,[Japanese]
+68274,68330,CORRELATES,"[article,article]"
+68274,68331,CORRELATES,"[Japanese,article,Wikipedia,Races,auto racing,Races,pole position,italics,lap]"
+68274,68333,CORRELATES,[Japanese]
+68274,68334,CORRELATES,"[article,Japanese,Wikipedia]"
+68274,68335,CORRELATES,[Japanese]
+68274,68336,CORRELATES,[Japanese]
+68274,68337,CORRELATES,[Japanese]
+68274,68339,CORRELATES,"[Japanese,article,Wikipedia]"
+68274,68340,CORRELATES,"[article,Wikipedia,article]"
+68274,68341,CORRELATES,"[Japanese,series]"
+68274,68342,CORRELATES,"[series,Japanese]"
+68274,68343,CORRELATES,"[article,article,Wikipedia]"
+68274,68345,CORRELATES,"[article,article,Wikipedia]"
+68274,68346,CORRELATES,"[Japanese,article,article,Wikipedia]"
+68274,68347,CORRELATES,"[article,Wikipedia]"
+68274,68351,CORRELATES,[Japanese]
+68274,68352,CORRELATES,[Japanese]
+68274,68354,CORRELATES,[series]
+68274,68355,CORRELATES,"[article,article,Wikipedia]"
+68274,68358,CORRELATES,"[article,article,Wikipedia]"
+68274,68360,CORRELATES,[Japanese]
+68274,68363,CORRELATES,"[article,Wikipedia,article]"
+68275,68277,CORRELATES,"[Japanese,one]"
+68275,68279,CORRELATES,[Japanese]
+68275,68281,CORRELATES,[Japanese]
+68275,68282,CORRELATES,[Japanese]
+68275,68284,CORRELATES,"[Japanese,Japan]"
+68275,68285,CORRELATES,[Japanese]
+68275,68286,CORRELATES,[New York City]
+68275,68287,CORRELATES,[New York City]
+68275,68289,CORRELATES,[New York City]
+68275,68291,CORRELATES,[Japanese]
+68275,68292,CORRELATES,[New York City]
+68275,68293,CORRELATES,[others]
+68275,68295,CORRELATES,[Japan]
+68275,68296,CORRELATES,[Japanese]
+68275,68298,CORRELATES,[one]
+68275,68299,CORRELATES,[Japanese]
+68275,68302,CORRELATES,[one]
+68275,68303,CORRELATES,[Japan]
+68275,68304,CORRELATES,[Japanese]
+68275,68307,CORRELATES,"[Japan,Japanese]"
+68275,68308,CORRELATES,[Japanese]
+68275,68309,CORRELATES,[Japanese]
+68275,68310,CORRELATES,[Japanese]
+68275,68311,CORRELATES,[Japanese]
+68275,68312,CORRELATES,[Japanese]
+68275,68314,CORRELATES,[Japanese]
+68275,68316,CORRELATES,"[Japanese,Japan]"
+68275,68317,CORRELATES,"[Japanese,one,one]"
+68275,68318,CORRELATES,[Japanese]
+68275,68319,CORRELATES,[Japanese]
+68275,68320,CORRELATES,[Japanese]
+68275,68321,CORRELATES,[Japanese]
+68275,68322,CORRELATES,[one]
+68275,68323,CORRELATES,[Japanese]
+68275,68324,CORRELATES,"[Japanese,organ,Japan]"
+68275,68325,CORRELATES,"[Japanese,Japan,one]"
+68275,68326,CORRELATES,[Japanese]
+68275,68328,CORRELATES,[Japanese]
+68275,68329,CORRELATES,[one]
+68275,68331,CORRELATES,[Japanese]
+68275,68333,CORRELATES,[Japanese]
+68275,68334,CORRELATES,[Japanese]
+68275,68335,CORRELATES,[Japanese]
+68275,68336,CORRELATES,[Japanese]
+68275,68337,CORRELATES,[Japanese]
+68275,68339,CORRELATES,"[Japanese,one]"
+68275,68341,CORRELATES,[Japanese]
+68275,68342,CORRELATES,"[album,Japanese,one]"
+68275,68343,CORRELATES,[music]
+68275,68346,CORRELATES,[Japanese]
+68275,68351,CORRELATES,"[Japanese,album]"
+68275,68352,CORRELATES,[Japanese]
+68275,68356,CORRELATES,"[band,one]"
+68275,68360,CORRELATES,[Japanese]
+68275,68361,CORRELATES,[one]
+68276,68277,CORRELATES,"[father,president,father]"
+68276,68278,CORRELATES,"[Republican Party,American,father,administration,president,president,president,wife,vice president,presidency]"
+68276,68280,CORRELATES,"[American,father,administration,administration,campaign,presidency,president,administration]"
+68276,68283,CORRELATES,"[American,presidency,president]"
+68276,68285,CORRELATES,"[president,president,president]"
+68276,68286,CORRELATES,"[father,troops,presidency]"
+68276,68287,CORRELATES,"[father,governor,governor,vote]"
+68276,68288,CORRELATES,"[governor,governor,governor,governor,governor,governor,governor,Barack Obama,governor,governor]"
+68276,68289,CORRELATES,"[Barack Obama,father,George H.W.]"
+68276,68290,CORRELATES,"[Republican Party,father,campaign,wife,campaign,governor,Barack Obama,governor]"
+68276,68292,CORRELATES,"[Barack Obama,administration,governor,administration,American]"
+68276,68294,CORRELATES,"[Barack Obama,John Kerry,campaign,president,father,Donald Trump,father,father]"
+68276,68295,CORRELATES,[father]
+68276,68296,CORRELATES,[wife]
+68276,68297,CORRELATES,"[presidency,American,president,White House,time,administration,governor,governor,president,president,presidency,administration,George H.W.,governor,Barack Obama]"
+68276,68298,CORRELATES,"[governor,governor,American,governor,governor,campaign,Barack Obama]"
+68276,68300,CORRELATES,"[Barack Obama,governor,American,bill,father,bill,bill,governor]"
+68276,68301,CORRELATES,"[Republican Party,Donald Trump,vote,governor,governor,governor,governor,governor,governor]"
+68276,68302,CORRELATES,"[American,presidency,campaign,president,White House,presidency,administration]"
+68276,68303,CORRELATES,[high school]
+68276,68305,CORRELATES,"[American,governor]"
+68276,68306,CORRELATES,"[American,vice president]"
+68276,68307,CORRELATES,[American]
+68276,68312,CORRELATES,[American]
+68276,68313,CORRELATES,"[father,high school]"
+68276,68315,CORRELATES,"[God,American,history,Republican Party,father,president]"
+68276,68322,CORRELATES,[American]
+68276,68323,CORRELATES,[event]
+68276,68324,CORRELATES,[father]
+68276,68326,CORRELATES,"[high school,high school]"
+68276,68327,CORRELATES,[American]
+68276,68329,CORRELATES,[American]
+68276,68330,CORRELATES,"[American,event,father]"
+68276,68332,CORRELATES,[father]
+68276,68333,CORRELATES,"[father,father]"
+68276,68335,CORRELATES,"[time,event]"
+68276,68338,CORRELATES,[American]
+68276,68340,CORRELATES,[American]
+68276,68341,CORRELATES,[father]
+68276,68342,CORRELATES,[event]
+68276,68343,CORRELATES,[American]
+68276,68344,CORRELATES,"[American,administration]"
+68276,68345,CORRELATES,[American]
+68276,68347,CORRELATES,[American]
+68276,68348,CORRELATES,"[American,father]"
+68276,68349,CORRELATES,[American]
+68276,68350,CORRELATES,[American]
+68276,68352,CORRELATES,[high school]
+68276,68353,CORRELATES,[American]
+68276,68354,CORRELATES,[American]
+68276,68355,CORRELATES,[history]
+68276,68356,CORRELATES,[American]
+68276,68360,CORRELATES,"[American,father]"
+68276,68361,CORRELATES,[American]
+68276,68362,CORRELATES,"[American,high school]"
+68276,68363,CORRELATES,[American]
+68277,68278,CORRELATES,"[father,president,son,president,president]"
+68277,68279,CORRELATES,"[Japanese,development]"
+68277,68280,CORRELATES,"[father,president,World War II]"
+68277,68281,CORRELATES,"[Japanese,companies,companies,mother,mother]"
+68277,68282,CORRELATES,"[Japanese,development,team]"
+68277,68283,CORRELATES,[president]
+68277,68284,CORRELATES,[Japanese]
+68277,68285,CORRELATES,"[president,Japanese,son,student,president,student,president,chairman]"
+68277,68286,CORRELATES,[father]
+68277,68287,CORRELATES,[father]
+68277,68289,CORRELATES,"[mother,family,father,mother]"
+68277,68290,CORRELATES,[father]
+68277,68291,CORRELATES,"[Japanese,development,team,awards]"
+68277,68293,CORRELATES,[World War II]
+68277,68294,CORRELATES,"[family,family,president,father,father,father]"
+68277,68295,CORRELATES,"[father,family]"
+68277,68296,CORRELATES,"[Japanese,chairman,chairman,chairman]"
+68277,68297,CORRELATES,"[president,president,president]"
+68277,68298,CORRELATES,[one]
+68277,68299,CORRELATES,"[Japanese,research]"
+68277,68300,CORRELATES,"[mother,chairman,father]"
+68277,68302,CORRELATES,"[one,mother,family,mother,president,World War II]"
+68277,68304,CORRELATES,[Japanese]
+68277,68307,CORRELATES,"[Sony,Masaru Ibuka,Japanese,co-founder,chairman,family,Imperial Japanese Navy,companies,World War II]"
+68277,68308,CORRELATES,"[Japanese,development,development]"
+68277,68309,CORRELATES,[Japanese]
+68277,68310,CORRELATES,[Japanese]
+68277,68311,CORRELATES,[Japanese]
+68277,68312,CORRELATES,[Japanese]
+68277,68313,CORRELATES,[father]
+68277,68314,CORRELATES,[Japanese]
+68277,68315,CORRELATES,"[father,president]"
+68277,68316,CORRELATES,"[Japanese,development,World War II,Imperial Japanese Navy]"
+68277,68317,CORRELATES,"[Japanese,one,one]"
+68277,68318,CORRELATES,"[Japanese,age,World War II,age]"
+68277,68319,CORRELATES,[Japanese]
+68277,68320,CORRELATES,[Japanese]
+68277,68321,CORRELATES,[Japanese]
+68277,68322,CORRELATES,"[son,age,age,one]"
+68277,68323,CORRELATES,"[Japanese,age]"
+68277,68324,CORRELATES,"[father,Japanese,World War II]"
+68277,68325,CORRELATES,"[Japanese,one]"
+68277,68326,CORRELATES,[Japanese]
+68277,68327,CORRELATES,"[mother,age,age,age]"
+68277,68328,CORRELATES,"[Japanese,mother]"
+68277,68329,CORRELATES,"[family,student,one]"
+68277,68330,CORRELATES,[father]
+68277,68331,CORRELATES,"[team,Japanese,age]"
+68277,68332,CORRELATES,[father]
+68277,68333,CORRELATES,"[Japanese,father,mother,father,age,family,World War II]"
+68277,68334,CORRELATES,[Japanese]
+68277,68335,CORRELATES,"[Japanese,age]"
+68277,68336,CORRELATES,[Japanese]
+68277,68337,CORRELATES,[Japanese]
+68277,68338,CORRELATES,"[age,team,family,age]"
+68277,68339,CORRELATES,"[Japanese,one]"
+68277,68340,CORRELATES,[team]
+68277,68341,CORRELATES,"[Japanese,father,family]"
+68277,68342,CORRELATES,"[Japanese,one]"
+68277,68344,CORRELATES,[age]
+68277,68346,CORRELATES,[Japanese]
+68277,68348,CORRELATES,[father]
+68277,68349,CORRELATES,[age]
+68277,68351,CORRELATES,[Japanese]
+68277,68352,CORRELATES,[Japanese]
+68277,68353,CORRELATES,[age]
+68277,68356,CORRELATES,"[team,family,one]"
+68277,68358,CORRELATES,[team]
+68277,68360,CORRELATES,"[father,mother,Japanese,age]"
+68277,68361,CORRELATES,"[team,one]"
+68277,68362,CORRELATES,[family]
+68278,68279,CORRELATES,[President]
+68278,68280,CORRELATES,"[Richard Nixon,American,father,Lyndon B. Johnson,administration,administration,U.S. House of Representatives,presidency,president,administration]"
+68278,68281,CORRELATES,[President]
+68278,68282,CORRELATES,"[part,part]"
+68278,68283,CORRELATES,"[American,Richard Nixon,presidency,president,Vietnam War]"
+68278,68285,CORRELATES,"[president,son,president,president]"
+68278,68286,CORRELATES,"[father,presidency]"
+68278,68287,CORRELATES,"[George W. Bush,The New York Times,father,part]"
+68278,68288,CORRELATES,"[member,minority leader]"
+68278,68289,CORRELATES,"[Yale Law School,George W. Bush,father]"
+68278,68290,CORRELATES,"[Republican Party,father,wife,Michigan]"
+68278,68292,CORRELATES,"[administration,administration,American,The New York Times]"
+68278,68294,CORRELATES,"[George W. Bush,Ronald Reagan,president,father,father,father,Vietnam War]"
+68278,68295,CORRELATES,[father]
+68278,68296,CORRELATES,"[President,President,President,member,President,wife]"
+68278,68297,CORRELATES,"[presidency,American,Ronald Reagan,president,Yale Law School,administration,George W. Bush,president,president,presidency,administration,President]"
+68278,68298,CORRELATES,"[American,member]"
+68278,68300,CORRELATES,"[American,father]"
+68278,68301,CORRELATES,"[Republican Party,George W. Bush]"
+68278,68302,CORRELATES,"[American,Richard Nixon,presidency,president,presidency,administration]"
+68278,68304,CORRELATES,"[member,member,member,member,member,member]"
+68278,68305,CORRELATES,"[Ronald Reagan,American,President]"
+68278,68306,CORRELATES,"[member,American,vice president,member,President]"
+68278,68307,CORRELATES,[American]
+68278,68312,CORRELATES,[American]
+68278,68313,CORRELATES,[father]
+68278,68315,CORRELATES,"[American,Republican Party,father,president]"
+68278,68318,CORRELATES,[person]
+68278,68319,CORRELATES,"[member,member,member,member,member]"
+68278,68320,CORRELATES,"[member,part,member]"
+68278,68322,CORRELATES,"[American,son]"
+68278,68324,CORRELATES,[father]
+68278,68325,CORRELATES,[part]
+68278,68327,CORRELATES,[American]
+68278,68329,CORRELATES,[American]
+68278,68330,CORRELATES,"[American,part,father]"
+68278,68332,CORRELATES,[father]
+68278,68333,CORRELATES,"[father,father]"
+68278,68336,CORRELATES,"[member,member,member]"
+68278,68338,CORRELATES,"[California,American]"
+68278,68340,CORRELATES,"[member,American]"
+68278,68341,CORRELATES,[father]
+68278,68342,CORRELATES,[member]
+68278,68343,CORRELATES,[American]
+68278,68344,CORRELATES,"[American,administration]"
+68278,68345,CORRELATES,"[American,member]"
+68278,68347,CORRELATES,[American]
+68278,68348,CORRELATES,"[member,American,member,father]"
+68278,68349,CORRELATES,"[American,member]"
+68278,68350,CORRELATES,"[American,California]"
+68278,68353,CORRELATES,[American]
+68278,68354,CORRELATES,[American]
+68278,68356,CORRELATES,"[American,member,member,part,person]"
+68278,68358,CORRELATES,[football team]
+68278,68360,CORRELATES,"[American,father]"
+68278,68361,CORRELATES,[American]
+68278,68362,CORRELATES,"[American,member]"
+68278,68363,CORRELATES,"[Michigan,American]"
+68279,68281,CORRELATES,"[Japanese,President]"
+68279,68282,CORRELATES,"[Japanese,development]"
+68279,68284,CORRELATES,"[Japanese,1,1]"
+68279,68285,CORRELATES,[Japanese]
+68279,68291,CORRELATES,"[Japanese,development]"
+68279,68296,CORRELATES,"[Japanese,President,President,President,President]"
+68279,68297,CORRELATES,[President]
+68279,68299,CORRELATES,[Japanese]
+68279,68304,CORRELATES,[Japanese]
+68279,68305,CORRELATES,[President]
+68279,68306,CORRELATES,[President]
+68279,68307,CORRELATES,[Japanese]
+68279,68308,CORRELATES,"[Japanese,development,development]"
+68279,68309,CORRELATES,[Japanese]
+68279,68310,CORRELATES,[Japanese]
+68279,68311,CORRELATES,"[Japanese,3,4,1,2,5,6]"
+68279,68312,CORRELATES,"[Japanese,2,1,3]"
+68279,68313,CORRELATES,[subsidiary]
+68279,68314,CORRELATES,"[Japanese,2,1,1,1,3]"
+68279,68316,CORRELATES,"[Japanese,development]"
+68279,68317,CORRELATES,"[Japanese,4,1,1,1]"
+68279,68318,CORRELATES,[Japanese]
+68279,68319,CORRELATES,"[Japanese,generation]"
+68279,68320,CORRELATES,[Japanese]
+68279,68321,CORRELATES,[Japanese]
+68279,68323,CORRELATES,[Japanese]
+68279,68324,CORRELATES,[Japanese]
+68279,68325,CORRELATES,[Japanese]
+68279,68326,CORRELATES,"[Japanese,1986,1986,2011]"
+68279,68328,CORRELATES,"[Japanese,6,3,2,2,4,6,5,1,3]"
+68279,68331,CORRELATES,"[Japanese,2,3]"
+68279,68333,CORRELATES,[Japanese]
+68279,68334,CORRELATES,"[Japanese,6]"
+68279,68335,CORRELATES,[Japanese]
+68279,68336,CORRELATES,"[Japanese,generation,generation]"
+68279,68337,CORRELATES,[Japanese]
+68279,68339,CORRELATES,"[Japanese,1986,2,2,1,1,3,4,1986]"
+68279,68340,CORRELATES,"[2,2,1]"
+68279,68341,CORRELATES,[Japanese]
+68279,68342,CORRELATES,"[generation,Japanese]"
+68279,68343,CORRELATES,"[3,2,4,1]"
+68279,68345,CORRELATES,"[1,1]"
+68279,68346,CORRELATES,"[Japanese,3,2,1,4]"
+68279,68347,CORRELATES,"[7,1]"
+68279,68351,CORRELATES,[Japanese]
+68279,68352,CORRELATES,"[Japanese,1,2,1,2]"
+68279,68353,CORRELATES,"[1,2,6]"
+68279,68359,CORRELATES,"[4,3,1,2]"
+68279,68360,CORRELATES,[Japanese]
+68279,68363,CORRELATES,"[1,3,2]"
+68280,68283,CORRELATES,"[John Fitzgerald Kennedy,U.S. Senate,American,Richard Nixon,Washington, D.C.,presidency,president]"
+68280,68285,CORRELATES,"[president,president,president]"
+68280,68286,CORRELATES,"[father,presidency]"
+68280,68287,CORRELATES,"[U.S. Senate,father]"
+68280,68289,CORRELATES,[father]
+68280,68290,CORRELATES,"[Massachusetts,father,campaign,campaign]"
+68280,68292,CORRELATES,"[administration,administration,American]"
+68280,68293,CORRELATES,"[war,World War II]"
+68280,68294,CORRELATES,"[campaign,president,father,all,father,father]"
+68280,68295,CORRELATES,[father]
+68280,68297,CORRELATES,"[presidency,American,president,administration,president,president,presidency,war,administration]"
+68280,68298,CORRELATES,"[American,campaign]"
+68280,68300,CORRELATES,"[Massachusetts,American,father,Boston]"
+68280,68302,CORRELATES,"[American,Richard Nixon,presidency,campaign,war,president,World War II,presidency,Washington, D.C.,United Nations,administration]"
+68280,68304,CORRELATES,[members]
+68280,68305,CORRELATES,"[American,Washington, D.C.]"
+68280,68306,CORRELATES,"[American,Dwight D. Eisenhower]"
+68280,68307,CORRELATES,"[American,World War II]"
+68280,68308,CORRELATES,[focus]
+68280,68312,CORRELATES,[American]
+68280,68313,CORRELATES,[father]
+68280,68315,CORRELATES,"[American,Washington, D.C.,father,president]"
+68280,68316,CORRELATES,"[World War II,war]"
+68280,68318,CORRELATES,[World War II]
+68280,68320,CORRELATES,[members]
+68280,68322,CORRELATES,"[American,life]"
+68280,68324,CORRELATES,"[father,World War II]"
+68280,68325,CORRELATES,[members]
+68280,68327,CORRELATES,"[American,Boston,Massachusetts]"
+68280,68329,CORRELATES,"[American,Boston]"
+68280,68330,CORRELATES,"[American,father]"
+68280,68332,CORRELATES,[father]
+68280,68333,CORRELATES,"[father,father,life,war,World War II]"
+68280,68338,CORRELATES,"[American,members]"
+68280,68340,CORRELATES,[American]
+68280,68341,CORRELATES,[father]
+68280,68342,CORRELATES,[members]
+68280,68343,CORRELATES,[American]
+68280,68344,CORRELATES,"[American,administration]"
+68280,68345,CORRELATES,[American]
+68280,68347,CORRELATES,[American]
+68280,68348,CORRELATES,"[American,father]"
+68280,68349,CORRELATES,[American]
+68280,68350,CORRELATES,[American]
+68280,68353,CORRELATES,[American]
+68280,68354,CORRELATES,[American]
+68280,68356,CORRELATES,[American]
+68280,68360,CORRELATES,"[American,father]"
+68280,68361,CORRELATES,[American]
+68280,68362,CORRELATES,"[American,members]"
+68280,68363,CORRELATES,[American]
+68281,68282,CORRELATES,[Japanese]
+68281,68284,CORRELATES,[Japanese]
+68281,68285,CORRELATES,[Japanese]
+68281,68289,CORRELATES,"[mother,practice,mother]"
+68281,68291,CORRELATES,"[Japanese,technology]"
+68281,68293,CORRELATES,"[company,visiting professor]"
+68281,68295,CORRELATES,"[CEO,company,company,company,company,company]"
+68281,68296,CORRELATES,"[CEO,Japanese,President,President,President,board member,President]"
+68281,68297,CORRELATES,[President]
+68281,68299,CORRELATES,[Japanese]
+68281,68300,CORRELATES,"[company,mother]"
+68281,68302,CORRELATES,"[mother,mother]"
+68281,68304,CORRELATES,[Japanese]
+68281,68305,CORRELATES,"[relationship,President]"
+68281,68306,CORRELATES,[President]
+68281,68307,CORRELATES,"[Japanese,company,company,company,companies,company]"
+68281,68308,CORRELATES,"[Japanese,company,company]"
+68281,68309,CORRELATES,[Japanese]
+68281,68310,CORRELATES,[Japanese]
+68281,68311,CORRELATES,[Japanese]
+68281,68312,CORRELATES,[Japanese]
+68281,68314,CORRELATES,"[Japanese,role]"
+68281,68316,CORRELATES,[Japanese]
+68281,68317,CORRELATES,[Japanese]
+68281,68318,CORRELATES,[Japanese]
+68281,68319,CORRELATES,[Japanese]
+68281,68320,CORRELATES,[Japanese]
+68281,68321,CORRELATES,"[Japanese,roles]"
+68281,68323,CORRELATES,"[Japanese,role]"
+68281,68324,CORRELATES,"[Japanese,professor]"
+68281,68325,CORRELATES,[Japanese]
+68281,68326,CORRELATES,"[Japanese,roles,role]"
+68281,68327,CORRELATES,[mother]
+68281,68328,CORRELATES,"[Japanese,mother]"
+68281,68331,CORRELATES,[Japanese]
+68281,68333,CORRELATES,"[Japanese,mother]"
+68281,68334,CORRELATES,[Japanese]
+68281,68335,CORRELATES,"[Japanese,role]"
+68281,68336,CORRELATES,[Japanese]
+68281,68337,CORRELATES,"[Japanese,roles,company]"
+68281,68339,CORRELATES,[Japanese]
+68281,68341,CORRELATES,[Japanese]
+68281,68342,CORRELATES,[Japanese]
+68281,68343,CORRELATES,[role]
+68281,68346,CORRELATES,[Japanese]
+68281,68351,CORRELATES,[Japanese]
+68281,68352,CORRELATES,"[Japanese,role,company]"
+68281,68354,CORRELATES,"[role,role,roles]"
+68281,68355,CORRELATES,[company]
+68281,68357,CORRELATES,[company]
+68281,68360,CORRELATES,"[mother,Japanese]"
+68282,68284,CORRELATES,[Japanese]
+68282,68285,CORRELATES,"[Japanese,University of Tokyo,degree,degree]"
+68282,68287,CORRELATES,[part]
+68282,68291,CORRELATES,"[Japanese,development,team,degree]"
+68282,68292,CORRELATES,[program]
+68282,68296,CORRELATES,[Japanese]
+68282,68297,CORRELATES,[program]
+68282,68299,CORRELATES,[Japanese]
+68282,68303,CORRELATES,[program]
+68282,68304,CORRELATES,[Japanese]
+68282,68307,CORRELATES,"[Japanese,degree,first]"
+68282,68308,CORRELATES,"[Japanese,first,training,development,development]"
+68282,68309,CORRELATES,"[article,Japanese]"
+68282,68310,CORRELATES,"[article,Japanese]"
+68282,68311,CORRELATES,"[Japanese,article]"
+68282,68312,CORRELATES,"[Japanese,article,University of Tokyo]"
+68282,68314,CORRELATES,[Japanese]
+68282,68316,CORRELATES,"[Japanese,development]"
+68282,68317,CORRELATES,"[Japanese,article]"
+68282,68318,CORRELATES,[Japanese]
+68282,68319,CORRELATES,"[Japanese,program]"
+68282,68320,CORRELATES,"[Japanese,part]"
+68282,68321,CORRELATES,[Japanese]
+68282,68322,CORRELATES,[childhood]
+68282,68323,CORRELATES,[Japanese]
+68282,68324,CORRELATES,"[Japanese,article]"
+68282,68325,CORRELATES,"[Japanese,part]"
+68282,68326,CORRELATES,[Japanese]
+68282,68328,CORRELATES,[Japanese]
+68282,68330,CORRELATES,"[part,article,article]"
+68282,68331,CORRELATES,"[team,Japanese,article]"
+68282,68333,CORRELATES,[Japanese]
+68282,68334,CORRELATES,"[article,Japanese]"
+68282,68335,CORRELATES,[Japanese]
+68282,68336,CORRELATES,"[Japanese,first]"
+68282,68337,CORRELATES,[Japanese]
+68282,68338,CORRELATES,[team]
+68282,68339,CORRELATES,"[Japanese,article]"
+68282,68340,CORRELATES,"[article,team,article]"
+68282,68341,CORRELATES,[Japanese]
+68282,68342,CORRELATES,[Japanese]
+68282,68343,CORRELATES,"[article,article]"
+68282,68344,CORRELATES,"[program,Bachelor of Science degree]"
+68282,68345,CORRELATES,"[article,article]"
+68282,68346,CORRELATES,"[Japanese,article,article]"
+68282,68347,CORRELATES,[article]
+68282,68349,CORRELATES,[first]
+68282,68351,CORRELATES,[Japanese]
+68282,68352,CORRELATES,[Japanese]
+68282,68355,CORRELATES,"[article,article]"
+68282,68356,CORRELATES,"[team,part]"
+68282,68358,CORRELATES,"[article,article,team]"
+68282,68360,CORRELATES,[Japanese]
+68282,68361,CORRELATES,"[team,degree]"
+68282,68363,CORRELATES,"[article,article]"
+68283,68285,CORRELATES,"[president,president,president]"
+68283,68286,CORRELATES,"[African Americans,presidency]"
+68283,68287,CORRELATES,"[U.S. Senate,Democrat,election,law]"
+68283,68290,CORRELATES,"[election,supporters,election]"
+68283,68292,CORRELATES,"[election,American]"
+68283,68294,CORRELATES,"[election.,president,Vietnam War]"
+68283,68297,CORRELATES,"[presidency,American,president,president,president,presidency,election]"
+68283,68298,CORRELATES,"[politician,election,American,Democrat,law,election,election,law,election]"
+68283,68300,CORRELATES,[American]
+68283,68301,CORRELATES,"[election,election,election,election,election.,election]"
+68283,68302,CORRELATES,"[American,Richard Nixon,presidency,president,presidency,Washington, D.C.]"
+68283,68304,CORRELATES,"[votes,election]"
+68283,68305,CORRELATES,"[American,opinion,Washington, D.C.,politician,seat]"
+68283,68306,CORRELATES,"[American,seat]"
+68283,68307,CORRELATES,[American]
+68283,68312,CORRELATES,[American]
+68283,68313,CORRELATES,"[grandfather,law]"
+68283,68315,CORRELATES,"[American,South,Washington, D.C.,African Americans,president,election]"
+68283,68322,CORRELATES,[American]
+68283,68327,CORRELATES,[American]
+68283,68329,CORRELATES,[American]
+68283,68330,CORRELATES,[American]
+68283,68336,CORRELATES,[election]
+68283,68338,CORRELATES,[American]
+68283,68340,CORRELATES,[American]
+68283,68343,CORRELATES,[American]
+68283,68344,CORRELATES,[American]
+68283,68345,CORRELATES,[American]
+68283,68347,CORRELATES,[American]
+68283,68348,CORRELATES,[American]
+68283,68349,CORRELATES,[American]
+68283,68350,CORRELATES,[American]
+68283,68351,CORRELATES,[grandfather]
+68283,68353,CORRELATES,[American]
+68283,68354,CORRELATES,[American]
+68283,68356,CORRELATES,[American]
+68283,68357,CORRELATES,[grandfather]
+68283,68360,CORRELATES,[American]
+68283,68361,CORRELATES,[American]
+68283,68362,CORRELATES,[American]
+68283,68363,CORRELATES,[American]
+68284,68285,CORRELATES,[Japanese]
+68284,68291,CORRELATES,[Japanese]
+68284,68295,CORRELATES,[Japan]
+68284,68296,CORRELATES,[Japanese]
+68284,68299,CORRELATES,[Japanese]
+68284,68303,CORRELATES,[Japan]
+68284,68304,CORRELATES,[Japanese]
+68284,68307,CORRELATES,"[Japan,Japanese]"
+68284,68308,CORRELATES,[Japanese]
+68284,68309,CORRELATES,[Japanese]
+68284,68310,CORRELATES,[Japanese]
+68284,68311,CORRELATES,"[Japanese,1]"
+68284,68312,CORRELATES,"[Japanese,1]"
+68284,68314,CORRELATES,"[Japanese,1,1,1]"
+68284,68316,CORRELATES,"[Japanese,Japan]"
+68284,68317,CORRELATES,"[Japanese,1,1,1]"
+68284,68318,CORRELATES,[Japanese]
+68284,68319,CORRELATES,[Japanese]
+68284,68320,CORRELATES,[Japanese]
+68284,68321,CORRELATES,[Japanese]
+68284,68323,CORRELATES,[Japanese]
+68284,68324,CORRELATES,"[Japanese,Japan]"
+68284,68325,CORRELATES,"[Japanese,Japan]"
+68284,68326,CORRELATES,[Japanese]
+68284,68328,CORRELATES,"[Japanese,1]"
+68284,68331,CORRELATES,[Japanese]
+68284,68333,CORRELATES,[Japanese]
+68284,68334,CORRELATES,[Japanese]
+68284,68335,CORRELATES,[Japanese]
+68284,68336,CORRELATES,[Japanese]
+68284,68337,CORRELATES,[Japanese]
+68284,68339,CORRELATES,"[Japanese,1,1]"
+68284,68340,CORRELATES,[1]
+68284,68341,CORRELATES,[Japanese]
+68284,68342,CORRELATES,[Japanese]
+68284,68343,CORRELATES,[1]
+68284,68345,CORRELATES,"[1,1]"
+68284,68346,CORRELATES,"[Japanese,1]"
+68284,68347,CORRELATES,[1]
+68284,68348,CORRELATES,[assistant]
+68284,68351,CORRELATES,[Japanese]
+68284,68352,CORRELATES,"[Japanese,1,1976,1]"
+68284,68353,CORRELATES,[1]
+68284,68358,CORRELATES,[United States]
+68284,68359,CORRELATES,"[1,18]"
+68284,68360,CORRELATES,[Japanese]
+68284,68361,CORRELATES,[assistant]
+68284,68363,CORRELATES,[1]
+68285,68291,CORRELATES,"[Japanese,degree]"
+68285,68294,CORRELATES,[president]
+68285,68296,CORRELATES,"[Japanese,chairman,chairman,chairman]"
+68285,68297,CORRELATES,"[president,president,president]"
+68285,68299,CORRELATES,[Japanese]
+68285,68300,CORRELATES,[chairman]
+68285,68302,CORRELATES,[president]
+68285,68304,CORRELATES,[Japanese]
+68285,68307,CORRELATES,"[Japanese,chairman,degree]"
+68285,68308,CORRELATES,[Japanese]
+68285,68309,CORRELATES,[Japanese]
+68285,68310,CORRELATES,[Japanese]
+68285,68311,CORRELATES,[Japanese]
+68285,68312,CORRELATES,"[Japanese,University of Tokyo,engineering]"
+68285,68314,CORRELATES,[Japanese]
+68285,68315,CORRELATES,[president]
+68285,68316,CORRELATES,"[Japanese,lecturer,world]"
+68285,68317,CORRELATES,[Japanese]
+68285,68318,CORRELATES,[Japanese]
+68285,68319,CORRELATES,[Japanese]
+68285,68320,CORRELATES,[Japanese]
+68285,68321,CORRELATES,[Japanese]
+68285,68322,CORRELATES,"[world,son]"
+68285,68323,CORRELATES,[Japanese]
+68285,68324,CORRELATES,"[Japanese,engineering,post]"
+68285,68325,CORRELATES,[Japanese]
+68285,68326,CORRELATES,[Japanese]
+68285,68328,CORRELATES,[Japanese]
+68285,68329,CORRELATES,[student]
+68285,68331,CORRELATES,[Japanese]
+68285,68333,CORRELATES,"[Japanese,bureaucrat,bureaucrat]"
+68285,68334,CORRELATES,[Japanese]
+68285,68335,CORRELATES,[Japanese]
+68285,68336,CORRELATES,[Japanese]
+68285,68337,CORRELATES,[Japanese]
+68285,68338,CORRELATES,[world]
+68285,68339,CORRELATES,[Japanese]
+68285,68341,CORRELATES,[Japanese]
+68285,68342,CORRELATES,[Japanese]
+68285,68346,CORRELATES,[Japanese]
+68285,68349,CORRELATES,[world]
+68285,68351,CORRELATES,[Japanese]
+68285,68352,CORRELATES,[Japanese]
+68285,68360,CORRELATES,[Japanese]
+68285,68361,CORRELATES,[degree]
+68286,68287,CORRELATES,"[New York City,father]"
+68286,68289,CORRELATES,"[New York City,father]"
+68286,68290,CORRELATES,[father]
+68286,68292,CORRELATES,[New York City]
+68286,68294,CORRELATES,"[father,father,father]"
+68286,68295,CORRELATES,[father]
+68286,68297,CORRELATES,"[presidency,presidency]"
+68286,68300,CORRELATES,[father]
+68286,68302,CORRELATES,"[presidency,British,presidency,statesman]"
+68286,68313,CORRELATES,"[father,commission,justice]"
+68286,68314,CORRELATES,[couple]
+68286,68315,CORRELATES,"[statesman,father,African Americans]"
+68286,68324,CORRELATES,[father]
+68286,68328,CORRELATES,[British]
+68286,68330,CORRELATES,[father]
+68286,68332,CORRELATES,[father]
+68286,68333,CORRELATES,"[father,father]"
+68286,68339,CORRELATES,[couple]
+68286,68341,CORRELATES,[father]
+68286,68348,CORRELATES,[father]
+68286,68360,CORRELATES,[father]
+68287,68288,CORRELATES,"[New York,Andrew Cuomo,governor,governor,governor,term,state,governor,state,governor,governor,governor,state,governor,governor]"
+68287,68289,CORRELATES,"[New York City,nomination,Republican,George W. Bush,father]"
+68287,68290,CORRELATES,"[father,term,election,governor,election,governor]"
+68287,68292,CORRELATES,"[New York,Mario Cuomo,election,New York City,governor,state,The New York Times,state,Republican]"
+68287,68294,CORRELATES,"[George W. Bush,Republican,father,father,father]"
+68287,68295,CORRELATES,[father]
+68287,68296,CORRELATES,[city]
+68287,68297,CORRELATES,"[George W. Bush,governor,governor,Republican,election,New York,term,governor]"
+68287,68298,CORRELATES,"[governor,governor,state,election,Democrat,law,governor,election,election,governor,law,election]"
+68287,68300,CORRELATES,"[governorship,governor,father,state,state,state,state,Governor,governor]"
+68287,68301,CORRELATES,"[vote,governor,state,George W. Bush,state,governor,governor,governor,governor,election,election,election,election,election,candidacy,governor]"
+68287,68302,CORRELATES,[Republican]
+68287,68304,CORRELATES,[election]
+68287,68305,CORRELATES,[governor]
+68287,68306,CORRELATES,"[New York,times]"
+68287,68313,CORRELATES,"[father,law]"
+68287,68315,CORRELATES,"[father,election]"
+68287,68318,CORRELATES,"[city,city,city,city]"
+68287,68320,CORRELATES,[part]
+68287,68324,CORRELATES,[father]
+68287,68325,CORRELATES,[part]
+68287,68329,CORRELATES,"[times,New York]"
+68287,68330,CORRELATES,"[part,New York,father]"
+68287,68332,CORRELATES,[father]
+68287,68333,CORRELATES,"[father,father]"
+68287,68336,CORRELATES,[election]
+68287,68341,CORRELATES,[father]
+68287,68348,CORRELATES,[father]
+68287,68349,CORRELATES,[times]
+68287,68356,CORRELATES,[part]
+68287,68360,CORRELATES,[father]
+68288,68289,CORRELATES,[Barack Obama]
+68288,68290,CORRELATES,"[term,governor,Barack Obama,governor]"
+68288,68292,CORRELATES,"[New York,Democratic Party,office,Barack Obama,governor,Eliot Spitzer,position,state,marriage,state]"
+68288,68294,CORRELATES,[Barack Obama]
+68288,68296,CORRELATES,[member]
+68288,68297,CORRELATES,"[Democratic Party,governor,governor,New York,attorney,office,term,governor,Barack Obama]"
+68288,68298,CORRELATES,"[governor,attorney,governor,state,member,governor,governor,office,Barack Obama]"
+68288,68300,CORRELATES,"[Barack Obama,office,governor,state,state,state,state,governor]"
+68288,68301,CORRELATES,"[governor,state,state,governor,governor,governor,governor,governor]"
+68288,68304,CORRELATES,"[member,member,member,member,member,member,position,position,position]"
+68288,68305,CORRELATES,[governor]
+68288,68306,CORRELATES,"[member,New York,member]"
+68288,68311,CORRELATES,[position]
+68288,68315,CORRELATES,[states]
+68288,68319,CORRELATES,"[member,member,position,member,member,member]"
+68288,68320,CORRELATES,"[member,member]"
+68288,68325,CORRELATES,[position]
+68288,68329,CORRELATES,[New York]
+68288,68330,CORRELATES,[New York]
+68288,68336,CORRELATES,"[member,position,member,member]"
+68288,68340,CORRELATES,[member]
+68288,68342,CORRELATES,[member]
+68288,68345,CORRELATES,[member]
+68288,68348,CORRELATES,"[member,member]"
+68288,68349,CORRELATES,[member]
+68288,68356,CORRELATES,"[member,member]"
+68288,68361,CORRELATES,[position]
+68288,68362,CORRELATES,[member]
+68289,68290,CORRELATES,"[father,Barack Obama]"
+68289,68292,CORRELATES,"[Bill Clinton,New York City,Barack Obama,Republican]"
+68289,68294,CORRELATES,"[Barack Obama,United States Senate,George W. Bush,Republican,family,Bill Clinton,family,father,father,father]"
+68289,68295,CORRELATES,"[father,family,school]"
+68289,68297,CORRELATES,"[Yale Law School,George W. Bush,Republican,George H.W.,Barack Obama]"
+68289,68298,CORRELATES,"[Bill Clinton,Barack Obama]"
+68289,68300,CORRELATES,"[Barack Obama,Bill Clinton,organization,mother,father]"
+68289,68301,CORRELATES,"[George W. Bush,staff]"
+68289,68302,CORRELATES,"[mother,family,mother,Republican]"
+68289,68305,CORRELATES,"[Supreme Court of the United States,associate justice,opinions,school,school,opinions,school]"
+68289,68307,CORRELATES,[family]
+68289,68313,CORRELATES,"[Bill Clinton,father,associate justice,United States Senate,opinions,cases,cases]"
+68289,68315,CORRELATES,"[government,father]"
+68289,68316,CORRELATES,[government]
+68289,68317,CORRELATES,[action]
+68289,68318,CORRELATES,"[government,government]"
+68289,68324,CORRELATES,"[father,school]"
+68289,68327,CORRELATES,[mother]
+68289,68328,CORRELATES,[mother]
+68289,68329,CORRELATES,[family]
+68289,68330,CORRELATES,[father]
+68289,68332,CORRELATES,[father]
+68289,68333,CORRELATES,"[father,mother,father,family]"
+68289,68338,CORRELATES,"[woman,distance,family,distance]"
+68289,68341,CORRELATES,"[father,family]"
+68289,68348,CORRELATES,"[organization,father]"
+68289,68356,CORRELATES,[family]
+68289,68357,CORRELATES,[staff]
+68289,68360,CORRELATES,"[father,school,mother]"
+68289,68362,CORRELATES,[family]
+68290,68292,CORRELATES,"[election,Barack Obama,governor]"
+68290,68294,CORRELATES,"[Barack Obama,senator,campaign,father,Democratic,father,father]"
+68290,68295,CORRELATES,[father]
+68290,68296,CORRELATES,[wife]
+68290,68297,CORRELATES,"[governor,governor,election,term,governor,Barack Obama]"
+68290,68298,CORRELATES,"[governor,governor,election,governor,election,election,governor,campaign,election,Barack Obama]"
+68290,68300,CORRELATES,"[Massachusetts,Barack Obama,Democratic,governor,mission,Bain Capital,father,businessman,governor]"
+68290,68301,CORRELATES,"[Republican Party,governor,governor,governor,governor,governor,election,election,election,election,election,governor,candidates]"
+68290,68302,CORRELATES,[campaign]
+68290,68304,CORRELATES,[election]
+68290,68305,CORRELATES,[governor]
+68290,68313,CORRELATES,[father]
+68290,68315,CORRELATES,"[Republican Party,father,election]"
+68290,68322,CORRELATES,[France]
+68290,68324,CORRELATES,"[father,mission]"
+68290,68327,CORRELATES,[Massachusetts]
+68290,68330,CORRELATES,[father]
+68290,68332,CORRELATES,[father]
+68290,68333,CORRELATES,"[father,father]"
+68290,68336,CORRELATES,[election]
+68290,68341,CORRELATES,[father]
+68290,68348,CORRELATES,[father]
+68290,68354,CORRELATES,[businessman]
+68290,68360,CORRELATES,[father]
+68290,68363,CORRELATES,[Michigan]
+68291,68293,CORRELATES,"[methods,concepts,methods]"
+68291,68296,CORRELATES,[Japanese]
+68291,68297,CORRELATES,"[speech,speech]"
+68291,68299,CORRELATES,[Japanese]
+68291,68304,CORRELATES,[Japanese]
+68291,68307,CORRELATES,"[Japanese,degree,Aichi Prefecture]"
+68291,68308,CORRELATES,"[Japanese,development,development]"
+68291,68309,CORRELATES,[Japanese]
+68291,68310,CORRELATES,[Japanese]
+68291,68311,CORRELATES,[Japanese]
+68291,68312,CORRELATES,[Japanese]
+68291,68314,CORRELATES,[Japanese]
+68291,68315,CORRELATES,[work]
+68291,68316,CORRELATES,"[Japanese,development]"
+68291,68317,CORRELATES,[Japanese]
+68291,68318,CORRELATES,[Japanese]
+68291,68319,CORRELATES,[Japanese]
+68291,68320,CORRELATES,[Japanese]
+68291,68321,CORRELATES,[Japanese]
+68291,68323,CORRELATES,"[Japanese,work]"
+68291,68324,CORRELATES,[Japanese]
+68291,68325,CORRELATES,[Japanese]
+68291,68326,CORRELATES,[Japanese]
+68291,68328,CORRELATES,[Japanese]
+68291,68331,CORRELATES,"[team,Japanese]"
+68291,68333,CORRELATES,"[Japanese,work]"
+68291,68334,CORRELATES,[Japanese]
+68291,68335,CORRELATES,[Japanese]
+68291,68336,CORRELATES,[Japanese]
+68291,68337,CORRELATES,[Japanese]
+68291,68338,CORRELATES,[team]
+68291,68339,CORRELATES,[Japanese]
+68291,68340,CORRELATES,[team]
+68291,68341,CORRELATES,[Japanese]
+68291,68342,CORRELATES,[Japanese]
+68291,68346,CORRELATES,[Japanese]
+68291,68351,CORRELATES,[Japanese]
+68291,68352,CORRELATES,[Japanese]
+68291,68356,CORRELATES,[team]
+68291,68357,CORRELATES,[work]
+68291,68358,CORRELATES,[team]
+68291,68360,CORRELATES,[Japanese]
+68291,68361,CORRELATES,"[team,degree]"
+68292,68294,CORRELATES,"[Barack Obama,Republican,Bill Clinton]"
+68292,68296,CORRELATES,[allegations]
+68292,68297,CORRELATES,"[American,Democratic Party,administration,governor,governor,Republican,administration,election,New York,office,governor,program,Barack Obama]"
+68292,68298,CORRELATES,"[governor,governor,state,election,American,governor,election,election,governor,office,Bill Clinton,election,Barack Obama]"
+68292,68300,CORRELATES,"[Barack Obama,office,Bill Clinton,governor,American,state,state,state,state,governor]"
+68292,68301,CORRELATES,"[governor,state,state,governor,governor,governor,governor,election,election,election,election,election,governor]"
+68292,68302,CORRELATES,"[American,Republican,administration]"
+68292,68303,CORRELATES,[program]
+68292,68304,CORRELATES,"[election,position,position,position]"
+68292,68305,CORRELATES,"[American,governor]"
+68292,68306,CORRELATES,"[New York,American]"
+68292,68307,CORRELATES,[American]
+68292,68311,CORRELATES,[position]
+68292,68312,CORRELATES,[American]
+68292,68313,CORRELATES,[Bill Clinton]
+68292,68315,CORRELATES,"[American,election]"
+68292,68319,CORRELATES,"[program,position]"
+68292,68322,CORRELATES,[American]
+68292,68325,CORRELATES,[position]
+68292,68327,CORRELATES,[American]
+68292,68329,CORRELATES,"[American,New York]"
+68292,68330,CORRELATES,"[American,New York]"
+68292,68336,CORRELATES,"[position,election]"
+68292,68338,CORRELATES,[American]
+68292,68340,CORRELATES,[American]
+68292,68343,CORRELATES,[American]
+68292,68344,CORRELATES,"[American,program,administration]"
+68292,68345,CORRELATES,[American]
+68292,68347,CORRELATES,[American]
+68292,68348,CORRELATES,"[allegations,American]"
+68292,68349,CORRELATES,[American]
+68292,68350,CORRELATES,[American]
+68292,68353,CORRELATES,[American]
+68292,68354,CORRELATES,[American]
+68292,68356,CORRELATES,[American]
+68292,68360,CORRELATES,[American]
+68292,68361,CORRELATES,"[American,position]"
+68292,68362,CORRELATES,"[allegations,American]"
+68292,68363,CORRELATES,[American]
+68293,68295,CORRELATES,"[company,company,company,company,company]"
+68293,68297,CORRELATES,[war]
+68293,68299,CORRELATES,[interest]
+68293,68300,CORRELATES,[company]
+68293,68302,CORRELATES,"[war,World War II]"
+68293,68303,CORRELATES,[interest]
+68293,68307,CORRELATES,"[company,company,company,company,World War II]"
+68293,68308,CORRELATES,"[company,company]"
+68293,68313,CORRELATES,[intention]
+68293,68316,CORRELATES,"[quality control,World War II,war]"
+68293,68318,CORRELATES,[World War II]
+68293,68324,CORRELATES,[World War II]
+68293,68333,CORRELATES,"[war,World War II]"
+68293,68337,CORRELATES,[company]
+68293,68342,CORRELATES,[many]
+68293,68352,CORRELATES,[company]
+68293,68355,CORRELATES,[company]
+68293,68357,CORRELATES,[company]
+68294,68295,CORRELATES,"[father,family]"
+68294,68297,CORRELATES,"[United States Congress,Ronald Reagan,president,George W. Bush,president,president,Republican,Barack Obama]"
+68294,68298,CORRELATES,"[Bill Clinton,campaign,Barack Obama]"
+68294,68300,CORRELATES,"[Barack Obama,Democratic,Bill Clinton,father]"
+68294,68301,CORRELATES,"[United States House of Representatives,Donald Trump,George W. Bush,election.]"
+68294,68302,CORRELATES,"[family,campaign,president,Republican,United States Congress]"
+68294,68303,CORRELATES,[man]
+68294,68305,CORRELATES,"[Arizona,Ronald Reagan]"
+68294,68306,CORRELATES,[United States House of Representatives]
+68294,68307,CORRELATES,[family]
+68294,68308,CORRELATES,[children]
+68294,68313,CORRELATES,"[Bill Clinton,father,United States Senate]"
+68294,68314,CORRELATES,[daughter]
+68294,68315,CORRELATES,"[children,father,president,children,children]"
+68294,68318,CORRELATES,"[daughter,children]"
+68294,68319,CORRELATES,[man]
+68294,68322,CORRELATES,"[children,children]"
+68294,68324,CORRELATES,[father]
+68294,68329,CORRELATES,[family]
+68294,68330,CORRELATES,[father]
+68294,68332,CORRELATES,"[two,father]"
+68294,68333,CORRELATES,"[father,father,family]"
+68294,68338,CORRELATES,"[family,children,children]"
+68294,68339,CORRELATES,[two]
+68294,68341,CORRELATES,"[father,family]"
+68294,68348,CORRELATES,[father]
+68294,68349,CORRELATES,[Arizona]
+68294,68356,CORRELATES,[family]
+68294,68360,CORRELATES,[father]
+68294,68362,CORRELATES,[family]
+68295,68296,CORRELATES,[CEO]
+68295,68300,CORRELATES,"[company,father]"
+68295,68302,CORRELATES,[family]
+68295,68303,CORRELATES,[Japan]
+68295,68305,CORRELATES,"[school,school,school]"
+68295,68307,CORRELATES,"[Japan,company,company,family,company,company]"
+68295,68308,CORRELATES,"[Nintendo DS,games,games,game,game,game,company,company]"
+68295,68313,CORRELATES,[father]
+68295,68315,CORRELATES,[father]
+68295,68316,CORRELATES,"[Japan,friends]"
+68295,68319,CORRELATES,"[producer,producer]"
+68295,68324,CORRELATES,"[father,school,Japan]"
+68295,68325,CORRELATES,[Japan]
+68295,68329,CORRELATES,[family]
+68295,68330,CORRELATES,[father]
+68295,68332,CORRELATES,[father]
+68295,68333,CORRELATES,"[father,father,family]"
+68295,68337,CORRELATES,[company]
+68295,68338,CORRELATES,[family]
+68295,68341,CORRELATES,"[father,family]"
+68295,68348,CORRELATES,[father]
+68295,68349,CORRELATES,[games]
+68295,68352,CORRELATES,[company]
+68295,68355,CORRELATES,"[game,game,company,game]"
+68295,68356,CORRELATES,[family]
+68295,68357,CORRELATES,[company]
+68295,68360,CORRELATES,"[father,school]"
+68295,68362,CORRELATES,[family]
+68296,68297,CORRELATES,[President]
+68296,68298,CORRELATES,[member]
+68296,68299,CORRELATES,[Japanese]
+68296,68300,CORRELATES,[chairman]
+68296,68304,CORRELATES,"[Japanese,member,member,member,member,member,member]"
+68296,68305,CORRELATES,[President]
+68296,68306,CORRELATES,"[member,member,President]"
+68296,68307,CORRELATES,"[Japanese,chairman]"
+68296,68308,CORRELATES,[Japanese]
+68296,68309,CORRELATES,[Japanese]
+68296,68310,CORRELATES,[Japanese]
+68296,68311,CORRELATES,[Japanese]
+68296,68312,CORRELATES,[Japanese]
+68296,68314,CORRELATES,[Japanese]
+68296,68316,CORRELATES,[Japanese]
+68296,68317,CORRELATES,[Japanese]
+68296,68318,CORRELATES,"[Japanese,city,city,city,city]"
+68296,68319,CORRELATES,"[Japanese,member,member,member,member,member]"
+68296,68320,CORRELATES,"[member,Japanese,member]"
+68296,68321,CORRELATES,[Japanese]
+68296,68323,CORRELATES,[Japanese]
+68296,68324,CORRELATES,[Japanese]
+68296,68325,CORRELATES,[Japanese]
+68296,68326,CORRELATES,[Japanese]
+68296,68328,CORRELATES,[Japanese]
+68296,68331,CORRELATES,[Japanese]
+68296,68333,CORRELATES,[Japanese]
+68296,68334,CORRELATES,[Japanese]
+68296,68335,CORRELATES,[Japanese]
+68296,68336,CORRELATES,"[member,Japanese,member,member]"
+68296,68337,CORRELATES,[Japanese]
+68296,68339,CORRELATES,[Japanese]
+68296,68340,CORRELATES,[member]
+68296,68341,CORRELATES,[Japanese]
+68296,68342,CORRELATES,"[book,member,Japanese]"
+68296,68345,CORRELATES,[member]
+68296,68346,CORRELATES,[Japanese]
+68296,68348,CORRELATES,"[allegations,member,member]"
+68296,68349,CORRELATES,[member]
+68296,68351,CORRELATES,[Japanese]
+68296,68352,CORRELATES,[Japanese]
+68296,68356,CORRELATES,"[member,member]"
+68296,68360,CORRELATES,[Japanese]
+68296,68362,CORRELATES,"[allegations,member]"
+68297,68298,CORRELATES,"[governor,attorney,governor,election,American,governor,election,election,governor,office,election,Barack Obama]"
+68297,68300,CORRELATES,"[Barack Obama,office,governor,American,governor]"
+68297,68301,CORRELATES,"[governor,George W. Bush,governor,governor,governor,governor,election,election,election,election,election,governor]"
+68297,68302,CORRELATES,"[American,presidency,war,president,White House,presidency,Republican,United States Congress,administration]"
+68297,68303,CORRELATES,[program]
+68297,68304,CORRELATES,[election]
+68297,68305,CORRELATES,"[Ronald Reagan,American,President,governor]"
+68297,68306,CORRELATES,"[New York,American,President]"
+68297,68307,CORRELATES,[American]
+68297,68312,CORRELATES,[American]
+68297,68315,CORRELATES,"[American,president,election]"
+68297,68316,CORRELATES,[war]
+68297,68319,CORRELATES,[program]
+68297,68322,CORRELATES,[American]
+68297,68327,CORRELATES,[American]
+68297,68329,CORRELATES,"[American,New York]"
+68297,68330,CORRELATES,"[American,New York]"
+68297,68333,CORRELATES,[war]
+68297,68335,CORRELATES,[time]
+68297,68336,CORRELATES,[election]
+68297,68338,CORRELATES,[American]
+68297,68340,CORRELATES,[American]
+68297,68343,CORRELATES,[American]
+68297,68344,CORRELATES,"[American,program,administration]"
+68297,68345,CORRELATES,[American]
+68297,68347,CORRELATES,[American]
+68297,68348,CORRELATES,[American]
+68297,68349,CORRELATES,[American]
+68297,68350,CORRELATES,[American]
+68297,68353,CORRELATES,[American]
+68297,68354,CORRELATES,[American]
+68297,68356,CORRELATES,[American]
+68297,68360,CORRELATES,[American]
+68297,68361,CORRELATES,[American]
+68297,68362,CORRELATES,[American]
+68297,68363,CORRELATES,[American]
+68298,68300,CORRELATES,"[Barack Obama,office,Bill Clinton,governor,American,state,state,state,state,governor]"
+68298,68301,CORRELATES,"[South Carolina,governor,state,state,governor,governor,governor,governor,election,election,election,election,election,governor]"
+68298,68302,CORRELATES,"[American,one,campaign,parents]"
+68298,68304,CORRELATES,"[member,member,member,member,election,member,member]"
+68298,68305,CORRELATES,"[American,politician,governor]"
+68298,68306,CORRELATES,"[member,American,member]"
+68298,68307,CORRELATES,[American]
+68298,68312,CORRELATES,[American]
+68298,68313,CORRELATES,"[Bill Clinton,law]"
+68298,68315,CORRELATES,"[American,election]"
+68298,68317,CORRELATES,"[one,one]"
+68298,68319,CORRELATES,"[member,member,citation,member,member,member]"
+68298,68320,CORRELATES,"[member,citation,citation,citation,citation,citation,member,citation]"
+68298,68322,CORRELATES,"[American,one]"
+68298,68325,CORRELATES,[one]
+68298,68327,CORRELATES,[American]
+68298,68329,CORRELATES,"[American,one]"
+68298,68330,CORRELATES,[American]
+68298,68335,CORRELATES,[parents]
+68298,68336,CORRELATES,"[member,member,election,member,citation]"
+68298,68338,CORRELATES,[American]
+68298,68339,CORRELATES,[one]
+68298,68340,CORRELATES,"[member,American]"
+68298,68342,CORRELATES,"[member,one]"
+68298,68343,CORRELATES,[American]
+68298,68344,CORRELATES,"[American,education,education]"
+68298,68345,CORRELATES,"[American,member]"
+68298,68347,CORRELATES,[American]
+68298,68348,CORRELATES,"[member,American,member]"
+68298,68349,CORRELATES,"[American,member]"
+68298,68350,CORRELATES,[American]
+68298,68353,CORRELATES,"[American,citation]"
+68298,68354,CORRELATES,[American]
+68298,68356,CORRELATES,"[American,member,member,citation,citation,citation,one]"
+68298,68357,CORRELATES,"[South Carolina,North Carolina]"
+68298,68360,CORRELATES,"[American,citation,citation,citation]"
+68298,68361,CORRELATES,"[American,one]"
+68298,68362,CORRELATES,"[American,member]"
+68298,68363,CORRELATES,[American]
+68299,68303,CORRELATES,[interest]
+68299,68304,CORRELATES,[Japanese]
+68299,68307,CORRELATES,[Japanese]
+68299,68308,CORRELATES,[Japanese]
+68299,68309,CORRELATES,[Japanese]
+68299,68310,CORRELATES,[Japanese]
+68299,68311,CORRELATES,[Japanese]
+68299,68312,CORRELATES,[Japanese]
+68299,68314,CORRELATES,"[Japanese,NHK]"
+68299,68316,CORRELATES,[Japanese]
+68299,68317,CORRELATES,[Japanese]
+68299,68318,CORRELATES,"[Japanese,people]"
+68299,68319,CORRELATES,[Japanese]
+68299,68320,CORRELATES,[Japanese]
+68299,68321,CORRELATES,[Japanese]
+68299,68322,CORRELATES,[people]
+68299,68323,CORRELATES,[Japanese]
+68299,68324,CORRELATES,[Japanese]
+68299,68325,CORRELATES,[Japanese]
+68299,68326,CORRELATES,[Japanese]
+68299,68328,CORRELATES,[Japanese]
+68299,68331,CORRELATES,[Japanese]
+68299,68333,CORRELATES,"[Japanese,people,works]"
+68299,68334,CORRELATES,[Japanese]
+68299,68335,CORRELATES,[Japanese]
+68299,68336,CORRELATES,[Japanese]
+68299,68337,CORRELATES,[Japanese]
+68299,68339,CORRELATES,[Japanese]
+68299,68341,CORRELATES,[Japanese]
+68299,68342,CORRELATES,[Japanese]
+68299,68343,CORRELATES,[fields]
+68299,68346,CORRELATES,[Japanese]
+68299,68351,CORRELATES,[Japanese]
+68299,68352,CORRELATES,[Japanese]
+68299,68357,CORRELATES,[civil engineering]
+68299,68360,CORRELATES,"[Japanese,addition]"
+68300,68301,CORRELATES,"[governor,state,author,state,governor,governor,governor,governor,governor]"
+68300,68302,CORRELATES,"[American,mother,mother]"
+68300,68305,CORRELATES,"[American,governor]"
+68300,68306,CORRELATES,[American]
+68300,68307,CORRELATES,"[company,American,company,chairman,company,company]"
+68300,68308,CORRELATES,"[company,company]"
+68300,68312,CORRELATES,[American]
+68300,68313,CORRELATES,"[Bill Clinton,father]"
+68300,68315,CORRELATES,"[American,father]"
+68300,68322,CORRELATES,[American]
+68300,68324,CORRELATES,"[father,mission]"
+68300,68327,CORRELATES,"[mother,American,Boston,Massachusetts]"
+68300,68328,CORRELATES,[mother]
+68300,68329,CORRELATES,"[American,Boston]"
+68300,68330,CORRELATES,"[American,father]"
+68300,68332,CORRELATES,[father]
+68300,68333,CORRELATES,"[father,mother,father,author]"
+68300,68337,CORRELATES,[company]
+68300,68338,CORRELATES,"[American,college]"
+68300,68340,CORRELATES,[American]
+68300,68341,CORRELATES,[father]
+68300,68343,CORRELATES,[American]
+68300,68344,CORRELATES,[American]
+68300,68345,CORRELATES,[American]
+68300,68347,CORRELATES,[American]
+68300,68348,CORRELATES,"[organization,American,father]"
+68300,68349,CORRELATES,[American]
+68300,68350,CORRELATES,[American]
+68300,68352,CORRELATES,[company]
+68300,68353,CORRELATES,[American]
+68300,68354,CORRELATES,"[businessman,American]"
+68300,68355,CORRELATES,[company]
+68300,68356,CORRELATES,[American]
+68300,68357,CORRELATES,"[college,company]"
+68300,68360,CORRELATES,"[American,father,mother]"
+68300,68361,CORRELATES,[American]
+68300,68362,CORRELATES,[American]
+68300,68363,CORRELATES,[American]
+68301,68304,CORRELATES,[election]
+68301,68305,CORRELATES,[governor]
+68301,68306,CORRELATES,"[United States House of Representatives,Chairman,Congress]"
+68301,68315,CORRELATES,"[Congress,Republican Party,election]"
+68301,68333,CORRELATES,"[house,author]"
+68301,68336,CORRELATES,[election]
+68301,68357,CORRELATES,"[staff,South Carolina]"
+68302,68305,CORRELATES,"[American,Washington, D.C.]"
+68302,68306,CORRELATES,[American]
+68302,68307,CORRELATES,"[American,family,World War II]"
+68302,68312,CORRELATES,[American]
+68302,68315,CORRELATES,"[American,Washington, D.C.,statesman,president]"
+68302,68316,CORRELATES,"[response,World War II,war]"
+68302,68317,CORRELATES,"[one,one]"
+68302,68318,CORRELATES,[World War II]
+68302,68322,CORRELATES,"[American,one]"
+68302,68324,CORRELATES,[World War II]
+68302,68325,CORRELATES,[one]
+68302,68327,CORRELATES,"[mother,American]"
+68302,68328,CORRELATES,"[mother,British]"
+68302,68329,CORRELATES,"[American,family,one]"
+68302,68330,CORRELATES,[American]
+68302,68333,CORRELATES,"[mother,family,war,World War II]"
+68302,68335,CORRELATES,[parents]
+68302,68338,CORRELATES,"[American,family]"
+68302,68339,CORRELATES,[one]
+68302,68340,CORRELATES,[American]
+68302,68341,CORRELATES,[family]
+68302,68342,CORRELATES,[one]
+68302,68343,CORRELATES,[American]
+68302,68344,CORRELATES,"[American,administration]"
+68302,68345,CORRELATES,[American]
+68302,68347,CORRELATES,[American]
+68302,68348,CORRELATES,"[American,response]"
+68302,68349,CORRELATES,[American]
+68302,68350,CORRELATES,[American]
+68302,68353,CORRELATES,"[American,Washington]"
+68302,68354,CORRELATES,[American]
+68302,68355,CORRELATES,[Washington]
+68302,68356,CORRELATES,"[American,family,one]"
+68302,68360,CORRELATES,"[American,mother]"
+68302,68361,CORRELATES,"[American,one]"
+68302,68362,CORRELATES,"[American,family]"
+68302,68363,CORRELATES,[American]
+68303,68304,CORRELATES,[actress]
+68303,68307,CORRELATES,[Japan]
+68303,68311,CORRELATES,[model]
+68303,68312,CORRELATES,[2009]
+68303,68313,CORRELATES,[high school]
+68303,68314,CORRELATES,"[career,birth,2009,2009]"
+68303,68316,CORRELATES,[Japan]
+68303,68317,CORRELATES,[series]
+68303,68319,CORRELATES,"[actress,program,man]"
+68303,68320,CORRELATES,[model]
+68303,68321,CORRELATES,[series]
+68303,68323,CORRELATES,[dramas]
+68303,68324,CORRELATES,[Japan]
+68303,68325,CORRELATES,"[series,actress,Japan,career,career,birth]"
+68303,68326,CORRELATES,"[high school,series,series,high school]"
+68303,68330,CORRELATES,[issue]
+68303,68333,CORRELATES,[model]
+68303,68335,CORRELATES,"[model,release,model,model,fashion magazine]"
+68303,68337,CORRELATES,[10]
+68303,68341,CORRELATES,[series]
+68303,68342,CORRELATES,"[career,actress,series]"
+68303,68344,CORRELATES,[program]
+68303,68346,CORRELATES,"[2009,2009,2009]"
+68303,68349,CORRELATES,"[career,career]"
+68303,68351,CORRELATES,[career]
+68303,68352,CORRELATES,"[model,high school,2007,2007]"
+68303,68354,CORRELATES,"[career,series]"
+68303,68359,CORRELATES,[career]
+68303,68362,CORRELATES,[high school]
+68304,68306,CORRELATES,"[member,member]"
+68304,68307,CORRELATES,[Japanese]
+68304,68308,CORRELATES,[Japanese]
+68304,68309,CORRELATES,[Japanese]
+68304,68310,CORRELATES,[Japanese]
+68304,68311,CORRELATES,"[Japanese,position]"
+68304,68312,CORRELATES,[Japanese]
+68304,68314,CORRELATES,[Japanese]
+68304,68315,CORRELATES,[election]
+68304,68316,CORRELATES,[Japanese]
+68304,68317,CORRELATES,[Japanese]
+68304,68318,CORRELATES,[Japanese]
+68304,68319,CORRELATES,"[actress,HKT48,AKB48,Japanese,member,member,position,member,member,member]"
+68304,68320,CORRELATES,"[member,Japanese,members,group,member]"
+68304,68321,CORRELATES,[Japanese]
+68304,68323,CORRELATES,"[Japanese,group,group,group,group]"
+68304,68324,CORRELATES,[Japanese]
+68304,68325,CORRELATES,"[actress,Japanese,members,hiatus,position]"
+68304,68326,CORRELATES,[Japanese]
+68304,68328,CORRELATES,[Japanese]
+68304,68331,CORRELATES,[Japanese]
+68304,68333,CORRELATES,[Japanese]
+68304,68334,CORRELATES,[Japanese]
+68304,68335,CORRELATES,[Japanese]
+68304,68336,CORRELATES,"[AKB48,member,sister group,Japanese,sister group,position,member,election,member]"
+68304,68337,CORRELATES,[Japanese]
+68304,68338,CORRELATES,[members]
+68304,68339,CORRELATES,[Japanese]
+68304,68340,CORRELATES,[member]
+68304,68341,CORRELATES,[Japanese]
+68304,68342,CORRELATES,"[Mayu Watanabe,AKB48,singles,actress,singles,group,group,members,member,group,Japanese]"
+68304,68345,CORRELATES,[member]
+68304,68346,CORRELATES,[Japanese]
+68304,68348,CORRELATES,"[member,member,tenure]"
+68304,68349,CORRELATES,[member]
+68304,68351,CORRELATES,[Japanese]
+68304,68352,CORRELATES,[Japanese]
+68304,68354,CORRELATES,[tenure]
+68304,68356,CORRELATES,"[member,member,hiatus]"
+68304,68360,CORRELATES,[Japanese]
+68304,68361,CORRELATES,[position]
+68304,68362,CORRELATES,"[members,member]"
+68305,68306,CORRELATES,"[American,seat,President]"
+68305,68307,CORRELATES,"[American,siblings]"
+68305,68312,CORRELATES,[American]
+68305,68313,CORRELATES,"[associate justice,opinions,jurist]"
+68305,68315,CORRELATES,"[American,Washington, D.C.,Army]"
+68305,68322,CORRELATES,"[death,American]"
+68305,68324,CORRELATES,[school]
+68305,68327,CORRELATES,[American]
+68305,68329,CORRELATES,[American]
+68305,68330,CORRELATES,[American]
+68305,68338,CORRELATES,[American]
+68305,68340,CORRELATES,[American]
+68305,68343,CORRELATES,[American]
+68305,68344,CORRELATES,[American]
+68305,68345,CORRELATES,[American]
+68305,68347,CORRELATES,[American]
+68305,68348,CORRELATES,[American]
+68305,68349,CORRELATES,"[American,Arizona]"
+68305,68350,CORRELATES,[American]
+68305,68353,CORRELATES,[American]
+68305,68354,CORRELATES,[American]
+68305,68356,CORRELATES,[American]
+68305,68360,CORRELATES,"[American,school]"
+68305,68361,CORRELATES,[American]
+68305,68362,CORRELATES,[American]
+68305,68363,CORRELATES,[American]
+68306,68307,CORRELATES,[American]
+68306,68312,CORRELATES,[American]
+68306,68315,CORRELATES,"[American,Congress]"
+68306,68319,CORRELATES,"[member,member,member,member,member]"
+68306,68320,CORRELATES,"[member,member]"
+68306,68322,CORRELATES,[American]
+68306,68324,CORRELATES,[space program]
+68306,68327,CORRELATES,[American]
+68306,68329,CORRELATES,"[American,times,New York]"
+68306,68330,CORRELATES,"[American,New York,Florida]"
+68306,68336,CORRELATES,"[member,member,member]"
+68306,68338,CORRELATES,[American]
+68306,68340,CORRELATES,"[member,American]"
+68306,68342,CORRELATES,[member]
+68306,68343,CORRELATES,[American]
+68306,68344,CORRELATES,[American]
+68306,68345,CORRELATES,"[American,member]"
+68306,68347,CORRELATES,[American]
+68306,68348,CORRELATES,"[member,American,member]"
+68306,68349,CORRELATES,"[American,times,member]"
+68306,68350,CORRELATES,[American]
+68306,68353,CORRELATES,[American]
+68306,68354,CORRELATES,[American]
+68306,68356,CORRELATES,"[American,member,member]"
+68306,68357,CORRELATES,[Virginia]
+68306,68360,CORRELATES,[American]
+68306,68361,CORRELATES,[American]
+68306,68362,CORRELATES,"[American,member]"
+68306,68363,CORRELATES,[American]
+68307,68308,CORRELATES,"[Japanese,first,company,company]"
+68307,68309,CORRELATES,[Japanese]
+68307,68310,CORRELATES,[Japanese]
+68307,68311,CORRELATES,[Japanese]
+68307,68312,CORRELATES,"[Japanese,American]"
+68307,68314,CORRELATES,"[Japanese,child]"
+68307,68315,CORRELATES,[American]
+68307,68316,CORRELATES,"[Japanese,Japan,World War II,Imperial Japanese Navy]"
+68307,68317,CORRELATES,[Japanese]
+68307,68318,CORRELATES,"[Japanese,World War II]"
+68307,68319,CORRELATES,[Japanese]
+68307,68320,CORRELATES,[Japanese]
+68307,68321,CORRELATES,[Japanese]
+68307,68322,CORRELATES,[American]
+68307,68323,CORRELATES,"[Japanese,child]"
+68307,68324,CORRELATES,"[Japanese,Japan,World War II]"
+68307,68325,CORRELATES,"[Japanese,Japan]"
+68307,68326,CORRELATES,[Japanese]
+68307,68327,CORRELATES,[American]
+68307,68328,CORRELATES,[Japanese]
+68307,68329,CORRELATES,"[American,family]"
+68307,68330,CORRELATES,[American]
+68307,68331,CORRELATES,[Japanese]
+68307,68333,CORRELATES,"[Japanese,family,World War II]"
+68307,68334,CORRELATES,[Japanese]
+68307,68335,CORRELATES,[Japanese]
+68307,68336,CORRELATES,"[Japanese,first]"
+68307,68337,CORRELATES,"[Japanese,company]"
+68307,68338,CORRELATES,"[American,family,child]"
+68307,68339,CORRELATES,[Japanese]
+68307,68340,CORRELATES,[American]
+68307,68341,CORRELATES,"[Japanese,family]"
+68307,68342,CORRELATES,[Japanese]
+68307,68343,CORRELATES,"[radio,American]"
+68307,68344,CORRELATES,[American]
+68307,68345,CORRELATES,[American]
+68307,68346,CORRELATES,[Japanese]
+68307,68347,CORRELATES,[American]
+68307,68348,CORRELATES,[American]
+68307,68349,CORRELATES,"[American,first]"
+68307,68350,CORRELATES,[American]
+68307,68351,CORRELATES,[Japanese]
+68307,68352,CORRELATES,"[Japanese,company]"
+68307,68353,CORRELATES,[American]
+68307,68354,CORRELATES,"[American,child]"
+68307,68355,CORRELATES,[company]
+68307,68356,CORRELATES,"[American,family]"
+68307,68357,CORRELATES,"[employees,company,employees]"
+68307,68360,CORRELATES,"[American,Japanese]"
+68307,68361,CORRELATES,"[American,degree]"
+68307,68362,CORRELATES,"[American,family,child]"
+68307,68363,CORRELATES,[American]
+68308,68309,CORRELATES,[Japanese]
+68308,68310,CORRELATES,[Japanese]
+68308,68311,CORRELATES,[Japanese]
+68308,68312,CORRELATES,[Japanese]
+68308,68314,CORRELATES,[Japanese]
+68308,68315,CORRELATES,"[children,children,children]"
+68308,68316,CORRELATES,"[Japanese,development]"
+68308,68317,CORRELATES,"[Japanese,version]"
+68308,68318,CORRELATES,"[Japanese,children]"
+68308,68319,CORRELATES,[Japanese]
+68308,68320,CORRELATES,[Japanese]
+68308,68321,CORRELATES,"[Japanese,Tokyo]"
+68308,68322,CORRELATES,"[children,children]"
+68308,68323,CORRELATES,[Japanese]
+68308,68324,CORRELATES,"[Japanese,Tokyo]"
+68308,68325,CORRELATES,"[Japanese,Hyogo]"
+68308,68326,CORRELATES,"[Japanese,Tokyo]"
+68308,68328,CORRELATES,[Japanese]
+68308,68331,CORRELATES,[Japanese]
+68308,68332,CORRELATES,[title]
+68308,68333,CORRELATES,"[Japanese,Tokyo]"
+68308,68334,CORRELATES,[Japanese]
+68308,68335,CORRELATES,[Japanese]
+68308,68336,CORRELATES,"[Japanese,first,title]"
+68308,68337,CORRELATES,"[Tokyo,Japanese,company]"
+68308,68338,CORRELATES,"[children,children]"
+68308,68339,CORRELATES,[Japanese]
+68308,68341,CORRELATES,[Japanese]
+68308,68342,CORRELATES,[Japanese]
+68308,68346,CORRELATES,[Japanese]
+68308,68349,CORRELATES,"[first,title,games]"
+68308,68351,CORRELATES,[Japanese]
+68308,68352,CORRELATES,"[Japanese,Tokyo,company]"
+68308,68355,CORRELATES,"[game,game,company,game]"
+68308,68357,CORRELATES,[company]
+68308,68360,CORRELATES,[Japanese]
+68309,68310,CORRELATES,"[article,Japanese,Wikipedia]"
+68309,68311,CORRELATES,"[Japanese,Wikipedia,films,article]"
+68309,68312,CORRELATES,"[Japanese,article,Wikipedia]"
+68309,68314,CORRELATES,[Japanese]
+68309,68316,CORRELATES,"[Japanese,Kyoto]"
+68309,68317,CORRELATES,"[Japanese,article,films,Wikipedia]"
+68309,68318,CORRELATES,[Japanese]
+68309,68319,CORRELATES,"[singer,Japanese,number]"
+68309,68320,CORRELATES,[Japanese]
+68309,68321,CORRELATES,[Japanese]
+68309,68323,CORRELATES,[Japanese]
+68309,68324,CORRELATES,"[Japanese,article,Wikipedia]"
+68309,68325,CORRELATES,[Japanese]
+68309,68326,CORRELATES,[Japanese]
+68309,68328,CORRELATES,[Japanese]
+68309,68330,CORRELATES,"[article,article]"
+68309,68331,CORRELATES,"[Japanese,article,Wikipedia]"
+68309,68333,CORRELATES,[Japanese]
+68309,68334,CORRELATES,"[article,Japanese,Wikipedia,films]"
+68309,68335,CORRELATES,"[singer,Japanese,singer]"
+68309,68336,CORRELATES,"[singer,Japanese]"
+68309,68337,CORRELATES,[Japanese]
+68309,68339,CORRELATES,"[Japanese,article,Wikipedia]"
+68309,68340,CORRELATES,"[article,Wikipedia,article]"
+68309,68341,CORRELATES,"[films,films,debut,Japanese,films,debut,films,films]"
+68309,68342,CORRELATES,[Japanese]
+68309,68343,CORRELATES,"[article,article,Wikipedia]"
+68309,68345,CORRELATES,"[article,article,Wikipedia]"
+68309,68346,CORRELATES,"[Japanese,article,article,Wikipedia,singer]"
+68309,68347,CORRELATES,"[article,Wikipedia]"
+68309,68349,CORRELATES,[number]
+68309,68351,CORRELATES,"[Japanese,singer]"
+68309,68352,CORRELATES,"[Japanese,films]"
+68309,68353,CORRELATES,"[1964,1964,1964]"
+68309,68354,CORRELATES,"[films,number,films]"
+68309,68355,CORRELATES,"[article,article,Wikipedia,number]"
+68309,68358,CORRELATES,"[article,article,Wikipedia]"
+68309,68360,CORRELATES,[Japanese]
+68309,68363,CORRELATES,"[article,Wikipedia,article]"
+68310,68311,CORRELATES,"[Japanese,Wikipedia,article]"
+68310,68312,CORRELATES,"[Japanese,article,Wikipedia]"
+68310,68314,CORRELATES,[Japanese]
+68310,68316,CORRELATES,[Japanese]
+68310,68317,CORRELATES,"[Japanese,article,Wikipedia]"
+68310,68318,CORRELATES,[Japanese]
+68310,68319,CORRELATES,[Japanese]
+68310,68320,CORRELATES,[Japanese]
+68310,68321,CORRELATES,"[voice actor,Japanese]"
+68310,68322,CORRELATES,[area]
+68310,68323,CORRELATES,[Japanese]
+68310,68324,CORRELATES,"[Japanese,article,Wikipedia]"
+68310,68325,CORRELATES,[Japanese]
+68310,68326,CORRELATES,[Japanese]
+68310,68328,CORRELATES,[Japanese]
+68310,68330,CORRELATES,"[article,article]"
+68310,68331,CORRELATES,"[Japanese,article,Wikipedia]"
+68310,68333,CORRELATES,[Japanese]
+68310,68334,CORRELATES,"[article,Japanese,Wikipedia]"
+68310,68335,CORRELATES,[Japanese]
+68310,68336,CORRELATES,[Japanese]
+68310,68337,CORRELATES,"[voice actor,Japanese]"
+68310,68339,CORRELATES,"[Japanese,article,Wikipedia]"
+68310,68340,CORRELATES,"[article,Wikipedia,article]"
+68310,68341,CORRELATES,[Japanese]
+68310,68342,CORRELATES,[Japanese]
+68310,68343,CORRELATES,"[article,article,Wikipedia]"
+68310,68344,CORRELATES,[area]
+68310,68345,CORRELATES,"[article,article,Wikipedia,12]"
+68310,68346,CORRELATES,"[Japanese,article,article,Wikipedia]"
+68310,68347,CORRELATES,"[article,Wikipedia,12]"
+68310,68351,CORRELATES,"[Japanese,voice actor]"
+68310,68352,CORRELATES,[Japanese]
+68310,68355,CORRELATES,"[article,article,Wikipedia]"
+68310,68358,CORRELATES,"[article,article,Wikipedia]"
+68310,68360,CORRELATES,[Japanese]
+68310,68361,CORRELATES,[12]
+68310,68363,CORRELATES,"[article,Wikipedia,article]"
+68311,68312,CORRELATES,"[Japanese,article,Wikipedia,2,1,15,3]"
+68311,68314,CORRELATES,"[Japanese,2,1,1,1,3]"
+68311,68316,CORRELATES,[Japanese]
+68311,68317,CORRELATES,"[Japanese,article,films,Wikipedia,4,1,1,1]"
+68311,68318,CORRELATES,[Japanese]
+68311,68319,CORRELATES,"[Japanese,position]"
+68311,68320,CORRELATES,"[actor,model,Japanese]"
+68311,68321,CORRELATES,"[Japanese,25]"
+68311,68323,CORRELATES,[Japanese]
+68311,68324,CORRELATES,"[Japanese,article,Wikipedia]"
+68311,68325,CORRELATES,"[Japanese,position]"
+68311,68326,CORRELATES,[Japanese]
+68311,68328,CORRELATES,"[Japanese,actor,6,3,2,2,4,6,5,1,3]"
+68311,68330,CORRELATES,"[article,article]"
+68311,68331,CORRELATES,"[Japanese,article,Wikipedia,2,3]"
+68311,68333,CORRELATES,"[Japanese,actor,model]"
+68311,68334,CORRELATES,"[article,Japanese,Wikipedia,films,6]"
+68311,68335,CORRELATES,"[model,Japanese,model,model]"
+68311,68336,CORRELATES,"[Japanese,position]"
+68311,68337,CORRELATES,[Japanese]
+68311,68339,CORRELATES,"[Japanese,article,Wikipedia,actor,2,2,1,1,15,3,4]"
+68311,68340,CORRELATES,"[article,Wikipedia,article,2,15,2,1]"
+68311,68341,CORRELATES,"[films,films,Japanese,films,several,films,films]"
+68311,68342,CORRELATES,[Japanese]
+68311,68343,CORRELATES,"[article,article,Wikipedia,3,2,4,1]"
+68311,68345,CORRELATES,"[article,article,Wikipedia,1,25,1]"
+68311,68346,CORRELATES,"[Japanese,article,article,Wikipedia,3,2,1,4]"
+68311,68347,CORRELATES,"[article,Wikipedia,1]"
+68311,68351,CORRELATES,"[Japanese,actor]"
+68311,68352,CORRELATES,"[Japanese,model,films,1,2,1,2]"
+68311,68353,CORRELATES,"[1,2,6]"
+68311,68354,CORRELATES,"[films,films]"
+68311,68355,CORRELATES,"[article,article,Wikipedia]"
+68311,68358,CORRELATES,"[Director,article,article,Wikipedia]"
+68311,68359,CORRELATES,"[4,3,1,2]"
+68311,68360,CORRELATES,[Japanese]
+68311,68361,CORRELATES,[position]
+68311,68363,CORRELATES,"[article,Wikipedia,article,1,11,3,2]"
+68312,68314,CORRELATES,"[Japanese,2009,2,1,1,2009,1,3]"
+68312,68315,CORRELATES,[American]
+68312,68316,CORRELATES,[Japanese]
+68312,68317,CORRELATES,"[Japanese,article,Wikipedia,1,1,1]"
+68312,68318,CORRELATES,[Japanese]
+68312,68319,CORRELATES,[Japanese]
+68312,68320,CORRELATES,"[Japanese,2005,2005]"
+68312,68321,CORRELATES,"[Japanese,2005,2005]"
+68312,68322,CORRELATES,[American]
+68312,68323,CORRELATES,[Japanese]
+68312,68324,CORRELATES,"[Japanese,article,Wikipedia,engineering]"
+68312,68325,CORRELATES,[Japanese]
+68312,68326,CORRELATES,[Japanese]
+68312,68327,CORRELATES,[American]
+68312,68328,CORRELATES,"[Japanese,3,2,2,1,3]"
+68312,68329,CORRELATES,[American]
+68312,68330,CORRELATES,"[American,article,article]"
+68312,68331,CORRELATES,"[Japanese,article,Wikipedia,2,3]"
+68312,68333,CORRELATES,[Japanese]
+68312,68334,CORRELATES,"[article,Japanese,Wikipedia]"
+68312,68335,CORRELATES,[Japanese]
+68312,68336,CORRELATES,[Japanese]
+68312,68337,CORRELATES,[Japanese]
+68312,68338,CORRELATES,[American]
+68312,68339,CORRELATES,"[Japanese,article,Wikipedia,2,2,1,1,15,3]"
+68312,68340,CORRELATES,"[article,Wikipedia,American,article,2,15,2,1]"
+68312,68341,CORRELATES,[Japanese]
+68312,68342,CORRELATES,[Japanese]
+68312,68343,CORRELATES,"[article,article,Wikipedia,American,2017,3,2,1]"
+68312,68344,CORRELATES,[American]
+68312,68345,CORRELATES,"[article,article,Wikipedia,American,1,1]"
+68312,68346,CORRELATES,"[Japanese,article,article,Wikipedia,2009,3,2,2009,2009,1]"
+68312,68347,CORRELATES,"[article,American,Wikipedia,1]"
+68312,68348,CORRELATES,[American]
+68312,68349,CORRELATES,[American]
+68312,68350,CORRELATES,[American]
+68312,68351,CORRELATES,[Japanese]
+68312,68352,CORRELATES,"[Japanese,1,2,1,2]"
+68312,68353,CORRELATES,"[American,1,2]"
+68312,68354,CORRELATES,[American]
+68312,68355,CORRELATES,"[article,article,Wikipedia]"
+68312,68356,CORRELATES,[American]
+68312,68358,CORRELATES,"[article,article,Wikipedia]"
+68312,68359,CORRELATES,"[3,1,2]"
+68312,68360,CORRELATES,"[American,Japanese]"
+68312,68361,CORRELATES,[American]
+68312,68362,CORRELATES,[American]
+68312,68363,CORRELATES,"[article,Wikipedia,American,article,1,3,2]"
+68313,68315,CORRELATES,[father]
+68313,68324,CORRELATES,[father]
+68313,68326,CORRELATES,"[high school,high school]"
+68313,68330,CORRELATES,[father]
+68313,68332,CORRELATES,[father]
+68313,68333,CORRELATES,"[father,father]"
+68313,68341,CORRELATES,[father]
+68313,68342,CORRELATES,[retirement]
+68313,68348,CORRELATES,[father]
+68313,68351,CORRELATES,[grandfather]
+68313,68352,CORRELATES,[high school]
+68313,68357,CORRELATES,[grandfather]
+68313,68360,CORRELATES,[father]
+68313,68362,CORRELATES,[high school]
+68314,68316,CORRELATES,[Japanese]
+68314,68317,CORRELATES,"[Japanese,1,1,1]"
+68314,68318,CORRELATES,"[Japanese,daughter]"
+68314,68319,CORRELATES,[Japanese]
+68314,68320,CORRELATES,[Japanese]
+68314,68321,CORRELATES,[Japanese]
+68314,68323,CORRELATES,"[Japanese,child,role,audition]"
+68314,68324,CORRELATES,[Japanese]
+68314,68325,CORRELATES,"[Japanese,career,career,audition,birth]"
+68314,68326,CORRELATES,"[Japanese,role,Saitama Prefecture,1989]"
+68314,68328,CORRELATES,"[Japanese,3,2,2,1,3]"
+68314,68331,CORRELATES,"[Japanese,2,2022,3]"
+68314,68333,CORRELATES,[Japanese]
+68314,68334,CORRELATES,[Japanese]
+68314,68335,CORRELATES,"[Japanese,role]"
+68314,68336,CORRELATES,"[Japanese,audition]"
+68314,68337,CORRELATES,[Japanese]
+68314,68338,CORRELATES,[child]
+68314,68339,CORRELATES,"[Japanese,couple,2,2,1,1,3]"
+68314,68340,CORRELATES,"[2,2,1]"
+68314,68341,CORRELATES,[Japanese]
+68314,68342,CORRELATES,"[career,Japanese]"
+68314,68343,CORRELATES,"[role,2021,3,2021,2,1]"
+68314,68345,CORRELATES,"[1,1]"
+68314,68346,CORRELATES,"[Japanese,2009,3,2,2009,2009,1]"
+68314,68347,CORRELATES,[1]
+68314,68349,CORRELATES,"[career,career]"
+68314,68351,CORRELATES,"[Japanese,career]"
+68314,68352,CORRELATES,"[Japanese,role,1,2,1,2]"
+68314,68353,CORRELATES,"[1,2]"
+68314,68354,CORRELATES,"[role,role,career,child]"
+68314,68359,CORRELATES,"[career,3,1,2]"
+68314,68360,CORRELATES,[Japanese]
+68314,68362,CORRELATES,[child]
+68314,68363,CORRELATES,"[1,3,2]"
+68315,68316,CORRELATES,[government]
+68315,68318,CORRELATES,"[government,children,government]"
+68315,68322,CORRELATES,"[American,children,children]"
+68315,68323,CORRELATES,[work]
+68315,68324,CORRELATES,[father]
+68315,68327,CORRELATES,[American]
+68315,68329,CORRELATES,[American]
+68315,68330,CORRELATES,"[American,father]"
+68315,68332,CORRELATES,[father]
+68315,68333,CORRELATES,"[father,work,father]"
+68315,68336,CORRELATES,[election]
+68315,68338,CORRELATES,"[American,children,children]"
+68315,68340,CORRELATES,"[American,Illinois]"
+68315,68341,CORRELATES,[father]
+68315,68343,CORRELATES,[American]
+68315,68344,CORRELATES,[American]
+68315,68345,CORRELATES,[American]
+68315,68347,CORRELATES,[American]
+68315,68348,CORRELATES,"[American,father]"
+68315,68349,CORRELATES,[American]
+68315,68350,CORRELATES,[American]
+68315,68353,CORRELATES,[American]
+68315,68354,CORRELATES,[American]
+68315,68355,CORRELATES,[history]
+68315,68356,CORRELATES,[American]
+68315,68357,CORRELATES,[work]
+68315,68360,CORRELATES,"[American,father]"
+68315,68361,CORRELATES,[American]
+68315,68362,CORRELATES,[American]
+68315,68363,CORRELATES,[American]
+68316,68317,CORRELATES,[Japanese]
+68316,68318,CORRELATES,"[Japanese,government,World War II,government]"
+68316,68319,CORRELATES,[Japanese]
+68316,68320,CORRELATES,[Japanese]
+68316,68321,CORRELATES,[Japanese]
+68316,68322,CORRELATES,[world]
+68316,68323,CORRELATES,[Japanese]
+68316,68324,CORRELATES,"[Japanese,instruments,Japan,World War II]"
+68316,68325,CORRELATES,"[Japanese,Japan]"
+68316,68326,CORRELATES,[Japanese]
+68316,68328,CORRELATES,[Japanese]
+68316,68331,CORRELATES,[Japanese]
+68316,68333,CORRELATES,"[Japanese,war,World War II]"
+68316,68334,CORRELATES,[Japanese]
+68316,68335,CORRELATES,[Japanese]
+68316,68336,CORRELATES,"[Japanese,captain]"
+68316,68337,CORRELATES,[Japanese]
+68316,68338,CORRELATES,[world]
+68316,68339,CORRELATES,[Japanese]
+68316,68341,CORRELATES,[Japanese]
+68316,68342,CORRELATES,[Japanese]
+68316,68343,CORRELATES,[negotiations]
+68316,68346,CORRELATES,[Japanese]
+68316,68348,CORRELATES,[response]
+68316,68349,CORRELATES,[world]
+68316,68351,CORRELATES,[Japanese]
+68316,68352,CORRELATES,[Japanese]
+68316,68360,CORRELATES,[Japanese]
+68317,68318,CORRELATES,[Japanese]
+68317,68319,CORRELATES,[Japanese]
+68317,68320,CORRELATES,[Japanese]
+68317,68321,CORRELATES,"[Japanese,series]"
+68317,68322,CORRELATES,[one]
+68317,68323,CORRELATES,[Japanese]
+68317,68324,CORRELATES,"[Japanese,article,Wikipedia]"
+68317,68325,CORRELATES,"[series,Japanese,one]"
+68317,68326,CORRELATES,"[Japanese,series,series]"
+68317,68328,CORRELATES,"[Japanese,film actor,character,4,1]"
+68317,68329,CORRELATES,[one]
+68317,68330,CORRELATES,"[article,article]"
+68317,68331,CORRELATES,"[Japanese,article,Wikipedia]"
+68317,68333,CORRELATES,[Japanese]
+68317,68334,CORRELATES,"[article,Japanese,Wikipedia,films,film actor]"
+68317,68335,CORRELATES,[Japanese]
+68317,68336,CORRELATES,[Japanese]
+68317,68337,CORRELATES,[Japanese]
+68317,68339,CORRELATES,"[Japanese,article,Wikipedia,1,1,one,4]"
+68317,68340,CORRELATES,"[article,Wikipedia,article,1]"
+68317,68341,CORRELATES,"[films,films,Japanese,series,films,films,films]"
+68317,68342,CORRELATES,"[series,Japanese,character,one]"
+68317,68343,CORRELATES,"[article,article,Wikipedia,television,4,1]"
+68317,68345,CORRELATES,"[article,article,Wikipedia,1,1]"
+68317,68346,CORRELATES,"[Japanese,article,article,Wikipedia,television,1,4]"
+68317,68347,CORRELATES,"[article,Wikipedia,1]"
+68317,68351,CORRELATES,"[Japanese,character]"
+68317,68352,CORRELATES,"[Japanese,films,1,1]"
+68317,68353,CORRELATES,"[1,27]"
+68317,68354,CORRELATES,"[films,films,character,series]"
+68317,68355,CORRELATES,"[article,article,Wikipedia]"
+68317,68356,CORRELATES,[one]
+68317,68358,CORRELATES,"[article,article,Wikipedia]"
+68317,68359,CORRELATES,"[4,1]"
+68317,68360,CORRELATES,[Japanese]
+68317,68361,CORRELATES,[one]
+68317,68363,CORRELATES,"[article,Wikipedia,article,1]"
+68318,68319,CORRELATES,[Japanese]
+68318,68320,CORRELATES,[Japanese]
+68318,68321,CORRELATES,[Japanese]
+68318,68322,CORRELATES,"[children,age,age,people,children]"
+68318,68323,CORRELATES,"[Japanese,age]"
+68318,68324,CORRELATES,"[Japanese,World War II]"
+68318,68325,CORRELATES,[Japanese]
+68318,68326,CORRELATES,[Japanese]
+68318,68327,CORRELATES,"[age,age,age]"
+68318,68328,CORRELATES,[Japanese]
+68318,68331,CORRELATES,"[Japanese,age]"
+68318,68333,CORRELATES,"[Japanese,people,age,World War II]"
+68318,68334,CORRELATES,[Japanese]
+68318,68335,CORRELATES,"[Japanese,age]"
+68318,68336,CORRELATES,[Japanese]
+68318,68337,CORRELATES,[Japanese]
+68318,68338,CORRELATES,"[age,children,children,age]"
+68318,68339,CORRELATES,[Japanese]
+68318,68341,CORRELATES,[Japanese]
+68318,68342,CORRELATES,[Japanese]
+68318,68344,CORRELATES,[age]
+68318,68346,CORRELATES,[Japanese]
+68318,68349,CORRELATES,"[age,supervisor]"
+68318,68351,CORRELATES,[Japanese]
+68318,68352,CORRELATES,[Japanese]
+68318,68353,CORRELATES,[age]
+68318,68356,CORRELATES,[person]
+68318,68360,CORRELATES,"[Japanese,business,age]"
+68319,68320,CORRELATES,"[member,Japanese,citation,citation,trainee,citation,citation,citation,member,citation]"
+68319,68321,CORRELATES,[Japanese]
+68319,68323,CORRELATES,[Japanese]
+68319,68324,CORRELATES,[Japanese]
+68319,68325,CORRELATES,"[actress,Japanese,position]"
+68319,68326,CORRELATES,[Japanese]
+68319,68328,CORRELATES,[Japanese]
+68319,68331,CORRELATES,[Japanese]
+68319,68333,CORRELATES,[Japanese]
+68319,68334,CORRELATES,[Japanese]
+68319,68335,CORRELATES,"[singer,Japanese,singer]"
+68319,68336,CORRELATES,"[AKB48,singer,member,Japanese,generation,graduation,position,member,generation,member,trainee,citation]"
+68319,68337,CORRELATES,[Japanese]
+68319,68339,CORRELATES,[Japanese]
+68319,68340,CORRELATES,[member]
+68319,68341,CORRELATES,[Japanese]
+68319,68342,CORRELATES,"[AKB48,Team B,actress,member,generation,theme song,Japanese]"
+68319,68344,CORRELATES,[program]
+68319,68345,CORRELATES,[member]
+68319,68346,CORRELATES,"[Japanese,singer]"
+68319,68348,CORRELATES,"[member,member]"
+68319,68349,CORRELATES,"[number,member]"
+68319,68351,CORRELATES,"[Japanese,singer]"
+68319,68352,CORRELATES,"[Japanese,releases]"
+68319,68353,CORRELATES,[citation]
+68319,68354,CORRELATES,[number]
+68319,68355,CORRELATES,[number]
+68319,68356,CORRELATES,"[member,member,citation,citation,citation]"
+68319,68360,CORRELATES,"[Japanese,citation,citation,citation]"
+68319,68361,CORRELATES,[position]
+68319,68362,CORRELATES,[member]
+68320,68321,CORRELATES,"[Japanese,2005,2005]"
+68320,68323,CORRELATES,"[Japanese,group,group,group,group]"
+68320,68324,CORRELATES,[Japanese]
+68320,68325,CORRELATES,"[Japanese,part,members,concerts,concerts]"
+68320,68326,CORRELATES,[Japanese]
+68320,68328,CORRELATES,"[Japanese,actor]"
+68320,68330,CORRELATES,[part]
+68320,68331,CORRELATES,[Japanese]
+68320,68333,CORRELATES,"[Japanese,actor,model]"
+68320,68334,CORRELATES,[Japanese]
+68320,68335,CORRELATES,"[model,Japanese,model,model,performance]"
+68320,68336,CORRELATES,"[member,Japanese,member,member,trainee,citation,performance]"
+68320,68337,CORRELATES,[Japanese]
+68320,68338,CORRELATES,[members]
+68320,68339,CORRELATES,"[Japanese,actor]"
+68320,68340,CORRELATES,[member]
+68320,68341,CORRELATES,[Japanese]
+68320,68342,CORRELATES,"[group,group,members,member,group,Japanese]"
+68320,68345,CORRELATES,[member]
+68320,68346,CORRELATES,[Japanese]
+68320,68348,CORRELATES,"[member,member]"
+68320,68349,CORRELATES,[member]
+68320,68351,CORRELATES,"[Japanese,actor]"
+68320,68352,CORRELATES,"[Japanese,model]"
+68320,68353,CORRELATES,[citation]
+68320,68356,CORRELATES,"[member,member,citation,part,citation,citation]"
+68320,68358,CORRELATES,[performance]
+68320,68360,CORRELATES,"[Japanese,citation,citation,citation]"
+68320,68362,CORRELATES,"[members,member]"
+68321,68323,CORRELATES,[Japanese]
+68321,68324,CORRELATES,"[Japanese,Tokyo]"
+68321,68325,CORRELATES,"[series,Japanese]"
+68321,68326,CORRELATES,"[Japanese,roles,series,series,Tokyo]"
+68321,68328,CORRELATES,[Japanese]
+68321,68331,CORRELATES,[Japanese]
+68321,68333,CORRELATES,"[Japanese,Tokyo]"
+68321,68334,CORRELATES,[Japanese]
+68321,68335,CORRELATES,"[Japanese,TV Tokyo]"
+68321,68336,CORRELATES,[Japanese]
+68321,68337,CORRELATES,"[voice actor,Tokyo,Japanese,roles]"
+68321,68339,CORRELATES,"[Japanese,1963]"
+68321,68341,CORRELATES,"[Japanese,series]"
+68321,68342,CORRELATES,"[series,Japanese]"
+68321,68345,CORRELATES,[25]
+68321,68346,CORRELATES,[Japanese]
+68321,68351,CORRELATES,"[Japanese,voice actor]"
+68321,68352,CORRELATES,"[Japanese,Tokyo]"
+68321,68354,CORRELATES,"[series,roles]"
+68321,68360,CORRELATES,[Japanese]
+68322,68323,CORRELATES,[age]
+68322,68325,CORRELATES,[one]
+68322,68327,CORRELATES,"[American,age,age,age]"
+68322,68329,CORRELATES,"[American,race,race,one]"
+68322,68330,CORRELATES,"[American,race,race]"
+68322,68331,CORRELATES,[age]
+68322,68333,CORRELATES,"[people,age,life]"
+68322,68335,CORRELATES,[age]
+68322,68338,CORRELATES,"[age,record,world,record,American,children,children,age]"
+68322,68339,CORRELATES,[one]
+68322,68340,CORRELATES,[American]
+68322,68342,CORRELATES,[one]
+68322,68343,CORRELATES,[American]
+68322,68344,CORRELATES,"[American,area,age]"
+68322,68345,CORRELATES,[American]
+68322,68347,CORRELATES,[American]
+68322,68348,CORRELATES,[American]
+68322,68349,CORRELATES,"[American,world,age]"
+68322,68350,CORRELATES,[American]
+68322,68353,CORRELATES,"[American,age]"
+68322,68354,CORRELATES,[American]
+68322,68356,CORRELATES,"[American,one]"
+68322,68360,CORRELATES,"[American,age]"
+68322,68361,CORRELATES,"[American,one]"
+68322,68362,CORRELATES,"[American,race]"
+68322,68363,CORRELATES,[American]
+68323,68324,CORRELATES,[Japanese]
+68323,68325,CORRELATES,"[Japanese,audition,single]"
+68323,68326,CORRELATES,"[Japanese,role,manga,anime]"
+68323,68327,CORRELATES,"[age,age,age]"
+68323,68328,CORRELATES,[Japanese]
+68323,68330,CORRELATES,[event]
+68323,68331,CORRELATES,"[Japanese,age]"
+68323,68333,CORRELATES,"[Japanese,work,age]"
+68323,68334,CORRELATES,[Japanese]
+68323,68335,CORRELATES,"[Japanese,age,event,Kanagawa Prefecture,role]"
+68323,68336,CORRELATES,"[Japanese,audition,single,single]"
+68323,68337,CORRELATES,[Japanese]
+68323,68338,CORRELATES,"[age,child,age]"
+68323,68339,CORRELATES,[Japanese]
+68323,68341,CORRELATES,[Japanese]
+68323,68342,CORRELATES,"[group,group,group,event,entertainment industry,Japanese]"
+68323,68343,CORRELATES,[role]
+68323,68344,CORRELATES,[age]
+68323,68346,CORRELATES,[Japanese]
+68323,68349,CORRELATES,[age]
+68323,68351,CORRELATES,"[Japanese,single]"
+68323,68352,CORRELATES,"[Japanese,manga,role]"
+68323,68353,CORRELATES,[age]
+68323,68354,CORRELATES,"[role,role,child]"
+68323,68357,CORRELATES,[work]
+68323,68360,CORRELATES,"[Japanese,age]"
+68323,68362,CORRELATES,[child]
+68324,68325,CORRELATES,"[Japanese,Japan]"
+68324,68326,CORRELATES,"[Japanese,Tokyo]"
+68324,68328,CORRELATES,[Japanese]
+68324,68330,CORRELATES,"[article,father,article]"
+68324,68331,CORRELATES,"[Japanese,article,Wikipedia]"
+68324,68332,CORRELATES,[father]
+68324,68333,CORRELATES,"[Japanese,father,father,Tokyo,World War II]"
+68324,68334,CORRELATES,"[article,Japanese,Wikipedia]"
+68324,68335,CORRELATES,[Japanese]
+68324,68336,CORRELATES,[Japanese]
+68324,68337,CORRELATES,"[Tokyo,Japanese]"
+68324,68339,CORRELATES,"[Japanese,article,Wikipedia]"
+68324,68340,CORRELATES,"[article,Wikipedia,article]"
+68324,68341,CORRELATES,"[Japanese,father]"
+68324,68342,CORRELATES,[Japanese]
+68324,68343,CORRELATES,"[media,article,article,Wikipedia]"
+68324,68345,CORRELATES,"[article,article,Wikipedia]"
+68324,68346,CORRELATES,"[Japanese,article,article,Wikipedia]"
+68324,68347,CORRELATES,"[article,Wikipedia]"
+68324,68348,CORRELATES,[father]
+68324,68351,CORRELATES,[Japanese]
+68324,68352,CORRELATES,"[Japanese,Tokyo]"
+68324,68355,CORRELATES,"[article,article,Wikipedia]"
+68324,68358,CORRELATES,"[article,article,Wikipedia]"
+68324,68360,CORRELATES,"[father,school,Japanese]"
+68324,68363,CORRELATES,"[article,Wikipedia,article]"
+68325,68326,CORRELATES,"[Japanese,series,series]"
+68325,68328,CORRELATES,[Japanese]
+68325,68329,CORRELATES,[one]
+68325,68330,CORRELATES,[part]
+68325,68331,CORRELATES,[Japanese]
+68325,68333,CORRELATES,[Japanese]
+68325,68334,CORRELATES,[Japanese]
+68325,68335,CORRELATES,[Japanese]
+68325,68336,CORRELATES,"[Japanese,audition,position,single,single]"
+68325,68337,CORRELATES,[Japanese]
+68325,68338,CORRELATES,[members]
+68325,68339,CORRELATES,"[Japanese,one]"
+68325,68341,CORRELATES,"[Japanese,series]"
+68325,68342,CORRELATES,"[career,actress,members,series,Japanese,one]"
+68325,68346,CORRELATES,[Japanese]
+68325,68348,CORRELATES,[acts]
+68325,68349,CORRELATES,"[career,career]"
+68325,68351,CORRELATES,"[Japanese,career,single]"
+68325,68352,CORRELATES,[Japanese]
+68325,68354,CORRELATES,"[career,series]"
+68325,68356,CORRELATES,"[hiatus,part,one]"
+68325,68359,CORRELATES,[career]
+68325,68360,CORRELATES,[Japanese]
+68325,68361,CORRELATES,"[position,one]"
+68325,68362,CORRELATES,[members]
+68326,68328,CORRELATES,[Japanese]
+68326,68331,CORRELATES,[Japanese]
+68326,68333,CORRELATES,"[Japanese,Tokyo]"
+68326,68334,CORRELATES,[Japanese]
+68326,68335,CORRELATES,"[Japanese,role]"
+68326,68336,CORRELATES,[Japanese]
+68326,68337,CORRELATES,"[Tokyo,Japanese,roles]"
+68326,68339,CORRELATES,"[Japanese,1986,1986]"
+68326,68341,CORRELATES,"[Japanese,series]"
+68326,68342,CORRELATES,"[series,Japanese]"
+68326,68343,CORRELATES,[role]
+68326,68346,CORRELATES,[Japanese]
+68326,68351,CORRELATES,[Japanese]
+68326,68352,CORRELATES,"[Japanese,manga,name,high school,role,Tokyo]"
+68326,68354,CORRELATES,"[role,role,series,roles]"
+68326,68360,CORRELATES,[Japanese]
+68326,68362,CORRELATES,[high school]
+68327,68328,CORRELATES,[mother]
+68327,68329,CORRELATES,"[American,Boston]"
+68327,68330,CORRELATES,"[American,publication]"
+68327,68331,CORRELATES,[age]
+68327,68333,CORRELATES,"[mother,age]"
+68327,68335,CORRELATES,[age]
+68327,68336,CORRELATES,[place]
+68327,68338,CORRELATES,"[age,American,age]"
+68327,68339,CORRELATES,"[2002,2002]"
+68327,68340,CORRELATES,[American]
+68327,68343,CORRELATES,[American]
+68327,68344,CORRELATES,"[American,age]"
+68327,68345,CORRELATES,[American]
+68327,68347,CORRELATES,[American]
+68327,68348,CORRELATES,[American]
+68327,68349,CORRELATES,"[American,age]"
+68327,68350,CORRELATES,[American]
+68327,68353,CORRELATES,"[American,age]"
+68327,68354,CORRELATES,[American]
+68327,68356,CORRELATES,"[American,competition,place]"
+68327,68360,CORRELATES,"[American,mother,age]"
+68327,68361,CORRELATES,[American]
+68327,68362,CORRELATES,[American]
+68327,68363,CORRELATES,[American]
+68328,68331,CORRELATES,"[Japanese,2,3]"
+68328,68333,CORRELATES,"[Japanese,mother,actor]"
+68328,68334,CORRELATES,"[Japanese,film actor,6]"
+68328,68335,CORRELATES,[Japanese]
+68328,68336,CORRELATES,[Japanese]
+68328,68337,CORRELATES,[Japanese]
+68328,68339,CORRELATES,"[Japanese,actor,2,2,1,1,3,4]"
+68328,68340,CORRELATES,"[2,2,1]"
+68328,68341,CORRELATES,[Japanese]
+68328,68342,CORRELATES,"[Japanese,character]"
+68328,68343,CORRELATES,"[3,2,4,1]"
+68328,68345,CORRELATES,"[1,1]"
+68328,68346,CORRELATES,"[Japanese,TV personality,3,2,1,4]"
+68328,68347,CORRELATES,[1]
+68328,68351,CORRELATES,"[Japanese,actor,character]"
+68328,68352,CORRELATES,"[Japanese,1,2,1,2]"
+68328,68353,CORRELATES,"[1,2,6]"
+68328,68354,CORRELATES,[character]
+68328,68359,CORRELATES,"[4,3,1,2]"
+68328,68360,CORRELATES,"[mother,Japanese]"
+68328,68363,CORRELATES,"[1,3,2]"
+68329,68330,CORRELATES,"[marathon,American,runners,race,success,B.A.,New York,marathon,marathon,marathon,marathon,race]"
+68329,68333,CORRELATES,[family]
+68329,68338,CORRELATES,"[track,track,track,American,family]"
+68329,68339,CORRELATES,[one]
+68329,68340,CORRELATES,[American]
+68329,68341,CORRELATES,[family]
+68329,68342,CORRELATES,[one]
+68329,68343,CORRELATES,[American]
+68329,68344,CORRELATES,[American]
+68329,68345,CORRELATES,[American]
+68329,68347,CORRELATES,[American]
+68329,68348,CORRELATES,[American]
+68329,68349,CORRELATES,"[American,sport,times]"
+68329,68350,CORRELATES,[American]
+68329,68351,CORRELATES,[track]
+68329,68353,CORRELATES,[American]
+68329,68354,CORRELATES,[American]
+68329,68356,CORRELATES,"[American,family,marathons,one]"
+68329,68358,CORRELATES,[baseball]
+68329,68360,CORRELATES,[American]
+68329,68361,CORRELATES,"[American,one]"
+68329,68362,CORRELATES,"[American,marathon,runner,family,race,New York City Marathon,sport]"
+68329,68363,CORRELATES,[American]
+68330,68331,CORRELATES,[article]
+68330,68332,CORRELATES,[father]
+68330,68333,CORRELATES,"[father,father]"
+68330,68334,CORRELATES,[article]
+68330,68335,CORRELATES,[event]
+68330,68338,CORRELATES,"[Olympic,American,silver medal]"
+68330,68339,CORRELATES,[article]
+68330,68340,CORRELATES,"[article,American,article,Olympic]"
+68330,68341,CORRELATES,[father]
+68330,68342,CORRELATES,[event]
+68330,68343,CORRELATES,"[article,article,American]"
+68330,68344,CORRELATES,[American]
+68330,68345,CORRELATES,"[article,article,American,silver medal,Olympic]"
+68330,68346,CORRELATES,"[article,article]"
+68330,68347,CORRELATES,"[article,American]"
+68330,68348,CORRELATES,"[Olympic,American,father]"
+68330,68349,CORRELATES,[American]
+68330,68350,CORRELATES,[American]
+68330,68353,CORRELATES,[American]
+68330,68354,CORRELATES,[American]
+68330,68355,CORRELATES,"[article,article]"
+68330,68356,CORRELATES,"[American,part]"
+68330,68358,CORRELATES,"[article,article,Germany]"
+68330,68360,CORRELATES,"[American,father]"
+68330,68361,CORRELATES,[American]
+68330,68362,CORRELATES,"[American,marathon,race]"
+68330,68363,CORRELATES,"[article,American,article]"
+68331,68333,CORRELATES,"[Japanese,age]"
+68331,68334,CORRELATES,"[article,Japanese,Wikipedia]"
+68331,68335,CORRELATES,"[Japanese,age]"
+68331,68336,CORRELATES,[Japanese]
+68331,68337,CORRELATES,[Japanese]
+68331,68338,CORRELATES,"[age,team,age]"
+68331,68339,CORRELATES,"[Japanese,article,Wikipedia,2,2,3]"
+68331,68340,CORRELATES,"[article,Wikipedia,team,article,2,2]"
+68331,68341,CORRELATES,[Japanese]
+68331,68342,CORRELATES,[Japanese]
+68331,68343,CORRELATES,"[article,article,Wikipedia,3,2]"
+68331,68344,CORRELATES,[age]
+68331,68345,CORRELATES,"[article,article,Wikipedia]"
+68331,68346,CORRELATES,"[Japanese,article,article,Wikipedia,3,2]"
+68331,68347,CORRELATES,"[article,Wikipedia]"
+68331,68349,CORRELATES,[age]
+68331,68351,CORRELATES,[Japanese]
+68331,68352,CORRELATES,"[Japanese,2,2]"
+68331,68353,CORRELATES,"[age,2]"
+68331,68355,CORRELATES,"[article,article,Wikipedia]"
+68331,68356,CORRELATES,[team]
+68331,68358,CORRELATES,"[article,article,Wikipedia,team]"
+68331,68359,CORRELATES,"[3,2]"
+68331,68360,CORRELATES,"[Japanese,age]"
+68331,68361,CORRELATES,"[team,1995]"
+68331,68363,CORRELATES,"[article,Wikipedia,article,3,2]"
+68332,68333,CORRELATES,"[father,father]"
+68332,68336,CORRELATES,[title]
+68332,68339,CORRELATES,[two]
+68332,68341,CORRELATES,[father]
+68332,68348,CORRELATES,[father]
+68332,68349,CORRELATES,"[championships,championships,title]"
+68332,68360,CORRELATES,[father]
+68333,68334,CORRELATES,[Japanese]
+68333,68335,CORRELATES,"[model,Japanese,age,model,model]"
+68333,68336,CORRELATES,[Japanese]
+68333,68337,CORRELATES,"[Tokyo,Japanese]"
+68333,68338,CORRELATES,"[age,family,age]"
+68333,68339,CORRELATES,"[Japanese,actor]"
+68333,68341,CORRELATES,"[Japanese,father,figure,family]"
+68333,68342,CORRELATES,[Japanese]
+68333,68344,CORRELATES,[age]
+68333,68346,CORRELATES,[Japanese]
+68333,68348,CORRELATES,[father]
+68333,68349,CORRELATES,[age]
+68333,68351,CORRELATES,"[Japanese,actor]"
+68333,68352,CORRELATES,"[Japanese,model,Tokyo]"
+68333,68353,CORRELATES,[age]
+68333,68355,CORRELATES,[figure]
+68333,68356,CORRELATES,[family]
+68333,68357,CORRELATES,[work]
+68333,68360,CORRELATES,"[father,mother,Japanese,age]"
+68333,68362,CORRELATES,[family]
+68334,68335,CORRELATES,[Japanese]
+68334,68336,CORRELATES,[Japanese]
+68334,68337,CORRELATES,[Japanese]
+68334,68339,CORRELATES,"[Japanese,article,Wikipedia]"
+68334,68340,CORRELATES,"[article,Wikipedia,article]"
+68334,68341,CORRELATES,"[films,films,Japanese,films,films,films]"
+68334,68342,CORRELATES,"[ten,Japanese]"
+68334,68343,CORRELATES,"[article,article,Wikipedia]"
+68334,68345,CORRELATES,"[article,article,Wikipedia]"
+68334,68346,CORRELATES,"[Japanese,article,article,Wikipedia]"
+68334,68347,CORRELATES,"[article,Wikipedia]"
+68334,68351,CORRELATES,[Japanese]
+68334,68352,CORRELATES,"[Japanese,films]"
+68334,68353,CORRELATES,[6]
+68334,68354,CORRELATES,"[films,films]"
+68334,68355,CORRELATES,"[article,article,Wikipedia]"
+68334,68358,CORRELATES,"[article,article,Wikipedia]"
+68334,68360,CORRELATES,[Japanese]
+68334,68363,CORRELATES,"[article,Wikipedia,article]"
+68335,68336,CORRELATES,"[singer,Japanese,performance]"
+68335,68337,CORRELATES,[Japanese]
+68335,68338,CORRELATES,"[age,elementary school,age]"
+68335,68339,CORRELATES,[Japanese]
+68335,68341,CORRELATES,[Japanese]
+68335,68342,CORRELATES,"[appearance,event,Japanese]"
+68335,68343,CORRELATES,[role]
+68335,68344,CORRELATES,[age]
+68335,68346,CORRELATES,"[Japanese,singer]"
+68335,68349,CORRELATES,[age]
+68335,68351,CORRELATES,"[Japanese,singer]"
+68335,68352,CORRELATES,"[Japanese,model,role]"
+68335,68353,CORRELATES,[age]
+68335,68354,CORRELATES,"[role,role]"
+68335,68357,CORRELATES,[appearance]
+68335,68358,CORRELATES,[performance]
+68335,68360,CORRELATES,"[Japanese,age]"
+68336,68337,CORRELATES,[Japanese]
+68336,68339,CORRELATES,[Japanese]
+68336,68340,CORRELATES,[member]
+68336,68341,CORRELATES,[Japanese]
+68336,68342,CORRELATES,"[AKB48,member,generation,title track,Japanese]"
+68336,68345,CORRELATES,[member]
+68336,68346,CORRELATES,"[Japanese,singer]"
+68336,68348,CORRELATES,"[member,member]"
+68336,68349,CORRELATES,"[first,title,member]"
+68336,68351,CORRELATES,"[Japanese,singer,single]"
+68336,68352,CORRELATES,[Japanese]
+68336,68353,CORRELATES,[citation]
+68336,68356,CORRELATES,"[member,member,citation,citation,citation,place]"
+68336,68358,CORRELATES,[performance]
+68336,68360,CORRELATES,"[Japanese,citation,citation,citation]"
+68336,68361,CORRELATES,[position]
+68336,68362,CORRELATES,[member]
+68337,68339,CORRELATES,[Japanese]
+68337,68341,CORRELATES,[Japanese]
+68337,68342,CORRELATES,[Japanese]
+68337,68346,CORRELATES,[Japanese]
+68337,68351,CORRELATES,"[Japanese,voice actor]"
+68337,68352,CORRELATES,"[Japanese,Tokyo,company]"
+68337,68354,CORRELATES,[roles]
+68337,68355,CORRELATES,[company]
+68337,68357,CORRELATES,[company]
+68337,68360,CORRELATES,[Japanese]
+68338,68340,CORRELATES,"[American,team,Olympic]"
+68338,68341,CORRELATES,[family]
+68338,68342,CORRELATES,[members]
+68338,68343,CORRELATES,[American]
+68338,68344,CORRELATES,"[coach,American,age]"
+68338,68345,CORRELATES,"[American,silver medal,Olympic]"
+68338,68347,CORRELATES,[American]
+68338,68348,CORRELATES,"[Olympic,American]"
+68338,68349,CORRELATES,"[American,world,final,age]"
+68338,68350,CORRELATES,"[American,Los Angeles,California]"
+68338,68351,CORRELATES,[track]
+68338,68353,CORRELATES,"[American,age]"
+68338,68354,CORRELATES,"[American,child]"
+68338,68355,CORRELATES,[coach]
+68338,68356,CORRELATES,"[American,team,family]"
+68338,68357,CORRELATES,[college]
+68338,68358,CORRELATES,[team]
+68338,68360,CORRELATES,"[American,age,Los Angeles]"
+68338,68361,CORRELATES,"[American,team,coach]"
+68338,68362,CORRELATES,"[American,family,athletics,track and field,members,child]"
+68338,68363,CORRELATES,[American]
+68339,68340,CORRELATES,"[article,Wikipedia,article,2,15,2,1]"
+68339,68341,CORRELATES,"[Japanese,Osaka Prefecture]"
+68339,68342,CORRELATES,"[Japanese,one]"
+68339,68343,CORRELATES,"[article,article,Wikipedia,3,2,4,1]"
+68339,68345,CORRELATES,"[article,article,Wikipedia,1,1]"
+68339,68346,CORRELATES,"[Japanese,article,article,Wikipedia,3,2,1,4]"
+68339,68347,CORRELATES,"[article,Wikipedia,1]"
+68339,68351,CORRELATES,"[Japanese,actor]"
+68339,68352,CORRELATES,"[Japanese,1,2,1,2]"
+68339,68353,CORRELATES,"[1,2]"
+68339,68355,CORRELATES,"[article,article,Wikipedia]"
+68339,68356,CORRELATES,[one]
+68339,68358,CORRELATES,"[article,article,Wikipedia]"
+68339,68359,CORRELATES,"[4,3,1,2]"
+68339,68360,CORRELATES,"[Japanese,manager]"
+68339,68361,CORRELATES,[one]
+68339,68363,CORRELATES,"[article,Wikipedia,article,1,3,2]"
+68340,68342,CORRELATES,[member]
+68340,68343,CORRELATES,"[article,article,Wikipedia,American,2,1]"
+68340,68344,CORRELATES,[American]
+68340,68345,CORRELATES,"[article,article,Wikipedia,1904 Summer Olympics,American,member,team.,tug of war,Southwest Turnverein,medalist,Olympic,1904,1904,1904,1904,1,1]"
+68340,68346,CORRELATES,"[article,article,Wikipedia,2,1]"
+68340,68347,CORRELATES,"[article,American,Wikipedia,1904 Summer Olympics,bronze medal,medalist,1904,1904,1904,1,1904]"
+68340,68348,CORRELATES,"[Olympic,member,American,member]"
+68340,68349,CORRELATES,"[American,team.,member]"
+68340,68350,CORRELATES,[American]
+68340,68352,CORRELATES,"[1,2,1,2]"
+68340,68353,CORRELATES,"[American,1,2]"
+68340,68354,CORRELATES,[American]
+68340,68355,CORRELATES,"[article,article,Wikipedia]"
+68340,68356,CORRELATES,"[American,member,team,member]"
+68340,68358,CORRELATES,"[article,article,Wikipedia,team]"
+68340,68359,CORRELATES,"[1,2]"
+68340,68360,CORRELATES,[American]
+68340,68361,CORRELATES,"[American,team]"
+68340,68362,CORRELATES,"[American,member]"
+68340,68363,CORRELATES,"[article,Wikipedia,American,article,medalist,1,2]"
+68341,68342,CORRELATES,"[series,Japanese]"
+68341,68343,CORRELATES,[film]
+68341,68346,CORRELATES,[Japanese]
+68341,68348,CORRELATES,[father]
+68341,68351,CORRELATES,[Japanese]
+68341,68352,CORRELATES,"[Japanese,films]"
+68341,68354,CORRELATES,"[film,films,films,series]"
+68341,68355,CORRELATES,[figure]
+68341,68356,CORRELATES,[family]
+68341,68360,CORRELATES,"[father,Japanese]"
+68341,68362,CORRELATES,[family]
+68342,68345,CORRELATES,[member]
+68342,68346,CORRELATES,[Japanese]
+68342,68348,CORRELATES,"[member,member]"
+68342,68349,CORRELATES,"[career,member,career]"
+68342,68351,CORRELATES,"[charts,Oricon,Japanese,career,album,character]"
+68342,68352,CORRELATES,[Japanese]
+68342,68354,CORRELATES,"[career,character,series]"
+68342,68356,CORRELATES,"[member,member,one]"
+68342,68357,CORRELATES,[appearance]
+68342,68359,CORRELATES,[career]
+68342,68360,CORRELATES,[Japanese]
+68342,68361,CORRELATES,[one]
+68342,68362,CORRELATES,"[members,member]"
+68343,68344,CORRELATES,[American]
+68343,68345,CORRELATES,"[article,article,Wikipedia,American,1,1]"
+68343,68346,CORRELATES,"[article,article,Wikipedia,television,3,2,1,4]"
+68343,68347,CORRELATES,"[article,American,Wikipedia,1]"
+68343,68348,CORRELATES,[American]
+68343,68349,CORRELATES,[American]
+68343,68350,CORRELATES,[American]
+68343,68352,CORRELATES,"[role,1,2,1,2]"
+68343,68353,CORRELATES,"[American,1,2]"
+68343,68354,CORRELATES,"[role,American,role,film]"
+68343,68355,CORRELATES,"[article,article,Wikipedia,graduate]"
+68343,68356,CORRELATES,[American]
+68343,68358,CORRELATES,"[article,article,Wikipedia,sports]"
+68343,68359,CORRELATES,"[graduate,4,3,1,2]"
+68343,68360,CORRELATES,[American]
+68343,68361,CORRELATES,[American]
+68343,68362,CORRELATES,[American]
+68343,68363,CORRELATES,"[article,Wikipedia,American,article,1,3,2]"
+68344,68345,CORRELATES,[American]
+68344,68347,CORRELATES,[American]
+68344,68348,CORRELATES,"[American,season]"
+68344,68349,CORRELATES,"[American,age]"
+68344,68350,CORRELATES,[American]
+68344,68353,CORRELATES,"[American,age]"
+68344,68354,CORRELATES,[American]
+68344,68355,CORRELATES,"[season,season,season,coach,season]"
+68344,68356,CORRELATES,[American]
+68344,68357,CORRELATES,"[Tom,season]"
+68344,68359,CORRELATES,"[Ohio,Ohio State University]"
+68344,68360,CORRELATES,"[American,age]"
+68344,68361,CORRELATES,"[American,head coach,baseball team,coach,season,season]"
+68344,68362,CORRELATES,[American]
+68344,68363,CORRELATES,[American]
+68345,68346,CORRELATES,"[article,article,Wikipedia,1]"
+68345,68347,CORRELATES,"[article,American,Wikipedia,1904 Summer Olympics,medalist,1904,1904,12,1904,1,1904]"
+68345,68348,CORRELATES,"[Olympic,member,American,member]"
+68345,68349,CORRELATES,"[American,team.,member]"
+68345,68350,CORRELATES,[American]
+68345,68352,CORRELATES,"[1,1]"
+68345,68353,CORRELATES,"[American,1]"
+68345,68354,CORRELATES,[American]
+68345,68355,CORRELATES,"[article,article,Wikipedia]"
+68345,68356,CORRELATES,"[American,member,member]"
+68345,68358,CORRELATES,"[article,article,Wikipedia]"
+68345,68359,CORRELATES,[1]
+68345,68360,CORRELATES,[American]
+68345,68361,CORRELATES,"[American,12]"
+68345,68362,CORRELATES,"[American,member]"
+68345,68363,CORRELATES,"[article,Wikipedia,American,article,medalist,1]"
+68346,68347,CORRELATES,"[article,Wikipedia,1]"
+68346,68351,CORRELATES,"[Japanese,singer]"
+68346,68352,CORRELATES,"[Japanese,21,1,21,2,1,2]"
+68346,68353,CORRELATES,"[1,2]"
+68346,68355,CORRELATES,"[article,article,Wikipedia]"
+68346,68358,CORRELATES,"[article,article,Wikipedia]"
+68346,68359,CORRELATES,"[1972,1972,1972,1972,4,3,1,2]"
+68346,68360,CORRELATES,[Japanese]
+68346,68363,CORRELATES,"[article,Wikipedia,article,1,3,2]"
+68347,68348,CORRELATES,[American]
+68347,68349,CORRELATES,[American]
+68347,68350,CORRELATES,[American]
+68347,68352,CORRELATES,"[1,1]"
+68347,68353,CORRELATES,"[American,1]"
+68347,68354,CORRELATES,[American]
+68347,68355,CORRELATES,"[article,article,Wikipedia]"
+68347,68356,CORRELATES,[American]
+68347,68358,CORRELATES,"[article,article,Wikipedia]"
+68347,68359,CORRELATES,[1]
+68347,68360,CORRELATES,[American]
+68347,68361,CORRELATES,"[American,12]"
+68347,68362,CORRELATES,[American]
+68347,68363,CORRELATES,"[article,Wikipedia,American,article,medalist,1]"
+68348,68349,CORRELATES,"[American,men,member]"
+68348,68350,CORRELATES,[American]
+68348,68353,CORRELATES,[American]
+68348,68354,CORRELATES,"[American,tenure]"
+68348,68355,CORRELATES,"[season,season,season,season]"
+68348,68356,CORRELATES,"[American,member,member]"
+68348,68357,CORRELATES,[season]
+68348,68360,CORRELATES,"[American,father]"
+68348,68361,CORRELATES,"[American,season,season,assistant]"
+68348,68362,CORRELATES,"[allegations,American,member,investigation]"
+68348,68363,CORRELATES,[American]
+68349,68350,CORRELATES,[American]
+68349,68351,CORRELATES,[career]
+68349,68353,CORRELATES,"[American,age]"
+68349,68354,CORRELATES,"[American,number,career]"
+68349,68355,CORRELATES,"[National Football League,official,number]"
+68349,68356,CORRELATES,"[athlete,American,member,athlete,member]"
+68349,68357,CORRELATES,[National Football League]
+68349,68359,CORRELATES,[career]
+68349,68360,CORRELATES,"[American,age]"
+68349,68361,CORRELATES,"[player,American,player]"
+68349,68362,CORRELATES,"[American,sport,member]"
+68349,68363,CORRELATES,[American]
+68350,68353,CORRELATES,[American]
+68350,68354,CORRELATES,[American]
+68350,68356,CORRELATES,[American]
+68350,68360,CORRELATES,"[American,Los Angeles]"
+68350,68361,CORRELATES,[American]
+68350,68362,CORRELATES,[American]
+68350,68363,CORRELATES,[American]
+68351,68352,CORRELATES,[Japanese]
+68351,68354,CORRELATES,"[career,character]"
+68351,68356,CORRELATES,[songwriter]
+68351,68357,CORRELATES,[grandfather]
+68351,68359,CORRELATES,[career]
+68351,68360,CORRELATES,[Japanese]
+68352,68353,CORRELATES,"[1,2]"
+68352,68354,CORRELATES,"[role,role,films,films]"
+68352,68355,CORRELATES,[company]
+68352,68357,CORRELATES,[company]
+68352,68359,CORRELATES,"[1,2]"
+68352,68360,CORRELATES,[Japanese]
+68352,68362,CORRELATES,[high school]
+68352,68363,CORRELATES,"[1,2]"
+68353,68354,CORRELATES,[American]
+68353,68355,CORRELATES,"[Seattle,Washington]"
+68353,68356,CORRELATES,"[American,citation,citation,citation]"
+68353,68359,CORRELATES,"[1,2]"
+68353,68360,CORRELATES,"[American,citation,age,citation,citation]"
+68353,68361,CORRELATES,[American]
+68353,68362,CORRELATES,[American]
+68353,68363,CORRELATES,"[American,1,2]"
+68354,68355,CORRELATES,[number]
+68354,68356,CORRELATES,[American]
+68354,68359,CORRELATES,[career]
+68354,68360,CORRELATES,[American]
+68354,68361,CORRELATES,"[American,adult life]"
+68354,68362,CORRELATES,"[American,child]"
+68354,68363,CORRELATES,[American]
+68355,68357,CORRELATES,"[National Football League,season,company]"
+68355,68358,CORRELATES,"[article,article,Wikipedia]"
+68355,68359,CORRELATES,[graduate]
+68355,68361,CORRELATES,"[coach,season,season]"
+68355,68363,CORRELATES,"[article,Wikipedia,article]"
+68356,68358,CORRELATES,[team]
+68356,68360,CORRELATES,"[American,descent,descent,Hawaii,citation,citation,citation]"
+68356,68361,CORRELATES,"[American,team,one]"
+68356,68362,CORRELATES,"[American,family,member]"
+68356,68363,CORRELATES,"[American,teams]"
+68357,68359,CORRELATES,[native]
+68357,68361,CORRELATES,"[season,season]"
+68357,68363,CORRELATES,[master's degree]
+68358,68361,CORRELATES,[team]
+68358,68362,CORRELATES,[athletes]
+68358,68363,CORRELATES,"[article,Wikipedia,article]"
+68359,68362,CORRELATES,[rookie]
+68359,68363,CORRELATES,"[1,3,2]"
+68360,68361,CORRELATES,[American]
+68360,68362,CORRELATES,[American]
+68360,68363,CORRELATES,[American]
+68361,68362,CORRELATES,"[American,NCAA]"
+68361,68363,CORRELATES,[American]
+68362,68363,CORRELATES,[American]
+71336,68264,CORRELATES,"[White House,Democratic Party,U.S. Congress,George W. Bush,John McCain,president,parents,politician,president]"
+71336,68265,CORRELATES,"[White House,Democratic Party,campaign,senator]"
+71336,68266,CORRELATES,[family]
+71336,68267,CORRELATES,[withdrawal]
+71336,68268,CORRELATES,"[president,president]"
+71336,68270,CORRELATES,"[Democratic Party,president,president]"
+71336,68276,CORRELATES,"[Barack Obama,White House,U.S. Congress,Afghanistan,campaign,Iraq,president,president,vice president,troops]"
+71336,68277,CORRELATES,"[family,president,president]"
+71336,68278,CORRELATES,"[George W. Bush,president,president,vice president]"
+71336,68280,CORRELATES,"[campaign,president,war,president]"
+71336,68283,CORRELATES,"[president,voters,politician,president]"
+71336,68285,CORRELATES,"[president,president]"
+71336,68286,CORRELATES,[troops]
+71336,68287,CORRELATES,"[George W. Bush,Republicans,candidacy]"
+71336,68288,CORRELATES,"[Barack Obama,Democratic Party]"
+71336,68289,CORRELATES,"[United States Senate,Barack Obama,George W. Bush,family]"
+71336,68290,CORRELATES,"[Barack Obama,campaign,senator]"
+71336,68292,CORRELATES,"[Barack Obama,Democratic Party]"
+71336,68293,CORRELATES,[war]
+71336,68294,CORRELATES,"[United States Senate,Barack Obama,George W. Bush,campaign,senator,family,president,president]"
+71336,68295,CORRELATES,[family]
+71336,68297,CORRELATES,"[Barack Obama,White House,Democratic Party,George W. Bush,president,war,president]"
+71336,68298,CORRELATES,"[Barack Obama,campaign,parents,politician]"
+71336,68300,CORRELATES,[Barack Obama]
+71336,68301,CORRELATES,"[George W. Bush,candidacy]"
+71336,68302,CORRELATES,"[White House,campaign,family,president,war,parents,president]"
+71336,68305,CORRELATES,[politician]
+71336,68306,CORRELATES,[vice president]
+71336,68307,CORRELATES,[family]
+71336,68313,CORRELATES,"[United States Senate,Ketanji Brown Jackson]"
+71336,68315,CORRELATES,"[president,president]"
+71336,68316,CORRELATES,[war]
+71336,68329,CORRELATES,[family]
+71336,68333,CORRELATES,"[family,war]"
+71336,68335,CORRELATES,[parents]
+71336,68338,CORRELATES,[family]
+71336,68341,CORRELATES,[family]
+71336,68356,CORRELATES,[family]
+71336,68362,CORRELATES,[family]
