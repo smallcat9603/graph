@@ -15,7 +15,7 @@ nphrase = form.slider("Number of nouns extracted from each article (50 if Offlin
 DATA_TYPE = form.radio("Data type", ["URL"], horizontal=True, captions=["parse html to retrive content"])
 # offline opt: neo4j-admin database dump/load, require to stop neo4j server
 DATA_LOAD = form.radio("Data load", ["Offline", "Semi-Online", "Online"], horizontal=True, captions=["load nodes and relationships from local (avoid to use gcp api, very fast)", "load nodes from local and create relationships during runtime (avoid to use gcp api, fast)", "create nodes and relationships during runtime (use gcp api, slow)"], index=0)
-gcp_api_key = form.text_input('GCP API Key (for Online)', type='password')
+gcp_api_key = form.text_input('GCP API Key (for Online)', type='password', placeholder='should not be empty for Online')
 OUTPUT = form.radio("Output", ["Simple", "Verbose"], horizontal=True, captions=["user mode", "develeper mode (esp. for debug)"])
 
 run_disabled = False
@@ -24,6 +24,8 @@ if "data" in st.session_state and st.session_state["data"] != DATA:
     form.warning("Please 'Reset' the database status first before you 'Run'!")
 run = form.form_submit_button("Run", type="primary", disabled=run_disabled)
 if not run and ("data" not in st.session_state or st.session_state["data"] != DATA):
+    st.stop()
+if run and DATA_LOAD == "Online" and gcp_api_key == "":
     st.stop()
 
 DATA_URL = "" # input data
