@@ -62,6 +62,7 @@ cypher(query)
 ### Import CSV ###
 ##############################
 
+@st.cache_data
 def import_graph_data():
     query = """
     CALL dbms.listConfig() YIELD name, value
@@ -96,6 +97,7 @@ def import_graph_data():
 # convert string to value
 # TODO: n.phrase not converted to stringlist via MATCH (n) WHERE n.phrase IS NOT NULL
 # TODO: r.common not converted to stringlist via MATCH ()-[r:CORRELATES]-() WHERE r.common IS NOT NULL
+@st.cache_data
 def post_process():
     query = f"""
     MATCH (n) WHERE n.pr0 IS NOT NULL
@@ -718,25 +720,23 @@ with col1.expander("Node Labels"):
 with col2.expander("Relationship Types"):
     st.table(result["relTypesCount"][0])
 
-# no bulkImport: all in one
-# use bulkImport to generate multiple files categorized by node label and relationship type
-def save_graph_data():
-    query = f"""
-    CALL apoc.export.csv.all("{DATA}.csv", {{}}) 
-    """
-    result_allinone = cypher(query)
-    query = f"""
-    CALL apoc.export.csv.all("{DATA}.csv", {{bulkImport: true}}) 
-    """
-    result_bulkimport = cypher(query)
-    if OUTPUT == "Verbose":
-        st.write(cypher(result_allinone))
-        st.write(cypher(result_bulkimport))
-
 if OUTPUT == "Verbose":
     st.caption("Save graph data including nodes and edges into csv files")
-    st.button("Save graph data (.csv)", on_click=save_graph_data) 
+    if st.button("Save graph data (.csv)"):
+        # no bulkImport: all in one
+        # use bulkImport to generate multiple files categorized by node label and relationship type
+        query = f"""
+        CALL apoc.export.csv.all("{DATA}.csv", {{}}) 
+        """
+        result_allinone = cypher(query)
+        query = f"""
+        CALL apoc.export.csv.all("{DATA}.csv", {{bulkImport: true}}) 
+        """
+        result_bulkimport = cypher(query)
 
+        st.write(result_allinone)
+        # st.write(result_bulkimport)
+    
 progress_bar.progress(100, text="Finished.")
 end_time = time.perf_counter()
 execution_time_ms = (end_time - start_time) * 1000
@@ -748,6 +748,7 @@ st.session_state["data"] = DATA
 ### interaction ###
 ##############################
 
+@st.cache_data
 def plot_similarity(query_node, similarity_method, limit):
     fig, ax = plt.subplots()
     articles = result["Article"]

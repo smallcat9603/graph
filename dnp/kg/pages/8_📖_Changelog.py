@@ -1,6 +1,8 @@
 import streamlit as st
 
 st.markdown("""
+            ## 240121
+            - fixed save button bug
             ## 240119
             - replaced st.bar_chart with pyplot
             - fixed pr bug
