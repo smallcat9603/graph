@@ -6,6 +6,8 @@ import numpy as np
 
 DATA = __file__.split("/")[-1].split(".")[0].split("_")[-1]
 DATA_DIR = "https://raw.githubusercontent.com/smallcat9603/graph/main/dnp/kg/data/"
+FILE_NODES = ["Article", "Noun", "Query"]
+FILE_RELATIONSHIPS =["CONTAINS", "CORRELATES", "SIMILAR_JACCARD", "SIMILAR_OVERLAP", "SIMILAR_COSINE", "SIMILAR_FASTRP", "SIMILAR_NODE2VEC", "SIMILAR_HASHGNN"]
 
 st.title(f"{DATA} Dataset")
 st.info("This database includes wikipedia pages of 100 football players.")
@@ -56,33 +58,15 @@ cypher(query)
 
 @st.cache_data
 def import_graph_data():
-    query = """
-    CALL dbms.listConfig() YIELD name, value
-    WHERE name = 'server.directories.import'
-    RETURN value AS importFolderPath
-    """
-    result = cypher(query)
-    importFolderPath = result["importFolderPath"][0]
-
-    filenames_nodes = []
-    filenames_relationships =[]
-    for filename in os.listdir(importFolderPath):
-        if filename.startswith(DATA+".nodes.") and filename.endswith(".csv"):
-            filenames_nodes.append(filename)
-        if filename.startswith(DATA+".relationships.") and filename.endswith(".csv"):
-            filenames_relationships.append(filename)
-
     query = "CALL apoc.import.csv(["
-    for idx, filename in enumerate(filenames_nodes):
-        if idx < len(filenames_nodes)-1:
-            query += f"{{fileName: 'file:/{filename}', labels: ['{filename.split('.')[-2]}']}}, "
-        else:
-            query += f"{{fileName: 'file:/{filename}', labels: ['{filename.split('.')[-2]}']}}], ["
-    for idx, filename in enumerate(filenames_relationships):
-        if idx < len(filenames_relationships)-1:
-            query += f"{{fileName: 'file:/{filename}', type: '{filename.split('.')[-2]}'}}, "
-        else:
-            query += f"{{fileName: 'file:/{filename}', type: '{filename.split('.')[-2]}'}}], {{}})"
+    for idx, node in enumerate(FILE_NODES):
+        query += f"{{fileName: '{DATA_DIR}{DATA}.nodes.{node}.csv', labels: ['{node}']}}, "
+        if idx == len(FILE_NODES)-1:
+            query = query[:-2] + "], ["
+    for idx, relationship in enumerate(FILE_RELATIONSHIPS):
+        query += f"{{fileName: '{DATA_DIR}{DATA}.relationships.{relationship}.csv', type: '{relationship}'}}, "
+        if idx == len(FILE_RELATIONSHIPS)-1:
+            query = query[:-2] + "], {})"
     result = cypher(query)
     return result
 
