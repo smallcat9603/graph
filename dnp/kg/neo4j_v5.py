@@ -19,11 +19,12 @@ if filename.startswith("neo4j"):
     host = st.secrets["NEO4J_LOCAL"]
     user = st.secrets["NEO4J_LOCAL_USER"]
     password = st.secrets["NEO4J_LOCAL_PASSWORD"]
-elif filename.startswith("app"):
+elif filename.startswith("App"):
     # sandbox
     host = st.secrets["NEO4J_SANDBOX"]
     user = st.secrets["NEO4J_SANDBOX_USER"]
     password = st.secrets["NEO4J_SANDBOX_PASSWORD"]
+st.session_state["hp"] = filename
 st.session_state["gds"] = GraphDataScience(host, auth=(user, password))
 
 st.success(f"Connection successful to GDBS server: {host}") 

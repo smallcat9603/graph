@@ -25,6 +25,9 @@ run_disabled = False
 if "data" in st.session_state and st.session_state["data"] != DATA:
     run_disabled = True
     form.warning("Please 'Reset' the database status first before you 'Run'!")
+elif st.session_state["hp"].startswith("App"):
+    run_disabled = True
+    form.warning("Sandbox memory may be not enough for this dataset!")
 run = form.form_submit_button("Run", type="primary", disabled=run_disabled)
 if not run and ("data" not in st.session_state or st.session_state["data"] != DATA):
     st.stop()

@@ -1,11 +1,14 @@
 import streamlit as st
 
 st.markdown("""
+            ## 240122
+            - Imported data CSV from URL instead of local file
+            - Disabled 'Run' for large datasets in sandbox
             ## 240121
-            - fixed save button bug
+            - Fixed save button bug
             ## 240119
-            - replaced st.bar_chart with pyplot
-            - fixed pr bug
+            - Replaced st.bar_chart with pyplot
+            - Fixed pr bug
             ## 240118
             - "Reset" is always enabled in case of program interruption
             ## 240117
