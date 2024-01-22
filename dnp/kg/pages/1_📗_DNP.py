@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 DATA = __file__.split("/")[-1].split(".")[0].split("_")[-1]
+DATA_DIR = "https://raw.githubusercontent.com/smallcat9603/graph/main/dnp/kg/data/"
 
 st.title(f"{DATA} Dataset")
 st.info("This database includes 100 DNP newsreleases, and 4 Toppan newsreleases.")
@@ -38,7 +39,7 @@ if DATA_TYPE == "TXT":
     QUERY_DICT["C-3"] = DATA_URL + "C-3.txt"
     QUERY_DICT["C-4"] = DATA_URL + "C-4.txt"
 elif DATA_TYPE == "URL":
-    DATA_URL = "https://raw.githubusercontent.com/smallcat9603/graph/main/dnp/kg/data/articles.csv"
+    DATA_URL = f"{DATA_DIR}articles.csv"
     QUERY_DICT["C-1"] = "https://www.holdings.toppan.com/ja/news/2023/10/newsrelease231004_1.html"
     QUERY_DICT["C-2"] = "https://www.holdings.toppan.com/ja/news/2023/10/newsrelease231004_2.html"
     QUERY_DICT["C-3"] = "https://www.holdings.toppan.com/ja/news/2023/10/newsrelease231004_3.html"
@@ -201,7 +202,7 @@ progress_bar.progress(20, text="Set phrase and salience properties...")
 
 if DATA_LOAD == "Semi-Online":
     query = f"""
-    LOAD CSV WITH HEADERS FROM "https://raw.githubusercontent.com/smallcat9603/graph/main/dnp/kg/data/{DATA}.csv" AS row
+    LOAD CSV WITH HEADERS FROM "{DATA_DIR}{DATA}.csv" AS row
     WITH row
     WHERE row._labels = ":Article"
     MATCH (a:Article {{name: row.name}}) WHERE a.processed IS NULL
@@ -298,7 +299,7 @@ progress_bar.progress(50, text="Set phrase and salience properties (Query)...")
 # set phrase and salience properties (Query)
 if DATA_LOAD == "Semi-Online":
     query = f"""
-    LOAD CSV WITH HEADERS FROM "https://raw.githubusercontent.com/smallcat9603/graph/main/dnp/kg/data/{DATA}.csv" AS row
+    LOAD CSV WITH HEADERS FROM "{DATA_DIR}{DATA}.csv" AS row
     WITH row
     WHERE row._labels = ":Query"
     MATCH (q:Query {{name: row.name}})

@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 DATA = __file__.split("/")[-1].split(".")[0].split("_")[-1]
+DATA_DIR = "https://raw.githubusercontent.com/smallcat9603/graph/main/dnp/kg/data/"
 
 st.title(f"{DATA} Dataset")
 st.info("This database includes wikipedia pages of 100 persons, consisting of 25 athletes, 25 engineers, 25 actors, and 25 politicians.")
@@ -30,7 +31,7 @@ if run and DATA_LOAD == "Online" and gcp_api_key == "":
 
 DATA_URL = "" # input data
 QUERY_DICT = {} # query dict {QUERY_NAME: QUERY_URL}
-DATA_URL = "https://raw.githubusercontent.com/smallcat9603/graph/main/dnp/kg/data/wikidata_persons_100.csv"  
+DATA_URL = f"{DATA_DIR}wikidata_persons_100.csv"  
 QUERY_DICT["Joe Biden"] = "https://en.wikipedia.org/wiki/Joe_Biden"
 
 if OUTPUT == "Verbose":
@@ -178,7 +179,7 @@ progress_bar.progress(20, text="Set phrase and salience properties...")
 
 if DATA_LOAD == "Semi-Online":
     query = f"""
-    LOAD CSV WITH HEADERS FROM "https://raw.githubusercontent.com/smallcat9603/graph/main/dnp/kg/data/{DATA}.csv" AS row
+    LOAD CSV WITH HEADERS FROM "{DATA_DIR}{DATA}.csv" AS row
     WITH row
     WHERE row._labels = ":Article"
     MATCH (a:Article {{name: row.name}}) WHERE a.processed IS NULL
@@ -266,7 +267,7 @@ progress_bar.progress(50, text="Set phrase and salience properties (Query)...")
 # set phrase and salience properties (Query)
 if DATA_LOAD == "Semi-Online":
     query = f"""
-    LOAD CSV WITH HEADERS FROM "https://raw.githubusercontent.com/smallcat9603/graph/main/dnp/kg/data/{DATA}.csv" AS row
+    LOAD CSV WITH HEADERS FROM "{DATA_DIR}{DATA}.csv" AS row
     WITH row
     WHERE row._labels = ":Query"
     MATCH (q:Query {{name: row.name}})
