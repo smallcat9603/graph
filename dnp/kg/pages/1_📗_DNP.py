@@ -25,7 +25,7 @@ OUTPUT = form.radio("Output", ["Simple", "Verbose"], horizontal=True, captions=[
 run_disabled = False
 if "data" in st.session_state and st.session_state["data"] != DATA:
     run_disabled = True
-    form.warning("Please 'Reset' the database status first before you 'Run'!")
+    form.warning("Please 'Reset' the database status first before you 'Run'!", icon='⚠')
 run = form.form_submit_button("Run", type="primary", disabled=run_disabled)
 if not run and ("data" not in st.session_state or st.session_state["data"] != DATA):
     st.stop()

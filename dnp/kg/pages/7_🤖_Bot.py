@@ -12,15 +12,20 @@ from langchain.prompts.prompt import PromptTemplate
 
 if 'data' not in st.session_state:
    st.title("No Graph Data")
-   st.warning("You should load graph data first!")
+   st.warning("You should load graph data first!", icon='⚠')
+   st.stop()
 else:
    st.title(f"{st.session_state['data']} Robot")
 
 form = st.form('my_form')
 openai_api_key = form.text_input('OpenAI API Key', type='password')
-submitted = form.form_submit_button('Submit')
-if submitted and not openai_api_key.startswith('sk-'):
-    form.warning('Please enter your OpenAI API key!', icon='⚠')
+
+if form.form_submit_button('Submit'):
+    if not openai_api_key.startswith('sk-'):
+        form.warning('Please enter your OpenAI API key!', icon='⚠')
+        st.stop()
+elif openai_api_key == "":
+    st.stop()
 
 llm = ChatOpenAI(
     openai_api_key=openai_api_key,
