@@ -4,6 +4,7 @@ st.markdown("""
             ## 240123
             - Optimized "Submit" logic
             - Optimized neo4j server connection parameters
+            - Added sandbox perf to chart
             ## 240122
             - Imported data CSV from URL instead of local file
             - Disabled 'Run' for large datasets in sandbox

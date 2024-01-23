@@ -58,22 +58,25 @@ def plot_dict_bar(xlabel="xlabel", ylabel="ylabel", legend=[], avg=False, percen
 
 st.title("Graph Construction Time")
 
-st.write("Offline vs Semi-Online vs Online (DNP, nphrase=50)")
+st.header("DNP")
+
+st.caption("Offline vs Semi-Online vs Online (nphrase=50)")
 plot_dict_bar(xlabel="Graph Construction", 
               ylabel="Graph Construction Time (ms)", 
-              legend=["Graph Construction Time"], 
+              legend=["Local", "Sandbox (w/o GCP NLP)"], 
               avg=False, 
               percent=False, 
               text=True, 
               xlog=False, 
               ylog=True, 
-              Offline=[298.8], 
-              Semi_Online=[26747.1], 
-              Online=[120191.6],
+              Offline=[298.8, 1117.3], 
+              Semi_Online=[26747.1, 295170.4], 
+              Online=[120191.6, 1000000], # gcp nlp not available in sandbox
               )
 
+st.header("Wiki")
 
-st.write("P100 vs P1000 vs P10000 (Online, nphrase=50)")
+st.caption("P100 vs P1000 vs P10000 (Online, nphrase=50)")
 plot_dict_bar(xlabel="Dataset", 
               ylabel="Number", 
               legend=["# nodes", "# edges"], 
