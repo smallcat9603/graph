@@ -95,7 +95,11 @@ plot_dict_bar(xlabel="Number of Phrases Extracted",
               n100=[140090.0], 
               )
 
+st.divider()
+
 st.title("Graph Size")
+
+st.header("DNP")
 
 st.caption("nphrase = 10 vs 20 vs 30 vs 40 vs 50 vs 60 vs 70 vs 80 vs 90 vs 100 (Semi-Online, txt, C-1, top-20, jaccard/cosine)")
 plot_dict_bar(xlabel="Number of Phrases Extracted", 
