@@ -67,9 +67,9 @@ llm = ChatOpenAI(
 #     retriever=retriever,  
 # )
 
-url=st.secrets["NEO4J_LOCAL"]
-username=st.secrets["NEO4J_LOCAL_USER"]
-password=st.secrets["NEO4J_LOCAL_PASSWORD"]
+url=st.session_state["host"]
+username=st.session_state["user"]
+password=st.session_state["password"]
 graph = Neo4jGraph(
     # url=st.secrets["NEO4J_URI"],
     # username=st.secrets["NEO4J_USERNAME"],

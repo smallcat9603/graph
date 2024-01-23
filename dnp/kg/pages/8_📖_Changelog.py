@@ -3,6 +3,7 @@ import streamlit as st
 st.markdown("""
             ## 240123
             - Optimized "Submit" logic
+            - Optimized neo4j server connection parameters
             ## 240122
             - Imported data CSV from URL instead of local file
             - Disabled 'Run' for large datasets in sandbox
