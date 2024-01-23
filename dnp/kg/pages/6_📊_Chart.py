@@ -74,6 +74,50 @@ plot_dict_bar(xlabel="Graph Construction",
               Online=[120191.6, 1000000], # gcp nlp not available in sandbox
               )
 
+st.caption("nphrase = 10 vs 20 vs 30 vs 40 vs 50 vs 60 vs 70 vs 80 vs 90 vs 100 (Semi-Online, txt, C-1, top-20, jaccard/cosine)")
+plot_dict_bar(xlabel="Number of Phrases Extracted", 
+              ylabel="Graph Construction Time (ms)", 
+              legend=["Local"], 
+              avg=False, 
+              percent=False, 
+              text=True, 
+              xlog=False, 
+              ylog=True, 
+              n10=[46550.4], 
+              n20=[71326.1], 
+              n30=[77871.4], 
+              n40=[52145.8], 
+              n50=[82088.5], 
+              n60=[84264.5], 
+              n70=[65402.7], 
+              n80=[104143.2], 
+              n90=[112897.6], 
+              n100=[140090.0], 
+              )
+
+st.title("Graph Size")
+
+st.caption("nphrase = 10 vs 20 vs 30 vs 40 vs 50 vs 60 vs 70 vs 80 vs 90 vs 100 (Semi-Online, txt, C-1, top-20, jaccard/cosine)")
+plot_dict_bar(xlabel="Number of Phrases Extracted", 
+              ylabel="Number", 
+              legend=["# nodes", "# edges"], 
+              avg=False, 
+              percent=False, 
+              text=True, 
+              xlog=False, 
+              ylog=True, 
+              n10=[855, 4928], 
+              n20=[1492, 6569], 
+              n30=[2029, 8140], 
+              n40=[2484, 9521], 
+              n50=[2968, 10643], 
+              n60=[3389, 11671], 
+              n70=[3812, 12666], 
+              n80=[4206, 13528], 
+              n90=[4593, 14444], 
+              n100=[4982, 15265], 
+              ) 
+
 st.header("Wiki")
 
 st.caption("P100 vs P1000 vs P10000 (Online, nphrase=50)")
