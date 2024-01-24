@@ -4,7 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.ticker import PercentFormatter
 
-def plot_dict_bar(xlabel="xlabel", ylabel="ylabel", legend=[], avg=False, percent=False, text=False, xlog=False, ylog=False, **dict): #dict={A:[], B:[]}
+def plot_dict_bar(xlabel="xlabel", ylabel="ylabel", legend=[], avg=False, percent=False, text=False, xlog=False, ylog=False, f=0, **dict): #dict={A:[], B:[]}
     fig, ax = plt.subplots()
 
     firstkey, firstvalue = list(dict.items())[0]
@@ -32,7 +32,7 @@ def plot_dict_bar(xlabel="xlabel", ylabel="ylabel", legend=[], avg=False, percen
             if percent == True:
                 ax.text(a, b, '%.1f%%'%(b*100), ha="center", va="bottom", fontsize=12)
             else:
-                ax.text(a, b, '%.0f'%(b), ha="center", va="bottom", fontsize=12)
+                ax.text(a, b, f'%.{f}f'%(b), ha="center", va="bottom", fontsize=12)
     ax.set(xticks=x, xticklabels=keys)
     ax.set_xlabel(xlabel)
     ax.set_ylabel(ylabel)
@@ -69,6 +69,7 @@ plot_dict_bar(xlabel="Graph Construction",
               text=True, 
               xlog=False, 
               ylog=True, 
+              f=0,
               Offline=[298.8, 1117.3], 
               Semi_Online=[26747.1, 295170.4], 
               Online=[120191.6, 1000000], # gcp nlp not available in sandbox
@@ -83,6 +84,7 @@ plot_dict_bar(xlabel="Number of Phrases Extracted",
               text=True, 
               xlog=False, 
               ylog=True, 
+              f=0,
               n10=[46550.4], 
               n20=[71326.1], 
               n30=[77871.4], 
@@ -110,6 +112,7 @@ plot_dict_bar(xlabel="Number of Phrases Extracted",
               text=True, 
               xlog=False, 
               ylog=True, 
+              f=0,
               n10=[855, 4928], 
               n20=[1492, 6569], 
               n30=[2029, 8140], 
@@ -133,7 +136,114 @@ plot_dict_bar(xlabel="Dataset",
               text=True, 
               xlog=False, 
               ylog=True, 
+              f=0,
               P100=[3099, 7292], 
               P1000=[23081, 276711], 
               P10000=[51193, 1172705],
               )    
+
+st.divider()
+
+st.title("nDCG")
+
+st.header("DNP")
+
+st.caption("nphrase = 20 vs 30 vs 40 vs 50 vs 60 vs 70 vs 80 vs 90 vs 100 (C-1, p=20, jaccard, linear)")
+plot_dict_bar(xlabel="Number of Phrases Extracted", 
+              ylabel="nDCG", 
+            #   legend=["Linear"], 
+              avg=False, 
+              percent=False, 
+              text=True, 
+              xlog=False, 
+              ylog=False, 
+              f=3,
+              n20=[0.8426041137752035], 
+              n30=[0.9016290795217933], 
+              n40=[0.9097269734827902], 
+              n50=[0.9295534087685132], 
+              n60=[0.9719214072407957], 
+              n70=[0.9940449558041299], 
+              n80=[0.9975939072599207], 
+              n90=[0.9993570847175404], 
+              n100=[1.0], 
+              )
+
+st.caption("nphrase = 20 vs 30 vs 40 vs 50 vs 60 vs 70 vs 80 vs 90 vs 100 (C-1, p=20, jaccard, exponential)")
+plot_dict_bar(xlabel="Number of Phrases Extracted", 
+              ylabel="nDCG", 
+            #   legend=["Exponential"], 
+              avg=False, 
+              percent=False, 
+              text=True, 
+              xlog=False, 
+              ylog=False, 
+              f=3,
+              n20=[0.840209026139336], 
+              n30=[0.900006042256782], 
+              n40=[0.9081490997008801], 
+              n50=[0.9283279320428501], 
+              n60=[0.9715995355521987], 
+              n70=[0.9939891623894176], 
+              n80=[0.9975657202676101], 
+              n90=[0.9993502245573821], 
+              n100=[1.0], 
+              )
+
+st.caption("nphrase = 20 vs 30 vs 40 vs 50 vs 60 vs 70 vs 80 vs 90 vs 100 (C-1, p=20, cosine, linear)")
+plot_dict_bar(xlabel="Number of Phrases Extracted", 
+              ylabel="nDCG", 
+            #   legend=["Linear"], 
+              avg=False, 
+              percent=False, 
+              text=True, 
+              xlog=False, 
+              ylog=False, 
+              f=3,
+              n20=[0.8772030685410965], 
+              n30=[0.9239751607324898], 
+              n40=[0.9443252006288475], 
+              n50=[0.9451233392774365], 
+              n60=[0.9569083564384423], 
+              n70=[0.9889435578574491], 
+              n80=[0.9961796569569021], 
+              n90=[0.9998489460748377], 
+              n100=[1.0], 
+              )
+
+st.caption("nphrase = 20 vs 30 vs 40 vs 50 vs 60 vs 70 vs 80 vs 90 vs 100 (C-1, p=20, cosine, exponential)")
+plot_dict_bar(xlabel="Number of Phrases Extracted", 
+              ylabel="nDCG", 
+            #   legend=["Exponential"], 
+              avg=False, 
+              percent=False, 
+              text=True, 
+              xlog=False, 
+              ylog=False, 
+              f=3,
+              n20=[0.8733013551208197], 
+              n30=[0.9215000529388362], 
+              n40=[0.9425099875658931], 
+              n50=[0.9433186157074812], 
+              n60=[0.9553039668095741], 
+              n70=[0.9885486940368893], 
+              n80=[0.9961049321363387], 
+              n90=[0.9998445599850421], 
+              n100=[1.0], 
+              )
+
+st.caption("p = 5 vs 10 vs 15 vs 20 (C-1, nphrase=50, cosine, exponential)")
+plot_dict_bar(xlabel="Top-k Rank", 
+              ylabel="nDCG", 
+            #   legend=["n50"], 
+              avg=False, 
+              percent=False, 
+              text=True, 
+              xlog=False, 
+              ylog=False, 
+              f=3,
+              p5=[0.9533662650719359],
+              p10=[0.9309694198312977],
+              p15=[0.9363462634037488],
+              p20=[0.9433186157074812], 
+              )

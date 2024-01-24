@@ -1,6 +1,8 @@
 import streamlit as st
 
 st.markdown("""
+            ## 240124
+            - Added nDCG chart
             ## 240123
             - Optimized "Submit" logic
             - Optimized neo4j server connection parameters
