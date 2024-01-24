@@ -1,5 +1,4 @@
 import streamlit as st
-import os
 import time
 import matplotlib.pyplot as plt
 import numpy as np
