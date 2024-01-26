@@ -1,6 +1,8 @@
 import streamlit as st
 
 st.markdown("""
+            ## 240126
+            - Converted n.phrase to stringlist (still bug for r.common) for offline 
             ## 240124
             - Added nDCG chart
             ## 240123

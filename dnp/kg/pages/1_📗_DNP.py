@@ -82,7 +82,6 @@ def import_graph_data():
     return result
 
 # convert string to value
-# TODO: n.phrase not converted to stringlist via MATCH (n) WHERE n.phrase IS NOT NULL
 # TODO: r.common not converted to stringlist via MATCH ()-[r:CORRELATES]-() WHERE r.common IS NOT NULL
 @st.cache_data
 def post_process():
@@ -115,6 +114,20 @@ def post_process():
     SET r.score = toFloat(r.score)
     """
     cypher(query)
+    query = f"""
+    MATCH (n) WHERE n.phrase IS NOT NULL
+    SET n.phrase = replace(n.phrase, "[", "")
+    SET n.phrase = replace(n.phrase, "]", "")
+    SET n.phrase = split(n.phrase, ",")
+    """
+    cypher(query)    
+    # query = f"""
+    # MATCH ()-[r:CORRELATES]-() WHERE r.common IS NOT NULL
+    # SET r.common = replace(r.common, "[", "")
+    # SET r.common = replace(r.common, "]", "")
+    # SET r.common = split(r.common, ",")
+    # """
+    # cypher(query) 
 
 if DATA_LOAD == "Offline":
     result = import_graph_data()
