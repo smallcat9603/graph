@@ -73,7 +73,6 @@ def import_graph_data():
     return result
 
 # convert string to value
-# TODO: r.common not converted to stringlist via MATCH ()-[r:CORRELATES]-() WHERE r.common IS NOT NULL
 @st.cache_data
 def post_process():
     query = f"""
@@ -112,13 +111,14 @@ def post_process():
     SET n.phrase = split(n.phrase, ",")
     """
     cypher(query)    
-    # query = f"""
-    # MATCH ()-[r:CORRELATES]-() WHERE r.common IS NOT NULL
-    # SET r.common = replace(r.common, "[", "")
-    # SET r.common = replace(r.common, "]", "")
-    # SET r.common = split(r.common, ",")
-    # """
-    # cypher(query) 
+    query = f"""
+    MATCH ()-[r:CORRELATES]-() WHERE r.common IS NOT NULL
+    SET r.common = replace(r.common, "[", "")
+    SET r.common = replace(r.common, "]", "")
+    WITH r, r.common AS common
+    SET r.common = split(common, ",")
+    """
+    cypher(query) 
 
 if DATA_LOAD == "Offline":
     result = import_graph_data()
@@ -807,19 +807,18 @@ with tab4:
     result = cypher(query)
     st.write(result)
 
-# # not work well for offline
-# with tab5:
-#     query = """
-#     MATCH (q:Query)-[r:CORRELATES]-(a:Article)
-#     WITH q, r, a, reduce(s = 0.0, word IN r.common | 
-#     s + q.salience[apoc.coll.indexOf(q.phrase, word)] + a.salience[apoc.coll.indexOf(a.phrase, word)]) AS Similarity
-#     RETURN q.name AS Query, a.name AS Article, a.url AS URL, a.grp AS Group, a.grp1 AS Group1, r.common, Similarity 
-#     ORDER BY Query, Similarity DESC
-#     LIMIT 10
-#     """
-#     if OUTPUT == "Verbose":
-#         st.code(query)    
-#     result = cypher(query)
-#     st.write(result)
+with tab5:
+    query = """
+    MATCH (q:Query)-[r:CORRELATES]-(a:Article)
+    WITH q, r, a, reduce(s = 0.0, word IN r.common | 
+    s + q.salience[apoc.coll.indexOf(q.phrase, word)] + a.salience[apoc.coll.indexOf(a.phrase, word)]) AS Similarity
+    RETURN q.name AS Query, a.name AS Article, a.url AS URL, a.grp AS Group, a.grp1 AS Group1, r.common, Similarity 
+    ORDER BY Query, Similarity DESC
+    LIMIT 10
+    """
+    if OUTPUT == "Verbose":
+        st.code(query)    
+    result = cypher(query)
+    st.write(result)
 
 st.divider()
