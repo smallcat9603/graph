@@ -1,6 +1,8 @@
 import streamlit as st
 
 st.markdown("""
+            ## 240129
+            - Modulized
             ## 240127
             - Converted r.common to stringlist for offline (A cypher bug of using split() for STRING relationship properties?)
             ## 240126
