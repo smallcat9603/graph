@@ -170,7 +170,7 @@ if DATA_LOAD != "Offline":
 ##############################
 
 if DATA_LOAD != "Offline":
-    flow.write_nodesimilarity_ppr(G, QUERY_DICT)
+    result_write_nodesimilarity_ppr = flow.write_nodesimilarity_ppr(G, QUERY_DICT)
 
 ##############################
 ### 1. node embedding ###
@@ -179,7 +179,7 @@ if DATA_LOAD != "Offline":
 progress_bar.progress(90, text="Node embedding...")
 
 if DATA_LOAD != "Offline":
-    result_node_embedding = flow.node_embedding(G)
+    result_fastRP_stream, result_node2vec_stream, result_hashgnn_stream, result_fastRP_mutate, result_node2vec_mutate, result_hashgnn_mutate = flow.node_embedding(G)
 
 ##############################
 ### 2. kNN ###
@@ -279,8 +279,12 @@ if OUTPUT == "Verbose":
         st.write(f"Nodes compared: {result_write_nodesimilarity_cosine['nodesCompared']}")
         st.write(f"Mean similarity: {result_write_nodesimilarity_cosine['similarityDistribution']['mean']}")
 
+        st.header("node similarity (ppr)")
+        st.write(result_write_nodesimilarity_ppr)
+
         st.header("1. node embedding")
-        st.write(f"Number of embedding vectors produced: {result_node_embedding['nodePropertiesWritten']}")
+        st.write(f"Embedding vectors: {result_hashgnn_stream['embedding']}")
+        st.write(f"Number of embedding vectors produced: {result_hashgnn_mutate['nodePropertiesWritten']}")
 
         st.header("2. kNN")
         st.write(f"Relationships produced: {result_kNN['relationshipsWritten']}")

@@ -125,6 +125,7 @@ def write_nodesimilarity_cosine(_G):
 
 @st.cache_data
 def write_nodesimilarity_ppr(_G, QUERY_DICT):
+    results = ""
     for idx, name in enumerate(list(QUERY_DICT.keys())):
         nodeid = st.session_state["gds"].find_node_id(labels=["Query"], properties={"name": name})
         result = st.session_state["gds"].pageRank.write(
@@ -135,14 +136,14 @@ def write_nodesimilarity_ppr(_G, QUERY_DICT):
             relationshipWeightProperty='weight',
             sourceNodes=[nodeid]
         )
-        # if OUTPUT == "Verbose":
-        #     st.write(f"Node properties written: {result['nodePropertiesWritten']}")
-        #     st.write(f"Mean: {result['centralityDistribution']['mean']}")
+        results += f"Node properties written: {result['nodePropertiesWritten']}\n"
+        results += f"Mean: {result['centralityDistribution']['mean']}\n"
+    return results
 
 @st.cache_data
 def node_embedding(_G):
     # fastrp
-    result = st.session_state["gds"].fastRP.stream(
+    result_fastRP_stream = st.session_state["gds"].fastRP.stream(
         _G,
         randomSeed=42,
         embeddingDimension=16,
@@ -151,7 +152,7 @@ def node_embedding(_G):
     )
 
     # node2vec
-    result = st.session_state["gds"].node2vec.stream(
+    result_node2vec_stream = st.session_state["gds"].node2vec.stream(
         _G,
         randomSeed=42,
         embeddingDimension=16,
@@ -160,7 +161,7 @@ def node_embedding(_G):
     )
 
     # hashgnn
-    result = st.session_state["gds"].beta.hashgnn.stream(
+    result_hashgnn_stream = st.session_state["gds"].beta.hashgnn.stream(
         _G,
         iterations = 3,
         embeddingDensity = 8,
@@ -168,11 +169,8 @@ def node_embedding(_G):
         randomSeed = 42,
     )
 
-    # if OUTPUT == "Verbose":
-    #     st.write(f"Embedding vectors: {result['embedding']}")
-
     # fastrp
-    result = st.session_state["gds"].fastRP.mutate(
+    result_fastRP_mutate = st.session_state["gds"].fastRP.mutate(
         _G,
         mutateProperty="embedding_fastrp",
         randomSeed=42,
@@ -182,7 +180,7 @@ def node_embedding(_G):
     )
 
     # node2vec
-    result = st.session_state["gds"].node2vec.mutate(
+    result_node2vec_mutate = st.session_state["gds"].node2vec.mutate(
         _G,
         mutateProperty="embedding_node2vec",
         randomSeed=42,
@@ -192,7 +190,7 @@ def node_embedding(_G):
     )
 
     # hashgnn
-    result = st.session_state["gds"].beta.hashgnn.mutate(
+    result_hashgnn_mutate = st.session_state["gds"].beta.hashgnn.mutate(
         _G,
         mutateProperty="embedding_hashgnn",
         randomSeed=42,
@@ -206,7 +204,7 @@ def node_embedding(_G):
         # featureProperties=['phrase', 'salience'], # each node should have
     )
 
-    return result
+    return result_fastRP_stream, result_node2vec_stream, result_hashgnn_stream, result_fastRP_mutate, result_node2vec_mutate, result_hashgnn_mutate
 
 @st.cache_data
 def kNN(_G):
