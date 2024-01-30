@@ -1,6 +1,4 @@
 import streamlit as st
-import spacy
-from collections import Counter
 from pages.lib import param, flow
 
 @st.cache_data
@@ -162,9 +160,8 @@ def set_phrase_salience_properties_gcp(gcp_api_key, query_node=False):
         """
     return run(query)
 
-def set_phrase_salience_properties_spacy(text, language, size, wordclass, n, query_node=False):      
-    nlp = flow.get_nlp(language, size)
-    
+def set_phrase_salience_properties_spacy(language, word_class, pipeline_size, n, query_node=False):      
+    nlp = flow.get_nlp(language, pipeline_size)
     if query_node == False:
         query = """
         MATCH (a:Article) 
@@ -172,10 +169,11 @@ def set_phrase_salience_properties_spacy(text, language, size, wordclass, n, que
         """
         result = run(query)
 
-        for record in result:
-            url = record["url"]
-            text = record["text"]
-            top_keywords = flow.extract_keywords(text, nlp, wordclass, n)
+        narticles = len(result["url"])
+        for i in range(narticles):
+            url = result["url"][i]
+            text = result["text"][i]
+            top_keywords = flow.extract_keywords(nlp, text, word_class, n)
             phrase = [item[0] for item in top_keywords]
             salience = [item[1] for item in top_keywords]
             query = f"""
@@ -192,10 +190,11 @@ def set_phrase_salience_properties_spacy(text, language, size, wordclass, n, que
         """
         result = run(query)
 
-        for record in result:
-            url = record["url"]
-            text = record["text"]
-            top_keywords = flow.extract_keywords(text, nlp, wordclass, n)
+        narticles = len(result["url"])
+        for i in range(narticles):
+            url = result["url"][i]
+            text = result["text"][i]
+            top_keywords = flow.extract_keywords(nlp, text, word_class, n)
             phrase = [item[0] for item in top_keywords]
             salience = [item[1] for item in top_keywords]
             query = f"""
@@ -205,6 +204,8 @@ def set_phrase_salience_properties_spacy(text, language, size, wordclass, n, que
             SET q.salience = {salience}
             """
             run(query)
+            
+    return result
 
 def create_noun_article_relationships(nphrase, query_node=False):
     if query_node == False:

@@ -7,9 +7,11 @@ from pages.lib import cypher, param, flow
 ##############################
 
 DATA = __file__.split("/")[-1].split(".")[0].split("_")[-1]
+LANGUAGE = "en"
+
 st.title(f"{DATA} Dataset")
 st.info("This database includes wikipedia pages of 100 football players.")
-nphrase, DATA_TYPE, DATA_LOAD, GCP_API_KEY = flow.set_param(DATA)
+nphrase, DATA_TYPE, DATA_LOAD, GCP_API_KEY, WORD_CLASS, PIPELINE_SIZE = flow.set_param(DATA)
 
 QUERY_DICT = {} # query dict {QUERY_NAME: QUERY_URL}
 DATA_URL = f"{param.DATA_DIR}wikidata_footballplayer_100.csv"
@@ -53,6 +55,8 @@ if DATA_LOAD == "Semi-Online":
     result_set_phrase_salience_properties_csv = cypher.set_phrase_salience_properties_csv(f"{param.DATA_DIR}{DATA}.csv")
 elif DATA_LOAD == "Online":
     result_set_phrase_salience_properties_gcp = cypher.set_phrase_salience_properties_gcp(GCP_API_KEY)
+elif DATA_LOAD == "On-the-fly":
+    result_set_phrase_salience_properties_spacy = cypher.set_phrase_salience_properties_spacy(LANGUAGE, WORD_CLASS, PIPELINE_SIZE, nphrase, query_node=False)
 
 ##############################
 ### create noun-url relationships ###
@@ -81,6 +85,8 @@ if DATA_LOAD == "Semi-Online":
     cypher.set_phrase_salience_properties_csv(f"{param.DATA_DIR}{DATA}.csv", query_node=True)
 elif DATA_LOAD == "Online":
     cypher.set_phrase_salience_properties_gcp(GCP_API_KEY, query_node=True)
+elif DATA_LOAD == "On-the-fly":
+    cypher.set_phrase_salience_properties_spacy(LANGUAGE, WORD_CLASS, PIPELINE_SIZE, nphrase, query_node=True)
 
 progress_bar.progress(60, text="Create noun-article relationships (Query)...")
 
@@ -217,6 +223,9 @@ with st.expander("Debug Info"):
     elif DATA_LOAD == "Online":
         st.header("set phrase salience properties (gcp)")
         st.write(result_set_phrase_salience_properties_gcp)
+    elif DATA_LOAD == "On-the-fly":
+        st.header("set phrase salience properties (spacy)")
+        st.write(result_set_phrase_salience_properties_spacy)
 
     st.header("Graph Statistics (project)")
     col1, col2, col3, col4 = st.columns(4)

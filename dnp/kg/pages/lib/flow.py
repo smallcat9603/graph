@@ -35,10 +35,13 @@ def set_param(DATA):
                                 placeholder="should not be empty for Online",
                                 label_visibility="collapsed")
     expander_keywords = col2.expander("Keywords (Optional for On-the-fly)")
-    KEYWORDS = expander_keywords.multiselect("Keywords",
+    WORD_CLASS = expander_keywords.multiselect("Keywords",
                                              ["NOUN", "ADJ", "VERB"], 
-                                             ["NOUN"],
-                                             label_visibility="collapsed")
+                                             ["NOUN"])
+    PIPELINE_SIZE = expander_keywords.radio("Pipeline size", 
+                           ["Small", "Medium", "Large"], 
+                           horizontal=True, 
+                           captions=["10M+", "40M+", "500M+"])
 
     run_disabled = False
     if "data" in st.session_state and st.session_state["data"] != DATA:
@@ -49,14 +52,14 @@ def set_param(DATA):
         if DATA_LOAD == "Online" and GCP_API_KEY == "":
             form.warning("Please input GCP API Key (Mandatory for Online) before you 'Run'!", icon='⚠')
             st.stop()
-        elif DATA_LOAD == "On-the-fly" and len(KEYWORDS) == 0:
+        elif DATA_LOAD == "On-the-fly" and len(WORD_CLASS) == 0:
             form.warning("Please select at least one keyword type before you 'Run'!", icon='⚠')
             st.stop()
     else:
         if "data" not in st.session_state or st.session_state["data"] != DATA:
             st.stop()
 
-    return nphrase, DATA_TYPE, DATA_LOAD, GCP_API_KEY
+    return nphrase, DATA_TYPE, DATA_LOAD, GCP_API_KEY, WORD_CLASS, PIPELINE_SIZE
 
 def project_graph():
     node_projection = ["Query", "Article", "Noun"]
@@ -294,27 +297,29 @@ def plot_similarity(result, query_node, similarity_method, limit):
 
     st.pyplot(fig)
 
-def get_nlp(language, size):
+@st.cache_data
+def get_nlp(language, pipeline_size):
     if language == "en":
-        if size == "small":
+        if pipeline_size == "Small":
             nlp = spacy.load("en_core_web_sm")
-        elif size == "medium":
+        elif pipeline_size == "Medium":
             nlp = spacy.load("en_core_web_md")
-        elif size == "large":
+        elif pipeline_size == "Large":
             nlp = spacy.load("en_core_web_lg")
     elif language == "ja":
-        if size == "small":
+        if pipeline_size == "Small":
             nlp = spacy.load("ja_core_news_sm")
-        elif size == "medium":
+        elif pipeline_size == "Medium":
             nlp = spacy.load("ja_core_news_md")
-        elif size == "large":
+        elif pipeline_size == "Large":
             nlp = spacy.load("ja_core_news_lg") 
 
     return nlp
 
-def extract_keywords(text, nlp, wordclass, n):
-    doc = nlp(text)
-    keywords = [token.text for token in doc if not token.is_stop and not token.is_punct and token.pos_ in wordclass]
+@st.cache_data
+def extract_keywords(_nlp, text, word_class, n):
+    doc = _nlp(text)
+    keywords = [token.text for token in doc if not token.is_stop and not token.is_punct and token.pos_ in word_class]
     keyword_freq = Counter(keywords)
     top_keywords = keyword_freq.most_common(n) 
     

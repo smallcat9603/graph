@@ -3,6 +3,7 @@ import streamlit as st
 st.markdown("""
             ## 240130
             - Optimized parameter form (added On-the-fly and hid Verbose)
+            - Added On-the-fly (spaCy)
             ## 240129
             - Modulized
             ## 240127
