@@ -37,10 +37,6 @@ def set_param(DATA):
                                              ["Noun", "Verb", "Adj"], 
                                              ["Noun"],
                                              label_visibility="collapsed")
-    # OUTPUT = form.radio("Output", 
-    #                     ["Simple", "Verbose"], 
-    #                     horizontal=True, 
-    #                     captions=["user mode", "develeper mode (esp. for debug)"])
 
     run_disabled = False
     if "data" in st.session_state and st.session_state["data"] != DATA:
