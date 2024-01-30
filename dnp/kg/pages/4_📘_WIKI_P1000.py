@@ -9,7 +9,7 @@ from pages.lib import cypher, param, flow
 DATA = __file__.split("/")[-1].split(".")[0].split("_")[-1]
 st.title(f"{DATA} Dataset")
 st.info("This database includes wikipedia pages of 1000 persons, consisting of 100 athletes, 100 engineers, 100 actors, 100 politicians, 100 physicians, 100 scientists, 100 artists, 100 journalists, 100 soldiers, and 100 lawyers.")
-nphrase, DATA_TYPE, DATA_LOAD, GCP_API_KEY, OUTPUT = flow.set_param(DATA)
+nphrase, DATA_TYPE, DATA_LOAD, GCP_API_KEY = flow.set_param(DATA)
 
 QUERY_DICT = {} # query dict {QUERY_NAME: QUERY_URL}
 DATA_URL = f"{param.DATA_DIR}wikidata_persons_1000.csv"  
@@ -201,9 +201,7 @@ st.divider()
 ### Verbose ###
 ##############################
 
-if OUTPUT == "Verbose":
-    st.header("Debug Info")
-
+with st.expander("Debug Info"):
     st.header("Data Source")
     st.write(DATA_URL)
     st.header("Query Dict")

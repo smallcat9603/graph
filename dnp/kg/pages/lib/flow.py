@@ -22,31 +22,43 @@ def set_param(DATA):
                                captions=["parse html to retrive content"])
     # offline opt: neo4j-admin database dump/load, require to stop neo4j server
     DATA_LOAD = form.radio("Data load", 
-                           ["Offline", "Semi-Online", "Online"], 
+                           ["Offline", "Semi-Online", "Online", "On-the-fly"], 
                            horizontal=True, 
-                           captions=["load nodes and relationships from local (avoid to use gcp api, very fast)", "load nodes from local and create relationships during runtime (avoid to use gcp api, fast)", "create nodes and relationships during runtime (use gcp api, slow)"], 
+                           captions=["load nodes and relationships from local (avoid to use gcp api, very fast)", "load nodes from local and create relationships during runtime (avoid to use gcp api, fast)", "create nodes and relationships during runtime (use gcp api, slow)", "use spaCy to extract keywords from each article (free)"], 
                            index=0)
-    GCP_API_KEY = form.text_input('GCP API Key', 
-                                  type='password', 
-                                  placeholder='should not be empty for Online')
-    OUTPUT = form.radio("Output", 
-                        ["Simple", "Verbose"], 
-                        horizontal=True, 
-                        captions=["user mode", "develeper mode (esp. for debug)"])
+    col1, col2 = form.columns(2)
+    expander_gcp_api_key = col1.expander("GCP API Key (Mandatory for Online)")
+    GCP_API_KEY = expander_gcp_api_key.text_input("GCP API Key", 
+                                type="password", 
+                                placeholder="should not be empty for Online",
+                                label_visibility="collapsed")
+    expander_keywords = col2.expander("Keywords (Optional for On-the-fly)")
+    KEYWORDS = expander_keywords.multiselect("Keywords",
+                                             ["Noun", "Verb", "Adj"], 
+                                             ["Noun"],
+                                             label_visibility="collapsed")
+    # OUTPUT = form.radio("Output", 
+    #                     ["Simple", "Verbose"], 
+    #                     horizontal=True, 
+    #                     captions=["user mode", "develeper mode (esp. for debug)"])
 
     run_disabled = False
     if "data" in st.session_state and st.session_state["data"] != DATA:
         run_disabled = True
         form.warning("Please 'Reset' the database status first before you 'Run'!", icon='⚠')
-    run = form.form_submit_button("Run", 
-                                  type="primary", 
-                                  disabled=run_disabled)
-    if not run and ("data" not in st.session_state or st.session_state["data"] != DATA):
-        st.stop()
-    if run and DATA_LOAD == "Online" and GCP_API_KEY == "":
-        st.stop()
 
-    return nphrase, DATA_TYPE, DATA_LOAD, GCP_API_KEY, OUTPUT
+    if form.form_submit_button("Run", type="primary", disabled=run_disabled):
+        if DATA_LOAD == "Online" and GCP_API_KEY == "":
+            form.warning("Please input GCP API Key (Mandatory for Online) before you 'Run'!", icon='⚠')
+            st.stop()
+        elif DATA_LOAD == "On-the-fly" and len(KEYWORDS) == 0:
+            form.warning("Please select at least one keyword type before you 'Run'!", icon='⚠')
+            st.stop()
+    else:
+        if "data" not in st.session_state or st.session_state["data"] != DATA:
+            st.stop()
+
+    return nphrase, DATA_TYPE, DATA_LOAD, GCP_API_KEY
 
 def project_graph():
     node_projection = ["Query", "Article", "Noun"]

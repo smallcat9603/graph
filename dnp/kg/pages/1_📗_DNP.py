@@ -11,7 +11,7 @@ from pages.lib import cypher, param, flow
 DATA = __file__.split("/")[-1].split(".")[0].split("_")[-1]
 st.title(f"{DATA} Dataset")
 st.info("This database includes 100 DNP newsreleases, and 4 Toppan newsreleases.")
-nphrase, DATA_TYPE, DATA_LOAD, GCP_API_KEY, OUTPUT = flow.set_param(DATA)
+nphrase, DATA_TYPE, DATA_LOAD, GCP_API_KEY = flow.set_param(DATA)
 
 QUERY_DICT = {} # query dict {QUERY_NAME: QUERY_URL}
 if DATA_TYPE == "TXT":
@@ -237,9 +237,7 @@ st.divider()
 ### Verbose ###
 ##############################
 
-if OUTPUT == "Verbose":
-    st.header("Debug Info")
-
+with st.expander("Debug Info"):
     st.header("Data Source")
     st.write(DATA_URL)
     st.header("Query Dict")
