@@ -1,6 +1,8 @@
 import streamlit as st
 import matplotlib.pyplot as plt
 import numpy as np
+import spacy
+from collections import Counter
 from pages.lib import cypher
 
 def set_param(DATA):
@@ -34,8 +36,8 @@ def set_param(DATA):
                                 label_visibility="collapsed")
     expander_keywords = col2.expander("Keywords (Optional for On-the-fly)")
     KEYWORDS = expander_keywords.multiselect("Keywords",
-                                             ["Noun", "Verb", "Adj"], 
-                                             ["Noun"],
+                                             ["NOUN", "ADJ", "VERB"], 
+                                             ["NOUN"],
                                              label_visibility="collapsed")
 
     run_disabled = False
@@ -291,3 +293,29 @@ def plot_similarity(result, query_node, similarity_method, limit):
     ax.set_title(f'Similarity to {query_node} by {similarity_method} (Top-{limit})')
 
     st.pyplot(fig)
+
+def get_nlp(language, size):
+    if language == "en":
+        if size == "small":
+            nlp = spacy.load("en_core_web_sm")
+        elif size == "medium":
+            nlp = spacy.load("en_core_web_md")
+        elif size == "large":
+            nlp = spacy.load("en_core_web_lg")
+    elif language == "ja":
+        if size == "small":
+            nlp = spacy.load("ja_core_news_sm")
+        elif size == "medium":
+            nlp = spacy.load("ja_core_news_md")
+        elif size == "large":
+            nlp = spacy.load("ja_core_news_lg") 
+
+    return nlp
+
+def extract_keywords(text, nlp, wordclass, n):
+    doc = nlp(text)
+    keywords = [token.text for token in doc if not token.is_stop and not token.is_punct and token.pos_ in wordclass]
+    keyword_freq = Counter(keywords)
+    top_keywords = keyword_freq.most_common(n) 
+    
+    return top_keywords

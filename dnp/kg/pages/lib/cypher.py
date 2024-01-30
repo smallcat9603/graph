@@ -1,4 +1,6 @@
 import streamlit as st
+import spacy
+from collections import Counter
 from pages.lib import param, flow
 
 @st.cache_data
@@ -159,6 +161,50 @@ def set_phrase_salience_properties_gcp(gcp_api_key, query_node=False):
         SET node.salience = coalesce(node.salience, []) + entity['salience']
         """
     return run(query)
+
+def set_phrase_salience_properties_spacy(text, language, size, wordclass, n, query_node=False):      
+    nlp = flow.get_nlp(language, size)
+    
+    if query_node == False:
+        query = """
+        MATCH (a:Article) 
+        RETURN a.url as url, a.body AS text
+        """
+        result = run(query)
+
+        for record in result:
+            url = record["url"]
+            text = record["text"]
+            top_keywords = flow.extract_keywords(text, nlp, wordclass, n)
+            phrase = [item[0] for item in top_keywords]
+            salience = [item[1] for item in top_keywords]
+            query = f"""
+            MATCH (a:Article {{url: "{url}"}})
+            SET a.processed = true
+            SET a.phrase = {phrase}
+            SET a.salience = {salience}
+            """
+            run(query)
+    else:
+        query = """
+        MATCH (q:Query) 
+        RETURN q.url as url, q.body AS text
+        """
+        result = run(query)
+
+        for record in result:
+            url = record["url"]
+            text = record["text"]
+            top_keywords = flow.extract_keywords(text, nlp, wordclass, n)
+            phrase = [item[0] for item in top_keywords]
+            salience = [item[1] for item in top_keywords]
+            query = f"""
+            MATCH (q:Query {{url: "{url}"}})
+            SET q.processed = true
+            SET q.phrase = {phrase}
+            SET q.salience = {salience}
+            """
+            run(query)
 
 def create_noun_article_relationships(nphrase, query_node=False):
     if query_node == False:
