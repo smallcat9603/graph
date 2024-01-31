@@ -44,6 +44,9 @@ progress_bar.progress(10, text="Create url nodes...")
 if DATA_LOAD != "Offline":
     if DATA_TYPE == "URL":
         cypher.load_data_url(DATA_URL)
+        # query
+        for QUERY_NAME, QUERY_URL in QUERY_DICT.items():
+            cypher.create_query_node(QUERY_NAME, QUERY_URL)
 
 ##############################
 ### set phrase and salience properties ###
@@ -53,10 +56,13 @@ progress_bar.progress(20, text="Set phrase and salience properties...")
 
 if DATA_LOAD == "Semi-Online":
     result_set_phrase_salience_properties_csv = cypher.set_phrase_salience_properties_csv(f"{param.DATA_DIR}{DATA}.csv")
+    cypher.set_phrase_salience_properties_csv(f"{param.DATA_DIR}{DATA}.csv", query_node=True)
 elif DATA_LOAD == "Online":
     result_set_phrase_salience_properties_gcp = cypher.set_phrase_salience_properties_gcp(GCP_API_KEY)
+    cypher.set_phrase_salience_properties_gcp(GCP_API_KEY, query_node=True)
 elif DATA_LOAD == "On-the-fly":
     result_set_phrase_salience_properties_spacy = cypher.set_phrase_salience_properties_spacy(LANGUAGE, WORD_CLASS, PIPELINE_SIZE, nphrase, query_node=False)
+    cypher.set_phrase_salience_properties_spacy(LANGUAGE, WORD_CLASS, PIPELINE_SIZE, nphrase, query_node=True)
 
 ##############################
 ### create noun-url relationships ###
@@ -66,39 +72,13 @@ progress_bar.progress(30, text="Create noun-url relationships...")
 
 if DATA_LOAD != "Offline":
     cypher.create_noun_article_relationships(nphrase)
-
-##############################
-### query ###
-##############################
-
-progress_bar.progress(40, text="Create query nodes...")
-
-if DATA_LOAD != "Offline":
-    if DATA_TYPE == "URL":
-        for QUERY_NAME, QUERY_URL in QUERY_DICT.items():
-            cypher.create_query_node(QUERY_NAME, QUERY_URL)
-
-progress_bar.progress(50, text="Set phrase and salience properties (Query)...")
-    
-# set phrase and salience properties (Query)
-if DATA_LOAD == "Semi-Online":
-    cypher.set_phrase_salience_properties_csv(f"{param.DATA_DIR}{DATA}.csv", query_node=True)
-elif DATA_LOAD == "Online":
-    cypher.set_phrase_salience_properties_gcp(GCP_API_KEY, query_node=True)
-elif DATA_LOAD == "On-the-fly":
-    cypher.set_phrase_salience_properties_spacy(LANGUAGE, WORD_CLASS, PIPELINE_SIZE, nphrase, query_node=True)
-
-progress_bar.progress(60, text="Create noun-article relationships (Query)...")
-
-# create noun-article relationships (Query)
-if DATA_LOAD != "Offline":
     cypher.create_noun_article_relationships(nphrase, query_node=True)
 
 ##############################
 ### create article-article relationships ###
 ##############################
 
-progress_bar.progress(70, text="Create article-article relationships...")
+progress_bar.progress(40, text="Create article-article relationships...")
 
 if DATA_LOAD != "Offline":
     cypher.create_article_article_relationships(nphrase)
@@ -108,13 +88,15 @@ if DATA_LOAD != "Offline":
 ### project graph to memory ###
 ##############################
 
-progress_bar.progress(80, text="Project graph to memory...")
+progress_bar.progress(50, text="Project graph to memory...")
 
 ##############################
 ### graph statistics ###
 ##############################
 
 G, result = flow.project_graph()
+
+progress_bar.progress(60, text="Write node similarity...")
 
 ##############################
 ### node similarity (JACCARD) ###
@@ -148,7 +130,7 @@ if DATA_LOAD != "Offline":
 ### 1. node embedding ###
 ##############################
 
-progress_bar.progress(90, text="Node embedding...")
+progress_bar.progress(70, text="Node embedding...")
 
 if DATA_LOAD != "Offline":
     result_fastRP_stream, result_node2vec_stream, result_hashgnn_stream, result_fastRP_mutate, result_node2vec_mutate, result_hashgnn_mutate = flow.node_embedding(G)
@@ -156,6 +138,8 @@ if DATA_LOAD != "Offline":
 ##############################
 ### 2. kNN ###
 ##############################
+    
+progress_bar.progress(80, text="kNN...")
 
 if DATA_LOAD != "Offline":
     result_kNN = flow.kNN(G)
@@ -169,6 +153,8 @@ result_fastrp, result_node2vec, result_hashgnn = cypher.evaluate_embedding_knn()
 ##############################
 ### export to csv in import/ ###
 ##############################
+
+progress_bar.progress(90, text="Show graph statistics...")
 
 st.divider()
 
