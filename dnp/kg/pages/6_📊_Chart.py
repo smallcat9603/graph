@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.ticker import PercentFormatter
 
-def plot_dict_bar(xlabel="xlabel", ylabel="ylabel", legend=[], avg=False, percent=False, text=False, xlog=False, ylog=False, f=0, **dict): #dict={A:[], B:[]}
+def plot_dict_bar(xlabel="xlabel", ylabel="ylabel", xmin=0.0, xmax=1.0, ymin=0.0, ymax=1.0, legend=[], avg=False, percent=False, text=False, xlog=False, ylog=False, fontsize=12, f=0, **dict): #dict={A:[], B:[]}
     fig, ax = plt.subplots()
 
     firstkey, firstvalue = list(dict.items())[0]
@@ -29,18 +29,22 @@ def plot_dict_bar(xlabel="xlabel", ylabel="ylabel", legend=[], avg=False, percen
     if text == True:
         for a, b in textlist:
             if percent == True:
-                ax.text(a, b, '%.1f%%'%(b*100), ha="center", va="bottom", fontsize=12)
+                ax.text(a, b, '%.1f%%'%(b*100), ha="center", va="bottom", fontsize=fontsize)
             else:
-                ax.text(a, b, f'%.{f}f'%(b), ha="center", va="bottom", fontsize=12)
+                ax.text(a, b, f'%.{f}f'%(b), ha="center", va="bottom", fontsize=fontsize)
     ax.set(xticks=x, xticklabels=keys)
     ax.set_xlabel(xlabel)
     ax.set_ylabel(ylabel)
+    if xmin != 0.0 or xmax != 1.0:
+        ax.set_xlim(xmin, xmax)
+    if ymin != 0.0 or ymax != 1.0:
+        ax.set_ylim(ymin, ymax)
     if xlog == True:
         ax.set_xscale('log')
     if ylog == True:
         ax.set_yscale('log')
     if len(legend) == ncol:
-        ax.legend(legend, loc='upper left', ncol=ncol//2+1)
+        ax.legend(legend, loc='upper left', fontsize=fontsize, ncol=ncol)
 
     ax.spines['left'].set_color('black')
     ax.spines['left'].set_linewidth(1)
@@ -51,7 +55,7 @@ def plot_dict_bar(xlabel="xlabel", ylabel="ylabel", legend=[], avg=False, percen
     ax.spines['bottom'].set_color('black')
     ax.spines['bottom'].set_linewidth(1)
     if percent == True:
-        ax.yaxis.set_major_formatter(PercentFormatter(xmax=1.0, decimals=1))
+        ax.yaxis.set_major_formatter(PercentFormatter(xmax=xmax, decimals=1))
 
     st.pyplot(fig) 
 
@@ -94,6 +98,21 @@ plot_dict_bar(xlabel="Number of Phrases Extracted",
               n80=[104143.2], 
               n90=[112897.6], 
               n100=[140090.0], 
+              )
+
+st.caption("pipeline size = small, medium, large (C-1, nphrase=50, Noun, cosine, exponential)")
+plot_dict_bar(xlabel="Model Size", 
+              ylabel="Graph Construction Time (ms)", 
+            #   legend=["Local"], 
+              avg=False, 
+              percent=False, 
+              text=True, 
+              xlog=False, 
+              ylog=False, 
+              f=0,
+              Small=[30792.0],
+              Medium=[34128.8],
+              Large=[37316.0],
               )
 
 st.divider()
@@ -245,4 +264,42 @@ plot_dict_bar(xlabel="Top-k Rank",
               p10=[0.9309694198312977],
               p15=[0.9363462634037488],
               p20=[0.9433186157074812], 
+              )
+
+st.caption("pipeline size = small, medium, large (C-1, nphrase=50, noun, p=20, linear)")
+plot_dict_bar(xlabel="Top-k Rank", 
+              ylabel="nDCG", 
+              ymin=0.994,
+              ymax=1.0009,
+              legend=["Small (10MB+)", "Medium (40MB+)", "Large (500MB+)"], 
+              avg=False, 
+              percent=False, 
+              text=True, 
+              xlog=False, 
+              ylog=False, 
+              fontsize=6,
+              f=4,
+              p5=[0.9956739705604392, 1.0, 1.0],
+              p10=[0.9996499504487203, 1.0, 1.0],
+              p15=[0.9971651664269762, 0.9976597469242784, 1.0],
+              p20=[0.9990413117479767, 0.9996886009091426, 1.0], 
+              )
+
+st.caption("pipeline size = small, medium, large (C-1, nphrase=50, noun, p=20, exponential)")
+plot_dict_bar(xlabel="Top-k Rank", 
+              ylabel="nDCG", 
+              ymin=0.994,
+              ymax=1.0009,
+              legend=["Small (10MB+)", "Medium (40MB+)", "Large (500MB+)"], 
+              avg=False, 
+              percent=False, 
+              text=True, 
+              xlog=False, 
+              ylog=False, 
+              fontsize=6,
+              f=4,
+              p5=[0.9953907760423011, 1.0, 1.0],
+              p10=[0.9996275873241606, 1.0, 1.0],
+              p15=[0.9971319582033891, 0.9976501591381657, 1.0],
+              p20=[0.9990158577522739, 0.9996875308478789, 1.0], 
               )

@@ -41,7 +41,7 @@ def set_param(DATA):
     PIPELINE_SIZE = expander_keywords.radio("Pipeline size", 
                            ["Small", "Medium", "Large"], 
                            horizontal=True, 
-                           captions=["10M+", "40M+", "500M+"])
+                           captions=["10MB+", "40MB+", "500MB+"])
 
     run_disabled = False
     if "data" in st.session_state and st.session_state["data"] != DATA:

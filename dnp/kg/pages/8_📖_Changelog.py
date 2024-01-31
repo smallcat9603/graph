@@ -1,6 +1,8 @@
 import streamlit as st
 
 st.markdown("""
+            ## 240131
+            - Added nDCG chart for different model sizes
             ## 240130
             - Optimized parameter form (added On-the-fly and hid Verbose)
             - Added On-the-fly (spaCy)
