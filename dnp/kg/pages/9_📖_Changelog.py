@@ -1,6 +1,8 @@
 import streamlit as st
 
 st.markdown("""
+            ## 240202
+            - Added Embedding
             ## 240131
             - Added nDCG chart for different model sizes
             ## 240130
