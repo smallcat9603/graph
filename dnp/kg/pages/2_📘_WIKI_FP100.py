@@ -14,7 +14,7 @@ st.info("This database includes wikipedia pages of 100 football players.")
 nphrase, DATA_TYPE, DATA_LOAD, GCP_API_KEY, WORD_CLASS, PIPELINE_SIZE = flow.set_param(DATA)
 
 QUERY_DICT = {} # query dict {QUERY_NAME: QUERY_URL}
-DATA_URL = f"{param.DATA_DIR}wikidata_footballplayer_100.csv"
+DATA_URL = f"{param.DIR}wikidata_footballplayer_100.csv"
 QUERY_DICT["Thierry Henry"] = "https://en.wikipedia.org/wiki/Thierry_Henry"
 
 ##############################
@@ -55,8 +55,8 @@ if DATA_LOAD != "Offline":
 progress_bar.progress(20, text="Set phrase and salience properties...")
 
 if DATA_LOAD == "Semi-Online":
-    result_set_phrase_salience_properties_csv = cypher.set_phrase_salience_properties_csv(f"{param.DATA_DIR}{DATA}.csv")
-    cypher.set_phrase_salience_properties_csv(f"{param.DATA_DIR}{DATA}.csv", query_node=True)
+    result_set_phrase_salience_properties_csv = cypher.set_phrase_salience_properties_csv(f"{param.DIR}{DATA}.csv")
+    cypher.set_phrase_salience_properties_csv(f"{param.DIR}{DATA}.csv", query_node=True)
 elif DATA_LOAD == "Online":
     result_set_phrase_salience_properties_gcp = cypher.set_phrase_salience_properties_gcp(GCP_API_KEY)
     cypher.set_phrase_salience_properties_gcp(GCP_API_KEY, query_node=True)

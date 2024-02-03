@@ -61,13 +61,13 @@ def post_process():
 
 def import_graph_data(DATA):
     query = "CALL apoc.import.csv(["
-    for idx, node in enumerate(param.FILE_NODES):
-        query += f"{{fileName: '{param.DATA_DIR}{DATA}.nodes.{node}.csv', labels: ['{node}']}}, "
-        if idx == len(param.FILE_NODES)-1:
+    for idx, node in enumerate(param.NODES):
+        query += f"{{fileName: '{param.DIR}{DATA}.nodes.{node}.csv', labels: ['{node}']}}, "
+        if idx == len(param.NODES)-1:
             query = query[:-2] + "], ["
-    for idx, relationship in enumerate(param.FILE_RELATIONSHIPS):
-        query += f"{{fileName: '{param.DATA_DIR}{DATA}.relationships.{relationship}.csv', type: '{relationship}'}}, "
-        if idx == len(param.FILE_RELATIONSHIPS)-1:
+    for idx, relationship in enumerate(param.RELATIONSHIPS):
+        query += f"{{fileName: '{param.DIR}{DATA}.relationships.{relationship}.csv', type: '{relationship}'}}, "
+        if idx == len(param.RELATIONSHIPS)-1:
             query = query[:-2] + "], {})"
     result = run(query)
     post_process()

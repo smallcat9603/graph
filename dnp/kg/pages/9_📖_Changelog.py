@@ -1,6 +1,8 @@
 import streamlit as st
 
 st.markdown("""
+            ## 240203
+            - Dropped constraint if exists (otherwise indexes exist even when nodes have been already deleted)
             ## 240202
             - Added Embedding
             ## 240131
