@@ -1,5 +1,6 @@
 from graphdatascience import GraphDataScience
 import streamlit as st
+from pages.lib import param
 
 ##############################
 ### neo4j desktop v5.11.0 ###
@@ -49,6 +50,10 @@ if st.button("Reset", type="primary"):
         G.drop()    
     query = """
     MATCH (n) DETACH DELETE n
+    """
+    cypher(query)
+    query = f"""
+    DROP CONSTRAINT {param.CONSTRAINT} IF EXISTS
     """
     cypher(query)
     st.cache_data.clear() # clear cache data via @st.cache_data, not including st.session_state

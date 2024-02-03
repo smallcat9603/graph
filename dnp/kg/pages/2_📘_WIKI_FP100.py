@@ -21,7 +21,7 @@ QUERY_DICT["Thierry Henry"] = "https://en.wikipedia.org/wiki/Thierry_Henry"
 ### Import CSV ###
 ##############################
 
-cypher.create_constraint()
+cypher.create_constraint(param.CONSTRAINT)
 if DATA_LOAD == "Offline":
     result_import_graph_data = cypher.import_graph_data(DATA)
 

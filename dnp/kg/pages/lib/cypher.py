@@ -5,9 +5,9 @@ from pages.lib import param, flow
 def run(query):
     return st.session_state["gds"].run_cypher(query)
 
-def create_constraint():
-    query = """
-    CREATE CONSTRAINT id_unique IF NOT EXISTS 
+def create_constraint(constraint_name):
+    query = f"""
+    CREATE CONSTRAINT {constraint_name} IF NOT EXISTS 
     For (a:Article) REQUIRE a.url IS UNIQUE;
     """
     run(query)
@@ -431,3 +431,17 @@ def interact_naive_by_salience():
     result = run(query)
     st.write(result)
     return query
+
+def get_node_labels():
+    query = """
+    CALL db.labels()
+    """
+    result = run(query)
+    return result
+
+def get_rel_types():
+    query = """
+    CALL db.relationshipTypes()
+    """
+    result = run(query)
+    return result
