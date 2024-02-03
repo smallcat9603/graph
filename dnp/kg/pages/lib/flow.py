@@ -61,12 +61,12 @@ def set_param(DATA):
 
     return nphrase, DATA_TYPE, DATA_LOAD, GCP_API_KEY, WORD_CLASS, PIPELINE_SIZE
 
-def project_graph():
-    node_projection = ["Query", "Article", "Noun"]
+def project_graph(node_label_list, relationship_type, relationship_property_list):
+    node_projection = node_label_list
     # # why raising error "java.lang.UnsupportedOperationException: Loading of values of type StringArray is currently not supported" ???
     # node_projection = {"Query": {"properties": 'phrase'}, "Article": {"properties": 'phrase'}, "Noun": {}}
     relationship_projection = {
-        "CONTAINS": {"orientation": "UNDIRECTED", "properties": ["rank", "score", "weight"]},
+        relationship_type: {"orientation": "UNDIRECTED", "properties": relationship_property_list},
         # "CORRELATES": {"orientation": "UNDIRECTED", "properties": ["common"]} # Unsupported type [TEXT_ARRAY] of value StringArray[DNP]. Please use a numeric property.
         }
     # # how to project node properties???

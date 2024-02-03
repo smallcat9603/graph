@@ -94,7 +94,10 @@ progress_bar.progress(50, text="Project graph to memory...")
 ### graph statistics ###
 ##############################
 
-G, result = flow.project_graph()
+node_label_list = ["Query", "Article", "Noun"]
+relationship_type = "CONTAINS"
+relationship_property_list = ["rank", "score", "weight"]
+G, result = flow.project_graph(node_label_list, relationship_type, relationship_property_list)
 
 progress_bar.progress(60, text="Write node similarity...")
 
