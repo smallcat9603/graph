@@ -1,6 +1,5 @@
 from graphdatascience import GraphDataScience
 import streamlit as st
-from pages.lib import param
 
 ##############################
 ### neo4j desktop v5.11.0 ###
@@ -28,6 +27,11 @@ st.session_state["user"] = st.secrets[neo4j_server+"_USER"]
 st.session_state["password"] = st.secrets[neo4j_server+"_PASSWORD"]
 st.session_state["gds"] = GraphDataScience(st.session_state["host"], auth=(st.session_state["user"], st.session_state["password"]))
 
+st.session_state["dir"] = "https://raw.githubusercontent.com/smallcat9603/graph/main/dnp/kg/data/"
+st.session_state["constraint"] = "ID_UNIQUE"
+st.session_state["fn_node"] = ["Article", "Noun", "Query"]
+st.session_state["fn_relationship"] =["CONTAINS", "CORRELATES", "SIMILAR_JACCARD", "SIMILAR_OVERLAP", "SIMILAR_COSINE", "SIMILAR_FASTRP", "SIMILAR_NODE2VEC", "SIMILAR_HASHGNN"]
+
 st.success(f"Connection successful to GDBS server: {st.session_state['host']}") 
 st.info(f"GDS version: {st.session_state['gds'].version()}")
 st.session_state["graph_name"] = "testgraph" # project graph name
@@ -53,7 +57,7 @@ if st.button("Reset", type="primary"):
     """
     cypher(query)
     query = f"""
-    DROP CONSTRAINT {param.CONSTRAINT} IF EXISTS
+    DROP CONSTRAINT {st.session_state["constraint"]} IF EXISTS
     """
     cypher(query)
     st.cache_data.clear() # clear cache data via @st.cache_data, not including st.session_state

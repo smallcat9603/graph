@@ -2,7 +2,7 @@ import streamlit as st
 import os
 import re
 import time
-from pages.lib import cypher, param, flow
+from pages.lib import cypher, flow
 
 ##############################
 ### Setting param ###
@@ -23,7 +23,7 @@ if DATA_TYPE == "TXT":
     QUERY_DICT["C-3"] = DATA_URL + "C-3.txt"
     QUERY_DICT["C-4"] = DATA_URL + "C-4.txt"
 elif DATA_TYPE == "URL":
-    DATA_URL = f"{param.DIR}articles.csv"
+    DATA_URL = f"{st.session_state['dir']}articles.csv"
     QUERY_DICT["C-1"] = "https://www.holdings.toppan.com/ja/news/2023/10/newsrelease231004_1.html"
     QUERY_DICT["C-2"] = "https://www.holdings.toppan.com/ja/news/2023/10/newsrelease231004_2.html"
     QUERY_DICT["C-3"] = "https://www.holdings.toppan.com/ja/news/2023/10/newsrelease231004_3.html"
@@ -33,7 +33,7 @@ elif DATA_TYPE == "URL":
 ### Import CSV ###
 ##############################
 
-cypher.create_constraint(param.CONSTRAINT)
+cypher.create_constraint(st.session_state["constraint"])
 if DATA_LOAD == "Offline":
     result_import_graph_data = cypher.import_graph_data(DATA)
 
@@ -89,8 +89,8 @@ if DATA_LOAD != "Offline":
 progress_bar.progress(20, text="Set phrase and salience properties...")
 
 if DATA_LOAD == "Semi-Online":
-    result_set_phrase_salience_properties_csv = cypher.set_phrase_salience_properties_csv(f"{param.DIR}{DATA}.csv")
-    cypher.set_phrase_salience_properties_csv(f"{param.DIR}{DATA}.csv", query_node=True)
+    result_set_phrase_salience_properties_csv = cypher.set_phrase_salience_properties_csv(f"{st.session_state['dir']}{DATA}.csv")
+    cypher.set_phrase_salience_properties_csv(f"{st.session_state['dir']}{DATA}.csv", query_node=True)
 elif DATA_LOAD == "Online":
     result_set_phrase_salience_properties_gcp = cypher.set_phrase_salience_properties_gcp(GCP_API_KEY)
     cypher.set_phrase_salience_properties_gcp(GCP_API_KEY, query_node=True)

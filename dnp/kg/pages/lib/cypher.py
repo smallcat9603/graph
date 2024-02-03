@@ -1,9 +1,31 @@
 import streamlit as st
-from pages.lib import param, flow
+from pages.lib import flow
 
 @st.cache_data
 def run(query):
     return st.session_state["gds"].run_cypher(query)
+
+def get_node_labels():
+    query = """
+    CALL db.labels()
+    """
+    result = run(query)
+    return list(result["label"])
+
+def get_relationship_types():
+    query = """
+    CALL db.relationshipTypes()
+    """
+    result = run(query)
+    return list(result["relationshipType"])
+
+def get_relationship_properties(rel):
+    query = f"""
+    MATCH ()-[r:{rel}]->()
+    RETURN DISTINCT keys(r) AS properties
+    """
+    result = run(query)
+    return list(result["properties"])
 
 def create_constraint(constraint_name):
     query = f"""
@@ -60,14 +82,17 @@ def post_process():
     run(query) 
 
 def import_graph_data(DATA):
+    nodes = st.session_state["fn_node"]
+    relationships = st.session_state["fn_relationship"]
+    dir = st.session_state["dir"]
     query = "CALL apoc.import.csv(["
-    for idx, node in enumerate(param.NODES):
-        query += f"{{fileName: '{param.DIR}{DATA}.nodes.{node}.csv', labels: ['{node}']}}, "
-        if idx == len(param.NODES)-1:
+    for idx, node in enumerate(nodes):
+        query += f"{{fileName: '{dir}{DATA}.nodes.{node}.csv', labels: ['{node}']}}, "
+        if idx == len(nodes)-1:
             query = query[:-2] + "], ["
-    for idx, relationship in enumerate(param.RELATIONSHIPS):
-        query += f"{{fileName: '{param.DIR}{DATA}.relationships.{relationship}.csv', type: '{relationship}'}}, "
-        if idx == len(param.RELATIONSHIPS)-1:
+    for idx, relationship in enumerate(relationships):
+        query += f"{{fileName: '{dir}{DATA}.relationships.{relationship}.csv', type: '{relationship}'}}, "
+        if idx == len(relationships)-1:
             query = query[:-2] + "], {})"
     result = run(query)
     post_process()
@@ -431,17 +456,3 @@ def interact_naive_by_salience():
     result = run(query)
     st.write(result)
     return query
-
-def get_node_labels():
-    query = """
-    CALL db.labels()
-    """
-    result = run(query)
-    return result
-
-def get_rel_types():
-    query = """
-    CALL db.relationshipTypes()
-    """
-    result = run(query)
-    return result
