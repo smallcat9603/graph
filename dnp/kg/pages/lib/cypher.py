@@ -25,7 +25,9 @@ def get_relationship_properties(rel):
     RETURN DISTINCT keys(r) AS properties
     """
     result = run(query)
-    return list(result["properties"])
+    result = result["properties"][0]
+    result = [value for value in result if isinstance(value, str) and not value.startswith("__csv_")]
+    return result
 
 def create_constraint(constraint_name):
     query = f"""
@@ -455,3 +457,13 @@ def interact_naive_by_salience():
     result = run(query)
     st.write(result)
     return query
+
+def free_up_db():
+    query = """
+    MATCH (n) DETACH DELETE n
+    """
+    run(query)
+    query = f"""
+    DROP CONSTRAINT {st.session_state["constraint"]} IF EXISTS
+    """
+    run(query)

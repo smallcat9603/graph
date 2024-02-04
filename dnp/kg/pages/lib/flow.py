@@ -341,3 +341,9 @@ def get_nodes_relationships_csv(file):
     relationships = [value[1:] if value.startswith(":") else value for value in relationships]
 
     return nodes, relationships
+
+def drop_memory_graph(graph_name):
+    exists_result = st.session_state["gds"].graph.exists(graph_name)
+    if exists_result["exists"]:
+        G = st.session_state["gds"].graph.get(graph_name)
+        G.drop()  
