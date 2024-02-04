@@ -29,8 +29,6 @@ st.session_state["gds"] = GraphDataScience(st.session_state["host"], auth=(st.se
 
 st.session_state["dir"] = "https://raw.githubusercontent.com/smallcat9603/graph/main/dnp/kg/data/"
 st.session_state["constraint"] = "ID_UNIQUE"
-st.session_state["fn_node"] = ["Article", "Noun", "Query"]
-st.session_state["fn_relationship"] =["CONTAINS", "CORRELATES", "SIMILAR_JACCARD", "SIMILAR_OVERLAP", "SIMILAR_COSINE", "SIMILAR_FASTRP", "SIMILAR_NODE2VEC", "SIMILAR_HASHGNN"]
 
 st.success(f"Connection successful to GDBS server: {st.session_state['host']}") 
 st.info(f"GDS version: {st.session_state['gds'].version()}")

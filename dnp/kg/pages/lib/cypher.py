@@ -82,8 +82,7 @@ def post_process():
     run(query) 
 
 def import_graph_data(DATA):
-    nodes = st.session_state["fn_node"]
-    relationships = st.session_state["fn_relationship"]
+    nodes, relationships = flow.get_nodes_relationships_csv(f"{st.session_state['dir']}{DATA}.csv")
     dir = st.session_state["dir"]
     query = "CALL apoc.import.csv(["
     for idx, node in enumerate(nodes):

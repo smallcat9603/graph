@@ -1,6 +1,7 @@
 import streamlit as st
 import matplotlib.pyplot as plt
 import numpy as np
+import pandas as pd
 import spacy
 from collections import Counter
 from pages.lib import cypher
@@ -324,3 +325,19 @@ def extract_keywords(_nlp, text, word_class, n):
     top_keywords = keyword_freq.most_common(n) 
     
     return top_keywords
+
+@st.cache_data
+def get_nodes_relationships_csv(file):
+    df = pd.read_csv(file)
+    header_node = "_labels"
+    header_relationship = "_type"
+
+    nodes = df[header_node].unique().tolist()
+    nodes = [value for value in nodes if isinstance(value, str)]
+    nodes = [value[1:] if value.startswith(":") else value for value in nodes]
+
+    relationships = df[header_relationship].unique().tolist()
+    relationships = [value for value in relationships if isinstance(value, str)]
+    relationships = [value[1:] if value.startswith(":") else value for value in relationships]
+
+    return nodes, relationships
