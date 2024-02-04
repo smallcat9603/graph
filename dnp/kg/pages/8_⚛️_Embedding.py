@@ -3,101 +3,53 @@ import altair as alt
 import numpy as np
 import pandas as pd
 from sklearn.manifold import TSNE
-from pages.lib import cypher
+from pages.lib import cypher, flow
 
 
-def get_node_labels():
-    label_ls = []
-    label_type_query = """CALL db.labels()"""
-    result = cypher.run(label_type_query)
-    for el in result:
-        #st.write(el[0])
-        label_ls.append(el[0])
-    return label_ls
+if 'data' not in st.session_state:
+   st.title("No Graph Data")
+   st.warning("You should load graph data first!", icon='⚠')
+   st.stop()
+else:
+   st.title(f"{st.session_state['data']} Dataset Embedding Visualizer")
 
-def get_rel_types():
-    rel_ls = []
-    rel_type_query = """CALL db.relationshipTypes()"""
-    result = cypher.run(rel_type_query)
-    for el in result:
-        rel_ls.append(el[0])
-    return rel_ls
+st.divider()
+st.header("Get graph list")
 
-def get_graph_list():
-    graph_ls = []
-    list_graph_query = """CALL gds.graph.list()"""
-    existing_graphs = cypher.run(list_graph_query)
-    if existing_graphs is not None:
-        for el in existing_graphs:
-            graph_ls.append(el[1])
-    return graph_ls
-
-############################## 
-
-##### Get listing of graphs
-
-intro_text = """
-# Introduction
-
-This is an embedding visualizer for the Neo4j Graph Data Science Game of Thrones graph.
-It is intended to be run in a free [Neo4j Sandbox](dev.neo4j.com/sandbox) instance.
-See the repository [README](https://github.com/cj2001/social_media_streamlit/blob/main/README.md) 
-for more information on how to create a Sandbox and populate it with the graph.
-
-The graph we will be working with is the monopartite, undirected graph of `(Person)-[:INTERACTS]-(Person)`.
-Using this graph, we will explore the graph embeddings using the FastRP and node2vec algorithms.  Most,
-but not all, of the hyperparameters are included so you can get a feel for how each impacts the
-overall embedding results.  The goal is to observe the embedding difference of dead (index label = 0) and
-non-dead (index label = 1) characters with the hope that we can create differentiable clusters.
-
-**This is not an all-inclusive approach and much will be added to this dashboard over time!!!**
-"""
-
-st.markdown(intro_text)
-
-st.markdown("""---""")
-
-st.header('Graph management')
-
-if st.button('Get graph list'):
-    graph_ls = get_graph_list()
+if st.button("Get graph list"):
+    graph_ls = st.session_state["gds"].graph.list()["graphName"]
     if len(graph_ls) > 0:
         for el in graph_ls:
-            st.write(el)
+            st.info(el)
     else:
-        st.write('There are currently no graphs in memory.')
-
-st.markdown("""---""")
+        st.info('There are currently no graphs in memory.')
 
 ##### Create in-memory graphs
+        
+st.divider()
+st.header("Create in-memory graph")
 
-create_graph = st.text_input('Name of graph to be created: ')
-if st.button('Create in-memory graph'):
-    create_graph_query = """CALL gds.graph.create(
-                                '%s', 
-                                'Person', 
-                                {
-                                    INTERACTS_WITH: {
-                                            type: 'INTERACTS',
-                                            orientation: 'UNDIRECTED'
-                                        }
-                                }
-                            )
-                        """ % (create_graph)
-    result = cypher.run(create_graph_query)
-    st.write('Graph ', result[0][2], 'has ', result[0][3], 'nodes and ', result[0][4],' relationships.')
+nodes = cypher.get_node_labels()
+relationships = cypher.get_relationship_types()
 
-st.markdown("""---""")
+node_label_list = st.multiselect("Node Labels", nodes, nodes)
+relationship_type = st.selectbox("Relationship Type", relationships)
+relationship_properties = cypher.get_relationship_properties(relationship_type)
+relationship_property_list = st.multiselect("Relationship Properties", relationship_properties, relationship_properties)
+
+if st.button("Create in-memory graph"):
+    G, result = flow.project_graph(node_label_list, relationship_type, relationship_property_list)
+    st.info(f"Graph {st.session_state['graph_name']} has {G.node_count()} nodes and {G.relationship_count()} relationships.")
 
 ##### Drop in-memory graph
+    
+st.divider()
+st.header("Drop in-memory graph")
 
-drop_graph = st.selectbox('Choose an graph to drop: ', get_graph_list())
+drop_graph = st.selectbox('Choose an graph to drop: ', st.session_state["gds"].graph.list()["graphName"])
 if st.button('Drop in-memory graph'):
-    drop_graph_query = f"""CALL gds.graph.drop('{drop_graph}')"""
-    result = cypher.run(drop_graph_query)
-    st.write('Graph ', result[0][0],' has been dropped.')
-
-st.markdown("""---""")
+    flow.drop_memory_graph(drop_graph)
+    st.info(f"Graph {drop_graph} has been dropped.")
 
 ##############################
 #
@@ -110,7 +62,6 @@ def create_graph_df():
     df = pd.DataFrame([dict(_) for _ in cypher.run(df_query)])
 
     return df
-
 
 def create_tsne_plot(emb_name='p.n2v_emb', n_components=2):
     tsne_query = """MATCH (p:Person) RETURN p.name AS name, p.death_year AS death_year, {} AS vec
@@ -139,8 +90,7 @@ col1, col2 = st.columns((1, 2))
 #####
 
 with col1:
-    #emb_graph = st.text_input('Enter graph name for embedding creation:')
-    emb_graph = st.selectbox('Enter graph name for embedding creation: ', get_graph_list())
+    emb_graph = st.selectbox('Enter graph name for embedding creation: ', st.session_state["gds"].graph.list()["graphName"])
 
 ##### FastRP embedding creation
 
@@ -154,16 +104,14 @@ with col1:
         frp_seed = st.slider('Random seed', value=42, min_value=1, max_value=99)
 
         if st.button('Create FastRP embedding'):
-            frp_query = """CALL gds.fastRP.write('%s', {
-                            embeddingDimension: %d,
-                            iterationWeights: [%f, %f, %f],
-                            normalizationStrength: %f,
-                            randomSeed: %d,
+            frp_query = f"""CALL gds.fastRP.write('{emb_graph}', {
+                            embeddingDimension: {frp_dim},
+                            iterationWeights: [{frp_it_weight1}, {frp_it_weight1}, {frp_it_weight1}],
+                            normalizationStrength: {frp_norm},
+                            randomSeed: {frp_seed},
                             writeProperty: 'frp_emb'
             })
-            """ % (emb_graph, frp_dim, frp_it_weight1, 
-                   frp_it_weight2, frp_it_weight3, frp_norm, 
-                   frp_seed)
+            """
             result = cypher.run(frp_query)
 
 ##### node2vec embedding creation
@@ -183,24 +131,21 @@ with col1:
         n2v_seed = st.slider('Random seed:', value=42, min_value=1, max_value=99)
 
         if st.button('Create node2vec embedding'):
-            n2v_query = """CALL gds.node2vec.write('%s', {
-                            embeddingDimension: %d,
-                            walkLength: %d,
-                            walksPerNode: %d,
-                            inOutFactor: %f,
-                            returnFactor: %f,
-                            negativeSamplingRate: %d,
-                            iterations: %d,
-                            initialLearningRate: %f,
-                            minLearningRate: %f,
-                            walkBufferSize: %d,
-                            randomSeed: %d,
+            n2v_query = f"""CALL gds.node2vec.write('{emb_graph}', {
+                            embeddingDimension: {n2v_dim},
+                            walkLength: {n2v_walk_length},
+                            walksPerNode: {n2v_walks_node},
+                            inOutFactor: {n2v_io_factor},
+                            returnFactor: {n2v_ret_factor},
+                            negativeSamplingRate: {n2v_neg_samp_rate},
+                            iterations: {n2v_iterations},
+                            initialLearningRate: {n2v_init_lr},
+                            minLearningRate: {n2v_min_lr},
+                            walkBufferSize: {n2v_walk_bs},
+                            randomSeed: {n2v_seed},
                             writeProperty: 'n2v_emb'
             })
-            """ % (emb_graph, n2v_dim, n2v_walk_length,
-                   n2v_walks_node, n2v_io_factor, n2v_ret_factor,
-                   n2v_neg_samp_rate, n2v_iterations, n2v_init_lr,
-                   n2v_min_lr, n2v_walk_bs, n2v_seed)
+            """
             result = cypher.run(n2v_query)
 
     st.markdown("---")
