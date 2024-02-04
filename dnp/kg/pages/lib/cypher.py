@@ -467,3 +467,9 @@ def free_up_db():
     DROP CONSTRAINT {st.session_state["constraint"]} IF EXISTS
     """
     run(query)
+
+def runFile(file_cypher):
+    query = f"""
+    CALL apoc.cypher.runFile("{file_cypher}")
+    """
+    run(query)

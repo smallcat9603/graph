@@ -3,6 +3,7 @@ import streamlit as st
 st.markdown("""
             ## 230204
             - Added get_nodes_relationships_csv(file)
+            - Used cypher file to construct graph
             ## 240203
             - Dropped constraint if exists (otherwise indexes exist even when nodes have been already deleted)
             - Deleted pages.lib.param

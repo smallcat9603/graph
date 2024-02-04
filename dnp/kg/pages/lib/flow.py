@@ -6,6 +6,29 @@ import spacy
 from collections import Counter
 from pages.lib import cypher
 
+def select_dataset():
+    form = st.form("dataset")
+    DATA = form.radio("Select one dataset", 
+                    ["euro_roads"], 
+                    captions=["The dataset contains 894 towns, 39 countries, and 1,250 roads connecting them."])
+    
+    run_disabled = False
+    if "data" in st.session_state and st.session_state["data"] != DATA:
+        run_disabled = True
+        form.warning("Please 'Reset' the database status first before you 'Run'!", icon='⚠')
+
+    if form.form_submit_button("Run", type="primary", disabled=run_disabled):
+        if DATA == "euro_roads":
+            file_cypher = "https://raw.githubusercontent.com/smallcat9603/graph/main/cypher/euro_roads.cypher"
+
+        cypher.runFile(file_cypher)
+        st.session_state["data"] = DATA
+    else:
+        if "data" not in st.session_state or st.session_state["data"] != DATA:
+            st.stop()
+
+    return DATA
+
 def set_param(DATA):
     st.title("Parameters")
     form = st.form("parameters")
