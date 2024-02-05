@@ -88,6 +88,7 @@ def set_param(DATA):
 def project_graph(node_label_list, relationship_type, relationship_property_list):
     node_projection = node_label_list
     # # why raising error "java.lang.UnsupportedOperationException: Loading of values of type StringArray is currently not supported" ???
+    # # update: only numerical property values are supported
     # node_projection = {"Query": {"properties": 'phrase'}, "Article": {"properties": 'phrase'}, "Noun": {}}
     relationship_projection = {
         relationship_type: {"orientation": "UNDIRECTED", "properties": relationship_property_list},

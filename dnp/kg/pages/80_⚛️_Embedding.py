@@ -14,15 +14,14 @@ else:
    st.title(f"{st.session_state['data']} Dataset Embedding Visualizer")
 
 st.divider()
-st.header("Get graph list")
+st.header("In-memory graph list")
 
-if st.button("Get graph list"):
-    graph_ls = st.session_state["gds"].graph.list()["graphName"]
-    if len(graph_ls) > 0:
-        for el in graph_ls:
-            st.info(el)
-    else:
-        st.info('There are currently no graphs in memory.')
+graph_ls = st.session_state["gds"].graph.list()["graphName"]
+if len(graph_ls) > 0:
+    for el in graph_ls:
+        st.info(el)
+else:
+    st.info('There are currently no graphs in memory.')
 
 ##### Create in-memory graphs
         

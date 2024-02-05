@@ -27,6 +27,8 @@ def get_relationship_properties(rel):
     result = run(query)
     result = result["properties"][0]
     result = [value for value in result if isinstance(value, str) and not value.startswith("__csv_")]
+
+    result = [prop for prop in result if type(run(f"MATCH ()-[r:{rel}]->() RETURN r.{prop} AS propertyValue")["propertyValue"][0]) != str]
     return result
 
 def create_constraint(constraint_name):
