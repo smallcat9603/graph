@@ -1,6 +1,8 @@
 import streamlit as st
 
 st.markdown("""
+            ## 230205
+            - Used t-SNE to plot high-dimension embedding
             ## 230204
             - Added get_nodes_relationships_csv(file)
             - Used cypher file to construct graph
