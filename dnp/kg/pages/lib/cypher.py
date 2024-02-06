@@ -494,3 +494,23 @@ def update_emb_status(emb):
     if len(result) == 0:
         status = False
     return status
+
+def get_emb_result(emb):
+    if st.session_state['data'] == "euro_roads":
+        query = f"""
+        MATCH (p:Place)-[:IN_COUNTRY]->(country)
+        WHERE country.code IN ["E", "GB", "F", "TR", "I", "D", "GR"]
+        RETURN p.name AS name, p.{emb} AS emb, country.code AS category
+        """
+    elif st.session_state['data'] == "DNP":
+        query = f"""
+        MATCH (n) WHERE 'Article' IN labels(n) OR 'Query' IN labels(n)
+        RETURN n.name AS name, n.{emb} AS emb, left(n.name,1) AS category
+        """        
+    else:
+        st.error("No embedding data is loaded!")
+        st.stop()
+
+    result = run(query)
+
+    return result

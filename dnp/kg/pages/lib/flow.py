@@ -4,6 +4,8 @@ import numpy as np
 import pandas as pd
 import spacy
 from collections import Counter
+from sklearn.manifold import TSNE
+import altair as alt
 from pages.lib import cypher
 
 def select_dataset():
@@ -371,3 +373,25 @@ def drop_memory_graph(graph_name):
     if exists_result["exists"]:
         G = st.session_state["gds"].graph.get(graph_name)
         G.drop()  
+
+def plot_tsne_alt(result):
+    X = np.array(list(result["emb"]))
+    X_embedded = TSNE(n_components=2, random_state=6).fit_transform(X)
+
+    names = result["name"]
+    categories = result["category"]
+    tsne_df = pd.DataFrame(data = {
+        "name": names,
+        "category": categories,
+        "x": [value[0] for value in X_embedded],
+        "y": [value[1] for value in X_embedded],
+    })
+
+    chart = alt.Chart(tsne_df).mark_circle(size=60).encode(
+    x="x",
+    y="y",
+    color="category",
+    tooltip=["name", "category"],
+    ).properties(width=700, height=400)
+
+    st.altair_chart(chart, use_container_width=True)

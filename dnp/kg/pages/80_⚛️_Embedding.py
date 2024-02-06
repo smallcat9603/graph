@@ -1,10 +1,5 @@
 import streamlit as st
-import altair as alt
-import numpy as np
-import pandas as pd
-from sklearn.manifold import TSNE
 from pages.lib import cypher, flow
-
 
 if 'data' not in st.session_state:
    st.title("No Graph Data")
@@ -178,35 +173,6 @@ if form.form_submit_button("Plot embeddings"):
         st.warning("You should do embedding first!")
         st.stop()
 
-    if st.session_state['data'] == "euro_roads":
-        query = f"""
-        MATCH (p:Place)-[:IN_COUNTRY]->(country)
-        WHERE country.code IN ["E", "GB", "F", "TR", "I", "D", "GR"]
-        RETURN p.name AS name, p.{emb} AS emb, country.code AS category
-        """
-    else:
-        st.error("No embedding data is loaded!")
-        st.stop()
+    result = cypher.get_emb_result(emb)
 
-    result = cypher.run(query)
-
-    X = np.array(list(result["emb"]))
-    X_embedded = TSNE(n_components=2, random_state=6).fit_transform(X)
-
-    names = result["name"]
-    categories = result["category"]
-    tsne_df = pd.DataFrame(data = {
-        "name": names,
-        "category": categories,
-        "x": [value[0] for value in X_embedded],
-        "y": [value[1] for value in X_embedded],
-    })
-
-    chart = alt.Chart(tsne_df).mark_circle(size=60).encode(
-    x="x",
-    y="y",
-    color="category",
-    tooltip=["name", "category"]
-    ).properties(width=700, height=400)
-
-    st.altair_chart(chart, use_container_width=True)
+    flow.plot_tsne_alt(result)
