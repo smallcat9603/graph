@@ -175,11 +175,16 @@ st.header("t-SNE")
 emb = st.selectbox("Choose an embedding to plot: ", ["emb_frp", "emb_n2v"])
 
 if st.button("Plot embeddings"):
-    query = f"""
-    MATCH (p:Place)-[:IN_COUNTRY]->(country)
-    WHERE country.code IN ["E", "GB", "F", "TR", "I", "D", "GR"]
-    RETURN p.name AS name, p.{emb} AS emb, country.code AS category
-    """
+    if st.session_state['data'] == "euro_roads":
+        query = f"""
+        MATCH (p:Place)-[:IN_COUNTRY]->(country)
+        WHERE country.code IN ["E", "GB", "F", "TR", "I", "D", "GR"]
+        RETURN p.name AS name, p.{emb} AS emb, country.code AS category
+        """
+    else:
+        st.error("No embedding data is loaded!")
+        st.stop()
+
     result = cypher.run(query)
 
     X = np.array(list(result["emb"]))
@@ -191,14 +196,14 @@ if st.button("Plot embeddings"):
         "name": names,
         "category": categories,
         "x": [value[0] for value in X_embedded],
-        "y": [value[1] for value in X_embedded]
+        "y": [value[1] for value in X_embedded],
     })
 
     chart = alt.Chart(tsne_df).mark_circle(size=60).encode(
-    x='x',
-    y='y',
-    color='category',
-    tooltip=['name', 'category']
+    x="x",
+    y="y",
+    color="category",
+    tooltip=["name", "category"]
     ).properties(width=700, height=400)
 
     st.altair_chart(chart, use_container_width=True)
