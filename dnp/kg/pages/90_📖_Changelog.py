@@ -1,6 +1,8 @@
 import streamlit as st
 
 st.markdown("""
+            ## 230206
+            - Added pages of Project and Node Similarity
             ## 230205
             - Used t-SNE to plot high-dimension embedding
             ## 230204
