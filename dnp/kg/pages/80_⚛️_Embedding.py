@@ -172,7 +172,17 @@ if st.button("Drop embeddings"):
 st.divider()
 st.header("t-SNE")
 
-emb = st.selectbox("Choose an embedding to plot: ", ["emb_frp", "emb_n2v"])
+emb_list = []
+for e in ["emb_frp", "emb_n2v"]:
+    query = f"""
+    MATCH (n) WHERE n.{e} IS NOT NULL
+    RETURN n
+    """
+    result = st.session_state["gds"].run_cypher(query)  
+    if len(result) > 0:
+        emb_list.append(e)
+
+emb = st.selectbox("Choose an embedding to plot: ", emb_list)
 
 if st.button("Plot embeddings"):
     if st.session_state['data'] == "euro_roads":
