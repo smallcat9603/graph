@@ -144,12 +144,7 @@ with st.expander("node2vec embedding creation"):
             writeProperty="emb_n2v",           
         )
 
-query = """
-MATCH (n)
-RETURN n.name AS name, n.emb_frp AS emb_frp, n.emb_n2v AS emb_n2v
-"""
-result = st.session_state["gds"].run_cypher(query)
-
+result = cypher.update_emb_result()
 st.write(result)
 
 # if st.button("Drop embeddings"):
@@ -179,12 +174,7 @@ emb = form.radio("Choose an embedding to plot:",
                     horizontal=True)
 
 if form.form_submit_button("Plot embeddings"):
-    query = f"""
-    MATCH (n) WHERE n.{emb} IS NOT NULL
-    RETURN n
-    """
-    result = st.session_state["gds"].run_cypher(query)  
-    if len(result) == 0:
+    if cypher.update_emb_status(emb) == False:
         st.warning("You should do embedding first!")
         st.stop()
 

@@ -475,3 +475,22 @@ def runFile(file_cypher):
     CALL apoc.cypher.runFile("{file_cypher}")
     """
     run(query)
+
+def update_emb_result():
+    query = """
+    MATCH (n)
+    RETURN n.name AS name, n.emb_frp AS emb_frp, n.emb_n2v AS emb_n2v
+    """
+    result = st.session_state["gds"].run_cypher(query)
+    return result
+
+def update_emb_status(emb):
+    query = f"""
+    MATCH (n) WHERE n.{emb} IS NOT NULL
+    RETURN n
+    """
+    result = st.session_state["gds"].run_cypher(query) 
+    status = True 
+    if len(result) == 0:
+        status = False
+    return status
