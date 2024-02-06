@@ -144,24 +144,24 @@ with st.expander("node2vec embedding creation"):
             writeProperty="emb_n2v",           
         )
 
-if st.button("Show embeddings"):
-    query = """
-    MATCH (n)
-    RETURN n.name AS name, n.emb_frp AS emb_frp, n.emb_n2v AS emb_n2v
-    """
-    result = cypher.run(query)
+query = """
+MATCH (n)
+RETURN n.name AS name, n.emb_frp AS emb_frp, n.emb_n2v AS emb_n2v
+"""
+result = st.session_state["gds"].run_cypher(query)
 
-    st.write(result)
+st.write(result)
 
-if st.button("Drop embeddings"):
-    query = """
-    MATCH (n) REMOVE n.emb_frp
-    """
-    cypher.run(query)  
-    query = """
-    MATCH (n) REMOVE n.emb_n2v
-    """
-    cypher.run(query)       
+# if st.button("Drop embeddings"):
+#     query = """
+#     MATCH (n) REMOVE n.emb_frp
+#     """
+#     cypher.run(query)  
+#     query = """
+#     MATCH (n) REMOVE n.emb_n2v
+#     """
+#     cypher.run(query)     
+
 
 #####
 #
@@ -172,17 +172,7 @@ if st.button("Drop embeddings"):
 st.divider()
 st.header("t-SNE")
 
-emb_list = []
-for e in ["emb_frp", "emb_n2v"]:
-    query = f"""
-    MATCH (n) WHERE n.{e} IS NOT NULL
-    RETURN n
-    """
-    result = st.session_state["gds"].run_cypher(query)  
-    if len(result) > 0:
-        emb_list.append(e)
-
-emb = st.selectbox("Choose an embedding to plot: ", emb_list)
+emb = st.selectbox("Choose an embedding to plot: ", ["emb_frp", "emb_n2v"])
 
 if st.button("Plot embeddings"):
     if st.session_state['data'] == "euro_roads":
