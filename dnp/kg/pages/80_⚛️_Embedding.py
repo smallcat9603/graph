@@ -172,9 +172,22 @@ st.write(result)
 st.divider()
 st.header("t-SNE")
 
-emb = st.selectbox("Choose an embedding to plot: ", ["emb_frp", "emb_n2v"])
+form = st.form("t-SNE")
+emb = form.radio("Choose an embedding to plot:", 
+                    ["emb_frp", "emb_n2v"], 
+                    captions=["FastRP", "node2vec"],
+                    horizontal=True)
 
-if st.button("Plot embeddings"):
+if form.form_submit_button("Plot embeddings"):
+    query = f"""
+    MATCH (n) WHERE n.{emb} IS NOT NULL
+    RETURN n
+    """
+    result = st.session_state["gds"].run_cypher(query)  
+    if len(result) == 0:
+        st.warning("You should do embedding first!")
+        st.stop()
+
     if st.session_state['data'] == "euro_roads":
         query = f"""
         MATCH (p:Place)-[:IN_COUNTRY]->(country)
