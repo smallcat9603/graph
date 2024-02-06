@@ -59,6 +59,7 @@ if len(graph_ls) > 0:
         st.info(f"Graph {g}: {G.node_count()} nodes and {G.relationship_count()} relationships")  
 else:
     st.info('There are currently no graphs in memory.')
+    st.stop()
 
 ##############################
 #
@@ -69,7 +70,7 @@ else:
 st.divider()
 st.header("Embedding")
 
-emb_graph = st.selectbox('Enter graph name for embedding creation: ', st.session_state["gds"].graph.list()["graphName"])
+emb_graph = st.selectbox('Enter graph name for embedding creation: ', graph_ls)
 G = st.session_state["gds"].graph.get(emb_graph)
 
 rprop = [None]
@@ -177,12 +178,12 @@ if st.button("Plot embeddings"):
     query = f"""
     MATCH (p:Place)-[:IN_COUNTRY]->(country)
     WHERE country.code IN ["E", "GB", "F", "TR", "I", "D", "GR"]
-    RETURN p.name AS place, p.{emb} AS embedding, country.code AS country
+    RETURN p.name AS place, p.{emb} AS emb, country.code AS country
     """
     result = cypher.run(query)
 
-    X = np.array(list(result["embedding"]))
-    X_embedded = TSNE(n_components=2, random_state=6).fit_transform(np.array(list(result["embedding"])))
+    X = np.array(list(result["emb"]))
+    X_embedded = TSNE(n_components=2, random_state=6).fit_transform(X)
 
     places = result["place"]
     countries = result["country"]
