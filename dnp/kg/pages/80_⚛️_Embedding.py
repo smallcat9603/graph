@@ -178,18 +178,18 @@ if st.button("Plot embeddings"):
     query = f"""
     MATCH (p:Place)-[:IN_COUNTRY]->(country)
     WHERE country.code IN ["E", "GB", "F", "TR", "I", "D", "GR"]
-    RETURN p.name AS place, p.{emb} AS emb, country.code AS country
+    RETURN p.name AS name, p.{emb} AS emb, country.code AS category
     """
     result = cypher.run(query)
 
     X = np.array(list(result["emb"]))
     X_embedded = TSNE(n_components=2, random_state=6).fit_transform(X)
 
-    places = result["place"]
-    countries = result["country"]
+    names = result["name"]
+    categories = result["category"]
     tsne_df = pd.DataFrame(data = {
-        "place": places,
-        "country": countries,
+        "name": names,
+        "category": categories,
         "x": [value[0] for value in X_embedded],
         "y": [value[1] for value in X_embedded]
     })
@@ -197,8 +197,8 @@ if st.button("Plot embeddings"):
     chart = alt.Chart(tsne_df).mark_circle(size=60).encode(
     x='x',
     y='y',
-    color='country',
-    tooltip=['place', 'country']
+    color='category',
+    tooltip=['name', 'category']
     ).properties(width=700, height=400)
 
     st.altair_chart(chart, use_container_width=True)
