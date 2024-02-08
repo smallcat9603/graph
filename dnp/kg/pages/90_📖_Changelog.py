@@ -1,6 +1,9 @@
 import streamlit as st
 
 st.markdown("""
+            ## 230208
+            - Modulized
+            - Showed FastRP and node2vec embeddings and added t-SNE plots
             ## 230206
             - Added pages of Project and Node Similarity
             ## 230205

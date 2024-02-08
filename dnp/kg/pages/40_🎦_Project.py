@@ -19,6 +19,12 @@ if len(graph_ls) > 0:
     for g in graph_ls:
         G = st.session_state["gds"].graph.get(g)
         st.success(f"Graph {g}: {G.node_count()} nodes and {G.relationship_count()} relationships")  
+        st.subheader("Graph Statistics (project)")
+        col1, col2, col3, col4 = st.columns(4)
+        col1.metric("# Nodes", str(G.node_count()))
+        col2.metric("# Edges", str(G.relationship_count()))
+        col3.metric("Density", str(G.density()))
+        col4.metric("Memory", str(G.memory_usage())) 
 else:
     st.warning('There are currently no graphs in memory.')
 

@@ -30,6 +30,8 @@ nprop = []
 for nl in G.node_labels():
     nprop += G.node_properties(nl)
 
+embs = ["emb_frp", "emb_n2v"]
+
 ##### FastRP embedding creation
 
 # Description of hyperparameters can be found: https://neo4j.com/docs/graph-data-science/current/algorithms/fastrp/#algorithms-embeddings-fastrp
@@ -46,8 +48,7 @@ with st.expander('FastRP embedding creation'):
     feat_prop = st.selectbox("Feature properties", nprop)
 
     if st.button("Create FastRP embedding"):
-        st.session_state["gds"].fastRP.write(
-            G,
+        flow.node_emb_frp(G, 
             embeddingDimension=frp_dim,
             normalizationStrength=frp_norm,
             iterationWeights=[frp_it_weight1,frp_it_weight2,frp_it_weight3],
@@ -55,8 +56,7 @@ with st.expander('FastRP embedding creation'):
             relationshipWeightProperty=rel_weight_prop,
             randomSeed=frp_seed,
             propertyRatio=prop_rat,
-            featureProperties=feat_prop,
-            writeProperty="emb_frp",            
+            featureProperties=feat_prop
         )
 
 ##### node2vec embedding creation
@@ -77,7 +77,7 @@ with st.expander("node2vec embedding creation"):
     rel_weight_prop = st.selectbox("Relationship weight property", rprop, key="n2v_rwp")
 
     if st.button("Create node2vec embedding"):
-        st.session_state["gds"].node2vec.write(
+        flow.node_emb_n2v(
             G,
             embeddingDimension=n2v_dim,
             walkLength=n2v_walk_length,
@@ -90,22 +90,16 @@ with st.expander("node2vec embedding creation"):
             minLearningRate=n2v_min_lr,
             walkBufferSize=n2v_walk_bs,
             relationshipWeightProperty=rel_weight_prop,
-            randomSeed=n2v_seed,
-            writeProperty="emb_n2v",           
+            randomSeed=n2v_seed          
         )
 
-result = cypher.update_emb_result()
-st.write(result)
+with st.expander("Show & Drop embeddings"):
+    if st.button("Show embeddings"):
+        result = cypher.update_emb_result()
+        st.write(result)
 
-# if st.button("Drop embeddings"):
-#     query = """
-#     MATCH (n) REMOVE n.emb_frp
-#     """
-#     cypher.run(query)  
-#     query = """
-#     MATCH (n) REMOVE n.emb_n2v
-#     """
-#     cypher.run(query)     
+    if st.button("Drop embeddings"):
+        cypher.drop_emb()    
 
 
 #####
@@ -119,7 +113,7 @@ st.header("t-SNE")
 
 form = st.form("t-SNE")
 emb = form.radio("Choose an embedding to plot:", 
-                    ["emb_frp", "emb_n2v"], 
+                    embs, 
                     captions=["FastRP", "node2vec"],
                     horizontal=True)
 
@@ -131,3 +125,37 @@ if form.form_submit_button("Plot embeddings"):
     result = cypher.get_emb_result(emb)
 
     flow.plot_tsne_alt(result)
+
+#####
+#
+# kNN
+#
+#####  
+
+st.divider()
+st.header("kNN") 
+
+if "query" not in st.session_state:
+    st.warning(f"No query node in dataset {st.session_state['data']}!")
+    st.stop()
+
+embs_done = []
+for emb in embs:
+    if cypher.update_emb_status(emb):
+        embs_done.append(emb)
+
+if len(embs_done) == 0:
+    st.warning("You should do embedding first!")
+else:
+    for emb in embs_done:
+        if st.session_state["load"] != "Offline": 
+            result = flow.kNN(G, emb)
+            with st.expander("Debug Info"):
+                st.write(f"Relationships produced: {result['relationshipsWritten']}")
+                st.write(f"Nodes compared: {result['nodesCompared']}")
+                st.write(f"Mean similarity: {result['similarityDistribution']['mean']}")
+
+        st.subheader(emb)
+        result = cypher.interact_knn(emb, st.session_state["query"]) # evaluate (node embedding + knn)
+        with st.expander("Debug Info"):
+            st.code(result)

@@ -320,35 +320,32 @@ def save_graph_data(data):
     st.write(result_allinone)
     # st.write(result_bulkimport)
 
-def evaluate_embedding_knn():
-    # fastrp
-    query = """
-    MATCH (q:Query)-[r:SIMILAR_FASTRP]-(a:Article)
+def interact_knn(emb, QUERY_DICT):
+    col1, col2 = st.columns(2)
+    with col1:
+        query_node = st.selectbox("Query node", tuple(QUERY_DICT.keys()), key=f"{emb}_col1")
+    with col2:
+        limit = st.selectbox("Limit", ("5", "10", "15", "20"), key=f"{emb}_col2")
+    st.write("The top-" + limit + " similar nodes for query " + query_node + " are ranked as follows (" + emb + ")")
+    if emb == "emb_frp":
+        m = "FASTRP"
+    elif emb == "emb_n2v":
+        m = "NODE2VEC"
+    elif emb == "emb_hgn":
+        m = "HASHGNN"
+    query = f"""
+    MATCH (q:Query)-[r:SIMILAR_{m}]-(a:Article) WHERE q.name = "{query_node}"
     RETURN q.name AS Query, a.name AS Article, a.url AS URL, a.grp AS Group, a.grp1 AS Group1, r.score AS Similarity
-    ORDER BY Query, Similarity DESC
-    LIMIT 10
-    """
-    result_fastrp = run(query)
-
-    # node2vec
-    query = """
-    MATCH (q:Query)-[r:SIMILAR_NODE2VEC]-(a:Article)
-    RETURN q.name AS Query, a.name AS Article, a.url AS URL, a.grp AS Group, a.grp1 AS Group1, r.score AS Similarity
-    ORDER BY Query, Similarity DESC
-    LIMIT 10
-    """
-    result_node2vec = run(query)
-
-    # hashgnn
-    query = """
-    MATCH (q:Query)-[r:SIMILAR_HASHGNN]-(a:Article)
-    RETURN q.name AS Query, a.name AS Article, a.url AS URL, a.grp AS Group, a.grp1 AS Group1, r.score AS Similarity
-    ORDER BY Query, Similarity DESC
-    LIMIT 10
-    """
-    result_hashgnn = run(query)
-
-    return result_fastrp, result_node2vec, result_hashgnn
+    ORDER BY Similarity DESC
+    LIMIT {limit}
+    """   
+    result = run(query)
+    tab01, tab02 = st.tabs(["Chart", "Table"]) 
+    with tab01:
+        flow.plot_similarity(result, query_node, emb, limit)
+    with tab02:
+        st.write(result)
+    return query
 
 def interact_node_similarity(QUERY_DICT):
     col1, col2, col3 = st.columns(3)
@@ -484,6 +481,16 @@ def update_emb_result():
     result = st.session_state["gds"].run_cypher(query)
     return result
 
+def drop_emb():
+    query = """
+    MATCH (n) REMOVE n.emb_frp
+    """
+    st.session_state["gds"].run_cypher(query)  
+    query = """
+    MATCH (n) REMOVE n.emb_n2v
+    """
+    st.session_state["gds"].run_cypher(query) 
+
 def update_emb_status(emb):
     query = f"""
     MATCH (n) WHERE n.{emb} IS NOT NULL
@@ -506,7 +513,12 @@ def get_emb_result(emb):
         query = f"""
         MATCH (n) WHERE 'Article' IN labels(n) OR 'Query' IN labels(n)
         RETURN n.name AS name, n.{emb} AS emb, left(n.name,1) AS category
-        """        
+        """      
+    elif st.session_state['data'].startswith("P100") or st.session_state['data'].startswith("FP100"):
+        query = f"""
+        MATCH (n) WHERE 'Article' IN labels(n) OR 'Query' IN labels(n)
+        RETURN n.name AS name, n.{emb} AS emb, labels(n)[0] AS category
+        """         
     else:
         st.error("No embedding data is loaded!")
         st.stop()

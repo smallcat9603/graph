@@ -181,7 +181,70 @@ def write_nodesimilarity_ppr(_G, QUERY_DICT):
     return results
 
 @st.cache_data
-def node_embedding(_G):
+def node_emb_frp(_G, embeddingDimension, normalizationStrength, iterationWeights, nodeSelfInfluence, relationshipWeightProperty, randomSeed, propertyRatio, featureProperties):
+    st.session_state["gds"].fastRP.mutate( # for downstream knn
+        _G,
+        embeddingDimension=embeddingDimension,
+        normalizationStrength=normalizationStrength,
+        iterationWeights=iterationWeights,
+        nodeSelfInfluence=nodeSelfInfluence,
+        relationshipWeightProperty=relationshipWeightProperty,
+        randomSeed=randomSeed,
+        propertyRatio=propertyRatio,
+        featureProperties=featureProperties,
+        mutateProperty="emb_frp"            
+    )
+    st.session_state["gds"].fastRP.write( # for t-SNE
+        _G,
+        embeddingDimension=embeddingDimension,
+        normalizationStrength=normalizationStrength,
+        iterationWeights=iterationWeights,
+        nodeSelfInfluence=nodeSelfInfluence,
+        relationshipWeightProperty=relationshipWeightProperty,
+        randomSeed=randomSeed,
+        propertyRatio=propertyRatio,
+        featureProperties=featureProperties,
+        writeProperty="emb_frp"          
+    )
+
+@st.cache_data
+def node_emb_n2v(_G, embeddingDimension, walkLength, walksPerNode, inOutFactor, returnFactor, negativeSamplingRate, iterations, initialLearningRate, minLearningRate, walkBufferSize, relationshipWeightProperty,randomSeed):
+    st.session_state["gds"].node2vec.mutate( # for downstream knn
+        _G,
+        embeddingDimension=embeddingDimension,
+        walkLength=walkLength,
+        walksPerNode=walksPerNode,
+        inOutFactor=inOutFactor,
+        returnFactor=returnFactor,
+        negativeSamplingRate=negativeSamplingRate,
+        iterations=iterations,
+        initialLearningRate=initialLearningRate,
+        minLearningRate=minLearningRate,
+        walkBufferSize=walkBufferSize,
+        relationshipWeightProperty=relationshipWeightProperty,
+        randomSeed=randomSeed,
+        mutateProperty="emb_n2v",           
+    )
+    st.session_state["gds"].node2vec.write( # for t-SNE
+        _G,
+        embeddingDimension=embeddingDimension,
+        walkLength=walkLength,
+        walksPerNode=walksPerNode,
+        inOutFactor=inOutFactor,
+        returnFactor=returnFactor,
+        negativeSamplingRate=negativeSamplingRate,
+        iterations=iterations,
+        initialLearningRate=initialLearningRate,
+        minLearningRate=minLearningRate,
+        walkBufferSize=walkBufferSize,
+        relationshipWeightProperty=relationshipWeightProperty,
+        randomSeed=randomSeed,
+        writeProperty="emb_n2v",           
+    )
+                    
+# not in use
+@st.cache_data
+def node_emb(_G):
     # fastrp
     result_fastRP_stream = st.session_state["gds"].fastRP.stream(
         _G,
@@ -247,53 +310,29 @@ def node_embedding(_G):
     return result_fastRP_stream, result_node2vec_stream, result_hashgnn_stream, result_fastRP_mutate, result_node2vec_mutate, result_hashgnn_mutate
 
 @st.cache_data
-def kNN(_G):
-    # fastrp
+def kNN(_G, emb, topK=100, writeProperty="score", sourceNodeFilter="Query", targetNodeFilter="Article"):
+    if emb == "emb_frp": # fastrp
+        writeRelationshipType = "SIMILAR_FASTRP"
+    elif emb == "emb_n2v": # node2vec  
+        writeRelationshipType = "SIMILAR_NODE2VEC" 
+    elif emb == "emb_hgn":
+        writeRelationshipType="SIMILAR_HASHGNN"
+
     result = st.session_state["gds"].knn.filtered.write(
         _G,
-        topK=10,
-        nodeProperties=["embedding_fastrp"],
+        topK=topK,
+        nodeProperties=[emb], # in-memory (used mutate, not write)
         randomSeed=42, # Note that concurrency must be set to 1 when setting this parameter.
         concurrency=1,
         sampleRate=1.0,
         deltaThreshold=0.0,
-        writeRelationshipType="SIMILAR_FASTRP",
-        writeProperty="score",
-        sourceNodeFilter="Query",
-        targetNodeFilter="Article",
-    )
+        writeRelationshipType=writeRelationshipType,
+        writeProperty=writeProperty,
+        sourceNodeFilter=sourceNodeFilter,
+        targetNodeFilter=targetNodeFilter,
+    ) 
 
-    # node2vec
-    result = st.session_state["gds"].knn.filtered.write(
-        _G,
-        topK=10,
-        nodeProperties=["embedding_node2vec"],
-        randomSeed=42, # Note that concurrency must be set to 1 when setting this parameter.
-        concurrency=1,
-        sampleRate=1.0,
-        deltaThreshold=0.0,
-        writeRelationshipType="SIMILAR_NODE2VEC",
-        writeProperty="score",
-        sourceNodeFilter="Query",
-        targetNodeFilter="Article",
-    )
-
-    # hashgnn
-    result = st.session_state["gds"].knn.filtered.write(
-        _G,
-        topK=10,
-        nodeProperties=["embedding_hashgnn"],
-        randomSeed=42, # Note that concurrency must be set to 1 when setting this parameter.
-        concurrency=1,
-        sampleRate=1.0,
-        deltaThreshold=0.0,
-        writeRelationshipType="SIMILAR_HASHGNN",
-        writeProperty="score",
-        sourceNodeFilter="Query",
-        targetNodeFilter="Article",
-    )
-
-    return result
+    return result          
 
 def show_graph_statistics():
     st.title("Graph Statistics")
@@ -395,3 +434,8 @@ def plot_tsne_alt(result):
     ).properties(width=700, height=400)
 
     st.altair_chart(chart, use_container_width=True)
+
+def update_state(DATA, DATA_LOAD, QUERY_DICT):
+    st.session_state["data"] = DATA
+    st.session_state["load"] = DATA_LOAD
+    st.session_state["query"] = QUERY_DICT
