@@ -2,6 +2,8 @@ import streamlit as st
 
 st.markdown("""
             ## 230208
+            - Merged datasets to DATA
+            ## 230207
             - Modulized
             - Showed FastRP and node2vec embeddings and added t-SNE plots
             ## 230206

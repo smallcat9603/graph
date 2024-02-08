@@ -3,33 +3,47 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import spacy
+import time
+import re
 from collections import Counter
 from sklearn.manifold import TSNE
 import altair as alt
 from pages.lib import cypher
 
-def select_dataset():
-    form = st.form("dataset")
-    DATA = form.radio("Select one dataset", 
-                    ["euro_roads"], 
-                    captions=["The dataset contains 894 towns, 39 countries, and 1,250 roads connecting them."])
-    
-    run_disabled = False
-    if "data" in st.session_state and st.session_state["data"] != DATA:
-        run_disabled = True
-        form.warning("Please 'Reset' the database status first before you 'Run'!", icon='⚠')
+def select_data():
 
-    if form.form_submit_button("Run", type="primary", disabled=run_disabled):
-        if DATA == "euro_roads":
-            file_cypher = "https://raw.githubusercontent.com/smallcat9603/graph/main/cypher/euro_roads.cypher"
+    TYPE = st.radio("Select one data type:", 
+                    ["DNP", "WIKI", "CYPHER"], 
+                    horizontal=True,
+                    # label_visibility="collapsed",
+                    )
 
-        cypher.runFile(file_cypher)
-        st.session_state["data"] = DATA
-    else:
-        if "data" not in st.session_state or st.session_state["data"] != DATA:
-            st.stop()
+    if TYPE == "DNP":
+        DATA = st.radio("Select one dataset", 
+                        ["DNP"], 
+                        captions=["This database includes 100 DNP newsreleases, and 4 Toppan newsreleases."],
+                        # label_visibility="collapsed",
+                        )
+        LANGUAGE = "ja"
 
-    return DATA
+    elif TYPE == "WIKI":
+        DATA = st.radio("Select one dataset", 
+                        ["FP100", "P100", "P1000", "P10000"], 
+                        captions=["This database includes wikipedia pages of 100 football players.",
+                                  "This database includes wikipedia pages of 100 persons, consisting of 25 athletes, 25 engineers, 25 actors, and 25 politicians.",
+                                  "This database includes wikipedia pages of 1000 persons, consisting of 100 athletes, 100 engineers, 100 actors, 100 politicians, 100 physicians, 100 scientists, 100 artists, 100 journalists, 100 soldiers, and 100 lawyers.",
+                                  "This database includes wikipedia pages of 10000 persons, consisting of 1000 athletes, 1000 engineers, 1000 actors, 1000 politicians, 1000 physicians, 1000 scientists, 1000 artists, 1000 journalists, 1000 soldiers, and 1000 lawyers."]
+                        )
+        LANGUAGE = "en"
+
+    elif TYPE == "CYPHER":
+        DATA = st.radio("Select one dataset", 
+                        ["euro_roads"], 
+                        captions=["The dataset contains 894 towns, 39 countries, and 1,250 roads connecting them."]
+                        )
+        LANGUAGE = "en"
+
+    return TYPE, DATA, LANGUAGE
 
 def set_param(DATA):
     st.title("Parameters")
@@ -439,3 +453,164 @@ def update_state(DATA, DATA_LOAD, QUERY_DICT):
     st.session_state["data"] = DATA
     st.session_state["load"] = DATA_LOAD
     st.session_state["query"] = QUERY_DICT
+
+def construct_graph_cypher(DATA, LANGUAGE, DATA_URL, QUERY_DICT, nphrase, DATA_TYPE, DATA_LOAD, GCP_API_KEY, WORD_CLASS, PIPELINE_SIZE):
+    ##############################
+    ### Import CSV ###
+    ##############################
+
+    cypher.create_constraint(st.session_state["constraint"])
+    if DATA_LOAD == "Offline":
+        result_import_graph_data = cypher.import_graph_data(DATA)
+
+    ##############################
+    ### Create Article-[Noun]-Article Graph ###
+    ##############################
+
+    st.divider()
+    st.title(f"Progress ({DATA})")
+    progress_bar = st.progress(0, text="Initialize...")
+    start_time = time.perf_counter()
+    container_status = st.container(border=False)
+
+    ##############################
+    ### create url nodes (article, person, ...) ###
+    ##############################
+
+    progress_bar.progress(20, text="Create url nodes...")
+
+    if DATA_LOAD != "Offline":
+        if DATA_TYPE == "TXT":
+            for idx in range(1, 101):
+                node = "B-" + str(idx)
+                file = DATA_URL + node + ".txt"
+                content = ""
+                with open(file, 'r') as f:
+                    content = f.read()
+                    content = re.sub('\n+', ' ', content)
+                query = f"""
+                MERGE (a:Article {{ name: "{node}", url: "{file}", body: "{content}" }})
+                """
+                cypher.run(query)
+            # query
+            for QUERY_NAME, QUERY_URL in QUERY_DICT.items():
+                content = ""
+                with open(QUERY_URL, 'r') as f:
+                    content = f.read()
+                    content = re.sub('\n+', ' ', content)
+                query = f"""
+                MERGE (q:Query {{ name: "{QUERY_NAME}", url: "{QUERY_URL}", body: "{content}" }})
+                """
+                cypher.run(query)
+        else:
+            cypher.load_data_url(DATA_URL)
+            # query
+            for QUERY_NAME, QUERY_URL in QUERY_DICT.items():
+                cypher.create_query_node(QUERY_NAME, QUERY_URL)
+
+    ##############################
+    ### set phrase and salience properties ###
+    ##############################
+    
+    progress_bar.progress(40, text="Set phrase and salience properties...")
+
+    if DATA_LOAD == "Semi-Online":
+        result_set_phrase_salience_properties_csv = cypher.set_phrase_salience_properties_csv(f"{st.session_state['dir']}{DATA}.csv")
+        cypher.set_phrase_salience_properties_csv(f"{st.session_state['dir']}{DATA}.csv", query_node=True)
+    elif DATA_LOAD == "Online":
+        result_set_phrase_salience_properties_gcp = cypher.set_phrase_salience_properties_gcp(GCP_API_KEY)
+        cypher.set_phrase_salience_properties_gcp(GCP_API_KEY, query_node=True)
+    elif DATA_LOAD == "On-the-fly":
+        result_set_phrase_salience_properties_spacy = cypher.set_phrase_salience_properties_spacy(LANGUAGE, WORD_CLASS, PIPELINE_SIZE, nphrase, query_node=False)
+        cypher.set_phrase_salience_properties_spacy(LANGUAGE, WORD_CLASS, PIPELINE_SIZE, nphrase, query_node=True)
+
+    ##############################
+    ### create noun-url relationships ###
+    ##############################
+
+    progress_bar.progress(60, text="Create noun-url relationships...")
+
+    if DATA_LOAD != "Offline":
+        cypher.create_noun_article_relationships(nphrase)
+        cypher.create_noun_article_relationships(nphrase, query_node=True)
+    
+    ##############################
+    ### create article-article relationships ###
+    ##############################
+
+    progress_bar.progress(80, text="Create article-article relationships...")
+
+    if DATA_LOAD != "Offline":
+        cypher.create_article_article_relationships(nphrase)
+        cypher.create_article_article_relationships(nphrase, query_node=True)
+
+    ##############################
+    ### state update ###
+    ##############################
+        
+    update_state(DATA, DATA_LOAD, QUERY_DICT)
+
+    ##############################
+    ### export to csv in import/ ###
+    ##############################
+
+    progress_bar.progress(100, text="Finished. Show graph statistics...")
+
+    end_time = time.perf_counter()
+    execution_time_ms = (end_time - start_time) * 1000
+    container_status.success(f"Loading finished: {execution_time_ms:.1f} ms. Graph data can be queried.")
+
+    st.divider()
+    show_graph_statistics()
+
+    st.caption("Save graph data including nodes and edges into csv files")
+    if st.button("Save graph data (.csv)"):
+        cypher.save_graph_data(DATA)
+
+    ##############################
+    ### Verbose ###
+    ##############################
+
+    with st.expander("Debug Info"):
+        st.header("Data Source")
+        st.write(DATA_URL)
+        st.header("Query Dict")
+        st.table(QUERY_DICT)
+
+        if DATA_LOAD == "Offline":
+            st.info("Importing nodes and relationships from csv files finished")
+            st.write(result_import_graph_data)
+
+        if DATA_LOAD == "Semi-Online":
+            st.header("set phrase salience properties (csv)")
+            st.write(result_set_phrase_salience_properties_csv)
+        elif DATA_LOAD == "Online":
+            st.header("set phrase salience properties (gcp)")
+            st.write(result_set_phrase_salience_properties_gcp)
+        elif DATA_LOAD == "On-the-fly":
+            st.header("set phrase salience properties (spacy)")
+            st.write(result_set_phrase_salience_properties_spacy)
+
+def construct_graph_cypherfile(DATA, LANGUAGE):
+    
+    run_disabled = False
+    if "data" in st.session_state and st.session_state["data"] != DATA:
+        run_disabled = True
+        st.warning("Please 'Reset' the database status first before you 'Run'!", icon='⚠')
+
+    if st.button("Run", type="primary", disabled=run_disabled):
+        if DATA == "euro_roads":
+            file_cypher = "https://raw.githubusercontent.com/smallcat9603/graph/main/cypher/euro_roads.cypher"
+
+        cypher.runFile(file_cypher)
+        st.session_state["data"] = DATA
+    else:
+        if "data" not in st.session_state or st.session_state["data"] != DATA:
+            st.stop()
+
+    st.success(f"Dataset {DATA} is loaded.")
+    show_graph_statistics()
+
+    st.caption("Save graph data including nodes and edges into csv files")
+    if st.button("Save graph data (.csv)"):
+        cypher.save_graph_data(DATA)

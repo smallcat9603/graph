@@ -1,7 +1,12 @@
 import streamlit as st
 from pages.lib import cypher, flow
 
-st.title("Node Similarity")
+if 'data' not in st.session_state:
+   st.title("No Graph Data")
+   st.warning("You should load graph data first!", icon='⚠')
+   st.stop()
+else:
+   st.title(f"Node Similarity ({st.session_state['data']})")
 
 if "query" not in st.session_state:
     st.warning(f"No query node in dataset {st.session_state['data']}!")
@@ -122,4 +127,3 @@ else:
         query_interact_naive_by_salience = cypher.interact_naive_by_salience()
         with st.expander("Debug Info"):
             st.code(query_interact_naive_by_salience)   
-             

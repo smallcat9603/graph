@@ -1,7 +1,12 @@
 import streamlit as st
 from pages.lib import cypher, flow
 
-st.title("In-memory Graph Embedding")
+if 'data' not in st.session_state:
+   st.title("No Graph Data")
+   st.warning("You should load graph data first!", icon='⚠')
+   st.stop()
+else:
+   st.title(f"In-memory Graph Embedding ({st.session_state['data']})")
 
 ##### List in-memory graph
 
