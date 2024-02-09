@@ -8,6 +8,10 @@ import re
 from collections import Counter
 from sklearn.manifold import TSNE
 import altair as alt
+from sklearn import svm
+from sklearn.metrics import accuracy_score
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
 from pages.lib import cypher
 
 def select_data():
@@ -614,3 +618,49 @@ def construct_graph_cypherfile(DATA, LANGUAGE):
     st.caption("Save graph data including nodes and edges into csv files")
     if st.button("Save graph data (.csv)"):
         cypher.save_graph_data(DATA)
+
+def create_X_y(result):
+
+    names = result["name"]
+    categories = result["category"]
+    embs = result["emb"]
+
+    emb_df = pd.DataFrame(data = {
+        "name": names,
+        "category": categories,
+        "emb": embs,
+    })
+
+    emb_df['target'] = pd.factorize(emb_df['category'])[0].astype("float32")
+    y = emb_df['target'].to_numpy()
+    emb_df['X'] = emb_df['emb'].apply(lambda x: np.array(x))
+    X = np.array(emb_df['X'].to_list())
+
+    return X, y
+
+def modeler(emb, k_folds=5, model='linear', show_matrix=True):
+
+    acc_scores = []
+
+    X, y = create_X_y(emb)
+
+    for i in range(k_folds):
+        
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25)
+        clf = svm.SVC(kernel=model, class_weight='balanced')
+        clf.fit(X_train, y_train)
+        pred = clf.predict(X_test)
+
+        acc = accuracy_score(pred, y_test)
+        acc_scores.append(acc)        
+        
+    st.write('Accuracy scores: ', acc_scores)
+    st.write('Mean accuracy: ', np.mean(acc_scores))
+    
+    if show_matrix:
+        fig, ax = plt.subplots()
+        cm = confusion_matrix(y_test, pred, labels=clf.classes_, normalize="true")
+        disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=clf.classes_)
+        disp.plot(ax=ax)
+        st.pyplot(fig)
+        

@@ -106,15 +106,14 @@ with st.expander("Show & Drop embeddings"):
     if st.button("Drop embeddings"):
         cypher.drop_emb()    
 
-
 #####
 #
-# t-SNE
+# t-SNE, ML
 #
 #####
 
 st.divider()
-st.header("t-SNE")
+st.header("t-SNE & ML")
 
 form = st.form("t-SNE")
 emb = form.radio("Choose an embedding to plot:", 
@@ -129,7 +128,11 @@ if form.form_submit_button("Plot embeddings"):
 
     result = cypher.get_emb_result(emb)
 
+    st.subheader("t-SNE")
     flow.plot_tsne_alt(result)
+
+    st.subheader("ML")
+    flow.modeler(result)
 
 #####
 #
