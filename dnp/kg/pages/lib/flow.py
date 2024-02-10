@@ -12,6 +12,7 @@ from sklearn import svm
 from sklearn.metrics import accuracy_score
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
+import optuna
 from pages.lib import cypher
 
 def select_data():
@@ -199,19 +200,20 @@ def write_nodesimilarity_ppr(_G, QUERY_DICT):
     return results
 
 @st.cache_data
-def node_emb_frp(_G, embeddingDimension, normalizationStrength, iterationWeights, nodeSelfInfluence, relationshipWeightProperty, randomSeed, propertyRatio, featureProperties):
-    st.session_state["gds"].fastRP.mutate( # for downstream knn
-        _G,
-        embeddingDimension=embeddingDimension,
-        normalizationStrength=normalizationStrength,
-        iterationWeights=iterationWeights,
-        nodeSelfInfluence=nodeSelfInfluence,
-        relationshipWeightProperty=relationshipWeightProperty,
-        randomSeed=randomSeed,
-        propertyRatio=propertyRatio,
-        featureProperties=featureProperties,
-        mutateProperty="emb_frp"            
-    )
+def node_emb_frp(_G, embeddingDimension, normalizationStrength, iterationWeights, nodeSelfInfluence, relationshipWeightProperty, randomSeed, propertyRatio, featureProperties, downstream=True):
+    if downstream:
+        st.session_state["gds"].fastRP.mutate( # for downstream knn
+            _G,
+            embeddingDimension=embeddingDimension,
+            normalizationStrength=normalizationStrength,
+            iterationWeights=iterationWeights,
+            nodeSelfInfluence=nodeSelfInfluence,
+            relationshipWeightProperty=relationshipWeightProperty,
+            randomSeed=randomSeed,
+            propertyRatio=propertyRatio,
+            featureProperties=featureProperties,
+            mutateProperty="emb_frp"            
+        )
     st.session_state["gds"].fastRP.write( # for t-SNE
         _G,
         embeddingDimension=embeddingDimension,
@@ -226,23 +228,24 @@ def node_emb_frp(_G, embeddingDimension, normalizationStrength, iterationWeights
     )
 
 @st.cache_data
-def node_emb_n2v(_G, embeddingDimension, walkLength, walksPerNode, inOutFactor, returnFactor, negativeSamplingRate, iterations, initialLearningRate, minLearningRate, walkBufferSize, relationshipWeightProperty,randomSeed):
-    st.session_state["gds"].node2vec.mutate( # for downstream knn
-        _G,
-        embeddingDimension=embeddingDimension,
-        walkLength=walkLength,
-        walksPerNode=walksPerNode,
-        inOutFactor=inOutFactor,
-        returnFactor=returnFactor,
-        negativeSamplingRate=negativeSamplingRate,
-        iterations=iterations,
-        initialLearningRate=initialLearningRate,
-        minLearningRate=minLearningRate,
-        walkBufferSize=walkBufferSize,
-        relationshipWeightProperty=relationshipWeightProperty,
-        randomSeed=randomSeed,
-        mutateProperty="emb_n2v",           
-    )
+def node_emb_n2v(_G, embeddingDimension, walkLength, walksPerNode, inOutFactor, returnFactor, negativeSamplingRate, iterations, initialLearningRate, minLearningRate, walkBufferSize, relationshipWeightProperty,randomSeed, downstream=True):
+    if downstream:
+        st.session_state["gds"].node2vec.mutate( # for downstream knn
+            _G,
+            embeddingDimension=embeddingDimension,
+            walkLength=walkLength,
+            walksPerNode=walksPerNode,
+            inOutFactor=inOutFactor,
+            returnFactor=returnFactor,
+            negativeSamplingRate=negativeSamplingRate,
+            iterations=iterations,
+            initialLearningRate=initialLearningRate,
+            minLearningRate=minLearningRate,
+            walkBufferSize=walkBufferSize,
+            relationshipWeightProperty=relationshipWeightProperty,
+            randomSeed=randomSeed,
+            mutateProperty="emb_n2v",           
+        )
     st.session_state["gds"].node2vec.write( # for t-SNE
         _G,
         embeddingDimension=embeddingDimension,
@@ -638,11 +641,11 @@ def create_X_y(result):
 
     return X, y
 
-def modeler(emb, k_folds=5, model='linear', show_matrix=True):
+def modeler(result, k_folds=5, model='linear', show_matrix=True):
 
     acc_scores = []
 
-    X, y = create_X_y(emb)
+    X, y = create_X_y(result)
 
     for i in range(k_folds):
         
@@ -653,14 +656,117 @@ def modeler(emb, k_folds=5, model='linear', show_matrix=True):
 
         acc = accuracy_score(pred, y_test)
         acc_scores.append(acc)        
-        
-    st.write('Accuracy scores: ', acc_scores)
-    st.write('Mean accuracy: ', np.mean(acc_scores))
     
     if show_matrix:
+        st.write('Accuracy scores: ', acc_scores)
+        st.write('Mean accuracy: ', np.mean(acc_scores))
+
         fig, ax = plt.subplots()
         cm = confusion_matrix(y_test, pred, labels=clf.classes_, normalize="true")
         disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=clf.classes_)
         disp.plot(ax=ax)
         st.pyplot(fig)
+    else:
+        return np.mean(acc_scores)
+
+def objective_frp(G, rel_weight_prop, prop_rat, feat_prop):
+    def objective(trial):
+        params = {
+            "embeddingDimension": trial.suggest_int("embeddingDimension", 128, 512, log=True),
+            "normalizationStrength": trial.suggest_float("normalizationStrength", -1.0, 1.0),
+            "iterationWeights1": trial.suggest_float("iterationWeights1", 0.0, 1.0),
+            "iterationWeights2": trial.suggest_float("iterationWeights2", 0.0, 1.0),
+            "iterationWeights3": trial.suggest_float("iterationWeights3", 0.0, 1.0),
+            "nodeSelfInfluence": trial.suggest_float("nodeSelfInfluence", 0.0, 1.0),
+            "randomSeed": trial.suggest_int("randomSeed", 1, 99),
+        }
+
+        frp_dim = params["embeddingDimension"]
+        frp_norm = params["normalizationStrength"]
+        frp_it_weight1 = params["iterationWeights1"]
+        frp_it_weight2 = params["iterationWeights2"]
+        frp_it_weight3 = params["iterationWeights3"]
+        node_self_infl = params["nodeSelfInfluence"]
+        frp_seed = params["randomSeed"]
+
+        node_emb_frp(G, 
+            embeddingDimension=frp_dim,
+            normalizationStrength=frp_norm,
+            iterationWeights=[frp_it_weight1,frp_it_weight2,frp_it_weight3],
+            nodeSelfInfluence=node_self_infl,
+            relationshipWeightProperty=rel_weight_prop,
+            randomSeed=frp_seed,
+            propertyRatio=prop_rat,
+            featureProperties=feat_prop,
+            downstream=False
+        )
+
+        result = cypher.get_emb_result("emb_frp")
+
+        return modeler(result, show_matrix=False)
+    
+    return objective
+
+def objective_n2v(G, rel_weight_prop):
+    def objective(trial):
+        params = {
+            "embeddingDimension": trial.suggest_int("embeddingDimension", 128, 512, log=True),
+            "walkLength": trial.suggest_int("walkLength", 2, 160),
+            "walksPerNode": trial.suggest_int("walksPerNode", 2, 50),
+            "inOutFactor": trial.suggest_float("inOutFactor", 0.001, 1.0, step=0.05),
+            "returnFactor": trial.suggest_float("returnFactor", 0.001, 1.0, step=0.05),
+            "negativeSamplingRate": trial.suggest_int("negativeSamplingRate", 5, 20),
+            "iterations": trial.suggest_int("iterations", 1, 10),
+            # "initialLearningRate": trial.suggest_float("initialLearningRate", 0.001, 0.1),
+            "initialLearningRate": trial.suggest_categorical("initialLearningRate", [0.001, 0.005, 0.01, 0.05, 0.1]),
+            # "minLearningRate": trial.suggest_float("minLearningRate", 0.0001, 0.01),
+            "minLearningRate": trial.suggest_categorical("minLearningRate", [0.0001, 0.0005, 0.001, 0.005, 0.01]),
+            "walkBufferSize": trial.suggest_int("walkBufferSize", 100, 2000),
+            "randomSeed": trial.suggest_int("randomSeed", 1, 99),
+        }
+
+        n2v_dim = params["embeddingDimension"]
+        n2v_walk_length = params["walkLength"]
+        n2v_walks_node = params["walksPerNode"]
+        n2v_io_factor = params["inOutFactor"]
+        n2v_ret_factor = params["returnFactor"]
+        n2v_neg_samp_rate = params["negativeSamplingRate"]
+        n2v_iterations = params["iterations"]
+        n2v_init_lr = params["initialLearningRate"]
+        n2v_min_lr = params["minLearningRate"]
+        n2v_walk_bs = params["walkBufferSize"]
+        n2v_seed  = params["randomSeed"]
         
+        node_emb_n2v(
+            G,
+            embeddingDimension=n2v_dim,
+            walkLength=n2v_walk_length,
+            walksPerNode=n2v_walks_node,
+            inOutFactor=n2v_io_factor,
+            returnFactor=n2v_ret_factor,
+            negativeSamplingRate=n2v_neg_samp_rate,
+            iterations=n2v_iterations,
+            initialLearningRate=n2v_init_lr,
+            minLearningRate=n2v_min_lr,
+            walkBufferSize=n2v_walk_bs,
+            relationshipWeightProperty=rel_weight_prop,
+            randomSeed=n2v_seed,
+            downstream=False         
+        )
+
+        result = cypher.get_emb_result("emb_n2v")
+
+        return modeler(result, show_matrix=False)
+    
+    return objective
+
+
+def show_tuning_result(study):
+    st.write(f"Accuracy: {study.best_trial.value}")
+    st.write(f"Best hyperparameters: {study.best_trial.params}")
+
+    fig = optuna.visualization.plot_optimization_history(study)
+    fig.show()
+
+    fig = optuna.visualization.plot_param_importances(study)
+    fig.show()

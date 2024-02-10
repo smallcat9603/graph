@@ -3,6 +3,7 @@ import streamlit as st
 st.markdown("""
             ## 230209
             - Added ML model
+            - Used optuna to tune hyperparameters
             ## 230208
             - Merged datasets to DATA
             ## 230207

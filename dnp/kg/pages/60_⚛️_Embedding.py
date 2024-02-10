@@ -1,4 +1,5 @@
 import streamlit as st
+import optuna
 from pages.lib import cypher, flow
 
 if 'data' not in st.session_state:
@@ -64,6 +65,26 @@ with st.expander('FastRP embedding creation'):
             featureProperties=feat_prop
         )
 
+    if st.button("Tune hyperparameters (FastRP)"):
+        initial_params_frp = {
+            "embeddingDimension": frp_dim,
+            "normalizationStrength": frp_norm,
+            "iterationWeights1": frp_it_weight1,
+            "iterationWeights2": frp_it_weight2,
+            "iterationWeights3": frp_it_weight3,
+            "nodeSelfInfluence": node_self_infl,
+            "relationshipWeightProperty": rel_weight_prop,
+            "randomSeed": frp_seed,
+            "propertyRatio": prop_rat,
+            "featureProperties": feat_prop
+        }
+
+        study = optuna.create_study(direction="maximize")
+        study.enqueue_trial(initial_params_frp)
+        study.optimize(flow.objective_frp(G, rel_weight_prop, prop_rat, feat_prop), n_trials=100)
+
+        flow.show_tuning_result(study)
+
 ##### node2vec embedding creation
 
 # Description of hyperparameters can be found: https://neo4j.com/docs/graph-data-science/current/algorithms/node2vec/
@@ -97,6 +118,28 @@ with st.expander("node2vec embedding creation"):
             relationshipWeightProperty=rel_weight_prop,
             randomSeed=n2v_seed          
         )
+
+    if st.button("Tune hyperparameters (node2vec)"):
+        initial_params_n2v = {
+            "embeddingDimension": n2v_dim,
+            "walkLength": n2v_walk_length,
+            "walksPerNode": n2v_walks_node,
+            "inOutFactor": n2v_io_factor,
+            "returnFactor": n2v_ret_factor,
+            "negativeSamplingRate": n2v_neg_samp_rate,
+            "iterations": n2v_iterations,
+            "initialLearningRate": n2v_init_lr,
+            "minLearningRate": n2v_min_lr,
+            "walkBufferSize": n2v_walk_bs,
+            "relationshipWeightProperty": rel_weight_prop,
+            "randomSeed": n2v_seed,
+        }
+
+        study = optuna.create_study(direction="maximize")
+        study.enqueue_trial(initial_params_n2v)
+        study.optimize(flow.objective_n2v(G, rel_weight_prop), n_trials=100)
+
+        flow.show_tuning_result(study)
 
 with st.expander("Show & Drop embeddings"):
     if st.button("Show embeddings"):
