@@ -43,8 +43,9 @@ def select_data():
 
     elif TYPE == "CYPHER":
         DATA = st.radio("Select one dataset", 
-                        ["euro_roads"], 
-                        captions=["The dataset contains 894 towns, 39 countries, and 1,250 roads connecting them."]
+                        ["euro_roads", "newfood"], 
+                        captions=["The dataset contains 894 towns, 39 countries, and 1,250 roads connecting them.",
+                                  "The dataset contains nutritional information alongside the ingredients used in 1600+ dishes."]
                         )
         LANGUAGE = "en"
 
@@ -608,6 +609,8 @@ def construct_graph_cypherfile(DATA, LANGUAGE):
     if st.button("Run", type="primary", disabled=run_disabled):
         if DATA == "euro_roads":
             file_cypher = "https://raw.githubusercontent.com/smallcat9603/graph/main/cypher/euro_roads.cypher"
+        elif DATA == "newfood":
+            file_cypher = "https://raw.githubusercontent.com/smallcat9603/graph/main/cypher/newfood.cypher"
 
         cypher.runFile(file_cypher)
         st.session_state["data"] = DATA
