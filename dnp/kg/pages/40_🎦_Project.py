@@ -52,12 +52,16 @@ with col1:
     node_labels = st.multiselect("Node labels", nodes, nodes)
     node_properties = {}
     for node_label in node_labels:
-        node_properties[node_label] = {"properties": cypher.get_node_properties(node_label)}
-
+        properties = cypher.get_node_properties(node_label)
+        node_properties[node_label] = {"properties": properties}
+        st.caption(f"{node_label}: {', '.join(properties)}")
+    
     relationship_types = st.multiselect("Relationship types", relationships, relationships)
     relationship_properties = {}
     for relationship_type in relationship_types:
-        relationship_properties[relationship_type] = {"orientation": "UNDIRECTED", "properties": cypher.get_relationship_properties(relationship_type)}
+        properties = cypher.get_relationship_properties(relationship_type)
+        relationship_properties[relationship_type] = {"orientation": "UNDIRECTED", "properties": properties}
+        st.caption(f"{relationship_type}: {', '.join(properties)}")
 
     st.button("Create in-memory graph", type="secondary", on_click=prj_graph, args=(node_properties, relationship_properties))
   
