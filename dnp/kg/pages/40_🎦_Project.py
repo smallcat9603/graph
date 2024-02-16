@@ -41,33 +41,29 @@ def drop_graph(drop_g):
     if drop_g is not None:
         flow.drop_memory_graph(drop_g)
 
-col1, col2 = st.columns(2)
+st.header("Create in-memory graph")
 
-with col1:
-    st.subheader("Create in-memory graph")
+nodes = cypher.get_node_labels()
+relationships = cypher.get_relationship_types()
 
-    nodes = cypher.get_node_labels()
-    relationships = cypher.get_relationship_types()
+node_labels = st.multiselect("Node labels", nodes, nodes)
+node_properties = {}
+for node_label in node_labels:
+    properties = cypher.get_node_properties(node_label)
+    node_properties[node_label] = {"properties": properties}
+    st.caption(f"{node_label}: {', '.join(properties)}")
 
-    node_labels = st.multiselect("Node labels", nodes, nodes)
-    node_properties = {}
-    for node_label in node_labels:
-        properties = cypher.get_node_properties(node_label)
-        node_properties[node_label] = {"properties": properties}
-        st.caption(f"{node_label}: {', '.join(properties)}")
-    
-    relationship_types = st.multiselect("Relationship types", relationships, relationships)
-    relationship_properties = {}
-    for relationship_type in relationship_types:
-        properties = cypher.get_relationship_properties(relationship_type)
-        relationship_properties[relationship_type] = {"orientation": "UNDIRECTED", "properties": properties}
-        st.caption(f"{relationship_type}: {', '.join(properties)}")
+relationship_types = st.multiselect("Relationship types", relationships, relationships)
+relationship_properties = {}
+for relationship_type in relationship_types:
+    properties = cypher.get_relationship_properties(relationship_type)
+    relationship_properties[relationship_type] = {"orientation": "UNDIRECTED", "properties": properties}
+    st.caption(f"{relationship_type}: {', '.join(properties)}")
 
-    st.button("Create in-memory graph", type="secondary", on_click=prj_graph, args=(node_properties, relationship_properties))
+st.button("Create in-memory graph", type="secondary", on_click=prj_graph, args=(node_properties, relationship_properties))
   
-with col2:
-    st.subheader("Drop in-memory graph")
+st.header("Drop in-memory graph")
 
-    drop_g = st.selectbox('Choose an graph to drop: ', st.session_state["gds"].graph.list()["graphName"])
+drop_g = st.selectbox('Choose an graph to drop: ', st.session_state["gds"].graph.list()["graphName"])
 
-    st.button("Drop in-memory graph", type="secondary", on_click=drop_graph, args=(drop_g,))
+st.button("Drop in-memory graph", type="secondary", on_click=drop_graph, args=(drop_g,))
