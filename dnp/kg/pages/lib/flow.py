@@ -467,7 +467,7 @@ def construct_graph_cypher(DATA, LANGUAGE, DATA_URL, QUERY_DICT, nphrase, DATA_T
     ### Import CSV ###
     ##############################
 
-    cypher.create_constraint(st.session_state["constraint"])
+    cypher.create_constraint("ID_UNIQUE")
     if DATA_LOAD == "Offline":
         result_import_graph_data = cypher.import_graph_data(DATA)
 

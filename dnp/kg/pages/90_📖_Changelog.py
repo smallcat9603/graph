@@ -1,6 +1,9 @@
 import streamlit as st
 
 st.markdown("""
+            ## 230216
+            - Added newfood (Kaggle) dataset
+            - Dropped all constraints when "Reset"
             ## 230209
             - Added ML model
             - Used optuna to tune hyperparameters

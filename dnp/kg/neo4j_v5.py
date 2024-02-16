@@ -29,7 +29,6 @@ st.session_state["password"] = st.secrets[neo4j_server+"_PASSWORD"]
 st.session_state["gds"] = GraphDataScience(st.session_state["host"], auth=(st.session_state["user"], st.session_state["password"]))
 
 st.session_state["dir"] = "https://raw.githubusercontent.com/smallcat9603/graph/main/dnp/kg/data/"
-st.session_state["constraint"] = "ID_UNIQUE"
 
 st.success(f"Connection successful to GDBS server: {st.session_state['host']}") 
 st.info(f"GDS version: {st.session_state['gds'].version()}")

@@ -463,9 +463,17 @@ def free_up_db():
     """
     run(query)
     query = f"""
-    DROP CONSTRAINT {st.session_state["constraint"]} IF EXISTS
+    SHOW CONSTRAINTS
+    YIELD name
+    RETURN name
     """
-    run(query)
+    result = run(query)["name"]
+    for constraint in result:
+        query = f"""
+        DROP CONSTRAINT {constraint} IF EXISTS
+        """
+        run(query)
+
 
 def runFile(file_cypher):
     query = f"""
