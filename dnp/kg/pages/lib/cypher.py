@@ -462,6 +462,7 @@ def free_up_db():
     MATCH (n) DETACH DELETE n
     """
     run(query)
+
     query = f"""
     SHOW CONSTRAINTS
     YIELD name
