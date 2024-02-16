@@ -24,7 +24,7 @@ def get_node_properties(node_label):
 
     result_numeric = []
     for prop in result:
-        value = run(f"MATCH (n:{node_label}) RETURN n.{prop} AS propertyValue")["propertyValue"][0]
+        value = run(f"MATCH (n:{node_label}) RETURN n.`{prop}` AS propertyValue")["propertyValue"][0]
         if isinstance(value, (float, int, numpy.int64)) or (isinstance(value, list) and isinstance(value[0], (float, int, numpy.int64))):
             result_numeric.append(prop)
 
@@ -48,7 +48,7 @@ def get_relationship_properties(rel):
 
     result_numeric = []
     for prop in result:
-        value = run(f"MATCH ()-[r:{rel}]->() RETURN r.{prop} AS propertyValue")["propertyValue"][0]
+        value = run(f"MATCH ()-[r:{rel}]->() RETURN r.`{prop}` AS propertyValue")["propertyValue"][0]
         if isinstance(value, (float, int, numpy.int64)) or (isinstance(value, list) and isinstance(value[0], (float, int, numpy.int64))):
             result_numeric.append(prop)
 
