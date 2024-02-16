@@ -1,4 +1,6 @@
-CALL apoc.schema.assert(null, {Ingredient:['name'], Dish:['id'], DishType:['name']});
+CREATE CONSTRAINT Ingredient_name IF NOT EXISTS FOR (i:Ingredient) REQUIRE i.name IS UNIQUE;
+CREATE CONSTRAINT Dish_id IF NOT EXISTS FOR (d:Dish) REQUIRE d.id IS UNIQUE;
+CREATE CONSTRAINT DishType_name IF NOT EXISTS FOR (d:DishType) REQUIRE d.name IS UNIQUE;
 
 LOAD CSV WITH HEADERS FROM "https://raw.githubusercontent.com/smallcat9603/graph/main/data/newfood.csv" AS row 
 CREATE (d:Dish {id:row.id}) 
