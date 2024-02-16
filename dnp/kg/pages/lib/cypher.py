@@ -12,6 +12,23 @@ def get_node_labels():
     result = run(query)
     return list(result["label"])
 
+def get_node_properties(node_label):
+    query = f"""
+    MATCH (n:{node_label})
+    RETURN DISTINCT keys(n) AS properties
+    """
+    result = run(query)
+    result = result["properties"][0]
+    result = [value for value in result if isinstance(value, str) and not value.startswith("__csv_")]
+
+    result_numeric = []
+    for prop in result:
+        value = run(f"MATCH (n:{node_label}) RETURN n.{prop} AS propertyValue")["propertyValue"][0]
+        if isinstance(value, (int, float)) or (isinstance(value, list) and isinstance(value[0], (int, float))):
+            result_numeric.append(prop)
+
+    return result_numeric
+
 def get_relationship_types():
     query = """
     CALL db.relationshipTypes()
@@ -28,8 +45,13 @@ def get_relationship_properties(rel):
     result = result["properties"][0]
     result = [value for value in result if isinstance(value, str) and not value.startswith("__csv_")]
 
-    result = [prop for prop in result if type(run(f"MATCH ()-[r:{rel}]->() RETURN r.{prop} AS propertyValue")["propertyValue"][0]) != str]
-    return result
+    result_numeric = []
+    for prop in result:
+        value = run(f"MATCH ()-[r:{rel}]->() RETURN r.{prop} AS propertyValue")["propertyValue"][0]
+        if isinstance(value, (int, float)) or (isinstance(value, list) and isinstance(value[0], (int, float))):
+            result_numeric.append(prop)
+
+    return result_numeric
 
 def create_constraint(constraint_name):
     query = f"""

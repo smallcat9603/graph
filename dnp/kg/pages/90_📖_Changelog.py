@@ -4,6 +4,7 @@ st.markdown("""
             ## 230216
             - Added newfood (Kaggle) dataset
             - Dropped all constraints when "Reset"
+            - Used node/relationship properties to project graph
             ## 230209
             - Added ML model
             - Used optuna to tune hyperparameters

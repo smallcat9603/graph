@@ -30,8 +30,12 @@ else:
 
 ##### Create in-memory graphs & Drop in-memory graph
 
-def prj_graph(node_label_list, relationship_type, relationship_property_list):
-    G, result = flow.project_graph(node_label_list, relationship_type, relationship_property_list)
+def prj_graph(node_properties, relationship_properties):
+    exists_result = st.session_state["gds"].graph.exists(st.session_state["graph_name"])
+    if exists_result["exists"]:
+        G = st.session_state["gds"].graph.get(st.session_state["graph_name"])
+        G.drop()
+    G, result = st.session_state["gds"].graph.project(st.session_state["graph_name"], node_properties, relationship_properties)
 
 def drop_graph(drop_g):
     if drop_g is not None:
@@ -45,12 +49,17 @@ with col1:
     nodes = cypher.get_node_labels()
     relationships = cypher.get_relationship_types()
 
-    node_label_list = st.multiselect("Node labels", nodes, nodes)
-    relationship_type = st.selectbox("Relationship type", relationships)
-    relationship_properties = cypher.get_relationship_properties(relationship_type)
-    relationship_property_list = st.multiselect("Relationship properties", relationship_properties, relationship_properties)
+    node_labels = st.multiselect("Node labels", nodes, nodes)
+    node_properties = {}
+    for node_label in node_labels:
+        node_properties[node_label] = {"properties": cypher.get_node_properties(node_label)}
 
-    st.button("Create in-memory graph", type="secondary", on_click=prj_graph, args=(node_label_list, relationship_type, relationship_property_list))
+    relationship_types = st.multiselect("Relationship types", relationships, relationships)
+    relationship_properties = {}
+    for relationship_type in relationship_types:
+        relationship_properties[relationship_type] = {"orientation": "UNDIRECTED", "properties": cypher.get_relationship_properties(relationship_type)}
+
+    st.button("Create in-memory graph", type="secondary", on_click=prj_graph, args=(node_properties, relationship_properties))
   
 with col2:
     st.subheader("Drop in-memory graph")

@@ -32,9 +32,11 @@ G = st.session_state["gds"].graph.get(emb_graph)
 rprop = [None]
 for rt in G.relationship_types():
     rprop += G.relationship_properties(rt)
+rprop = list(set(rprop))
 nprop = []
 for nl in G.node_labels():
     nprop += G.node_properties(nl)
+nprop = list(set(nprop))
 
 embs = ["emb_frp", "emb_n2v"]
 
@@ -51,7 +53,7 @@ with st.expander('FastRP embedding creation'):
     node_self_infl = st.slider("Node self influence", value=0., min_value=0., max_value=1.)
     rel_weight_prop = st.selectbox("Relationship weight property", rprop, key="frp_rwp")
     prop_rat = st.slider("Property ratio", value=0., min_value=0., max_value=1.)
-    feat_prop = st.selectbox("Feature properties", nprop)
+    feat_prop = st.multiselect("Feature properties", nprop)
 
     if st.button("Create FastRP embedding"):
         flow.node_emb_frp(G, 

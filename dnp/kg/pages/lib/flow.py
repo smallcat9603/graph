@@ -107,40 +107,6 @@ def set_param(DATA):
 
     return nphrase, DATA_TYPE, DATA_LOAD, GCP_API_KEY, WORD_CLASS, PIPELINE_SIZE
 
-def project_graph(node_label_list, relationship_type, relationship_property_list):
-    node_projection = node_label_list
-    # # why raising error "java.lang.UnsupportedOperationException: Loading of values of type StringArray is currently not supported" ???
-    # # update: only numerical property values are supported
-    # node_projection = {"Query": {"properties": 'phrase'}, "Article": {"properties": 'phrase'}, "Noun": {}}
-    relationship_projection = {
-        relationship_type: {"orientation": "UNDIRECTED", "properties": relationship_property_list},
-        # "CORRELATES": {"orientation": "UNDIRECTED", "properties": ["common"]} # Unsupported type [TEXT_ARRAY] of value StringArray[DNP]. Please use a numeric property.
-        }
-    # # how to project node properties???
-    # node_properties = { 
-    #     "nodeProperties": {
-    #         "phrase": {"defaultValue": []},
-    #         "salience": {"defaultValue": []}
-    #     }
-    # }
-
-    exists_result = st.session_state["gds"].graph.exists(st.session_state["graph_name"])
-    if exists_result["exists"]:
-        G = st.session_state["gds"].graph.get(st.session_state["graph_name"])
-        G.drop()
-    G, result = st.session_state["gds"].graph.project(st.session_state["graph_name"], node_projection, relationship_projection)
-    # st.title("project graph to memory")
-    # st.write(f"The projection took {result['projectMillis']} ms")
-    # st.write(f"Graph '{G.name()}' node count: {G.node_count()}")
-    # st.write(f"Graph '{G.name()}' node labels: {G.node_labels()}")
-    # st.write(f"Graph '{G.name()}' relationship count: {G.relationship_count()}")
-    # st.write(f"Graph '{G.name()}' degree distribution: {G.degree_distribution()}")
-    # st.write(f"Graph '{G.name()}' density: {G.density()}")
-    # st.write(f"Graph '{G.name()}' size in bytes: {G.size_in_bytes()}")
-    # st.write(f"Graph '{G.name()}' memory_usage: {G.memory_usage()}")
-
-    return G, result
-
 @st.cache_data
 def write_nodesimilarity_jaccard(_G):
     result = st.session_state["gds"].nodeSimilarity.filtered.write(
@@ -613,7 +579,7 @@ def construct_graph_cypherfile(DATA, LANGUAGE):
             file_cypher = "https://raw.githubusercontent.com/smallcat9603/graph/main/cypher/newfood.cypher"
 
         cypher.runFile(file_cypher)
-        
+
         st.session_state["data"] = DATA
     else:
         if "data" not in st.session_state or st.session_state["data"] != DATA:
