@@ -613,6 +613,7 @@ def construct_graph_cypherfile(DATA, LANGUAGE):
             file_cypher = "https://raw.githubusercontent.com/smallcat9603/graph/main/cypher/newfood.cypher"
 
         cypher.runFile(file_cypher)
+        
         st.session_state["data"] = DATA
     else:
         if "data" not in st.session_state or st.session_state["data"] != DATA:
