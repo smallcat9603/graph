@@ -13,6 +13,8 @@ from sklearn.metrics import accuracy_score
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
 import optuna
+import networkx as nx
+from sklearn.preprocessing import scale
 from pages.lib import cypher
 
 def select_data():
@@ -730,7 +732,6 @@ def objective_n2v(G, rel_weight_prop):
     
     return objective
 
-
 def show_tuning_result(study):
     st.write(f"Accuracy: {study.best_trial.value}")
     st.write(f"Best hyperparameters: {study.best_trial.params}")
@@ -740,3 +741,122 @@ def show_tuning_result(study):
 
     fig = optuna.visualization.plot_param_importances(study)
     fig.show()
+
+
+def rescale_embeddings(u):
+    """
+    Rescale the embedding matrix by mean removal and variance scaling.
+
+    :param u: Embeddings.
+    :return: Rescaled embeddings.
+    """
+    shape = u.shape
+    scaled = scale(u.flatten())
+    return np.reshape(scaled, shape)
+
+def preprocess_similarity_matrix(R):
+    """
+    Preprocess the similarity matrix.
+
+    :param R: Similarity matrix.
+    :return: Preprocessed similarity matrix.
+    """
+
+    # R = R.copy()
+
+    # Replace nan with 0 and negative infinity with min value in the matrix.
+    R[np.isnan(R)] = 0
+    # R[np.isinf(R)] = np.inf
+    R[np.isinf(R)] = R.min()
+
+    return R
+
+def postprocess_decomposition(u, s, v=None):
+    """
+    Postprocess the decomposed vectors and values into final embeddings.
+
+    :param u: Eigenvectors (or left singular vectors)
+    :param s: Eigenvalues (or singular values)
+    :param v: Right singular vectors.
+    :return: Embeddings.
+    """
+
+    dim = len(s)
+
+    # Weight the vectors with square root of values.
+    for i in range(dim):
+        u[:, i] *= np.sqrt(s[i])
+        if v is not None:
+            v[:, i] *= np.sqrt(s[i])
+
+    # Unify the sign of vectors for reproducible results.
+    for i in range(dim):
+        if u[0, i] < 0:
+            u[:, i] *= -1
+            if v is not None:
+                v[:, i] *= -1
+
+    # Rescale the embedding matrix.
+    if v is not None:
+        return rescale_embeddings(u), rescale_embeddings(v)
+    else:
+        return rescale_embeddings(u)
+
+def standard_random_walk_transition_matrix(G, graph_tool="igraph"):
+    """
+    Transition matrix for the standard random-walk given the input graph.
+
+    :param G: Input graph.
+    :return: Standard random-walk transition matrix.
+    """
+
+    """
+    e.g, 0-1, 0-2, 1-2, 2-3
+    degree_vector = np.array(G.degree()) = [2 2 3 1]
+    1/degree_vector = [0.5 0.5 0.33 1.]
+    """
+
+    if graph_tool == "igraph":
+        degree_vector = np.array(G.degree())
+        D_1 = np.diag(1/degree_vector)
+        A = np.array(G.get_adjacency().data)
+    elif graph_tool == "networkx":
+        degree_vector = np.array([a[1] for a in sorted(G.degree(weight='weight'), key=lambda a: a[0])])
+        D_1 = np.diag(1/degree_vector)
+        A = nx.adjacency_matrix(G, sorted(G.nodes)).toarray()
+        
+    return np.matmul(D_1, A)
+
+def stationary_distribution(M):
+    """
+    Stationary distribution given the transition matrix.
+
+    :param M: Transition matrix.
+    :return: Stationary distribution.
+    """
+
+    # We solve (M^T - I) x = 0 and 1 x = 1. Combine them and let A = [M^T - I; 1], b = [0; 1]. We have A x = b.
+    n = M.shape[0]
+    A = np.concatenate([M.T - np.identity(n), np.ones(shape=(1,n))], axis=0)
+    b = np.concatenate([np.zeros(n), [1]], axis=0)
+
+    # Solve A^T A x = A^T x instead (since A is not square).
+    x = np.linalg.solve(A.T @ A, A.T @ b)
+
+    return x
+
+def autocovariance_matrix(M, tau, b=1):
+    """
+    Autocovariance matrix given a transition matrix. X M^tau/b -x x^T
+
+    :param M: Transition matrix.
+    :param tau: Markov time.
+    :param b: Number of negative samples used in the sampling algorithm.
+    :return: Autocovariance matrix.
+    """
+
+    x = stationary_distribution(M)
+    X = np.diag(x)
+    M_tau = np.linalg.matrix_power(M, tau)
+
+    return X @ M_tau/b - np.outer(x, x) 
