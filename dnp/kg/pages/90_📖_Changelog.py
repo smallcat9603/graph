@@ -1,6 +1,8 @@
 import streamlit as st
 
 st.markdown("""
+            ## 230222
+            - Fix bugs
             ## 230221
             - Added page of RW-based Embedding
             ## 230216
