@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 import networkx as nx
 import igraph as ig
 from scipy.sparse.linalg import svds, eigsh
@@ -130,8 +131,7 @@ def standard_random_walk_transition_matrix(G, graph_tool="ig"):
     """
 
     if graph_tool == "ig":
-        degree_vector = np.array(G.degree())
-        D_1 = np.diag(1/degree_vector)
+        D_1 = np.diag(1/np.array(G.degree()))
         A = np.array(G.get_adjacency().data)
     elif graph_tool == "nx":
         D_1 = np.diag(1/degree_vector(G))
@@ -139,20 +139,37 @@ def standard_random_walk_transition_matrix(G, graph_tool="ig"):
         
     return np.matmul(D_1, A)
 
-graph_tool = "ig"
-edgefile = "/Users/smallcat/Documents/GitHub/graph/dnp/kg/emb/test.edges"
+def renum_nodes_contiguous(file, file_new):
+    node_map = {}
+    with open(file, "r") as f:
+        edgelist = [line.strip().split() for line in f]
+        edgelist = [list(map(int, edge)) for edge in edgelist]
+        nodes = set([edge[0] for edge in edgelist] + [edge[1] for edge in edgelist])
+        node_map = {node: i for i, node in enumerate(nodes)} 
+        edgelist_new = [(node_map[edge[0]], node_map[edge[1]]) for edge in edgelist]
+        df = pd.DataFrame(edgelist_new)
+        df.to_csv(file_new, sep=" ", index=False, header=False)
+
+graph_tool = "nx"
+edgefile = "test.edges"
 if graph_tool == "ig":
+    renum_nodes_contiguous(edgefile, edgefile) # node id is from 0
     G = ig.Graph.Read_Edgelist(edgefile, directed=False)
+    print(G.summary())
 elif graph_tool == "nx":
-    G = nx.read_edgelist(edgefile)
+    G = nx.read_edgelist(edgefile, nodetype=int, data=False, create_using=nx.Graph)
+    print(G)
+
 M = standard_random_walk_transition_matrix(G, graph_tool)
-print(M)
+# print(M)
 tau = 3 # markov_time
 R = autocovariance_matrix(M, tau)
-print(R)
+# print(R)
 R = preprocess_similarity_matrix(R)
-print(R)
+# print(R)
 s, u = eigsh(A=R, k=128, which='LA', maxiter=R.shape[0] * 20)
-print(u)
+# print(u)
 u = postprocess_decomposition(u, s)
-print(u)
+# print(u)
+
+np.savetxt("test1.embeddings", u, fmt='%.16f')
