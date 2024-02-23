@@ -1,6 +1,8 @@
 import streamlit as st
 
 st.markdown("""
+            ## 230223
+            - Added similarity option PMI
             ## 230222
             - Fix bugs
             ## 230221

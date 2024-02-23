@@ -742,7 +742,7 @@ def show_tuning_result(study):
     fig = optuna.visualization.plot_param_importances(study)
     fig.show()
 
-@st.cache_data
+
 def standard_random_walk_transition_matrix(G, graph_tool="igraph"):
     """
     Transition matrix for the standard random-walk given the input graph.
@@ -768,7 +768,6 @@ def standard_random_walk_transition_matrix(G, graph_tool="igraph"):
         
     return np.matmul(D_1, A)
 
-@st.cache_data
 def stationary_distribution(M):
     """
     Stationary distribution given the transition matrix.
@@ -782,12 +781,11 @@ def stationary_distribution(M):
     A = np.concatenate([M.T - np.identity(n), np.ones(shape=(1,n))], axis=0)
     b = np.concatenate([np.zeros(n), [1]], axis=0)
 
-    # Solve A^T A x = A^T x instead (since A is not square).
+    # Solve A^T A x = A^T b instead (since A is not square).
     x = np.linalg.solve(A.T @ A, A.T @ b)
 
     return x
 
-@st.cache_data
 def autocovariance_matrix(M, tau, b=1):
     """
     Autocovariance matrix given a transition matrix. X M^tau/b -x x^T
@@ -804,7 +802,22 @@ def autocovariance_matrix(M, tau, b=1):
 
     return X @ M_tau/b - np.outer(x, x) 
 
-@st.cache_data
+def PMI_matrix(M, tau, b=1):
+    """
+    PMI matrix given a transition matrix. log(X M^tau/b) - log(x x^T)
+
+    :param M: transition matrix
+    :param tau: Markov time
+    :param b: Number of negative samples used in the sampling algorithm.
+    :return: PMI matrix.
+    """
+
+    x = stationary_distribution(M)
+    X = np.diag(x)
+    M_tau = np.linalg.matrix_power(M, tau)
+
+    return np.log(X @ M_tau/b) - np.log(np.outer(x, x))
+
 def preprocess_similarity_matrix(R):
     """
     Preprocess the similarity matrix.
@@ -817,12 +830,11 @@ def preprocess_similarity_matrix(R):
 
     # Replace nan with 0 and negative infinity with min value in the matrix.
     R[np.isnan(R)] = 0
-    # R[np.isinf(R)] = np.inf
+    R[np.isinf(R)] = np.inf
     R[np.isinf(R)] = R.min()
 
     return R
 
-@st.cache_data
 def rescale_embeddings(u):
     """
     Rescale the embedding matrix by mean removal and variance scaling.
@@ -834,7 +846,6 @@ def rescale_embeddings(u):
     scaled = scale(u.flatten())
     return np.reshape(scaled, shape)
 
-@st.cache_data
 def postprocess_decomposition(u, s, v=None):
     """
     Postprocess the decomposed vectors and values into final embeddings.

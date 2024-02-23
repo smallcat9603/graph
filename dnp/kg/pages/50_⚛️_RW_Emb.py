@@ -30,26 +30,52 @@ if edgefile is not None:
         G = nx.from_pandas_edgelist(df, source=0, target=1)
         st.info(G)
 
-    if st.button("Embedding"):
-        nrows = 10
+    form = st.form("emb")
+
+    sim = form.radio("Select the similarity metric:", 
+                    ["Autocovariance", "PMI"], 
+                    horizontal=True,
+                    # label_visibility="collapsed",
+                    )
+    tau = form.slider("Markov time:", 
+                    1, 
+                    100, 
+                    3)
+    dim = form.select_slider("Dimension:", 
+                             value=128, 
+                             options=[128, 256, 512, 1024])
+    nrows = form.slider("Number of rows displayed:", 
+                    1, 
+                    100, 
+                    10)
+
+    if form.form_submit_button("Embedding"):
+        # adjacency matrix A --> 
+        # transition matrix T (= D_1 A) --> 
+        # stationary distribution x (via A x = b) --> 
+        # autocovariance matrix R (= X M^tau/b -x x^T) --> 
+        # eigsh u (via R u = s u) --> 
+        # rescale u
     
         M = flow.standard_random_walk_transition_matrix(G, graph_tool)
         st.header(f"Transition Matrix ({nrows} rows)")
         st.write(M.shape)
         st.table(M[:nrows, :])
 
-        tau = 3 # markov_time
-        R = flow.autocovariance_matrix(M, tau)
-        st.header(f"Autocovariance Matrix ({nrows} rows)")
+        if sim == "Autocovariance":
+            R = flow.autocovariance_matrix(M, tau)
+        elif sim == "PMI":
+            R = flow.PMI_matrix(M, tau)
+        st.header(f"{sim} Matrix ({nrows} rows)")
         st.write(R.shape)
         st.table(R[:nrows, :])
 
         R = flow.preprocess_similarity_matrix(R)
-        st.header(f"Autocovariance Matrix (clean) ({nrows} rows)")
+        st.header(f"{sim} Matrix (clean) ({nrows} rows)")
         st.write(R.shape)
         st.table(R[:nrows, :])
 
-        s, u = eigsh(A=R, k=128, which='LA', maxiter=R.shape[0] * 20)
+        s, u = eigsh(A=R, k=dim, which='LA', maxiter=R.shape[0] * 20)
         st.header(f"Eigenvectors ({nrows} rows)")
         st.write(u.shape)
         st.table(u[:nrows, :])

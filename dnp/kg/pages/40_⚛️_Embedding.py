@@ -45,7 +45,7 @@ embs = ["emb_frp", "emb_n2v"]
 # Description of hyperparameters can be found: https://neo4j.com/docs/graph-data-science/current/algorithms/fastrp/#algorithms-embeddings-fastrp
 with st.expander('FastRP embedding creation'):
     frp_seed = st.slider('Random seed', value=42, min_value=1, max_value=99)
-    frp_dim = st.select_slider("Embedding dimenson", value=256, options=[128, 256, 512, 1024], key="frp_dim")
+    frp_dim = st.select_slider("Embedding dimension", value=256, options=[128, 256, 512, 1024], key="frp_dim")
     frp_norm = st.slider("Normalization strength", value=0., min_value=-1., max_value=1.)
     frp_it_weight1 = st.slider("Iteration weight 1", value=0., min_value=0., max_value=1.)
     frp_it_weight2 = st.slider("Iteration weight 2", value=1., min_value=0., max_value=1.)
@@ -92,7 +92,7 @@ with st.expander('FastRP embedding creation'):
 # Description of hyperparameters can be found: https://neo4j.com/docs/graph-data-science/current/algorithms/node2vec/
 with st.expander("node2vec embedding creation"):
     n2v_seed = st.slider("Random seed:", value=42, min_value=1, max_value=99)
-    n2v_dim = st.select_slider("Embedding dimenson", value=256, options=[128, 256, 512, 1024], key="n2v_dim")
+    n2v_dim = st.select_slider("Embedding dimension", value=256, options=[128, 256, 512, 1024], key="n2v_dim")
     n2v_walk_length = st.slider("Walk length", value=80, min_value=2, max_value=160)
     n2v_walks_node = st.slider("Walks per node", value=10, min_value=2, max_value=50)
     n2v_io_factor = st.slider("inOutFactor", value=1.0, min_value=0.001, max_value=1.0, step=0.05)
