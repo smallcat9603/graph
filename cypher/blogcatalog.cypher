@@ -1,4 +1,4 @@
-CREATE CONSTRAINT id_unique IF NOT EXISTS FOR (n:Node) REQUIRE n.name IS UNIQUE;
+CREATE INDEX node_name FOR (n:Node) ON (n.name);
 
 CALL apoc.periodic.iterate(
     "LOAD CSV FROM 'https://raw.githubusercontent.com/smallcat9603/graph/main/data/blogcatalog.edges' AS row FIELDTERMINATOR ' '
