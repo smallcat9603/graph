@@ -556,6 +556,11 @@ def get_emb_result(emb):
         MATCH (dt:DishType)<-[:DISH_TYPE]-(d:Dish)
         WHERE dt.name IN ["bread", "drink", "salad", "sauce", "snack", "soup"]
         RETURN d.title as name, d.{emb} AS emb, dt.name AS category
+        """
+    elif st.session_state['data'] == "blogcatalog":   
+        query = f""" 
+        MATCH (n:Node)
+        RETURN n.name as name, n.{emb} AS emb, labels(n)[0] AS category
         """  
     else:
         st.error("No embedding data is loaded!")

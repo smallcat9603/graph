@@ -1,5 +1,6 @@
 import streamlit as st
 import optuna
+import numpy as np
 from pages.lib import cypher, flow
 
 if 'data' not in st.session_state:
@@ -177,7 +178,11 @@ if form.form_submit_button("Plot embeddings"):
     flow.plot_tsne_alt(result)
 
     st.subheader("ML")
-    flow.modeler(result)
+    n = len(np.unique(result["category"]))
+    if n > 1:
+        flow.modeler(result)
+    else: 
+        st.warning(f"The dataset {st.session_state['data']} has only one category!")
 
 #####
 #
