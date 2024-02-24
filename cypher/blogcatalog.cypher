@@ -5,6 +5,6 @@ CALL apoc.periodic.iterate(
     RETURN row",
     "MERGE (s:Node {name: row[0]})
     MERGE (t:Node {name: row[1]})
-    CREATE (s)-[:EDGE]-(t)",
+    MERGE (s)-[:EDGE]-(t)",
     {batchSize: 1000}
 )
