@@ -7,4 +7,4 @@ CALL apoc.periodic.iterate(
     MERGE (t:Node {name: row[1]})
     MERGE (s)-[:EDGE]-(t)",
     {batchSize: 1000}
-)
+);
