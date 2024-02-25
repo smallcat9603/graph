@@ -44,7 +44,7 @@ def select_data():
         LANGUAGE = "en"
 
     elif TYPE == "CYPHER":
-        DATA = st.radio("Select one dataset", 
+        DATA = st.radio("Select one dataset:", 
                         ["euro_roads", "newfood", "blogcatalog"], 
                         captions=["The dataset contains 894 towns, 39 countries, and 1,250 roads connecting them. https://github.com/neo4j-examples/graph-embeddings/raw/main/data/roads.csv",
                                   "The dataset contains nutritional information alongside the ingredients used in 1600+ dishes. https://raw.githubusercontent.com/smallcat9603/graph/main/data/newfood.csv",
