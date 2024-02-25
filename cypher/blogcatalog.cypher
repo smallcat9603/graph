@@ -8,3 +8,11 @@ CALL apoc.periodic.iterate(
     MERGE (s)-[:EDGE]-(t)",
     {batchSize: 1000}
 );
+
+CALL apoc.periodic.iterate(
+    "LOAD CSV FROM 'https://raw.githubusercontent.com/smallcat9603/graph/main/data/blogcatalog_0.labels' AS row FIELDTERMINATOR ' '
+    RETURN row",
+    "MATCH (n:Node {name: row[0]})
+    SET n.labels = coalesce(n.labels, []) + row[1]",
+    {batchSize: 1000}    
+);
