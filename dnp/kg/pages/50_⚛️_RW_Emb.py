@@ -16,6 +16,7 @@ graph_tool = st.radio("Select one graph tool:",
                 # label_visibility="collapsed",
                 )
 edgefile = st.file_uploader("Choose an edge file:")
+labelfile = st.file_uploader("Choose a label file:")
 if edgefile is not None:
     df = pd.read_csv(edgefile, sep='\s+', header=None)
     st.divider()
@@ -85,11 +86,28 @@ if edgefile is not None:
         st.write(u.shape)
         st.table(u[:nrows, :])
 
-        st.header(f"t-SNE")
+        st.header("t-SNE")
         n = u.shape[0]
+        category = [0]*n
+        if labelfile is not None:
+            df = pd.read_csv(labelfile, sep='\s+', header=None)
+            node_labels = flow.get_node_labels(df)
+            category = []
+            for i in range(n):
+                if 1 in node_labels[i]:  
+                    category.append(1)
+                else: 
+                    category.append(0)
         emb_df = pd.DataFrame(data = {
             "name": range(n),
-            "category": [0]*n,
+            "category": category,
             "emb": [row for row in u],
         })
         flow.plot_tsne_alt(emb_df)
+
+        st.header("ML")
+        ncategories = len(np.unique(emb_df["category"]))
+        if ncategories > 1:
+            flow.modeler(emb_df)
+        else: 
+            st.warning(f"The dataset {st.session_state['data']} has only one category!")

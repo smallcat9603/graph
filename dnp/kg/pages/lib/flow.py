@@ -879,3 +879,16 @@ def postprocess_decomposition(u, s, v=None):
         return rescale_embeddings(u), rescale_embeddings(v)
     else:
         return rescale_embeddings(u)
+    
+def get_node_labels(df):
+    df.columns = ["node", "label"]
+    node_labels = {}
+    df_rows = df.shape[0]
+    for i in range(df_rows):
+        node = df["node"][i]
+        label = df["label"][i]
+        if node in node_labels:
+            node_labels[node].append(label)
+        else:
+            node_labels[node] = [label]
+    return node_labels
