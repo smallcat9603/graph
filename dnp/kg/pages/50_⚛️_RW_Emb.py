@@ -57,7 +57,7 @@ if edgefile is not None:
         # eigsh u (via R u = s u) --> 
         # rescale u
     
-        M = flow.standard_random_walk_transition_matrix(G, graph_tool)
+        M = flow.standard_random_walk_transition_matrix(G, graph_tool=graph_tool)
         st.header(f"Transition Matrix ({nrows} rows)")
         st.write(M.shape)
         st.table(M[:nrows, :])
