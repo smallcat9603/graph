@@ -1,6 +1,8 @@
 import streamlit as st
 
 st.markdown("""
+            ## 230225
+            - Added my embedding t-SNE plot
             ## 230224
             - Added blogcatalog data
             ## 230223

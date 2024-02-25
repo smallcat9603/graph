@@ -84,3 +84,12 @@ if edgefile is not None:
         st.header(f"Embedding Matrix ({nrows} rows)")
         st.write(u.shape)
         st.table(u[:nrows, :])
+
+        st.header(f"t-SNE")
+        n = u.shape[0]
+        emb_df = pd.DataFrame(data = {
+            "name": range(n),
+            "category": [0]*n,
+            "emb": [row for row in u],
+        })
+        flow.plot_tsne_alt(emb_df)
