@@ -565,6 +565,7 @@ def get_emb_result(emb):
     elif st.session_state['data'] == "airport":   
         query = f""" 
         MATCH (n:Node)
+        WHERE n.labels[0] IN ["1", "2", "3", "4", "5", "6", "7", "8", "9"]
         RETURN n.name as name, n.{emb} AS emb, n.labels[0] AS category
         """ 
     else:
