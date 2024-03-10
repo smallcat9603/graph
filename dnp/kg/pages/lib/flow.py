@@ -45,10 +45,11 @@ def select_data():
 
     elif TYPE == "CYPHER":
         DATA = st.radio("Select one dataset:", 
-                        ["euro_roads", "newfood", "blogcatalog"], 
+                        ["euro_roads", "newfood", "blogcatalog", "airport"], 
                         captions=["The dataset contains 894 towns, 39 countries, and 1,250 roads connecting them. https://github.com/neo4j-examples/graph-embeddings/raw/main/data/roads.csv",
                                   "The dataset contains nutritional information alongside the ingredients used in 1600+ dishes. https://raw.githubusercontent.com/smallcat9603/graph/main/data/newfood.csv",
-                                  "The dataset contains undirected social network of bloggers with (multi) labels representing topics of interest. https://raw.githubusercontent.com/smallcat9603/graph/main/data/blogcatalog_0.edges"]
+                                  "The dataset contains undirected social network of bloggers with (multi) labels representing topics of interest. https://raw.githubusercontent.com/smallcat9603/graph/main/data/blogcatalog_0.edges",
+                                  "The dataset contains flight network among global airports (from Open-Flights). https://raw.githubusercontent.com/smallcat9603/graph/main/data/airport_0.edges"]
                         )
         LANGUAGE = "en"
 
@@ -582,6 +583,8 @@ def construct_graph_cypherfile(DATA, LANGUAGE):
             file_cypher = "https://raw.githubusercontent.com/smallcat9603/graph/main/cypher/newfood.cypher"
         elif DATA == "blogcatalog":
             file_cypher = "https://raw.githubusercontent.com/smallcat9603/graph/main/cypher/blogcatalog.cypher"
+        elif DATA == "airport":
+            file_cypher = "https://raw.githubusercontent.com/smallcat9603/graph/main/cypher/airport.cypher"
 
         cypher.runFile(file_cypher)
 

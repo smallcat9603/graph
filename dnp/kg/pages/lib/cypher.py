@@ -562,6 +562,11 @@ def get_emb_result(emb):
         MATCH (n:Node)
         RETURN n.name as name, n.{emb} AS emb, labels(n)[0] AS category
         """  
+    elif st.session_state['data'] == "airport":   
+        query = f""" 
+        MATCH (n:Node)
+        RETURN n.name as name, n.{emb} AS emb, n.labels[0] AS category
+        """ 
     else:
         st.error("No embedding data is loaded!")
         st.stop()
