@@ -19,16 +19,30 @@ edgefile = st.file_uploader("Choose an edge file:")
 labelfile = st.file_uploader("Choose a label file:")
 if edgefile is not None:
     df = pd.read_csv(edgefile, sep='\s+', header=None)
+    ncols = df.shape[1]
+
+    cols = ["source", "target"]
+    if ncols > 2:
+        cols.append("weight")
+    df.columns = cols
+
+    col1_values = df["source"].values
+    col2_values = df["target"].values
+    min_value = np.min(np.concatenate((col1_values, col2_values)))
+
     st.divider()
     st.header("Graph Info")
     if graph_tool == "igraph":
-        if np.min(df.values) > 0:
+        if min_value > 0:
             st.error("Node ID should be from 0!")
             st.stop()
         G = ig.Graph.DataFrame(df, directed=False)
         st.info(G.summary())
     elif graph_tool == "networkx":
-        G = nx.from_pandas_edgelist(df, source=0, target=1)
+        if ncols == 2:
+            G = nx.from_pandas_edgelist(df, source="source", target="target")
+        elif ncols > 2:
+            G = nx.from_pandas_edgelist(df, source="source", target="target", edge_attr="weight")
         st.info(G)
 
     form = st.form("emb")
@@ -92,12 +106,7 @@ if edgefile is not None:
         if labelfile is not None:
             df = pd.read_csv(labelfile, sep='\s+', header=None)
             node_labels = flow.get_node_labels(df)
-            category = []
-            for i in range(n):
-                if 1 in node_labels[i]:  
-                    category.append(1)
-                else: 
-                    category.append(0)
+            category = flow.get_category_list(node_labels)
         emb_df = pd.DataFrame(data = {
             "name": range(n),
             "category": category,

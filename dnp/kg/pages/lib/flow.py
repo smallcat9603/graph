@@ -895,3 +895,16 @@ def get_node_labels(df):
         else:
             node_labels[node] = [label]
     return node_labels
+
+def get_category_list(node_labels):
+    category = []
+    n = len(node_labels)
+    categories = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+    for i in range(n):
+        for c in categories:
+            if c in node_labels[i]:
+                category.append(c)
+                break
+        else:
+            category.append(0)
+    return category

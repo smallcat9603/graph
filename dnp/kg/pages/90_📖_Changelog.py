@@ -3,6 +3,7 @@ import streamlit as st
 st.markdown("""
             ## 230310
             - Added airport data
+            - Constructed graph using edgelist with edge attributes
             ## 230225
             - Added my embedding t-SNE plot
             ## 230224
