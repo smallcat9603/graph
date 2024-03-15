@@ -119,4 +119,4 @@ if edgefile is not None:
         if ncategories > 1:
             flow.modeler(emb_df)
         else: 
-            st.warning(f"The dataset {st.session_state['data']} has only one category!")
+            st.warning(f"The dataset has only one category!")
