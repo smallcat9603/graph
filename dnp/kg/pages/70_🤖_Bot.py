@@ -67,16 +67,11 @@ llm = ChatOpenAI(
 #     retriever=retriever,  
 # )
 
-url=st.session_state["host"]
-username=st.session_state["user"]
-password=st.session_state["password"]
+
 graph = Neo4jGraph(
-    # url=st.secrets["NEO4J_URI"],
-    # username=st.secrets["NEO4J_USERNAME"],
-    # password=st.secrets["NEO4J_PASSWORD"],
-    url=url,
-    username=username,
-    password=password,
+    url=st.session_state["host"],
+    username=st.session_state["user"],
+    password=st.session_state["password"],
 )
 
 CYPHER_GENERATION_TEMPLATE = """
@@ -128,17 +123,20 @@ tools = [
     func = cypher_qa, 
     ),
 ]
+
 memory = ConversationBufferWindowMemory(
     memory_key='chat_history',
     k=5,
     return_messages=True,
 )
+
 SYSTEM_MESSAGE = """
 You are a expert providing information about node similariy.
 Be as helpful as possible and return as much information as possible.
 
 Do not answer any questions using your pre-trained knowledge, only use the information provided in the context.
 """
+
 agent = initialize_agent(
     tools,
     llm,
@@ -159,7 +157,7 @@ def generate_response(prompt):
     return response['output']
 
 
-def write_message(role, content, save = True):
+def write_message(role, content, save=True):
     """
     This is a helper function that saves a message to the
      session state and then writes a message to the UI
@@ -208,4 +206,3 @@ if prompt := st.chat_input("What is up?"):
 
     # Generate a response
     handle_submit(prompt)
-
