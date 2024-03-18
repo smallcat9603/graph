@@ -15,6 +15,7 @@ from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
 import optuna
 import networkx as nx
 from sklearn.preprocessing import scale
+from scipy.sparse.linalg import svds, eigsh
 from pages.lib import cypher
 
 def select_data():
@@ -233,73 +234,61 @@ def node_emb_n2v(_G, embeddingDimension, walkLength, walksPerNode, inOutFactor, 
         randomSeed=randomSeed,
         writeProperty="emb_n2v",           
     )
-                    
-# not in use
+
 @st.cache_data
-def node_emb(_G):
-    # fastrp
-    result_fastRP_stream = st.session_state["gds"].fastRP.stream(
-        _G,
-        randomSeed=42,
-        embeddingDimension=16,
-        relationshipWeightProperty="weight",
-        iterationWeights=[1, 1, 1],
-    )
+def node_emb(_G, sim, tau, dim, graph_tool, df_label, nrows, verbose=False):
+    # adjacency matrix A --> 
+    # transition matrix T (= D_1 A) --> 
+    # stationary distribution x (via A x = b) --> 
+    # autocovariance matrix R (= X M^tau/b -x x^T) --> 
+    # eigsh u (via R u = s u) --> 
+    # rescale u        
 
-    # node2vec
-    result_node2vec_stream = st.session_state["gds"].node2vec.stream(
-        _G,
-        randomSeed=42,
-        embeddingDimension=16,
-        relationshipWeightProperty="weight",
-        iterations=3,
-    )
+    M = standard_random_walk_transition_matrix(_G, graph_tool=graph_tool)
+    if verbose:
+        st.header(f"Transition Matrix ({nrows} rows)")
+        st.write(M.shape)
+        st.table(M[:nrows, :])
 
-    # hashgnn
-    result_hashgnn_stream = st.session_state["gds"].beta.hashgnn.stream(
-        _G,
-        iterations = 3,
-        embeddingDensity = 8,
-        generateFeatures = {"dimension": 16, "densityLevel": 1},
-        randomSeed = 42,
-    )
+    if sim == "Autocovariance":
+        R = autocovariance_matrix(M, tau)
+    elif sim == "PMI":
+        R = PMI_matrix(M, tau)
+    if verbose:
+        st.header(f"{sim} Matrix ({nrows} rows)")
+        st.write(R.shape)
+        st.table(R[:nrows, :])
 
-    # fastrp
-    result_fastRP_mutate = st.session_state["gds"].fastRP.mutate(
-        _G,
-        mutateProperty="embedding_fastrp",
-        randomSeed=42,
-        embeddingDimension=16,
-        relationshipWeightProperty="weight", # each relationship should have
-        iterationWeights=[1, 1, 1],
-    )
+    R = preprocess_similarity_matrix(R)
+    if verbose:
+        st.header(f"{sim} Matrix (clean) ({nrows} rows)")
+        st.write(R.shape)
+        st.table(R[:nrows, :])
 
-    # node2vec
-    result_node2vec_mutate = st.session_state["gds"].node2vec.mutate(
-        _G,
-        mutateProperty="embedding_node2vec",
-        randomSeed=42,
-        embeddingDimension=16,
-        relationshipWeightProperty="weight",
-        iterations=3,
-    )
+    s, u = eigsh(A=R, k=dim, which='LA', maxiter=R.shape[0] * 20)
+    if verbose:
+        st.header(f"Eigenvectors ({nrows} rows)")
+        st.write(u.shape)
+        st.table(u[:nrows, :])
 
-    # hashgnn
-    result_hashgnn_mutate = st.session_state["gds"].beta.hashgnn.mutate(
-        _G,
-        mutateProperty="embedding_hashgnn",
-        randomSeed=42,
-        heterogeneous=True,
-        iterations=3,
-        embeddingDensity=8,
-        # opt1
-        generateFeatures={"dimension": 16, "densityLevel": 1},
-        # # opt2 not work
-        # binarizeFeatures={"dimension": 16, "threshold": 0},
-        # featureProperties=['phrase', 'salience'], # each node should have
-    )
+    u = postprocess_decomposition(u, s)
+    if verbose:
+        st.header(f"Embedding Matrix ({nrows} rows)")
+        st.write(u.shape)
+        st.table(u[:nrows, :])
 
-    return result_fastRP_stream, result_node2vec_stream, result_hashgnn_stream, result_fastRP_mutate, result_node2vec_mutate, result_hashgnn_mutate
+    n = u.shape[0]
+    category = [0]*n
+    if df_label is not None:
+        node_labels = get_node_labels(df_label)
+        category = get_category_list(node_labels)
+    emb_df = pd.DataFrame(data = {
+        "name": range(n),
+        "category": category,
+        "emb": [row for row in u],
+    }) 
+
+    return emb_df 
 
 @st.cache_data
 def kNN(_G, emb, topK=100, writeProperty="score", sourceNodeFilter="Query", targetNodeFilter="Article"):
@@ -733,6 +722,31 @@ def objective_n2v(G, rel_weight_prop):
         )
 
         result = cypher.get_emb_result("emb_n2v")
+
+        return modeler(result, show_matrix=False)
+    
+    return objective
+
+def objective_emb(G, graph_tool, df_label, nrows):
+    def objective(trial):
+        params = {
+            "sim": trial.suggest_categorical("sim", ["Autocovariance", "PMI"]),
+            "tau": trial.suggest_int("tau", 1, 100),
+            "dim": trial.suggest_int("dim", 128, 1024, log=True),
+        }
+
+        sim = params["sim"]
+        tau = params["tau"]
+        dim = params["dim"]
+
+        result = node_emb(G,
+                        sim=sim,
+                        tau=tau,
+                        dim=dim,
+                        graph_tool=graph_tool,
+                        df_label=df_label,
+                        nrows=nrows,       
+                        )
 
         return modeler(result, show_matrix=False)
     

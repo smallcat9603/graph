@@ -4,6 +4,7 @@ import igraph as ig
 import pandas as pd
 import numpy as np
 from scipy.sparse.linalg import svds, eigsh
+import optuna
 from pages.lib import flow
 
 
@@ -13,10 +14,12 @@ st.divider()
 graph_tool = st.radio("Select one graph tool:", 
                 ["igraph", "networkx"], 
                 horizontal=True,
-                # label_visibility="collapsed",
                 )
 edgefile = st.file_uploader("Choose an edge file:")
 labelfile = st.file_uploader("Choose a label file:")
+df_label = None
+if labelfile is not None:
+    df_label = pd.read_csv(labelfile, sep='\s+', header=None) 
 if edgefile is not None:
     df = pd.read_csv(edgefile, sep='\s+', header=None)
     ncols = df.shape[1]
@@ -50,7 +53,6 @@ if edgefile is not None:
     sim = form.radio("Select the similarity metric:", 
                     ["Autocovariance", "PMI"], 
                     horizontal=True,
-                    # label_visibility="collapsed",
                     )
     tau = form.slider("Markov time:", 
                     1, 
@@ -62,56 +64,12 @@ if edgefile is not None:
     nrows = form.slider("Number of rows displayed:", 
                     1, 
                     100, 
-                    10)
+                    10) 
 
-    if form.form_submit_button("Embedding"):
-        # adjacency matrix A --> 
-        # transition matrix T (= D_1 A) --> 
-        # stationary distribution x (via A x = b) --> 
-        # autocovariance matrix R (= X M^tau/b -x x^T) --> 
-        # eigsh u (via R u = s u) --> 
-        # rescale u
-    
-        M = flow.standard_random_walk_transition_matrix(G, graph_tool=graph_tool)
-        st.header(f"Transition Matrix ({nrows} rows)")
-        st.write(M.shape)
-        st.table(M[:nrows, :])
-
-        if sim == "Autocovariance":
-            R = flow.autocovariance_matrix(M, tau)
-        elif sim == "PMI":
-            R = flow.PMI_matrix(M, tau)
-        st.header(f"{sim} Matrix ({nrows} rows)")
-        st.write(R.shape)
-        st.table(R[:nrows, :])
-
-        R = flow.preprocess_similarity_matrix(R)
-        st.header(f"{sim} Matrix (clean) ({nrows} rows)")
-        st.write(R.shape)
-        st.table(R[:nrows, :])
-
-        s, u = eigsh(A=R, k=dim, which='LA', maxiter=R.shape[0] * 20)
-        st.header(f"Eigenvectors ({nrows} rows)")
-        st.write(u.shape)
-        st.table(u[:nrows, :])
-
-        u = flow.postprocess_decomposition(u, s)
-        st.header(f"Embedding Matrix ({nrows} rows)")
-        st.write(u.shape)
-        st.table(u[:nrows, :])
+    if form.form_submit_button("Embedding"):  
+        emb_df = flow.node_emb(G, sim=sim, tau=tau, dim=dim, graph_tool=graph_tool, df_label=df_label, nrows=nrows, verbose=True)
 
         st.header("t-SNE")
-        n = u.shape[0]
-        category = [0]*n
-        if labelfile is not None:
-            df = pd.read_csv(labelfile, sep='\s+', header=None)
-            node_labels = flow.get_node_labels(df)
-            category = flow.get_category_list(node_labels)
-        emb_df = pd.DataFrame(data = {
-            "name": range(n),
-            "category": category,
-            "emb": [row for row in u],
-        })
         flow.plot_tsne_alt(emb_df)
 
         st.header("ML")
@@ -120,3 +78,19 @@ if edgefile is not None:
             flow.modeler(emb_df)
         else: 
             st.warning(f"The dataset has only one category!")
+
+    if form.form_submit_button("Tune hyperparameters"):
+        initial_params = {
+            "sim": sim,
+            "tau": tau,
+            "dim": dim,
+            "graph_tool": graph_tool, 
+            "df_label": df_label, 
+            "nrows": nrows,
+        }
+
+        study = optuna.create_study(direction="maximize")
+        study.enqueue_trial(initial_params)
+        study.optimize(flow.objective_emb(G, graph_tool, df_label, nrows), n_trials=100)
+
+        flow.show_tuning_result(study)
