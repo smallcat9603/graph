@@ -236,7 +236,7 @@ def node_emb_n2v(_G, embeddingDimension, walkLength, walksPerNode, inOutFactor, 
     )
 
 @st.cache_data
-def node_emb(_G, sim, tau, dim, graph_tool, df_label, nrows, verbose=False):
+def node_emb(_G, sim, tau, dim, graph_tool, df_label, nrows, verbose=False, alpha=1.0):
     # adjacency matrix A --> 
     # transition matrix T (= D_1 A) --> 
     # stationary distribution x (via A x = b) --> 
@@ -247,6 +247,18 @@ def node_emb(_G, sim, tau, dim, graph_tool, df_label, nrows, verbose=False):
     M = standard_random_walk_transition_matrix(_G, graph_tool=graph_tool)
     if verbose:
         st.header(f"Transition Matrix ({nrows} rows)")
+        st.write(M.shape)
+        st.table(M[:nrows, :])
+
+    n = M.shape[0]
+    category = [0]*n
+    if df_label is not None:
+        node_labels = get_node_labels(df_label)
+        category = get_category_list(node_labels)
+
+        M = M_attr(n=n, node_labels=node_labels, M=M, alpha=alpha)
+
+        st.header(f"Transition Matrix with Attributes({nrows} rows)")
         st.write(M.shape)
         st.table(M[:nrows, :])
 
@@ -277,11 +289,6 @@ def node_emb(_G, sim, tau, dim, graph_tool, df_label, nrows, verbose=False):
         st.write(u.shape)
         st.table(u[:nrows, :])
 
-    n = u.shape[0]
-    category = [0]*n
-    if df_label is not None:
-        node_labels = get_node_labels(df_label)
-        category = get_category_list(node_labels)
     emb_df = pd.DataFrame(data = {
         "name": range(n),
         "category": category,
@@ -922,3 +929,18 @@ def get_category_list(node_labels):
         else:
             category.append(0)
     return category
+
+def M_attr(n, node_labels, M, alpha):
+    arr_nln = np.zeros((n, n))
+    for i in range(n):
+        for j in range(i+1, n):
+            common_count = len(set(node_labels[i]) & set(node_labels[j]))
+            if common_count > 0:
+                arr_nln[i, j] = common_count
+                arr_nln[j, i] = common_count
+    arr_sum = np.sum(arr_nln, axis=1)
+    for i in range(n):
+        if arr_sum[i] > 0:
+            arr_nln[i] /= arr_sum[i]
+            M[i] = M[i]*alpha + arr_nln[i]*(1-alpha)
+    return M

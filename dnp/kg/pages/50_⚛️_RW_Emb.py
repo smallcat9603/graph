@@ -61,13 +61,17 @@ if edgefile is not None:
     dim = form.select_slider("Dimension:", 
                              value=128, 
                              options=[128, 256, 512, 1024])
+    alpha = form.slider("Topology Importance:",
+                        0.1,
+                        1.0,
+                        1.0)
     nrows = form.slider("Number of rows displayed:", 
                     1, 
                     100, 
                     10) 
 
     if form.form_submit_button("Embedding"):  
-        emb_df = flow.node_emb(G, sim=sim, tau=tau, dim=dim, graph_tool=graph_tool, df_label=df_label, nrows=nrows, verbose=True)
+        emb_df = flow.node_emb(G, sim=sim, tau=tau, dim=dim, graph_tool=graph_tool, df_label=df_label, nrows=nrows, verbose=True, alpha=alpha)
 
         st.header("t-SNE")
         flow.plot_tsne_alt(emb_df)
