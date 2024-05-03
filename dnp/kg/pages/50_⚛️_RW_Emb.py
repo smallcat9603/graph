@@ -17,9 +17,13 @@ graph_tool = st.radio("Select one graph tool:",
                 )
 edgefile = st.file_uploader("Choose an edge file:")
 labelfile = st.file_uploader("Choose a label file:")
+labelfile2 = st.file_uploader("Choose a second label file:")
 df_label = None
+df_label2 = None
 if labelfile is not None:
     df_label = pd.read_csv(labelfile, sep='\s+', header=None) 
+if labelfile2 is not None:
+    df_label2 = pd.read_csv(labelfile2, sep='\s+', header=None) 
 if edgefile is not None:
     df = pd.read_csv(edgefile, sep='\s+', header=None)
     ncols = df.shape[1]
@@ -61,17 +65,15 @@ if edgefile is not None:
     dim = form.select_slider("Dimension:", 
                              value=128, 
                              options=[128, 256, 512, 1024])
-    alpha = form.slider("Topology Importance:",
-                        0.1,
-                        1.0,
-                        1.0)
-    nrows = form.slider("Number of rows displayed:", 
-                    1, 
-                    100, 
-                    10) 
+    alpha = form.select_slider("Topology importance (topo-to-label):",
+                                value=1.0,
+                                options=[0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0])
+    beta = form.select_slider("Label importance (label1-to-label2):",
+                                value=1.0,
+                                options=[0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0])
 
     if form.form_submit_button("Embedding"):  
-        emb_df = flow.node_emb(G, sim=sim, tau=tau, dim=dim, graph_tool=graph_tool, df_label=df_label, nrows=nrows, verbose=True, alpha=alpha)
+        emb_df = flow.node_emb(G, sim=sim, tau=tau, dim=dim, graph_tool=graph_tool, df_label=df_label, df_label2=df_label2, alpha=alpha, beta=beta, verbose=True)
 
         st.header("t-SNE")
         flow.plot_tsne_alt(emb_df)
@@ -89,12 +91,14 @@ if edgefile is not None:
             "tau": tau,
             "dim": dim,
             "graph_tool": graph_tool, 
-            "df_label": df_label, 
-            "nrows": nrows,
+            "df_label": df_label,
+            "df_label2": df_label2,
+            "alpha": alpha,
+            "beta": beta,
         }
 
         study = optuna.create_study(direction="maximize")
         study.enqueue_trial(initial_params)
-        study.optimize(flow.objective_emb(G, graph_tool, df_label, nrows), n_trials=100)
+        study.optimize(flow.objective_emb(G, graph_tool, df_label, df_label2), n_trials=100)
 
         flow.show_tuning_result(study)

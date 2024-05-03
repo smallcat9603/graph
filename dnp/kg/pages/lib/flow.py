@@ -236,13 +236,15 @@ def node_emb_n2v(_G, embeddingDimension, walkLength, walksPerNode, inOutFactor, 
     )
 
 @st.cache_data
-def node_emb(_G, sim, tau, dim, graph_tool, df_label, nrows, verbose=False, alpha=1.0):
+def node_emb(_G, sim, tau, dim, graph_tool, df_label, df_label2, alpha, beta, verbose=False):
     # adjacency matrix A --> 
     # transition matrix T (= D_1 A) --> 
     # stationary distribution x (via A x = b) --> 
     # autocovariance matrix R (= X M^tau/b -x x^T) --> 
     # eigsh u (via R u = s u) --> 
     # rescale u        
+
+    nrows = 10
 
     M = standard_random_walk_transition_matrix(_G, graph_tool=graph_tool)
     if verbose:
@@ -256,9 +258,13 @@ def node_emb(_G, sim, tau, dim, graph_tool, df_label, nrows, verbose=False, alph
         node_labels = get_node_labels(df_label)
         category = get_category_list(node_labels)
 
-        M = M_attr(n=n, node_labels=node_labels, M=M, alpha=alpha)
+        node_labels2 = None
+        if df_label2 is not None:
+            node_labels2 = get_node_labels(df_label2)
+        M = M_attr(n=n, M=M, node_labels=node_labels, node_labels2=node_labels2, alpha=alpha, beta=beta)
 
-        st.header(f"Transition Matrix with Attributes({nrows} rows)")
+        # st.write(np.sum(M, axis=1))
+        st.header(f"Transition Matrix with Attributes ({nrows} rows)")
         st.write(M.shape)
         st.table(M[:nrows, :])
 
@@ -734,25 +740,31 @@ def objective_n2v(G, rel_weight_prop):
     
     return objective
 
-def objective_emb(G, graph_tool, df_label, nrows):
+def objective_emb(G, graph_tool, df_label, df_label2):
     def objective(trial):
         params = {
             "sim": trial.suggest_categorical("sim", ["Autocovariance", "PMI"]),
             "tau": trial.suggest_int("tau", 1, 100),
             "dim": trial.suggest_int("dim", 128, 1024, log=True),
+            "alpha": trial.suggest_float("alpha", 0.1, 1.0, step=0.1),
+            "beta": trial.suggest_float("beta", 0.1, 1.0, step=0.1),
         }
 
         sim = params["sim"]
         tau = params["tau"]
         dim = params["dim"]
+        alpha = params["alpha"]
+        beta = params["beta"]
 
         result = node_emb(G,
                         sim=sim,
                         tau=tau,
                         dim=dim,
                         graph_tool=graph_tool,
-                        df_label=df_label,
-                        nrows=nrows,       
+                        df_label=df_label,  
+                        df_label2=df_label2,
+                        alpha=alpha,
+                        beta=beta,     
                         )
 
         return modeler(result, show_matrix=False)
@@ -930,7 +942,7 @@ def get_category_list(node_labels):
             category.append(0)
     return category
 
-def M_attr(n, node_labels, M, alpha):
+def transition_matrix_node_label_node(n, node_labels):
     arr_nln = np.zeros((n, n))
     for i in range(n):
         for j in range(i+1, n):
@@ -942,5 +954,21 @@ def M_attr(n, node_labels, M, alpha):
     for i in range(n):
         if arr_sum[i] > 0:
             arr_nln[i] /= arr_sum[i]
-            M[i] = M[i]*alpha + arr_nln[i]*(1-alpha)
+    return arr_nln, arr_sum
+
+def M_attr(n, M, node_labels, node_labels2, alpha, beta):
+    arr_nln, arr_sum = transition_matrix_node_label_node(n, node_labels)
+    if node_labels2 is None:
+        for i in range(n):
+            if arr_sum[i] > 0:
+                M[i] = M[i]*alpha + arr_nln[i]*(1-alpha)
+    else:
+        arr_nln2, arr_sum2 = transition_matrix_node_label_node(n, node_labels2)
+        for i in range(n):
+            if arr_sum[i] > 0 and arr_sum2[i] == 0:
+                M[i] = M[i]*alpha + arr_nln[i]*(1-alpha)
+            elif arr_sum[i] == 0 and arr_sum2[i] > 0:
+                M[i] = M[i]*alpha + arr_nln2[i]*(1-alpha)
+            elif arr_sum[i] > 0 and arr_sum2[i] > 0:
+                M[i] = M[i]*alpha + arr_nln[i]*(1-alpha)*beta + arr_nln2[i]*(1-alpha)*(1-beta)
     return M
