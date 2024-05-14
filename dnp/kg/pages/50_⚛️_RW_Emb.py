@@ -71,9 +71,10 @@ if edgefile is not None:
     beta = form.select_slider("Label importance (label1-to-label2):",
                                 value=1.0,
                                 options=[0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0])
+    save_emb = form.checkbox("Save embedding result")
 
     if form.form_submit_button("Embedding"):  
-        emb_df = flow.node_emb(G, sim=sim, tau=tau, dim=dim, graph_tool=graph_tool, df_label=df_label, df_label2=df_label2, alpha=alpha, beta=beta, verbose=True)
+        emb_df = flow.node_emb(G, sim=sim, tau=tau, dim=dim, graph_tool=graph_tool, df_label=df_label, df_label2=df_label2, alpha=alpha, beta=beta, verbose=True, save_emb=save_emb)
 
         st.header("t-SNE")
         flow.plot_tsne_alt(emb_df)
