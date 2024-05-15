@@ -302,7 +302,7 @@ def node_emb(_G, sim, tau, dim, graph_tool, df_label, df_label2, alpha, beta, ve
     }) 
 
     if save_emb:
-        np.savetxt(f"/Users/smallcat/Documents/GitHub/graph/random-walk-embedding-master/emb/tau{tau}_dim{dim}_alpha{alpha}_beta{beta}.txt", u)
+        np.savetxt(f"/Users/smallcat/Documents/GitHub/graph/dnp/kg/emb/tau{tau}_dim{dim}_alpha{alpha}_beta{beta}.txt", u)
 
     return emb_df 
 
