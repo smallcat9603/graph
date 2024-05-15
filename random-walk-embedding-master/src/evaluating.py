@@ -219,9 +219,9 @@ def link_prediction(emb, removed_edges, remaining_edges, k):
     :return: precision@k score.
     """
 
-    # Reformat the edges.
-    removed_edges = removed_edges[:, :2].astype(int) - 1
-    remaining_edges = remaining_edges[:, :2].astype(int) - 1
+    # Reformat the edges. (remove - 1 for igraph)
+    removed_edges = removed_edges[:, :2].astype(int) #- 1
+    remaining_edges = remaining_edges[:, :2].astype(int) #- 1
 
     # Compute the actual k in terms of number of edges.
     k = int(np.ceil(len(removed_edges) * k))
