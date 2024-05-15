@@ -39,7 +39,7 @@ def renum_nodes_contiguous(data, weight, labels):
     node_map = {}
     with open(file, "r") as f:
         edgelist = [line.strip().split() for line in f]
-        edgelist = [list(map(int, edge)) for edge in edgelist]
+        edgelist = [list(map(int, map(float, edge))) for edge in edgelist]
         nodes = set([edge[0] for edge in edgelist] + [edge[1] for edge in edgelist])
         node_map = {node: i for i, node in enumerate(nodes)} 
         if weight:
@@ -53,7 +53,10 @@ def renum_nodes_contiguous(data, weight, labels):
         with open(file_labels, "r") as f:
             labellist = [line.strip().split() for line in f]
             labellist = [list(map(int, nodelabel)) for nodelabel in labellist]
-            labellist_new = [(node_map[nodelabel[0]], nodelabel[1]) for nodelabel in labellist]
+            labellist_new = []
+            for nodelabel in labellist:
+                if nodelabel[0] in node_map:
+                    labellist_new.append((node_map[nodelabel[0]], nodelabel[1]))
             df = pd.DataFrame(labellist_new)
             df.to_csv(file_labels_new, sep=" ", index=False, header=False)
 
