@@ -74,7 +74,7 @@ if edgefile is not None:
     save_emb = form.checkbox("Save embedding result")
 
     if form.form_submit_button("Embedding"):  
-        emb_df = flow.node_emb(G, sim=sim, tau=tau, dim=dim, graph_tool=graph_tool, df_label=df_label, df_label2=df_label2, alpha=alpha, beta=beta, verbose=True, save_emb=save_emb)
+        emb_df = flow.node_emb(G, sim=sim, tau=tau, dim=dim, graph_tool=graph_tool, df_label=df_label, df_label2=df_label2, alpha=alpha, beta=beta, verbose=True, save_emb=save_emb, name=edgefile.name[:edgefile.name.rfind('.')])
 
         st.header("t-SNE")
         flow.plot_tsne_alt(emb_df)

@@ -236,7 +236,7 @@ def node_emb_n2v(_G, embeddingDimension, walkLength, walksPerNode, inOutFactor, 
     )
 
 @st.cache_data
-def node_emb(_G, sim, tau, dim, graph_tool, df_label, df_label2, alpha, beta, verbose=False, save_emb=False):
+def node_emb(_G, sim, tau, dim, graph_tool, df_label, df_label2, alpha, beta, verbose=False, save_emb=False, name="test"):
     # adjacency matrix A --> 
     # transition matrix T (= D_1 A) --> 
     # stationary distribution x (via A x = b) --> 
@@ -302,7 +302,7 @@ def node_emb(_G, sim, tau, dim, graph_tool, df_label, df_label2, alpha, beta, ve
     }) 
 
     if save_emb:
-        np.savetxt(f"/Users/smallcat/Documents/GitHub/graph/dnp/kg/emb/tau{tau}_dim{dim}_alpha{alpha}_beta{beta}.txt", u)
+        np.savetxt(f"/Users/smallcat/Documents/GitHub/graph/dnp/kg/emb/{name}_tau{tau}_dim{dim}_alpha{alpha}_beta{beta}.txt", u)
 
     return emb_df 
 
