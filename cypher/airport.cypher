@@ -11,7 +11,7 @@ CALL apoc.periodic.iterate(
 );
 
 CALL apoc.periodic.iterate(
-    "LOAD CSV FROM 'https://raw.githubusercontent.com/smallcat9603/graph/main/data/airport.country_0.labels' AS row FIELDTERMINATOR ' '
+    "LOAD CSV FROM 'https://raw.githubusercontent.com/smallcat9603/graph/main/data/airport.continent_0.labels' AS row FIELDTERMINATOR ' '
     RETURN row",
     "MATCH (n:Node {name: row[0]})
     SET n.labels = coalesce(n.labels, []) + row[1]",
@@ -19,7 +19,7 @@ CALL apoc.periodic.iterate(
 );
 
 CALL apoc.periodic.iterate(
-    "LOAD CSV FROM 'https://raw.githubusercontent.com/smallcat9603/graph/main/data/airport.continent_0.labels' AS row FIELDTERMINATOR ' '
+    "LOAD CSV FROM 'https://raw.githubusercontent.com/smallcat9603/graph/main/data/airport.country_0.labels' AS row FIELDTERMINATOR ' '
     RETURN row",
     "MATCH (n:Node {name: row[0]})
     SET n.labels = coalesce(n.labels, []) + row[1]",
