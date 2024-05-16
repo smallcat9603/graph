@@ -46,11 +46,12 @@ def select_data():
 
     elif TYPE == "CYPHER":
         DATA = st.radio("Select one dataset:", 
-                        ["euro_roads", "newfood", "blogcatalog", "airport"], 
+                        ["euro_roads", "newfood", "blogcatalog", "airport", "airport0.8"], 
                         captions=["The dataset contains 894 towns, 39 countries, and 1,250 roads connecting them. https://github.com/neo4j-examples/graph-embeddings/raw/main/data/roads.csv",
                                   "The dataset contains nutritional information alongside the ingredients used in 1600+ dishes. https://raw.githubusercontent.com/smallcat9603/graph/main/data/newfood.csv",
                                   "The dataset contains undirected social network of bloggers with (multi) labels representing topics of interest. https://raw.githubusercontent.com/smallcat9603/graph/main/data/blogcatalog_0.edges",
-                                  "The dataset contains flight network among global airports (from Open-Flights). https://raw.githubusercontent.com/smallcat9603/graph/main/data/airport_0.edges"]
+                                  "The dataset contains flight network among global airports (from Open-Flights). https://raw.githubusercontent.com/smallcat9603/graph/main/data/airport_0.edges",
+                                  "The dataset contains flight network among global airports (from Open-Flights), however 20 percent of edges are randomly removed while keeping graph connected. https://raw.githubusercontent.com/smallcat9603/graph/main/data/airport_0_remaining.edges"]
                         )
         LANGUAGE = "en"
 
@@ -590,6 +591,8 @@ def construct_graph_cypherfile(DATA, LANGUAGE):
             file_cypher = "https://raw.githubusercontent.com/smallcat9603/graph/main/cypher/blogcatalog.cypher"
         elif DATA == "airport":
             file_cypher = "https://raw.githubusercontent.com/smallcat9603/graph/main/cypher/airport.cypher"
+        elif DATA == "airport0.8":
+            file_cypher = "https://raw.githubusercontent.com/smallcat9603/graph/main/cypher/airport_removed.cypher"
 
         cypher.runFile(file_cypher)
 
