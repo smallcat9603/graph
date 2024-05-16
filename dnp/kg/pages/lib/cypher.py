@@ -562,7 +562,7 @@ def get_emb_result(emb):
         MATCH (n:Node)
         RETURN n.name as name, n.{emb} AS emb, labels(n)[0] AS category
         """  
-    elif st.session_state['data'] == "airport":   
+    elif st.session_state['data'].startswith("airport"):   
         query = f""" 
         MATCH (n:Node)
         WHERE n.labels[0] IN ["1", "2", "3", "4", "5", "6", "7", "8", "9"]
