@@ -31,10 +31,7 @@ else:
 ##### Create in-memory graphs & Drop in-memory graph
 
 def prj_graph(node_properties, relationship_properties):
-    exists_result = st.session_state["gds"].graph.exists(st.session_state["graph_name"])
-    if exists_result["exists"]:
-        G = st.session_state["gds"].graph.get(st.session_state["graph_name"])
-        G.drop()
+    flow.drop_memory_graph(st.session_state["graph_name"])
     G, result = st.session_state["gds"].graph.project(st.session_state["graph_name"], node_properties, relationship_properties)
 
 def drop_graph(drop_g):
