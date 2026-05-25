@@ -1,14 +1,19 @@
-CC = mpicc
-RM = /bin/rm
-PROG = rw
-
-CFLAGS = -O3
+CC      = mpicc
+CFLAGS  = -O3 -Wall -Wextra
 LDFLAGS = -ligraph -lm
 
-all : ${PROG}
+PROG    = rw
+OBJS    = main.o walker.o routing.o graph_io.o intmap.o
 
-rw : rw.c algo.c file.c rt.c
-	${CC} -o $@ $^ ${CFLAGS} ${LDFLAGS}
+all: $(PROG)
 
-clean :
-	${RM} -f ${PROG} 
+$(PROG): $(OBJS)
+	$(CC) -o $@ $^ $(CFLAGS) $(LDFLAGS)
+
+%.o: %.c
+	$(CC) -c $(CFLAGS) $< -o $@
+
+clean:
+	$(RM) -f $(PROG) $(OBJS)
+
+.PHONY: all clean
