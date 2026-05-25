@@ -49,7 +49,8 @@ static void pick_next_hop(const partition_t* part, const routing_t* routing,
                           int* out_dst_rank) {
     igraph_vector_int_t nbrs;
     igraph_vector_int_init(&nbrs, 0);
-    igraph_neighbors(&part->graph, &nbrs, (igraph_integer_t) cur_local, IGRAPH_ALL);
+    igraph_neighbors(&part->graph, &nbrs, (igraph_integer_t) cur_local,
+                     IGRAPH_ALL, IGRAPH_LOOPS_TWICE, IGRAPH_MULTIPLE);
     int n_local = (int) igraph_vector_int_size(&nbrs);
 
     const route_entry_t* re = routing_lookup(routing, cur_global);
