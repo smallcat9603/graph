@@ -40,6 +40,8 @@ typedef struct {
     int*     l2g;     /* size = nnodes */
     int      nnodes;
     intmap_t g2l;
+    int      t_min;   /* smallest edge timestamp seen during load */
+    int      t_max;   /* largest  edge timestamp seen during load */
 } partition_t;
 
 void partition_init(partition_t* p);

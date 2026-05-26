@@ -10,6 +10,8 @@ void partition_init(partition_t* p) {
     p->tals   = NULL;
     p->l2g    = NULL;
     p->nnodes = 0;
+    p->t_min  = 0;
+    p->t_max  = 0;
     intmap_init(&p->g2l, 1024);
 }
 
@@ -75,6 +77,7 @@ int partition_load_edgelist(partition_t* p, const char* path) {
 
     char line[512];
     int two_col = 0, three_col = 0;
+    int t_min = 0, t_max = 0, t_seen = 0;
 
     while (fgets(line, sizeof(line), fp)) {
         int src_g, dst_g, t;
@@ -87,6 +90,8 @@ int partition_load_edgelist(partition_t* p, const char* path) {
         } else {
             continue;  /* skip blank / malformed */
         }
+        if (!t_seen) { t_min = t_max = t; t_seen = 1; }
+        else { if (t < t_min) t_min = t; if (t > t_max) t_max = t; }
 
         int src_l = intern_global(p, &l2g_cap, src_g);
         int dst_l = intern_global(p, &l2g_cap, dst_g);
@@ -115,6 +120,9 @@ int partition_load_edgelist(partition_t* p, const char* path) {
                 "(%d and %d resp.); synthesising for 2-col, reading for 3-col\n",
                 path, two_col, three_col);
     }
+
+    p->t_min = t_min;
+    p->t_max = t_max;
 
     /* Tighten l2g */
     p->l2g = (int*) realloc(p->l2g, sizeof(int) * p->nnodes);

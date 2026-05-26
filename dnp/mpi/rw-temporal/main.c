@@ -1,25 +1,23 @@
 /*
  * main.c -- MPI driver for distributed continuous-time random walks (CTDW)
- *           on a partitioned graph.
+ *           on a partitioned graph, with three scheduling modes.
  *
  * Usage:
- *     mpirun -np <P> ./rw [dataset] [nwalkers_per_rank] [nsteps] [mode]
+ *     mpirun -np <P> ./rw [dataset] [nwalkers_per_rank] [nsteps] [mode] [delta_t]
  *
  * Arguments (all optional, see config.h for defaults):
- *     dataset           short name: facebook | git | twitch | livejournal
- *                       (or a full basename under data/)
+ *     dataset           short name: facebook | git | twitch | livejournal |
+ *                       wikipedia | reddit | mooc, or a full basename in data/
  *     nwalkers_per_rank number of walkers each rank seeds
  *     nsteps            number of nodes in each walker's path
- *     mode              0 = partitioned (each rank reads data/<P>/...subN.txt
- *                                       and ...rtN.txt)
- *                       1 = full        (every rank reads the whole graph,
- *                                       no routing table needed)
+ *     mode              0 = partitioned, 1 = full graph per rank
+ *     delta_t           scheduling policy:
+ *                          < 0  drive-to-death (legacy Wave 1 baseline)
+ *                          = 0  single-bucket scheduler (naive batching)
+ *                          > 0  N-bucket scheduler with width delta_t
+ *                               (time-window batching, the paper's contribution)
  *
- * Outputs one log file per run at log/<unix_ts>_<dataset>_w<W>_s<S>_p<P>_e<M>.txt
- *
- * Each walker step samples uniformly among edges with t > t_cur (local +
- * remote). Walkers that hit a dead end (no future edge) terminate early
- * and their path is padded with WALKER_DEAD_END_PAD (-1) in the log.
+ * Outputs one log at log/<unix_ts>_<dataset>_w<W>_s<S>_p<P>_e<M>_dt<D>.txt
  */
 
 #include <mpi.h>
@@ -32,6 +30,7 @@
 #include "config.h"
 #include "graph_io.h"
 #include "routing.h"
+#include "scheduler.h"
 #include "walker.h"
 
 typedef enum { MODE_PARTITION = 0, MODE_FULL = 1 } run_mode_t;
@@ -41,6 +40,7 @@ typedef struct {
     int        nwalkers_per_rank;
     int        nsteps;
     run_mode_t mode;
+    int        delta_t;
 } args_t;
 
 static void parse_args(int argc, char** argv, args_t* a) {
@@ -48,14 +48,14 @@ static void parse_args(int argc, char** argv, args_t* a) {
     a->nwalkers_per_rank = DEFAULT_NWALKERS;
     a->nsteps            = DEFAULT_NSTEPS;
     a->mode              = (run_mode_t) DEFAULT_MODE;
+    a->delta_t           = DEFAULT_DELTA_T;
     if (argc > 1) snprintf(a->dataset, sizeof(a->dataset), "%s", argv[1]);
     if (argc > 2) a->nwalkers_per_rank = atoi(argv[2]);
     if (argc > 3) a->nsteps            = atoi(argv[3]);
     if (argc > 4) a->mode              = (run_mode_t) atoi(argv[4]);
+    if (argc > 5) a->delta_t           = atoi(argv[5]);
 }
 
-/* Map a dataset short-name to its on-disk basename. Unknown names are
- * passed through unchanged. */
 static const char* dataset_basename(const char* short_name) {
     if (!strcmp(short_name, "facebook"))    return "facebook_combined_undirected_connected";
     if (!strcmp(short_name, "git"))         return "musae_git_edges_undirected.connected";
@@ -77,9 +77,18 @@ static void build_paths(const char* dataset, int rank, int size, run_mode_t mode
     }
 }
 
-/* Run one walker until it completes, dies, or migrates.
- * Returns 1 if the walker was retired locally (pushed into `paths`),
- *         0 if the walker migrated. */
+static void seed_rng(int rank) {
+    uint32_t t = (uint32_t) time(NULL);
+    uint32_t r = (uint32_t) rank * 2654435761u;
+    srand((unsigned int) (t ^ r));
+}
+
+/* ------------------------------------------------------------ drive-to-death
+ *
+ * Legacy Wave 1 main loop: every walker runs to completion (or migration)
+ * before the next one starts. Kept as an ablation baseline.
+ */
+
 static int drive_walker(walker_t* w, const partition_t* part, const routing_t* routing,
                         path_buf_t* paths) {
     int dst_rank;
@@ -92,20 +101,137 @@ static int drive_walker(walker_t* w, const partition_t* part, const routing_t* r
             walker_destroy(w);
             return 1;
         }
-        /* WALKER_STEP_MIGRATE */
         MPI_Send(w->buf, w->len, MPI_INT, dst_rank, TAG_WALKER, MPI_COMM_WORLD);
         walker_destroy(w);
         return 0;
     }
 }
 
-/* Per-rank RNG seed: mix wall-clock with a rank-dependent hash so ranks
- * initialised in the same second still get distinct streams. */
-static void seed_rng(int rank) {
-    uint32_t t = (uint32_t) time(NULL);
-    uint32_t r = (uint32_t) rank * 2654435761u;
-    srand((unsigned int) (t ^ r));
+static void run_drive_to_death(const args_t* args, int rank, int total_walkers,
+                               const partition_t* part, const routing_t* routing,
+                               path_buf_t* paths) {
+    int id_start = rank * args->nwalkers_per_rank;
+    int walker_len = WALKER_HEADER_INTS + args->nsteps;
+    (void) walker_len;
+
+    for (int i = 0; i < args->nwalkers_per_rank; i++) {
+        walker_t w;
+        walker_spawn(&w, id_start + i, args->nsteps);
+        drive_walker(&w, part, routing, paths);
+    }
+
+    int global_done = 0;
+    while (global_done < total_walkers) {
+        int        flag = 0;
+        MPI_Status status;
+        MPI_Iprobe(MPI_ANY_SOURCE, TAG_WALKER, MPI_COMM_WORLD, &flag, &status);
+        if (flag) {
+            int count;
+            MPI_Get_count(&status, MPI_INT, &count);
+            int* recv = (int*) malloc(sizeof(int) * count);
+            MPI_Recv(recv, count, MPI_INT, status.MPI_SOURCE, TAG_WALKER,
+                     MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+            walker_t w;
+            walker_adopt(&w, recv, count, args->nsteps, part);
+            if (w.len >= w.cap_ints) {
+                walker_finalize(&w);
+                path_buf_push(paths, w.buf);
+                walker_destroy(&w);
+            } else {
+                drive_walker(&w, part, routing, paths);
+            }
+        }
+        MPI_Allreduce(&paths->nwalkers, &global_done, 1, MPI_INT, MPI_SUM,
+                      MPI_COMM_WORLD);
+    }
 }
+
+/* ------------------------------------------------------------ bucket scheduler
+ *
+ * Wave 2 main loop: walkers are kept in a time-bucketed scheduler. Each
+ * iteration drains the earliest non-empty bucket, advances every walker
+ * in it by one step, and re-inserts the survivors. Used for both
+ * naive batching (delta_t == 0, single bucket) and time-window batching
+ * (delta_t > 0).
+ */
+
+static void process_bucket(walker_t** arr, int n,
+                           const partition_t* part, const routing_t* routing,
+                           scheduler_t* sched, path_buf_t* paths) {
+    for (int i = 0; i < n; i++) {
+        walker_t* w = arr[i];
+        int dst_rank;
+        int r = walker_step(w, part, routing, &dst_rank);
+        switch (r) {
+            case WALKER_STEP_CONTINUE:
+                scheduler_insert(sched, w);
+                break;
+            case WALKER_STEP_DONE:
+            case WALKER_STEP_DEAD_END:
+                walker_finalize(w);
+                path_buf_push(paths, w->buf);
+                walker_free(w);
+                break;
+            case WALKER_STEP_MIGRATE:
+                MPI_Send(w->buf, w->len, MPI_INT, dst_rank, TAG_WALKER, MPI_COMM_WORLD);
+                walker_free(w);
+                break;
+        }
+    }
+}
+
+static void run_bucketed(const args_t* args, int rank, int total_walkers,
+                         const partition_t* part, const routing_t* routing,
+                         path_buf_t* paths) {
+    int id_start = rank * args->nwalkers_per_rank;
+
+    scheduler_t sched;
+    scheduler_init(&sched, args->delta_t, part->t_max);
+
+    for (int i = 0; i < args->nwalkers_per_rank; i++) {
+        walker_t* w = walker_create_spawn(id_start + i, args->nsteps);
+        scheduler_insert(&sched, w);
+    }
+
+    int global_done = 0;
+    while (global_done < total_walkers) {
+        /* 1) Drain one bucket -- single round of work per outer iteration. */
+        int n;
+        walker_t** arr = scheduler_pop_earliest(&sched, &n);
+        if (arr) {
+            process_bucket(arr, n, part, routing, &sched, paths);
+            free(arr);
+        }
+
+        /* 2) Absorb any walker that just arrived from a peer rank. */
+        int        flag = 0;
+        MPI_Status status;
+        MPI_Iprobe(MPI_ANY_SOURCE, TAG_WALKER, MPI_COMM_WORLD, &flag, &status);
+        if (flag) {
+            int count;
+            MPI_Get_count(&status, MPI_INT, &count);
+            int* recv = (int*) malloc(sizeof(int) * count);
+            MPI_Recv(recv, count, MPI_INT, status.MPI_SOURCE, TAG_WALKER,
+                     MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+            walker_t* w = walker_create_adopt(recv, count, args->nsteps, part);
+            if (w->len >= w->cap_ints) {
+                walker_finalize(w);
+                path_buf_push(paths, w->buf);
+                walker_free(w);
+            } else {
+                scheduler_insert(&sched, w);
+            }
+        }
+
+        /* 3) Global termination check. */
+        MPI_Allreduce(&paths->nwalkers, &global_done, 1, MPI_INT, MPI_SUM,
+                      MPI_COMM_WORLD);
+    }
+
+    scheduler_free(&sched);
+}
+
+/* ------------------------------------------------------------ main */
 
 int main(int argc, char** argv) {
     args_t args;
@@ -120,10 +246,14 @@ int main(int argc, char** argv) {
 
     const int total_walkers = args.nwalkers_per_rank * size;
     const int id_start      = rank * args.nwalkers_per_rank;
-    printf("rank=%d/%d dataset=%s walkers=%d (%d..%d) steps=%d mode=%d\n",
+
+    const char* mode_name =
+        (args.delta_t < 0) ? "drive-to-death" :
+        (args.delta_t == 0) ? "single-bucket" : "time-window";
+    printf("rank=%d/%d dataset=%s walkers=%d (%d..%d) steps=%d mode=%d sched=%s delta_t=%d\n",
            rank, size, args.dataset, args.nwalkers_per_rank,
            id_start, id_start + args.nwalkers_per_rank - 1,
-           args.nsteps, (int) args.mode);
+           args.nsteps, (int) args.mode, mode_name, args.delta_t);
 
     char edge_path[512], rt_path[512];
     build_paths(args.dataset, rank, size, args.mode, edge_path, rt_path, sizeof(edge_path));
@@ -133,7 +263,8 @@ int main(int argc, char** argv) {
     if (partition_load_edgelist(&part, edge_path) != 0) {
         MPI_Abort(MPI_COMM_WORLD, 1);
     }
-    printf("rank=%d loaded %s (|V_local|=%d)\n", rank, edge_path, part.nnodes);
+    printf("rank=%d loaded %s (|V_local|=%d  t_range=[%d,%d])\n",
+           rank, edge_path, part.nnodes, part.t_min, part.t_max);
 
     routing_t routing;
     routing_init(&routing);
@@ -151,41 +282,15 @@ int main(int argc, char** argv) {
 
     double t0 = MPI_Wtime();
 
-    for (int i = 0; i < args.nwalkers_per_rank; i++) {
-        walker_t w;
-        walker_spawn(&w, id_start + i, args.nsteps);
-        drive_walker(&w, &part, &routing, &paths);
-    }
-
-    int global_done = 0;
-    while (global_done < total_walkers) {
-        int        flag = 0;
-        MPI_Status status;
-        MPI_Iprobe(MPI_ANY_SOURCE, TAG_WALKER, MPI_COMM_WORLD, &flag, &status);
-        if (flag) {
-            int count;
-            MPI_Get_count(&status, MPI_INT, &count);
-            int* recv = (int*) malloc(sizeof(int) * count);
-            MPI_Recv(recv, count, MPI_INT, status.MPI_SOURCE, TAG_WALKER,
-                     MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-
-            walker_t w;
-            walker_adopt(&w, recv, count, args.nsteps, &part);
-
-            if (w.len >= w.cap_ints) {
-                walker_finalize(&w);
-                path_buf_push(&paths, w.buf);
-                walker_destroy(&w);
-            } else {
-                drive_walker(&w, &part, &routing, &paths);
-            }
-        }
-        MPI_Allreduce(&paths.nwalkers, &global_done, 1, MPI_INT, MPI_SUM,
-                      MPI_COMM_WORLD);
+    if (args.delta_t < 0) {
+        run_drive_to_death(&args, rank, total_walkers, &part, &routing, &paths);
+    } else {
+        run_bucketed(&args, rank, total_walkers, &part, &routing, &paths);
     }
 
     double t1 = MPI_Wtime();
 
+    /* Gather and write log */
     int  local_npaths = paths.nwalkers;
     int* counts = NULL;
     int* displs = NULL;
@@ -213,12 +318,14 @@ int main(int argc, char** argv) {
     if (rank == 0) {
         char log_path[512];
         snprintf(log_path, sizeof(log_path),
-                 "%s/%d_%s_w%d_s%d_p%d_e%d.txt",
+                 "%s/%d_%s_w%d_s%d_p%d_e%d_dt%d.txt",
                  LOG_DIR, (int) t1, args.dataset,
-                 args.nwalkers_per_rank, args.nsteps, size, (int) args.mode);
+                 args.nwalkers_per_rank, args.nsteps, size,
+                 (int) args.mode, args.delta_t);
         log_write(log_path, all_paths, total_paths_int / walker_len, walker_len);
         printf("wrote %s\n", log_path);
-        printf("rank=0 elapsed=%fs total_walkers=%d\n", t1 - t0, total_walkers);
+        printf("rank=0 elapsed=%fs sched=%s delta_t=%d total_walkers=%d\n",
+               t1 - t0, mode_name, args.delta_t, total_walkers);
         free(counts);
         free(displs);
         free(all_paths);

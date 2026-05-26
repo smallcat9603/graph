@@ -142,6 +142,24 @@ void walker_destroy(walker_t* w) {
     w->cur_local = -1;
 }
 
+walker_t* walker_create_spawn(int id, int max_steps) {
+    walker_t* w = (walker_t*) malloc(sizeof(walker_t));
+    walker_spawn(w, id, max_steps);
+    return w;
+}
+
+walker_t* walker_create_adopt(int* recv_buf, int recv_len, int max_steps,
+                              const partition_t* part) {
+    walker_t* w = (walker_t*) malloc(sizeof(walker_t));
+    walker_adopt(w, recv_buf, recv_len, max_steps, part);
+    return w;
+}
+
+void walker_free(walker_t* w) {
+    walker_destroy(w);
+    free(w);
+}
+
 /* ---------------------------------------------------------------- path_buf */
 
 void path_buf_init(path_buf_t* pb, int walker_len) {

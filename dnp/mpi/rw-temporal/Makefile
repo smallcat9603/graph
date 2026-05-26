@@ -3,7 +3,7 @@ CFLAGS  = -O3 -Wall -Wextra
 LDFLAGS = -lm
 
 PROG    = rw
-OBJS    = main.o walker.o routing.o graph_io.o intmap.o
+OBJS    = main.o walker.o routing.o graph_io.o intmap.o scheduler.o
 
 all: $(PROG)
 

@@ -43,6 +43,7 @@
 #define DEFAULT_NWALKERS  1
 #define DEFAULT_NSTEPS    80
 #define DEFAULT_MODE      0   /* 0 = partitioned, 1 = full graph per rank */
+#define DEFAULT_DELTA_T   (-1)/* <0 drive-to-death | =0 single bucket | >0 time-window */
 
 /* Paths are interpreted relative to the directory rw is launched from. */
 #define DATA_DIR "data"

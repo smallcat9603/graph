@@ -59,6 +59,14 @@ void walker_finalize(walker_t* w);
 /* Free the walker buffer. */
 void walker_destroy(walker_t* w);
 
+/* Heap-allocated factory wrappers (for the bucket scheduler, which stores
+ * walker_t pointers). The returned pointer owns its buffer; pair with
+ * walker_free. */
+walker_t* walker_create_spawn(int id, int max_steps);
+walker_t* walker_create_adopt(int* recv_buf, int recv_len, int max_steps,
+                              const partition_t* part);
+void      walker_free(walker_t* w);
+
 
 /*
  * path_buf -- growable collection of completed walker buffers. Each slot
