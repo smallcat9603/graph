@@ -5,7 +5,7 @@
 #include <string.h>
 #include <time.h>
 
-void walker_spawn(walker_t* w, int id, int max_steps) {
+void walker_spawn(walker_t* w, int id, int max_steps, const partition_t* part) {
     w->cap_ints  = WALKER_HEADER_INTS + max_steps;
     w->buf       = (int*) malloc(sizeof(int) * w->cap_ints);
     w->len       = WALKER_HEADER_INTS;
@@ -15,6 +15,14 @@ void walker_spawn(walker_t* w, int id, int max_steps) {
     WALKER_END_TS(w->buf)   = 0;
     WALKER_HOPS_OUT(w->buf) = 0;
     WALKER_TCUR(w->buf)     = WALKER_INITIAL_TCUR;
+
+    /* Pick a random starting node eagerly so cur_local is valid before
+     * the walker reaches any scheduler. */
+    if (part->nnodes > 0) {
+        int local = rand() % part->nnodes;
+        w->cur_local = local;
+        w->buf[w->len++] = part->l2g[local];
+    }
 }
 
 void walker_adopt(walker_t* w, int* recv_buf, int recv_len, int max_steps,
@@ -88,17 +96,8 @@ int walker_step(walker_t* w, const partition_t* part, const routing_t* routing,
                 int* out_dst_rank) {
     if (w->len >= w->cap_ints) return WALKER_STEP_DONE;
 
-    /* First step: pick a random starting node in this partition. No edge
-     * is taken; t_cur remains at its initial value so the next call can
-     * accept any edge with t > WALKER_INITIAL_TCUR. */
-    if (w->len == WALKER_HEADER_INTS) {
-        int local = rand() % part->nnodes;
-        w->cur_local = local;
-        w->buf[w->len++] = part->l2g[local];
-        return (w->len >= w->cap_ints) ? WALKER_STEP_DONE : WALKER_STEP_CONTINUE;
-    }
-
-    /* Subsequent step: hop along a time-respecting edge. */
+    /* The starting node was already placed by walker_spawn / walker_adopt,
+     * so every walker_step call takes a real edge. */
     int cur_local  = w->cur_local;
     int cur_global = w->buf[w->len - 1];
     int t_cur      = WALKER_TCUR(w->buf);
@@ -142,9 +141,9 @@ void walker_destroy(walker_t* w) {
     w->cur_local = -1;
 }
 
-walker_t* walker_create_spawn(int id, int max_steps) {
+walker_t* walker_create_spawn(int id, int max_steps, const partition_t* part) {
     walker_t* w = (walker_t*) malloc(sizeof(walker_t));
-    walker_spawn(w, id, max_steps);
+    walker_spawn(w, id, max_steps, part);
     return w;
 }
 

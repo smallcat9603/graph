@@ -29,11 +29,13 @@
 
 #include "config.h"
 #include "graph_io.h"
+#include "node_scheduler.h"
 #include "routing.h"
 #include "scheduler.h"
 #include "walker.h"
 
 typedef enum { MODE_PARTITION = 0, MODE_FULL = 1 } run_mode_t;
+typedef enum { POLICY_AUTO = 0, POLICY_NODE = 1 } policy_t;
 
 typedef struct {
     char       dataset[64];
@@ -41,6 +43,7 @@ typedef struct {
     int        nsteps;
     run_mode_t mode;
     int        delta_t;
+    policy_t   policy;
 } args_t;
 
 static void parse_args(int argc, char** argv, args_t* a) {
@@ -49,11 +52,13 @@ static void parse_args(int argc, char** argv, args_t* a) {
     a->nsteps            = DEFAULT_NSTEPS;
     a->mode              = (run_mode_t) DEFAULT_MODE;
     a->delta_t           = DEFAULT_DELTA_T;
+    a->policy            = POLICY_AUTO;
     if (argc > 1) snprintf(a->dataset, sizeof(a->dataset), "%s", argv[1]);
     if (argc > 2) a->nwalkers_per_rank = atoi(argv[2]);
     if (argc > 3) a->nsteps            = atoi(argv[3]);
     if (argc > 4) a->mode              = (run_mode_t) atoi(argv[4]);
     if (argc > 5) a->delta_t           = atoi(argv[5]);
+    if (argc > 6) a->policy            = (policy_t) atoi(argv[6]);
 }
 
 static const char* dataset_basename(const char* short_name) {
@@ -116,7 +121,7 @@ static void run_drive_to_death(const args_t* args, int rank, int total_walkers,
 
     for (int i = 0; i < args->nwalkers_per_rank; i++) {
         walker_t w;
-        walker_spawn(&w, id_start + i, args->nsteps);
+        walker_spawn(&w, id_start + i, args->nsteps, part);
         drive_walker(&w, part, routing, paths);
     }
 
@@ -189,7 +194,7 @@ static void run_bucketed(const args_t* args, int rank, int total_walkers,
     scheduler_init(&sched, args->delta_t, part->t_max);
 
     for (int i = 0; i < args->nwalkers_per_rank; i++) {
-        walker_t* w = walker_create_spawn(id_start + i, args->nsteps);
+        walker_t* w = walker_create_spawn(id_start + i, args->nsteps, part);
         scheduler_insert(&sched, w);
     }
 
@@ -231,6 +236,86 @@ static void run_bucketed(const args_t* args, int rank, int total_walkers,
     scheduler_free(&sched);
 }
 
+/* ------------------------------------------------------------ node grouping
+ *
+ * Wave 3 main loop: walkers are bucketed by their CURRENT NODE rather
+ * than by t_cur. Each iteration drains one node bucket; all walkers in
+ * that batch share the same TAL, giving real cache locality.
+ */
+
+static void process_node_bucket(walker_t** arr, int n,
+                                const partition_t* part, const routing_t* routing,
+                                node_scheduler_t* sched, path_buf_t* paths) {
+    for (int i = 0; i < n; i++) {
+        walker_t* w = arr[i];
+        int dst_rank;
+        int r = walker_step(w, part, routing, &dst_rank);
+        switch (r) {
+            case WALKER_STEP_CONTINUE:
+                node_scheduler_insert(sched, w);
+                break;
+            case WALKER_STEP_DONE:
+            case WALKER_STEP_DEAD_END:
+                walker_finalize(w);
+                path_buf_push(paths, w->buf);
+                walker_free(w);
+                break;
+            case WALKER_STEP_MIGRATE:
+                MPI_Send(w->buf, w->len, MPI_INT, dst_rank, TAG_WALKER, MPI_COMM_WORLD);
+                walker_free(w);
+                break;
+        }
+    }
+}
+
+static void run_node_grouped(const args_t* args, int rank, int total_walkers,
+                             const partition_t* part, const routing_t* routing,
+                             path_buf_t* paths) {
+    int id_start = rank * args->nwalkers_per_rank;
+
+    node_scheduler_t sched;
+    node_scheduler_init(&sched, part->nnodes);
+
+    for (int i = 0; i < args->nwalkers_per_rank; i++) {
+        walker_t* w = walker_create_spawn(id_start + i, args->nsteps, part);
+        node_scheduler_insert(&sched, w);
+    }
+
+    int global_done = 0;
+    while (global_done < total_walkers) {
+        int n;
+        walker_t** arr = node_scheduler_pop_any(&sched, &n);
+        if (arr) {
+            process_node_bucket(arr, n, part, routing, &sched, paths);
+            free(arr);
+        }
+
+        int        flag = 0;
+        MPI_Status status;
+        MPI_Iprobe(MPI_ANY_SOURCE, TAG_WALKER, MPI_COMM_WORLD, &flag, &status);
+        if (flag) {
+            int count;
+            MPI_Get_count(&status, MPI_INT, &count);
+            int* recv = (int*) malloc(sizeof(int) * count);
+            MPI_Recv(recv, count, MPI_INT, status.MPI_SOURCE, TAG_WALKER,
+                     MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+            walker_t* w = walker_create_adopt(recv, count, args->nsteps, part);
+            if (w->len >= w->cap_ints) {
+                walker_finalize(w);
+                path_buf_push(paths, w->buf);
+                walker_free(w);
+            } else {
+                node_scheduler_insert(&sched, w);
+            }
+        }
+
+        MPI_Allreduce(&paths->nwalkers, &global_done, 1, MPI_INT, MPI_SUM,
+                      MPI_COMM_WORLD);
+    }
+
+    node_scheduler_free(&sched);
+}
+
 /* ------------------------------------------------------------ main */
 
 int main(int argc, char** argv) {
@@ -247,13 +332,20 @@ int main(int argc, char** argv) {
     const int total_walkers = args.nwalkers_per_rank * size;
     const int id_start      = rank * args.nwalkers_per_rank;
 
-    const char* mode_name =
-        (args.delta_t < 0) ? "drive-to-death" :
-        (args.delta_t == 0) ? "single-bucket" : "time-window";
-    printf("rank=%d/%d dataset=%s walkers=%d (%d..%d) steps=%d mode=%d sched=%s delta_t=%d\n",
+    const char* mode_name;
+    if (args.policy == POLICY_NODE) {
+        mode_name = "node-grouping";
+    } else if (args.delta_t < 0) {
+        mode_name = "drive-to-death";
+    } else if (args.delta_t == 0) {
+        mode_name = "single-bucket";
+    } else {
+        mode_name = "time-window";
+    }
+    printf("rank=%d/%d dataset=%s walkers=%d (%d..%d) steps=%d mode=%d sched=%s delta_t=%d policy=%d\n",
            rank, size, args.dataset, args.nwalkers_per_rank,
            id_start, id_start + args.nwalkers_per_rank - 1,
-           args.nsteps, (int) args.mode, mode_name, args.delta_t);
+           args.nsteps, (int) args.mode, mode_name, args.delta_t, (int) args.policy);
 
     char edge_path[512], rt_path[512];
     build_paths(args.dataset, rank, size, args.mode, edge_path, rt_path, sizeof(edge_path));
@@ -282,7 +374,9 @@ int main(int argc, char** argv) {
 
     double t0 = MPI_Wtime();
 
-    if (args.delta_t < 0) {
+    if (args.policy == POLICY_NODE) {
+        run_node_grouped(&args, rank, total_walkers, &part, &routing, &paths);
+    } else if (args.delta_t < 0) {
         run_drive_to_death(&args, rank, total_walkers, &part, &routing, &paths);
     } else {
         run_bucketed(&args, rank, total_walkers, &part, &routing, &paths);
@@ -318,10 +412,10 @@ int main(int argc, char** argv) {
     if (rank == 0) {
         char log_path[512];
         snprintf(log_path, sizeof(log_path),
-                 "%s/%d_%s_w%d_s%d_p%d_e%d_dt%d.txt",
+                 "%s/%d_%s_w%d_s%d_p%d_e%d_dt%d_pol%d.txt",
                  LOG_DIR, (int) t1, args.dataset,
                  args.nwalkers_per_rank, args.nsteps, size,
-                 (int) args.mode, args.delta_t);
+                 (int) args.mode, args.delta_t, (int) args.policy);
         log_write(log_path, all_paths, total_paths_int / walker_len, walker_len);
         printf("wrote %s\n", log_path);
         printf("rank=0 elapsed=%fs sched=%s delta_t=%d total_walkers=%d\n",

@@ -30,10 +30,13 @@ typedef struct {
 #define WALKER_STEP_DONE     2  /* path reached max_steps                 */
 #define WALKER_STEP_DEAD_END 3  /* no valid future edge -- terminate      */
 
-/* Allocate a fresh walker buffer of capacity (WALKER_HEADER_INTS + max_steps),
- * stamp id / start_ts, zero hops_out / end_ts, and set t_cur to
- * WALKER_INITIAL_TCUR so the first hop accepts any edge. */
-void walker_spawn(walker_t* w, int id, int max_steps);
+/* Allocate a fresh walker buffer (capacity WALKER_HEADER_INTS + max_steps),
+ * stamp id / start_ts, zero hops_out / end_ts, set t_cur to
+ * WALKER_INITIAL_TCUR (so the first hop accepts any edge), and
+ * eagerly pick a uniformly-random starting node from `part`.
+ * After this returns, w->cur_local is valid and the first path slot
+ * holds the global id of the chosen starting node. */
+void walker_spawn(walker_t* w, int id, int max_steps, const partition_t* part);
 
 /* Take ownership of an MPI-received buffer of `recv_len` ints, growing it
  * to full capacity so subsequent steps don't realloc. Resolves cur_local
@@ -41,15 +44,11 @@ void walker_spawn(walker_t* w, int id, int max_steps);
 void walker_adopt(walker_t* w, int* recv_buf, int recv_len, int max_steps,
                   const partition_t* part);
 
-/* Advance the walker by exactly one node.
- *
- * - First call (len == WALKER_HEADER_INTS) picks a random starting node
- *   and does not take an edge; t_cur stays at its spawn value.
- * - Later calls find one neighbour (local or remote) with t > t_cur and
- *   take that edge; t_cur is updated to the edge's timestamp.
- *
- * Returns one of WALKER_STEP_*. If MIGRATE is returned, *out_dst_rank is
- * filled with the target rank and the caller must MPI_Send the buffer. */
+/* Advance the walker by exactly one edge: find one neighbour (local or
+ * remote) with t > t_cur, take that edge, append the destination's
+ * global id to the path, update t_cur. Returns one of WALKER_STEP_*.
+ * If MIGRATE is returned, *out_dst_rank is filled with the target rank
+ * and the caller must MPI_Send the buffer. */
 int  walker_step(walker_t* w, const partition_t* part, const routing_t* routing,
                  int* out_dst_rank);
 
@@ -62,7 +61,7 @@ void walker_destroy(walker_t* w);
 /* Heap-allocated factory wrappers (for the bucket scheduler, which stores
  * walker_t pointers). The returned pointer owns its buffer; pair with
  * walker_free. */
-walker_t* walker_create_spawn(int id, int max_steps);
+walker_t* walker_create_spawn(int id, int max_steps, const partition_t* part);
 walker_t* walker_create_adopt(int* recv_buf, int recv_len, int max_steps,
                               const partition_t* part);
 void      walker_free(walker_t* w);
