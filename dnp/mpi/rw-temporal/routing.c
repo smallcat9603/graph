@@ -4,6 +4,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "config.h"
+
 void routing_init(routing_t* r) {
     r->entries  = NULL;
     r->nentries = 0;
@@ -20,45 +22,63 @@ void routing_free(routing_t* r) {
     intmap_free(&r->index);
 }
 
+static int cmp_peer_by_t(const void* a, const void* b) {
+    int ta = ((const route_peer_t*) a)->t;
+    int tb = ((const route_peer_t*) b)->t;
+    return (ta > tb) - (ta < tb);
+}
+
 /* Parse one line of the form:
- *     <src> "[(d0, p0), (d1, p1), ...]"
+ *     <src> "[(d0, p0[, t0]), (d1, p1[, t1]), ...]"
  *
- * Returns 0 on success and fills *src_out / *peers_out / *npairs_out.
- * *peers_out is malloc'd; caller frees.
- * Returns -1 if the line is malformed; nothing is allocated in that case.
- */
-static int parse_line(const char* line, int* src_out, int** peers_out, int* npairs_out) {
+ * On success fills *src_out / *peers_out / *npeers_out (peers sorted by t).
+ * *peers_out is malloc'd; caller frees. Returns -1 on malformed line. */
+static int parse_line(const char* line, int* src_out,
+                      route_peer_t** peers_out, int* npeers_out) {
     if (sscanf(line, "%d", src_out) != 1) return -1;
+    int src = *src_out;
 
     const char* lb = strchr(line, '[');
     const char* rb = strchr(line, ']');
     if (!lb || !rb || rb <= lb + 1) return -1;
 
-    /* First pass: count '(' between brackets to size the output array. */
-    int npairs = 0;
+    int npeers = 0;
     for (const char* p = lb; p < rb; p++) {
-        if (*p == '(') npairs++;
+        if (*p == '(') npeers++;
     }
-    if (npairs == 0) return -1;
+    if (npeers == 0) return -1;
 
-    int* peers = (int*) malloc(sizeof(int) * 2 * npairs);
+    route_peer_t* peers = (route_peer_t*) malloc(sizeof(route_peer_t) * npeers);
     int written = 0;
     const char* cursor = lb;
 
-    while (written < 2 * npairs) {
+    while (written < npeers) {
         const char* lp = strchr(cursor, '(');
         if (!lp || lp >= rb) { free(peers); return -1; }
-        int dst, proc;
-        if (sscanf(lp, "(%d, %d)", &dst, &proc) != 2) { free(peers); return -1; }
-        peers[written++] = dst;
-        peers[written++] = proc;
+
+        int dst, proc, t;
+        int n = sscanf(lp, "(%d, %d, %d)", &dst, &proc, &t);
+        if (n == 3) {
+            /* 3-tuple: timestamp provided */
+        } else if (sscanf(lp, "(%d, %d)", &dst, &proc) == 2) {
+            t = synth_timestamp(src, dst);
+        } else {
+            free(peers); return -1;
+        }
+
+        peers[written].dst_global = dst;
+        peers[written].dst_proc   = proc;
+        peers[written].t          = t;
+        written++;
+
         cursor = strchr(lp, ')');
         if (!cursor) { free(peers); return -1; }
         cursor++;
     }
 
+    qsort(peers, npeers, sizeof(route_peer_t), cmp_peer_by_t);
     *peers_out  = peers;
-    *npairs_out = npairs;
+    *npeers_out = npeers;
     return 0;
 }
 
@@ -73,13 +93,13 @@ int routing_load(routing_t* r, const char* path) {
     r->entries  = (route_entry_t*) malloc(sizeof(route_entry_t) * cap);
     r->nentries = 0;
 
-    char*  line   = NULL;
-    size_t bufsz  = 0;
+    char*  line  = NULL;
+    size_t bufsz = 0;
 
     while (getline(&line, &bufsz, fp) != -1) {
-        int  src, npairs;
-        int* peers = NULL;
-        if (parse_line(line, &src, &peers, &npairs) != 0) {
+        int           src, npeers;
+        route_peer_t* peers = NULL;
+        if (parse_line(line, &src, &peers, &npeers) != 0) {
             fprintf(stderr, "routing_load: skipping malformed line in %s\n", path);
             continue;
         }
@@ -89,7 +109,7 @@ int routing_load(routing_t* r, const char* path) {
         }
         r->entries[r->nentries].src_global = src;
         r->entries[r->nentries].peers      = peers;
-        r->entries[r->nentries].npairs     = npairs;
+        r->entries[r->nentries].npeers     = npeers;
         intmap_put(&r->index, src, r->nentries);
         r->nentries++;
     }

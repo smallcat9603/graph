@@ -1,6 +1,6 @@
 /*
- * main.c -- MPI driver for distributed (static) random walks on a
- *           partitioned graph.
+ * main.c -- MPI driver for distributed continuous-time random walks (CTDW)
+ *           on a partitioned graph.
  *
  * Usage:
  *     mpirun -np <P> ./rw [dataset] [nwalkers_per_rank] [nsteps] [mode]
@@ -16,6 +16,10 @@
  *                                       no routing table needed)
  *
  * Outputs one log file per run at log/<unix_ts>_<dataset>_w<W>_s<S>_p<P>_e<M>.txt
+ *
+ * Each walker step samples uniformly among edges with t > t_cur (local +
+ * remote). Walkers that hit a dead end (no future edge) terminate early
+ * and their path is padded with WALKER_DEAD_END_PAD (-1) in the log.
  */
 
 #include <mpi.h>
@@ -51,7 +55,7 @@ static void parse_args(int argc, char** argv, args_t* a) {
 }
 
 /* Map a dataset short-name to its on-disk basename. Unknown names are
- * passed through unchanged (so a full basename also works). */
+ * passed through unchanged. */
 static const char* dataset_basename(const char* short_name) {
     if (!strcmp(short_name, "facebook"))    return "facebook_combined_undirected_connected";
     if (!strcmp(short_name, "git"))         return "musae_git_edges_undirected.connected";
@@ -60,8 +64,6 @@ static const char* dataset_basename(const char* short_name) {
     return short_name;
 }
 
-/* Build the per-rank edgelist and routing-table paths.
- * `rt_path` is left empty when the routing table is not used. */
 static void build_paths(const char* dataset, int rank, int size, run_mode_t mode,
                         char* edge_path, char* rt_path, size_t cap) {
     const char* base = dataset_basename(dataset);
@@ -75,16 +77,16 @@ static void build_paths(const char* dataset, int rank, int size, run_mode_t mode
     }
 }
 
-/* Run one walker to completion or to the point it has been sent away.
- * Returns 1 if the walker finished locally and was pushed into `paths`,
+/* Run one walker until it completes, dies, or migrates.
+ * Returns 1 if the walker was retired locally (pushed into `paths`),
  *         0 if the walker migrated. */
 static int drive_walker(walker_t* w, const partition_t* part, const routing_t* routing,
-                        int nsteps, path_buf_t* paths) {
+                        path_buf_t* paths) {
     int dst_rank;
     for (;;) {
-        int r = walker_step(w, part, routing, nsteps, &dst_rank);
+        int r = walker_step(w, part, routing, &dst_rank);
         if (r == WALKER_STEP_CONTINUE) continue;
-        if (r == WALKER_STEP_DONE) {
+        if (r == WALKER_STEP_DONE || r == WALKER_STEP_DEAD_END) {
             walker_finalize(w);
             path_buf_push(paths, w->buf);
             walker_destroy(w);
@@ -97,8 +99,8 @@ static int drive_walker(walker_t* w, const partition_t* part, const routing_t* r
     }
 }
 
-/* Per-rank RNG seed: combine wall-clock with a rank-dependent hash so
- * that ranks initialised in the same second still get distinct streams. */
+/* Per-rank RNG seed: mix wall-clock with a rank-dependent hash so ranks
+ * initialised in the same second still get distinct streams. */
 static void seed_rng(int rank) {
     uint32_t t = (uint32_t) time(NULL);
     uint32_t r = (uint32_t) rank * 2654435761u;
@@ -123,21 +125,16 @@ int main(int argc, char** argv) {
            id_start, id_start + args.nwalkers_per_rank - 1,
            args.nsteps, (int) args.mode);
 
-    /* Locate input files. */
-    char edge_path[512];
-    char rt_path[512];
+    char edge_path[512], rt_path[512];
     build_paths(args.dataset, rank, size, args.mode, edge_path, rt_path, sizeof(edge_path));
 
-    /* Load this rank's partition graph. */
     partition_t part;
     partition_init(&part);
-    if (partition_load_edgelist(&part, edge_path, /*directed=*/false) != 0) {
+    if (partition_load_edgelist(&part, edge_path) != 0) {
         MPI_Abort(MPI_COMM_WORLD, 1);
     }
     printf("rank=%d loaded %s (|V_local|=%d)\n", rank, edge_path, part.nnodes);
-    partition_assert_connected(&part);
 
-    /* Load routing table (partitioned mode only). */
     routing_t routing;
     routing_init(&routing);
     if (rt_path[0] != '\0') {
@@ -148,22 +145,18 @@ int main(int argc, char** argv) {
         printf("rank=%d loaded routing %s\n", rank, rt_path);
     }
 
-    /* Buffer of completed walker paths on this rank. */
     const int walker_len = WALKER_HEADER_INTS + args.nsteps;
     path_buf_t paths;
     path_buf_init(&paths, walker_len);
 
     double t0 = MPI_Wtime();
 
-    /* Seed walkers belonging to this rank. */
     for (int i = 0; i < args.nwalkers_per_rank; i++) {
         walker_t w;
         walker_spawn(&w, id_start + i, args.nsteps);
-        drive_walker(&w, &part, &routing, args.nsteps, &paths);
+        drive_walker(&w, &part, &routing, &paths);
     }
 
-    /* Service in-flight walkers from other ranks until every walker in the
-     * whole job has finished. */
     int global_done = 0;
     while (global_done < total_walkers) {
         int        flag = 0;
@@ -179,13 +172,12 @@ int main(int argc, char** argv) {
             walker_t w;
             walker_adopt(&w, recv, count, args.nsteps, &part);
 
-            if (w.len >= walker_len) {
-                /* Walker arrived already full (corner case: last hop crossed). */
+            if (w.len >= w.cap_ints) {
                 walker_finalize(&w);
                 path_buf_push(&paths, w.buf);
                 walker_destroy(&w);
             } else {
-                drive_walker(&w, &part, &routing, args.nsteps, &paths);
+                drive_walker(&w, &part, &routing, &paths);
             }
         }
         MPI_Allreduce(&paths.nwalkers, &global_done, 1, MPI_INT, MPI_SUM,
@@ -194,7 +186,6 @@ int main(int argc, char** argv) {
 
     double t1 = MPI_Wtime();
 
-    /* Gather completed paths on rank 0 and write the log. */
     int  local_npaths = paths.nwalkers;
     int* counts = NULL;
     int* displs = NULL;

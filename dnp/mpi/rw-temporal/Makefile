@@ -1,6 +1,6 @@
 CC      = mpicc
 CFLAGS  = -O3 -Wall -Wextra
-LDFLAGS = -ligraph -lm
+LDFLAGS = -lm
 
 PROG    = rw
 OBJS    = main.o walker.o routing.o graph_io.o intmap.o
