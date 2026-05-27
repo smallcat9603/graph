@@ -30,23 +30,78 @@ from collections import defaultdict
 
 import numpy as np
 
+# Keep in sync with config.h MAX_CHUNK_BYTES (90 MiB).
+MAX_CHUNK_BYTES = 90 * 1024 * 1024
+
+
+def resolve_chunks(logical):
+    """Resolve a logical path to its on-disk chunk file(s).
+    Single file if it exists, else contiguous <logical>.part000, .part001, ..."""
+    if os.path.isfile(logical):
+        return [logical]
+    parts = []
+    i = 0
+    while True:
+        p = f"{logical}.part{i:03d}"
+        if not os.path.isfile(p):
+            break
+        parts.append(p)
+        i += 1
+    return parts
+
+
+def write_split(path, line_iter):
+    """Write text lines (each already ending in '\\n') to <path>, splitting at
+    line boundaries into <path>.part000, .part001, ... whenever a part would
+    exceed MAX_CHUNK_BYTES. If only one part results, rename it to <path>."""
+    # Clear any stale output from a previous run (single file + parts).
+    if os.path.exists(path):
+        os.remove(path)
+    i = 0
+    while True:
+        sp = f"{path}.part{i:03d}"
+        if not os.path.exists(sp):
+            break
+        os.remove(sp)
+        i += 1
+    part_idx = 0
+    part_bytes = 0
+    fp = open(f"{path}.part{part_idx:03d}", "w")
+    for line in line_iter:
+        b = len(line.encode("utf-8"))
+        if part_bytes + b > MAX_CHUNK_BYTES and part_bytes > 0:
+            fp.close()
+            part_idx += 1
+            part_bytes = 0
+            fp = open(f"{path}.part{part_idx:03d}", "w")
+        fp.write(line)
+        part_bytes += b
+    fp.close()
+    if part_idx == 0:
+        os.replace(f"{path}.part000", path)
+
 
 def load_edges(path):
-    """Return an (E, 3) int32 numpy array."""
+    """Return an (E, 3) int32 numpy array, reading across chunks if split."""
+    chunks = resolve_chunks(path)
+    if not chunks:
+        sys.exit(f"file not found: {path} (or {path}.part000)")
     try:
         import pandas as pd
-        df = pd.read_csv(path, sep=r'\s+', header=None, dtype=np.int32, engine='c')
-        return df.values
+        frames = [pd.read_csv(c, sep=r'\s+', header=None, dtype=np.int32, engine='c')
+                  for c in chunks]
+        return np.concatenate([f.values for f in frames], axis=0)
     except ImportError:
         pass
 
     rows = []
-    with open(path) as f:
-        for line in f:
-            parts = line.split()
-            if len(parts) != 3:
-                continue
-            rows.append((int(parts[0]), int(parts[1]), int(parts[2])))
+    for c in chunks:
+        with open(c) as f:
+            for line in f:
+                parts = line.split()
+                if len(parts) != 3:
+                    continue
+                rows.append((int(parts[0]), int(parts[1]), int(parts[2])))
     return np.array(rows, dtype=np.int32)
 
 
@@ -73,8 +128,8 @@ def main():
         sys.exit("usage: partition_metis.py <edge_file> <num_parts>")
     edge_file = sys.argv[1]
     num_parts = int(sys.argv[2])
-    if not os.path.isfile(edge_file):
-        sys.exit(f"file not found: {edge_file}")
+    if not resolve_chunks(edge_file):
+        sys.exit(f"file not found: {edge_file} (or {edge_file}.part000)")
     if num_parts < 2:
         sys.exit(f"num_parts must be >= 2 (got {num_parts})")
 
@@ -131,12 +186,13 @@ def main():
     n_cross = int(np.sum(~is_local))
     print(f"      cross-partition edges: {n_cross} ({100*n_cross/n_edges:.1f}%)")
 
-    # 5a. Local edges per rank
+    # 5a. Local edges per rank (split into <100MB chunks)
     for r in range(num_parts):
         mask = is_local & (src_part == r)
         rank_edges = edges[mask]
         sub_path = os.path.join(out_dir, f"{base}.sub{r}.txt")
-        np.savetxt(sub_path, rank_edges, fmt="%d %d %d")
+        write_split(sub_path,
+                    (f"{e[0]} {e[1]} {e[2]}\n" for e in rank_edges))
 
     # 5b. Routing table per rank
     rt = [defaultdict(list) for _ in range(num_parts)]
@@ -152,12 +208,14 @@ def main():
         rt[ru][u].append((v, rv, t))
         rt[rv][v].append((u, ru, t))
 
+    def rt_lines(entries):
+        for u, peers in entries.items():
+            peers_str = ", ".join(f"({v}, {ru}, {t})" for v, ru, t in peers)
+            yield f'{u} "[{peers_str}]"\n'
+
     for r in range(num_parts):
         rt_path = os.path.join(out_dir, f"{base}.rt{r}.txt")
-        with open(rt_path, "w") as f:
-            for u, peers in rt[r].items():
-                peers_str = ", ".join(f"({v}, {ru}, {t})" for v, ru, t in peers)
-                f.write(f'{u} "[{peers_str}]"\n')
+        write_split(rt_path, rt_lines(rt[r]))
 
         owned = int(np.sum(membership == r))
         n_local_edges = int(np.sum(is_local & (src_part == r)))

@@ -10,6 +10,53 @@ measured speed-up to each change.
 
 ---
 
+## [0.6.0] - 2026-05-27 -- "log compaction + large-file chunking"
+
+Keeps on-disk artefacts small: no single text file exceeds 100 MB, and
+dead-end padding no longer dominates log size.
+
+### Added
+
+- `chunkio.{c,h}` -- `resolve_chunks(logical)`: resolves a logical path to
+  `[logical]` if it exists, else to contiguous `logical.part000`,
+  `.part001`, … chunks (stop at first missing index). `free_chunks` frees
+  the result.
+- `MAX_CHUNK_BYTES` in `config.h` (90 MiB) -- the per-file split threshold.
+- `write_split()` + `resolve_chunks()` in `partition_metis.py` mirroring the
+  C behaviour for the partitioner's inputs and outputs.
+
+### Changed
+
+- `log_write` now (a) collapses each row's trailing run of dead-end padding
+  (`-1`) to a single `-1` marker — lossless since path node ids are
+  non-negative, so a trailing `-1` can only be padding — and (b) streams
+  rows into `<path>.part000`, `.part001`, … splitting at line boundaries
+  whenever a part would exceed `MAX_CHUNK_BYTES`; a single-part result is
+  renamed back to `<path>`. Stale single file + parts from a prior run with
+  the same name are removed before writing.
+- `partition_load_edgelist` and `routing_load` read across resolved chunks,
+  so split and unsplit inputs are interchangeable.
+- `partition_metis.py` reads chunked inputs and splits its `.sub`/`.rt`
+  outputs the same way.
+- `Makefile` adds `chunkio.o`.
+
+### One-time migration (not code)
+
+- Collapsed trailing `-1` runs in existing `log/*.txt`: 2.3 GB → 1.4 GB.
+- Split the five existing >100 MB files (`data/stackoverflow_a2q.txt` 416 MB,
+  two `data/4/…sub*.txt`, two large `log/*.txt`) into `.partNNN` at line
+  boundaries (line-count verified, originals removed). Largest remaining
+  single file is now 92.6 MB.
+
+### Notes
+
+- The split threshold (90 MiB) is intentionally below 100 MB so a part plus
+  one trailing row never crosses the limit.
+- A `-1` in the `t_cur` field (index 4) is never mistaken for padding
+  because it is always followed by the non-negative start-node id.
+
+---
+
 ## [0.5.0] - 2026-05-27 -- "batched communication (Wave 4)"
 
 Replaces per-walker blocking `MPI_Send` with collective `MPI_Alltoallv`

@@ -99,6 +99,17 @@ Temporal datasets are 3-column (`src dst t`). Helper scripts prepare them:
 deterministic timestamp is synthesised per edge (`synth_timestamp` in
 `config.h`).
 
+## Large-file chunking
+
+To keep every file under 100 MB (GitHub / sync limits), any text file that
+would exceed 90 MiB is split at line boundaries into
+`<name>.part000`, `<name>.part001`, … Readers resolve a logical name to the
+single file if present, else to its contiguous `.partNNN` chunks, so split
+and unsplit files are interchangeable. This applies transparently to log
+output, partition files, routing tables, and raw edge lists; the writers
+(`log_write`, `partition_metis.py`) split automatically and collapse back to
+a single file when small.
+
 ## Input data layout
 
 Paths are relative to the launch directory.
@@ -149,6 +160,7 @@ rw-temporal/
 ├── docs/ARCHITECTURE.md       -- design rationale, data flow, schedulers
 ├── config.h                   -- wire layout, defaults, timestamp synthesis
 ├── intmap.{c,h}               -- int->int hash table
+├── chunkio.{c,h}              -- large-file chunk (.partNNN) resolution
 ├── routing.{c,h}              -- cross-partition routing (timestamped)
 ├── graph_io.{c,h}             -- partition load, TAL build, log I/O
 ├── walker.{c,h}               -- walker state machine + path buffer

@@ -67,8 +67,9 @@ intra-rank scheduling policy matters <20%.
 | ---------------- | --------------------------------------------- | ---------------------- |
 | `config.h`       | constants, walker wire layout, timestamp synth| nothing                |
 | `intmap`         | int → int hash table                          | nothing                |
-| `routing`        | cross-partition routing table (with timestamps)| `intmap`              |
-| `graph_io`       | partition load, TAL build, ID mapping, log I/O| `intmap`               |
+| `chunkio`        | logical-path → on-disk chunk(s) resolution    | nothing                |
+| `routing`        | cross-partition routing table (with timestamps)| `intmap`, `chunkio`   |
+| `graph_io`       | partition load, TAL build, ID mapping, log I/O| `intmap`, `chunkio`    |
 | `walker`         | walker state machine + completed-path buffer  | `graph_io`, `routing`  |
 | `scheduler`      | time-bucketed walker scheduler                | `walker`               |
 | `node_scheduler` | per-current-node walker scheduler             | `walker`               |
@@ -252,6 +253,38 @@ The baseline refactor fixed seven concrete issues; all still hold:
 6. Identical RNG seed across ranks → rank-mixed seed.
 7. Hard `exit(0)` on malformed routing line → warn and skip.
 
+## Large-file chunking
+
+Every on-disk text file is kept below `MAX_CHUNK_BYTES` (90 MiB, comfortably
+under common 100 MB limits) so no single file trips GitHub / sync-service
+size caps.
+
+**Naming convention.** A logical file `foo.txt` is stored either as the
+single file `foo.txt` (when small) or as contiguous parts
+`foo.txt.part000`, `foo.txt.part001`, … (when large). Splitting always
+happens at line boundaries, so no walker / edge / routing record is broken
+across parts.
+
+**Reading** (`chunkio.resolve_chunks`). A logical path resolves to:
+- `[foo.txt]` if `foo.txt` exists as a regular file, else
+- `[foo.txt.part000, foo.txt.part001, …]` (stop at the first missing index).
+
+`partition_load_edgelist` and `routing_load` iterate the resolved list, so
+split and unsplit inputs are handled identically. `partition_metis.py`
+mirrors this in `resolve_chunks` / `load_edges`.
+
+**Writing.** `log_write` (and the Python `write_split`) stream rows/lines
+into `foo.txt.part000`, rolling to the next part whenever adding the next
+row would exceed `MAX_CHUNK_BYTES`. If only one part results, it is renamed
+back to `foo.txt` (small outputs stay single-file). Before writing, any
+stale single file **and** contiguous parts from a prior run with the same
+name are removed, so leftover higher parts cannot be misread as current
+data.
+
+This applies to: log output (`log/`), partition edge lists and routing
+tables (`data/<P>/…sub<r>.txt`, `…rt<r>.txt`), and raw 3-column edge files
+(`data/<name>.txt`).
+
 ## Configuration and tunables (`config.h`)
 
 | Macro | Purpose |
@@ -264,6 +297,7 @@ The baseline refactor fixed seven concrete issues; all still hold:
 | `DEFAULT_DATASET/NWALKERS/NSTEPS/MODE/DELTA_T` | argv defaults |
 | `DATA_DIR` / `LOG_DIR` | I/O roots |
 | `TAG_WALKER` | MPI tag for in-flight walkers |
+| `MAX_CHUNK_BYTES` | max single-file size (90 MiB) before splitting into `.partNNN` |
 
 ## Known limitations / future work
 

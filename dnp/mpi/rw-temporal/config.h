@@ -52,6 +52,13 @@
 /* MPI message tag for in-flight walkers. */
 #define TAG_WALKER 0
 
+/* Maximum size of a single on-disk text file. Files that would exceed this
+ * are split at line boundaries into <name>.part000, <name>.part001, ...
+ * Readers resolve a logical name to the single file if it exists, else to
+ * its contiguous .partNNN chunks. 90 MiB stays comfortably under common
+ * 100 MB limits (GitHub, many sync services). */
+#define MAX_CHUNK_BYTES (90L * 1024 * 1024)
+
 /* Synthesised edge timestamps live in [0, TSYNTH_MAX). The space is small
  * enough to be human-readable in logs but large enough that collisions are
  * statistically rare for graphs up to ~10^5 edges. */

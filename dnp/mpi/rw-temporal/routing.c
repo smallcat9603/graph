@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "chunkio.h"
 #include "config.h"
 
 void routing_init(routing_t* r) {
@@ -83,9 +84,11 @@ static int parse_line(const char* line, int* src_out,
 }
 
 int routing_load(routing_t* r, const char* path) {
-    FILE* fp = fopen(path, "r");
-    if (!fp) {
-        fprintf(stderr, "routing_load: cannot open %s\n", path);
+    int nchunks;
+    char** chunks = resolve_chunks(path, &nchunks);
+    if (nchunks == 0) {
+        fprintf(stderr, "routing_load: cannot find %s (or %s.part000)\n", path, path);
+        free_chunks(chunks, nchunks);
         return -1;
     }
 
@@ -96,26 +99,36 @@ int routing_load(routing_t* r, const char* path) {
     char*  line  = NULL;
     size_t bufsz = 0;
 
-    while (getline(&line, &bufsz, fp) != -1) {
-        int           src, npeers;
-        route_peer_t* peers = NULL;
-        if (parse_line(line, &src, &peers, &npeers) != 0) {
-            fprintf(stderr, "routing_load: skipping malformed line in %s\n", path);
-            continue;
+    for (int c = 0; c < nchunks; c++) {
+        FILE* fp = fopen(chunks[c], "r");
+        if (!fp) {
+            fprintf(stderr, "routing_load: cannot open chunk %s\n", chunks[c]);
+            free(line);
+            free_chunks(chunks, nchunks);
+            return -1;
         }
-        if ((size_t) r->nentries == cap) {
-            cap *= 2;
-            r->entries = (route_entry_t*) realloc(r->entries, sizeof(route_entry_t) * cap);
+        while (getline(&line, &bufsz, fp) != -1) {
+            int           src, npeers;
+            route_peer_t* peers = NULL;
+            if (parse_line(line, &src, &peers, &npeers) != 0) {
+                fprintf(stderr, "routing_load: skipping malformed line in %s\n", chunks[c]);
+                continue;
+            }
+            if ((size_t) r->nentries == cap) {
+                cap *= 2;
+                r->entries = (route_entry_t*) realloc(r->entries, sizeof(route_entry_t) * cap);
+            }
+            r->entries[r->nentries].src_global = src;
+            r->entries[r->nentries].peers      = peers;
+            r->entries[r->nentries].npeers     = npeers;
+            intmap_put(&r->index, src, r->nentries);
+            r->nentries++;
         }
-        r->entries[r->nentries].src_global = src;
-        r->entries[r->nentries].peers      = peers;
-        r->entries[r->nentries].npeers     = npeers;
-        intmap_put(&r->index, src, r->nentries);
-        r->nentries++;
+        fclose(fp);
     }
 
     free(line);
-    fclose(fp);
+    free_chunks(chunks, nchunks);
     return 0;
 }
 
