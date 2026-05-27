@@ -64,6 +64,11 @@ static inline int tal_upper_bound(const tal_t* tal, int t_cur) {
     return lo;
 }
 
+/* Append `global` to the partition as a new local node if not already
+ * present. Use this for boundary nodes that appear only in the routing
+ * table (all their edges cross-partition). Returns the local id. */
+int partition_ensure_node(partition_t* p, int global);
+
 /* Write `nwalkers` rows of `walker_len` ints each (space separated, one
  * row per line) to `path`. Dead-end walkers have WALKER_DEAD_END_PAD
  * sentinels in their trailing path slots. */

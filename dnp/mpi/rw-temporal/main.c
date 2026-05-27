@@ -27,6 +27,7 @@
 #include <string.h>
 #include <time.h>
 
+#include "comm_batch.h"
 #include "config.h"
 #include "graph_io.h"
 #include "node_scheduler.h"
@@ -86,6 +87,96 @@ static void seed_rng(int rank) {
     uint32_t t = (uint32_t) time(NULL);
     uint32_t r = (uint32_t) rank * 2654435761u;
     srand((unsigned int) (t ^ r));
+}
+
+/* ----------------------------------------------------------- batched comm
+ *
+ * Parse a contiguous chunk received from one peer (or any peer's slice of
+ * the Alltoallv recvbuf) and adopt every walker into the scheduler.
+ * `node_sched` xor `time_sched` may be non-NULL depending on policy. */
+static void absorb_recv_chunk(int* chunk, int chunk_len, int max_steps,
+                              partition_t* part,
+                              node_scheduler_t* node_sched,
+                              scheduler_t* time_sched,
+                              path_buf_t* paths) {
+    int p = 0;
+    while (p < chunk_len) {
+        int wlen = chunk[p];
+        int* wdata = (int*) malloc(sizeof(int) * wlen);
+        memcpy(wdata, &chunk[p + 1], sizeof(int) * wlen);
+        p += 1 + wlen;
+
+        /* Ensure the incoming node has a local slot (covers boundary
+         * nodes whose only edges are cross-partition). */
+        int last_global = wdata[wlen - 1];
+        partition_ensure_node(part, last_global);
+
+        walker_t* w = walker_create_adopt(wdata, wlen, max_steps, part);
+        if (w->len >= w->cap_ints) {
+            walker_finalize(w);
+            path_buf_push(paths, w->buf);
+            walker_free(w);
+        } else if (node_sched) {
+            node_scheduler_insert(node_sched, w);
+        } else if (time_sched) {
+            scheduler_insert(time_sched, w);
+        } else {
+            walker_free(w);
+        }
+    }
+}
+
+/* Collective Alltoallv: every rank flushes all queued outbound walkers,
+ * receives walkers destined for itself, and absorbs them. */
+static void flush_round(outbound_t* outbound, int size, int max_steps,
+                        partition_t* part,
+                        node_scheduler_t* node_sched,
+                        scheduler_t* time_sched,
+                        path_buf_t* paths) {
+    int* sendcounts = (int*) malloc(sizeof(int) * size);
+    int* sdispls    = (int*) malloc(sizeof(int) * size);
+    int total_send = 0;
+    for (int j = 0; j < size; j++) {
+        sendcounts[j] = outbound[j].total_ints;
+        sdispls[j]    = total_send;
+        total_send   += sendcounts[j];
+    }
+    int* sendbuf = (total_send > 0) ? (int*) malloc(sizeof(int) * total_send) : NULL;
+    for (int j = 0; j < size; j++) {
+        if (sendcounts[j] > 0) {
+            memcpy(sendbuf + sdispls[j], outbound[j].data,
+                   sizeof(int) * sendcounts[j]);
+        }
+    }
+
+    int* recvcounts = (int*) malloc(sizeof(int) * size);
+    MPI_Alltoall(sendcounts, 1, MPI_INT, recvcounts, 1, MPI_INT, MPI_COMM_WORLD);
+
+    int* rdispls = (int*) malloc(sizeof(int) * size);
+    int total_recv = 0;
+    for (int j = 0; j < size; j++) {
+        rdispls[j]  = total_recv;
+        total_recv += recvcounts[j];
+    }
+    int* recvbuf = (total_recv > 0) ? (int*) malloc(sizeof(int) * total_recv) : NULL;
+
+    MPI_Alltoallv(sendbuf, sendcounts, sdispls, MPI_INT,
+                  recvbuf, recvcounts, rdispls, MPI_INT, MPI_COMM_WORLD);
+
+    for (int j = 0; j < size; j++) {
+        if (recvcounts[j] > 0) {
+            absorb_recv_chunk(recvbuf + rdispls[j], recvcounts[j], max_steps,
+                              part, node_sched, time_sched, paths);
+        }
+    }
+
+    for (int j = 0; j < size; j++) {
+        outbound[j].total_ints = 0;
+        outbound[j].nwalkers   = 0;
+    }
+
+    free(sendcounts); free(sdispls);  free(sendbuf);
+    free(recvcounts); free(rdispls);  free(recvbuf);
 }
 
 /* ------------------------------------------------------------ drive-to-death
@@ -162,7 +253,9 @@ static void run_drive_to_death(const args_t* args, int rank, int total_walkers,
 
 static void process_bucket(walker_t** arr, int n,
                            const partition_t* part, const routing_t* routing,
-                           scheduler_t* sched, path_buf_t* paths) {
+                           scheduler_t* sched,
+                           outbound_t* outbound,
+                           path_buf_t* paths) {
     for (int i = 0; i < n; i++) {
         walker_t* w = arr[i];
         int dst_rank;
@@ -178,20 +271,23 @@ static void process_bucket(walker_t** arr, int n,
                 walker_free(w);
                 break;
             case WALKER_STEP_MIGRATE:
-                MPI_Send(w->buf, w->len, MPI_INT, dst_rank, TAG_WALKER, MPI_COMM_WORLD);
+                outbound_push(outbound, dst_rank, w->buf, w->len);
                 walker_free(w);
                 break;
         }
     }
 }
 
-static void run_bucketed(const args_t* args, int rank, int total_walkers,
-                         const partition_t* part, const routing_t* routing,
+static void run_bucketed(const args_t* args, int rank, int size,
+                         int total_walkers,
+                         partition_t* part, const routing_t* routing,
                          path_buf_t* paths) {
     int id_start = rank * args->nwalkers_per_rank;
 
     scheduler_t sched;
     scheduler_init(&sched, args->delta_t, part->t_max);
+
+    outbound_t* outbound = outbound_array_alloc(size);
 
     for (int i = 0; i < args->nwalkers_per_rank; i++) {
         walker_t* w = walker_create_spawn(id_start + i, args->nsteps, part);
@@ -200,39 +296,22 @@ static void run_bucketed(const args_t* args, int rank, int total_walkers,
 
     int global_done = 0;
     while (global_done < total_walkers) {
-        /* 1) Drain one bucket -- single round of work per outer iteration. */
-        int n;
-        walker_t** arr = scheduler_pop_earliest(&sched, &n);
-        if (arr) {
-            process_bucket(arr, n, part, routing, &sched, paths);
+        /* Drain every local bucket before each Alltoallv flush. */
+        while (!scheduler_empty(&sched)) {
+            int n;
+            walker_t** arr = scheduler_pop_earliest(&sched, &n);
+            if (!arr) break;
+            process_bucket(arr, n, part, routing, &sched, outbound, paths);
             free(arr);
         }
 
-        /* 2) Absorb any walker that just arrived from a peer rank. */
-        int        flag = 0;
-        MPI_Status status;
-        MPI_Iprobe(MPI_ANY_SOURCE, TAG_WALKER, MPI_COMM_WORLD, &flag, &status);
-        if (flag) {
-            int count;
-            MPI_Get_count(&status, MPI_INT, &count);
-            int* recv = (int*) malloc(sizeof(int) * count);
-            MPI_Recv(recv, count, MPI_INT, status.MPI_SOURCE, TAG_WALKER,
-                     MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-            walker_t* w = walker_create_adopt(recv, count, args->nsteps, part);
-            if (w->len >= w->cap_ints) {
-                walker_finalize(w);
-                path_buf_push(paths, w->buf);
-                walker_free(w);
-            } else {
-                scheduler_insert(&sched, w);
-            }
-        }
+        flush_round(outbound, size, args->nsteps, part, NULL, &sched, paths);
 
-        /* 3) Global termination check. */
         MPI_Allreduce(&paths->nwalkers, &global_done, 1, MPI_INT, MPI_SUM,
                       MPI_COMM_WORLD);
     }
 
+    outbound_array_free(outbound, size);
     scheduler_free(&sched);
 }
 
@@ -245,7 +324,9 @@ static void run_bucketed(const args_t* args, int rank, int total_walkers,
 
 static void process_node_bucket(walker_t** arr, int n,
                                 const partition_t* part, const routing_t* routing,
-                                node_scheduler_t* sched, path_buf_t* paths) {
+                                node_scheduler_t* sched,
+                                outbound_t* outbound,
+                                path_buf_t* paths) {
     for (int i = 0; i < n; i++) {
         walker_t* w = arr[i];
         int dst_rank;
@@ -261,20 +342,25 @@ static void process_node_bucket(walker_t** arr, int n,
                 walker_free(w);
                 break;
             case WALKER_STEP_MIGRATE:
-                MPI_Send(w->buf, w->len, MPI_INT, dst_rank, TAG_WALKER, MPI_COMM_WORLD);
+                /* Batched: queue for next Alltoallv flush instead of
+                 * issuing a blocking MPI_Send per walker. */
+                outbound_push(outbound, dst_rank, w->buf, w->len);
                 walker_free(w);
                 break;
         }
     }
 }
 
-static void run_node_grouped(const args_t* args, int rank, int total_walkers,
-                             const partition_t* part, const routing_t* routing,
+static void run_node_grouped(const args_t* args, int rank, int size,
+                             int total_walkers,
+                             partition_t* part, const routing_t* routing,
                              path_buf_t* paths) {
     int id_start = rank * args->nwalkers_per_rank;
 
     node_scheduler_t sched;
     node_scheduler_init(&sched, part->nnodes);
+
+    outbound_t* outbound = outbound_array_alloc(size);
 
     for (int i = 0; i < args->nwalkers_per_rank; i++) {
         walker_t* w = walker_create_spawn(id_start + i, args->nsteps, part);
@@ -283,36 +369,27 @@ static void run_node_grouped(const args_t* args, int rank, int total_walkers,
 
     int global_done = 0;
     while (global_done < total_walkers) {
-        int n;
-        walker_t** arr = node_scheduler_pop_any(&sched, &n);
-        if (arr) {
-            process_node_bucket(arr, n, part, routing, &sched, paths);
+        /* Drain the local scheduler completely before each flush so
+         * Alltoallv can carry as many walkers per call as possible. */
+        while (!node_scheduler_empty(&sched)) {
+            int n;
+            walker_t** arr = node_scheduler_pop_any(&sched, &n);
+            if (!arr) break;
+            process_node_bucket(arr, n, part, routing, &sched, outbound, paths);
             free(arr);
         }
 
-        int        flag = 0;
-        MPI_Status status;
-        MPI_Iprobe(MPI_ANY_SOURCE, TAG_WALKER, MPI_COMM_WORLD, &flag, &status);
-        if (flag) {
-            int count;
-            MPI_Get_count(&status, MPI_INT, &count);
-            int* recv = (int*) malloc(sizeof(int) * count);
-            MPI_Recv(recv, count, MPI_INT, status.MPI_SOURCE, TAG_WALKER,
-                     MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-            walker_t* w = walker_create_adopt(recv, count, args->nsteps, part);
-            if (w->len >= w->cap_ints) {
-                walker_finalize(w);
-                path_buf_push(paths, w->buf);
-                walker_free(w);
-            } else {
-                node_scheduler_insert(&sched, w);
-            }
-        }
+        /* Collective: send all queued walkers, receive everyone else's. */
+        flush_round(outbound, size, args->nsteps, part, &sched, NULL, paths);
 
+        /* Inbound walkers (if any) now live in the scheduler; loop again
+         * to process them. If every rank's scheduler stays empty AND no
+         * one queued anything, the Allreduce below will let us exit. */
         MPI_Allreduce(&paths->nwalkers, &global_done, 1, MPI_INT, MPI_SUM,
                       MPI_COMM_WORLD);
     }
 
+    outbound_array_free(outbound, size);
     node_scheduler_free(&sched);
 }
 
@@ -365,7 +442,22 @@ int main(int argc, char** argv) {
             fprintf(stderr, "rank=%d failed to load %s\n", rank, rt_path);
             MPI_Abort(MPI_COMM_WORLD, 1);
         }
-        printf("rank=%d loaded routing %s\n", rank, rt_path);
+        printf("rank=%d loaded routing %s (%d entries)\n",
+               rank, rt_path, routing.nentries);
+
+        /* Ensure every routing source has a local slot, even when all of
+         * its edges are cross-partition (so the node never appeared in
+         * sub<r>.txt). */
+        int added = 0;
+        for (int i = 0; i < routing.nentries; i++) {
+            int src = routing.entries[i].src_global;
+            int before = part.nnodes;
+            partition_ensure_node(&part, src);
+            if (part.nnodes > before) added++;
+        }
+        if (added > 0) {
+            printf("rank=%d added %d boundary-only nodes from routing\n", rank, added);
+        }
     }
 
     const int walker_len = WALKER_HEADER_INTS + args.nsteps;
@@ -375,11 +467,11 @@ int main(int argc, char** argv) {
     double t0 = MPI_Wtime();
 
     if (args.policy == POLICY_NODE) {
-        run_node_grouped(&args, rank, total_walkers, &part, &routing, &paths);
+        run_node_grouped(&args, rank, size, total_walkers, &part, &routing, &paths);
     } else if (args.delta_t < 0) {
         run_drive_to_death(&args, rank, total_walkers, &part, &routing, &paths);
     } else {
-        run_bucketed(&args, rank, total_walkers, &part, &routing, &paths);
+        run_bucketed(&args, rank, size, total_walkers, &part, &routing, &paths);
     }
 
     double t1 = MPI_Wtime();

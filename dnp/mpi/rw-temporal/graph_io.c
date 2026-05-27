@@ -143,6 +143,20 @@ int partition_load_edgelist(partition_t* p, const char* path) {
     return 0;
 }
 
+int partition_ensure_node(partition_t* p, int global) {
+    int local = intmap_get(&p->g2l, global);
+    if (local != INTMAP_MISS) return local;
+    /* Boundary node with no local edges: extend l2g + tals. */
+    local = p->nnodes++;
+    p->l2g  = (int*)   realloc(p->l2g,  sizeof(int)   * p->nnodes);
+    p->tals = (tal_t*) realloc(p->tals, sizeof(tal_t) * p->nnodes);
+    p->l2g[local] = global;
+    p->tals[local].edges = NULL;
+    p->tals[local].size  = 0;
+    intmap_put(&p->g2l, global, local);
+    return local;
+}
+
 int log_write(const char* path, const int* paths, int nwalkers, int walker_len) {
     FILE* fp = fopen(path, "w");
     if (!fp) {
