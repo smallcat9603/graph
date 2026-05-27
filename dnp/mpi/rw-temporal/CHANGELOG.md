@@ -10,6 +10,118 @@ measured speed-up to each change.
 
 ---
 
+## [0.5.0] - 2026-05-27 -- "batched communication (Wave 4)"
+
+Replaces per-walker blocking `MPI_Send` with collective `MPI_Alltoallv`
+batching, and adds METIS graph partitioning. This is the release that makes
+distributed CTDW actually fast: **78–347× over the naive baseline**, with
+the speedup growing as graph size increases. See `results.md`.
+
+### Added
+
+- `comm_batch.{c,h}` -- per-destination outbound buffers (`outbound_t`) that
+  accumulate migrating walkers, plus the encoding `[len, walker_data, ...]`
+  consumed by the Alltoallv flush.
+- `flush_round()` in `main.c` -- one `MPI_Alltoall` (counts) + one
+  `MPI_Alltoallv` (walker bytes) per round, then parse + re-insert.
+- `partition_metis.py` -- numpy-based METIS partitioner producing
+  `data/<P>/<base>.sub<r>.txt` (local edges) and `.rt<r>.txt` (routing,
+  with timestamps). Memory-efficient (~2 GB for 17M edges).
+- `partition_ensure_node()` (graph_io) -- lazily registers boundary nodes
+  that appear only as routing-table sources (no local edges).
+- `fetch_stackoverflow.sh` -- download + 3-column conversion for SNAP
+  sx-stackoverflow datasets.
+- `results.md` -- consolidated benchmark tables.
+
+### Changed
+
+- The batched run loops (`run_bucketed`, `run_node_grouped`) now drain the
+  local scheduler fully, then `flush_round`, then check termination —
+  instead of one blocking `MPI_Send` per migrating walker.
+- Drive-to-death (`run_drive_to_death`) retains per-walker `MPI_Send` and
+  serves as the naive baseline (config "A").
+- Log filename gains `_pol<P>` suffix (scheduling policy).
+
+### Findings (documented, not code)
+
+- Per-walker `MPI_Send` is unscalable; cost grows with cross-partition hop
+  count. On extreme bipartite graphs (MOOC, 97 items) it effectively does
+  not terminate in reasonable time.
+- After batching, scheduler choice contributes <20%; **single-bucket is
+  often the fastest** and node-grouping can be slower at large node counts.
+- Scaling is communication-bound at light per-rank load (negative strong
+  scaling at 200K walkers) but compute-bound and positively scaling at
+  heavy load (2M walkers, 1.08× at np=8).
+
+---
+
+## [0.4.0] - 2026-05-26 -- "node-grouping scheduler (Wave 3)"
+
+### Added
+
+- `node_scheduler.{c,h}` -- buckets walkers by their current local node so
+  every walker in a batch reads the same TAL (the static-graph batching
+  idea of KnightKing/ThunderRW, applied to the temporal setting). O(1)
+  insert/pop via a dense active-bucket list.
+- `policy` argument (`argv[6]`): `0` = use delta_t (drive/single/time-window),
+  `1` = node-grouping.
+- Heap walker factories `walker_create_spawn` / `walker_create_adopt` /
+  `walker_free` (the scheduler stores `walker_t*`).
+
+### Changed
+
+- `walker_spawn` now takes the partition and **eagerly picks the random
+  start node**, so `walker_step` always takes a real edge (the old
+  "first call picks start" branch is removed).
+
+### Findings
+
+- Node-grouping does not win on the tested datasets: with 50K walkers over
+  2.6M nodes (Stack-Overflow), buckets hold ~0.08 walkers each, so the
+  per-node bookkeeping cost dominates any cache reuse. Kept as an ablation.
+
+---
+
+## [0.3.0] - 2026-05-26 -- "temporal walks + time-window scheduler (Wave 1+2)"
+
+Turns the static sampler into a continuous-time dynamic-walk (CTDW)
+sampler. **igraph dependency removed.**
+
+### Added
+
+- Time-sorted adjacency list (`tal_t` / `tal_edge_t`) in `graph_io`, with
+  `tal_upper_bound` binary search for the first edge with `t > t_cur`.
+- `t_cur` walker header field (`WALKER_HEADER_INTS`: 4 → 5) and
+  `WALKER_STEP_DEAD_END` return code (no valid future edge).
+- Timestamps on routing peers (`route_peer_t.t`), sorted, with
+  `routing_upper_bound`.
+- `synth_timestamp()` + 2-vs-3-column edge-file auto-detection: 2-column
+  files synthesise a deterministic timestamp, 3-column files read it.
+- `scheduler.{c,h}` -- time-bucketed walker scheduler. `delta_t < 0`
+  drive-to-death, `= 0` single-bucket, `> 0` time-window of width delta_t.
+- `delta_t` argument (`argv[5]`).
+
+### Changed
+
+- `partition_load_edgelist` builds TALs directly (no igraph, no `.x.txt`
+  temp file); tracks `t_min`/`t_max`.
+- `pick_next_hop` is now time-respecting: samples uniformly from local TAL
+  edges and remote routing peers whose `t > t_cur`.
+- `Makefile` drops `-ligraph`.
+- Log filename gains `_dt<D>` suffix.
+
+### Findings
+
+- Real temporal data dead-ends like synthetic: under uniform forward
+  sampling `t_cur` converges geometrically to `t_max`, so walk length is
+  intrinsically bounded (~10–15 hops on Wikipedia) regardless of dataset.
+- Time-window bucketing shows **no Δt sweet spot** and is slower than
+  drive-to-death in the no-communication (mode=1) regime — the cache-locality
+  hypothesis does not hold because same-time walkers sit on different nodes
+  (different memory), so time-similarity ≠ address-similarity.
+
+---
+
 ## [0.2.0] - 2026-05-25 -- "refactor + bug-fix baseline"
 
 This release is a structural and correctness pass over the original

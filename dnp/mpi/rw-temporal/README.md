@@ -1,26 +1,28 @@
 # rw-temporal
 
-Distributed random walks on partitioned graphs, implemented with MPI + igraph.
+Distributed **continuous-time random walks (CTDW)** on partitioned temporal
+graphs, implemented with MPI.
 
-Each MPI rank owns a vertex-disjoint partition of the input graph plus a
-routing table that names the rank-owner of every cross-partition neighbour.
-Walkers step inside their host partition until they pick a neighbour that
-lives elsewhere, at which point they are shipped to the owner rank with
-`MPI_Send` and continue from there. After every walker has taken `nsteps`
-hops, the gathered paths are written to a single log file.
+Each MPI rank owns a vertex-disjoint partition plus a routing table naming
+the rank-owner of every cross-partition neighbour. Every edge carries a
+timestamp; a walker carries a cursor `t_cur` and may only traverse edges
+with `t > t_cur` (time-respecting walk). When a walker steps to a node on
+another rank it migrates there as a message. Migrating walkers are **batched
+and exchanged with a single `MPI_Alltoallv` per round** rather than one
+blocking send each — the change that makes the system 78–347× faster than
+the naive baseline (see [results.md](results.md)).
 
-This repository is the cleaned-up baseline that the temporal-graph work
-(see [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)) will build on. The
-static algorithm in this version is intentionally a faithful reproduction
-of the legacy implementation -- only obvious performance bugs have been
-fixed; no batching, alias sampling, or temporal logic yet.
+For internals see [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md); for version
+history see [CHANGELOG.md](CHANGELOG.md).
 
 ## Requirements
 
-- An MPI implementation that provides `mpicc` (OpenMPI / MPICH both work)
-- [igraph](https://igraph.org/c/) (tested against 1.0.x; the only 1.0-specific
-  call is `igraph_neighbors` with `IGRAPH_LOOPS_TWICE` / `IGRAPH_MULTIPLE`)
+- An MPI implementation providing `mpicc` (tested: Open MPI 4.1.2)
 - A C99 compiler
+- `python3` with `pymetis` + `numpy` (for graph partitioning only)
+
+No igraph or other graph library is needed — the time-sorted adjacency list
+(TAL) is built in-house.
 
 ## Quick start
 
@@ -28,130 +30,151 @@ fixed; no batching, alias sampling, or temporal logic yet.
 # Build
 make
 
-# Single-node smoke test (1 rank, full graph mode)
-mpirun -np 1 ./rw facebook 100 80 1
+# Smoke test: 1 rank, full graph, drive-to-death scheduler
+mpirun -np 1 ./rw wikipedia 100 20 1 -1 0
 
-# Distributed run (4 ranks, partitioned mode)
-mpirun -np 4 ./rw facebook 1050 80 0
+# Partition a dataset into 4 parts (writes data/4/...)
+python3 partition_metis.py data/wikipedia.txt 4
 
-# Multi-host run (uses hostfile)
-mpirun -np 8 --hostfile hostfile ./rw facebook 525 80 0
+# Distributed run: 4 ranks, partitioned, single-bucket + Alltoallv batching
+mpirun -np 4 ./rw wikipedia 50000 30 0 0 0
 ```
 
-Each run writes one log file to `log/<unix_ts>_<dataset>_w<W>_s<S>_p<P>_e<M>.txt`.
+Each run writes one log to
+`log/<unix_ts>_<dataset>_w<W>_s<S>_p<P>_e<M>_dt<D>_pol<POL>.txt`.
 
 ## Command-line arguments
 
 ```
-./rw [dataset] [nwalkers_per_rank] [nsteps] [mode]
+./rw [dataset] [nwalkers_per_rank] [nsteps] [mode] [delta_t] [policy]
 ```
 
-| Position | Name              | Default    | Meaning                                             |
-| -------- | ----------------- | ---------- | --------------------------------------------------- |
-| 1        | dataset           | `facebook` | Short name (see below) or a full basename in `data/` |
-| 2        | nwalkers_per_rank | `1`        | Number of walkers each rank seeds                   |
-| 3        | nsteps            | `80`       | Nodes per walker path (1 random start + `nsteps`-1 hops) |
-| 4        | mode              | `0`        | `0` = partitioned, `1` = full graph on every rank   |
+| Pos | Name | Default | Meaning |
+| --- | --- | --- | --- |
+| 1 | dataset | `facebook` | short name (below) or a basename in `data/` |
+| 2 | nwalkers_per_rank | `1` | walkers each rank seeds |
+| 3 | nsteps | `80` | max nodes per path (walkers may dead-end earlier) |
+| 4 | mode | `0` | `0` = partitioned, `1` = full graph on every rank |
+| 5 | delta_t | `-1` | scheduler selector (see below) |
+| 6 | policy | `0` | `0` = use delta_t, `1` = node-grouping |
 
-Built-in dataset short names:
+### Scheduler selection (`delta_t`, `policy`)
 
-| short name    | resolved basename                                |
-| ------------- | ------------------------------------------------ |
-| `facebook`    | `facebook_combined_undirected_connected`         |
-| `git`         | `musae_git_edges_undirected.connected`           |
-| `twitch`      | `large_twitch_edges_undirected.connected`        |
+| delta_t | policy | scheduler | communication |
+| --- | --- | --- | --- |
+| `< 0` | `0` | drive-to-death (one walker at a time) | per-walker `MPI_Send` (naive baseline) |
+| `= 0` | `0` | single-bucket (round-robin one step each) | `MPI_Alltoallv` batched |
+| `> 0` | `0` | time-window (bucket by `t_cur / delta_t`) | `MPI_Alltoallv` batched |
+| any | `1` | node-grouping (bucket by current node) | `MPI_Alltoallv` batched |
+
+Empirically `single-bucket` (delta_t=0, policy=0) is the best general choice;
+the others exist for ablation (see results.md).
+
+### Built-in dataset short names
+
+| short name | resolved basename |
+| --- | --- |
+| `facebook` | `facebook_combined_undirected_connected` |
+| `git` | `musae_git_edges_undirected.connected` |
+| `twitch` | `large_twitch_edges_undirected.connected` |
 | `livejournal` | `soc-LiveJournal1_directed.undirected.connected` |
 
-Any other value is treated as a literal basename, so you can drop additional
-edgelists into `data/` without touching the source.
+Any other value is treated as a literal basename, so `wikipedia`,
+`reddit`, `mooc`, `stackoverflow_a2q` etc. resolve to `data/<name>.txt`
+without code changes.
+
+## Datasets
+
+Temporal datasets are 3-column (`src dst t`). Helper scripts prepare them:
+
+```bash
+# JODIE CSV (wikipedia/reddit/mooc): convert manually (see git history) to
+# 3-column with merged user/item id space, normalised timestamps.
+
+# Stack-Overflow Temporal (SNAP): download + convert
+./fetch_stackoverflow.sh a2q        # -> data/stackoverflow_a2q.txt
+```
+
+2-column files (`src dst`, the legacy static datasets) still work: a
+deterministic timestamp is synthesised per edge (`synth_timestamp` in
+`config.h`).
 
 ## Input data layout
 
-Paths are interpreted relative to the working directory at launch time
-(typically the project root).
+Paths are relative to the launch directory.
 
 ### Full-graph mode (`mode=1` or `np=1`)
 
 ```
-data/<basename>.txt
+data/<basename>.txt          # "src dst t" (or "src dst"), one edge per line
 ```
-
-A whitespace-separated edgelist: `<src_global> <dst_global>`, one edge per
-line. Global node ids may be sparse; they are densified to local ids on load.
 
 ### Partitioned mode (`mode=0` and `np>1`)
 
-For `np = P`:
+Generated by `partition_metis.py`. For `np = P`:
 
 ```
-data/<P>/<basename>.sub<rank>.txt      # this rank's subgraph edgelist
-data/<P>/<basename>.rt<rank>.txt       # this rank's routing table
+data/<P>/<basename>.sub<rank>.txt    # local edges: "src dst t"
+data/<P>/<basename>.rt<rank>.txt     # routing: <src> "[(dst, proc, t), ...]"
 ```
 
-The routing table format is one source-node per line:
-
-```
-<src_global> "[(dst0_global, owner_rank0), (dst1_global, owner_rank1), ...]"
-```
-
-`src_global` is a node owned by this rank that has at least one neighbour on
-another rank; the bracketed list enumerates those out-of-partition neighbours.
+The routing table lists, per locally-owned source node, its
+out-of-partition neighbours with owner rank and edge timestamp.
 
 ## Output log format
 
-Each completed walker is one line of `WALKER_HEADER_INTS + nsteps` integers,
-space-separated:
+One line per completed walker, `WALKER_HEADER_INTS + nsteps` space-separated
+integers:
 
 ```
-<id> <start_ts> <end_ts> <hops_out> <node_0_global> <node_1_global> ... <node_{nsteps-1}_global>
+<id> <start_ts> <end_ts> <hops_out> <t_cur> <node_0> <node_1> ... <node_{nsteps-1}>
 ```
 
-| Field        | Meaning                                                       |
-| ------------ | ------------------------------------------------------------- |
-| `id`         | Walker id (globally unique, `rank * nwalkers_per_rank + i`)   |
-| `start_ts`   | `time(NULL)` when the walker was spawned                      |
-| `end_ts`     | `time(NULL)` when the walker reached `nsteps`                 |
-| `hops_out`   | Number of cross-partition migrations during this walker's life|
-| `node_i`     | Global id of the i-th visited node                            |
+| Field | Meaning |
+| --- | --- |
+| `id` | globally unique walker id |
+| `start_ts` / `end_ts` | wall-clock spawn / completion time |
+| `hops_out` | cross-partition migrations during this walker's life |
+| `t_cur` | temporal cursor at termination |
+| `node_i` | global id of the i-th visited node |
+
+Walkers that dead-end early (no future edge) pad remaining slots with `-1`.
 
 ## Module layout
 
 ```
 rw-temporal/
 ├── Makefile
-├── README.md
-├── docs/
-│   └── ARCHITECTURE.md     -- design rationale, data flow, walker lifecycle
-├── hostfile                -- list of nodes for distributed runs
-├── config.h                -- walker wire layout, defaults, path constants
-├── intmap.{c,h}            -- open-addressing int->int hash table
-├── routing.{c,h}           -- cross-partition routing table
-├── graph_io.{c,h}          -- partition loading + result log writing
-├── walker.{c,h}            -- walker state machine + completed-path buffer
-├── main.c                  -- MPI driver / main loop
-├── data/                   -- input edgelists and partitioned subgraphs
-└── log/                    -- one file per run, see "Output log format"
+├── README.md / CHANGELOG.md / results.md
+├── docs/ARCHITECTURE.md       -- design rationale, data flow, schedulers
+├── config.h                   -- wire layout, defaults, timestamp synthesis
+├── intmap.{c,h}               -- int->int hash table
+├── routing.{c,h}              -- cross-partition routing (timestamped)
+├── graph_io.{c,h}             -- partition load, TAL build, log I/O
+├── walker.{c,h}               -- walker state machine + path buffer
+├── scheduler.{c,h}            -- time-bucketed scheduler (single/time-window)
+├── node_scheduler.{c,h}       -- node-grouping scheduler
+├── comm_batch.{c,h}           -- Alltoallv outbound buffers
+├── main.c                     -- driver: 3 run loops + MPI collectives
+├── partition_metis.py         -- METIS graph partitioner
+├── fetch_stackoverflow.sh     -- SNAP dataset fetch + convert
+├── data/                      -- edgelists + partitioned subgraphs
+└── log/                       -- one file per run
 ```
 
-See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for the responsibility of
-each module and the walker lifecycle in detail.
+## Status
 
-## Roadmap
+The temporal extension and communication batching are implemented and
+benchmarked (see [results.md](results.md)). Key results: batched
+communication is 78–347× faster than per-walker send; the speedup grows with
+graph size; scaling is communication-bound at light per-rank load and
+compute-bound (positively scaling) at heavy load.
 
-This baseline is the starting point for a temporal-graph extension. Planned
-work, in order:
-
-1. Continuous-time edges `(src, dst, t)` and per-node time-sorted adjacency
-2. Temporal walker (`t_cur` field, time-respecting next-hop sampling)
-3. Time-window walker bucketing for cache locality (the planned paper's
-   main system contribution)
-4. Communication batching via `MPI_Alltoallv`
-5. Downstream validation on temporal link-prediction benchmarks
-
-See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) "Planned extensions" for
-where each piece will hook in.
+Not yet done (see ARCHITECTURE.md "Known limitations"): downstream
+link-prediction validation (CTDNE/CAW), clean np>8 scaling on a true
+many-core machine, backward/biased walks.
 
 ## License / contact
 
-Original author: smallcat (see source headers). This refactor is a
-work-in-progress for a research project; license to be decided.
+Original author: smallcat (see source headers). Research work-in-progress;
+license TBD.
