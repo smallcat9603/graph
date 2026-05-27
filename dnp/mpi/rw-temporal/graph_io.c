@@ -165,8 +165,18 @@ int log_write(const char* path, const int* paths, int nwalkers, int walker_len) 
     }
     for (int w = 0; w < nwalkers; w++) {
         const int* row = paths + (size_t) w * walker_len;
-        for (int j = 0; j < walker_len; j++) {
-            fprintf(fp, "%d ", row[j]);
+        /* Collapse the trailing run of dead-end padding (-1) to a single
+         * marker. Path node ids are non-negative, so a -1 can only be
+         * padding; the t_cur field (index 4) may be -1 but is always
+         * followed by the start node, so it is never part of the trailing
+         * run. A single trailing -1 still signals "walker dead-ended". */
+        int last = walker_len - 1;
+        while (last >= 0 && row[last] == WALKER_DEAD_END_PAD) last--;
+        if (last == walker_len - 1) {
+            for (int j = 0; j < walker_len; j++) fprintf(fp, "%d ", row[j]);
+        } else {
+            for (int j = 0; j <= last; j++) fprintf(fp, "%d ", row[j]);
+            fprintf(fp, "%d ", WALKER_DEAD_END_PAD);
         }
         fputc('\n', fp);
     }
