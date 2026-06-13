@@ -52,6 +52,12 @@ void walker_adopt(walker_t* w, int* recv_buf, int recv_len, int max_steps,
 int  walker_step(walker_t* w, const partition_t* part, const routing_t* routing,
                  int* out_dst_rank);
 
+/* E1 de-risking instrumentation (research_plan_v3.md §8): count adjacent
+ * (center, context) pairs and how many cross a partition boundary. Reset
+ * before a run; read the process-local totals after, then reduce in MPI. */
+void walker_e1_reset(void);
+void walker_e1_get(long* total, long* cross);
+
 /* Stamp end_ts and pad any unused path slots with WALKER_DEAD_END_PAD. */
 void walker_finalize(walker_t* w);
 

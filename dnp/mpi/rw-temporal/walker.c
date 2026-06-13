@@ -92,6 +92,21 @@ static int pick_next_hop(const partition_t* part, const routing_t* routing,
     return 0;
 }
 
+/* ---- E1 instrumentation (de-risking experiment, research_plan_v3.md §8).
+ * Count every adjacent (center, context) pair a walk produces and how many
+ * of them cross a partition boundary. A boundary-crossing pair is exactly a
+ * remote hop, so this measures the fraction of skip-gram pairs that would
+ * need cross-rank embedding traffic under co-sharding. Process-local; the
+ * caller reduces across ranks. */
+static long e1_pairs_total = 0;
+static long e1_pairs_cross = 0;
+
+void walker_e1_reset(void) { e1_pairs_total = 0; e1_pairs_cross = 0; }
+void walker_e1_get(long* total, long* cross) {
+    *total = e1_pairs_total;
+    *cross = e1_pairs_cross;
+}
+
 int walker_step(walker_t* w, const partition_t* part, const routing_t* routing,
                 int* out_dst_rank) {
     if (w->len >= w->cap_ints) return WALKER_STEP_DONE;
@@ -110,6 +125,12 @@ int walker_step(walker_t* w, const partition_t* part, const routing_t* routing,
 
     w->buf[w->len++]    = next_global;
     WALKER_TCUR(w->buf) = next_t;
+
+    /* E1: this hop produced one adjacent pair; flag it if it crossed ranks
+     * (counted here, before the path-full DONE return, so terminal crossing
+     * hops are not missed). */
+    e1_pairs_total++;
+    if (dst_rank != -1) e1_pairs_cross++;
 
     /* Path full: walker finalised here even if last hop crossed partitions
      * (the boundary node is recorded but the walker is not migrated). */

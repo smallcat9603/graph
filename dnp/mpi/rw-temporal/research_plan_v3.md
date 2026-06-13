@@ -236,6 +236,112 @@ of adjacent (center, context) pairs whose endpoints sit on **different ranks**.
 - **Fail:** fraction large ⇒ co-shard saves little; rethink the thesis.
 - Runnable **now** on the current codebase — no embedding code needed.
 
+**E1 — results (2026-06-13, static-METIS partition, 500 walkers/rank × 30
+steps, forward uniform).** Cross-rank fraction of skip-gram (center, context)
+pairs, at training window $w=1,5,10$ (the always-on window-1 counter and the
+gated `E1_WINDOW` post-process agree exactly on $w=1$ — cross-validated):
+
+| dataset | $w{=}1$ | $w{=}5$ | $w{=}10$ |
+| --- | --- | --- | --- |
+| wikipedia np=4 | 11% | 20% | 24% |
+| wikipedia np=16 | 17% | 29% | 34% |
+| reddit np=4 | 14% | 22% | 25% |
+| reddit np=16 | 31% | 41% | 45% |
+| **stackoverflow np=4** | 34% | **50%** | 54% |
+| **stackoverflow np=8** | 40% | **59%** | 63% |
+| **stackoverflow np=16** | 46% | **66%** | 70% |
+
+(static social sanity check, $w{=}1$: facebook 6.8%/15.4%, twitch 36%/49%.)
+
+**Verdict (sharpened — this is a serious warning, not a green light).**
+The co-shard premise is partition-, window-, and scale-dependent, and it is
+WEAKEST exactly where it matters most:
+- Real skip-gram windows ($w=5$–$10$, the DeepWalk/node2vec default) roughly
+  **double** the cross fraction vs the window-1 proxy — so the earlier
+  window-1 numbers were a large underestimate.
+- On the **small** graph (wikipedia) it stays tolerable (~20–34%).
+- On the **large** graph (stackoverflow, 17.8M edges — the very out-of-memory
+  regime that motivates distribution), a realistic $w=5$ already crosses
+  **50–66%** of pairs. **More than half the embedding updates are remote.**
+  Under stock METIS, the central "most updates are local" premise of
+  Innovation 1 **does not hold on the hardest, most important case.**
+
+**PLAN IMPACT (acted on this finding):**
+1. **Co-shard alone is not a sufficient thesis for large temporal graphs.**
+   Its headline benefit is *entirely gated* on a partitioner that drives the
+   cross fraction down at a realistic window — so **T4 is promoted to THE
+   central contribution, not a supporting one**. Quantified, much harder
+   target: **cut stackoverflow's $w=5$ cross fraction from ~50–66% toward
+   ~20%.** If T4 cannot, the co-shard story collapses on big graphs.
+2. **Go/no-go reframed:** before the big build, prototype T4 (temporal-
+   reachability-weighted partition) and re-run E1 at $w=5,10$. Decision gate:
+   T4 must show a large cross-fraction drop on stackoverflow. If it cannot,
+   **pivot** — e.g., to the v2 pure-HPC plan, or to embedding-replication /
+   bounded-staleness designs that tolerate high cross rates instead of
+   assuming locality.
+3. Any "co-shard saves ~all embedding traffic" claim must be stated as
+   **conditional on (graph, window, partition quality)** with this E1 table as
+   the evidence — never as a universal property.
+
+> Reproduce: `E1_WINDOW=10 mpirun --oversubscribe -np <P> ./rw <dataset> 500 30 0`
+> (window-1 prints by default; `E1_WINDOW=w` adds the $1..w$ curve).
+
+**T4 prototype — go/no-go on the partitioner (2026-06-13, np=4).** Two edge
+weightings were tested against the unweighted baseline, measured by E1.
+
+E1 cross-rank pair fraction at $w{=}5$, np=4 (walk-length median in parens):
+
+| dataset (walk median) | baseline | analytic "earliness" | **empirical T4** |
+| --- | --- | --- | --- |
+| wikipedia (6) | 18.95% | 22.45% ❌ worse | **15.86%** (−16%) |
+| stackoverflow (5) | 50.07% | — | **39.68%** (−21%) |
+| mooc (13, time-dense) | 47.05% | — | **26.64%** (−43%) |
+
+**Findings:**
+1. **The cheap analytic weight FAILS** — weighting edges by earliness in time
+   slightly *increased* the cross fraction at every scale tried. A trivial
+   temporal weight is not enough; T4 needs real traversal statistics.
+2. **The empirical weight WORKS** — a pilot pass that simulates walks and
+   counts per-edge traversals, fed to METIS as `eweights`, reduces the cross
+   fraction on both graphs. T4 is **viable, but only in its principled
+   (pilot-based) form** — a genuine build, not a one-line heuristic.
+3. **But even with empirical T4, the large graph still crosses ~40% at
+   $w=5$** (down from 50%, not down to wikipedia's ~16%). Co-shard's
+   "most updates are local" premise stays only *partially* satisfied on the
+   hardest, most important case.
+4. **Walk-triviality concern RETRACTED (it was a misread metric).** The
+   earlier "99% length-1" claim was wrong — it confused the dead-end
+   *termination* rate (≈100% for any forward time-respecting walk, since every
+   walk eventually dead-ends) with walk *length*. Measured walk-length medians:
+   wikipedia 6, reddit 6, stackoverflow 5, **mooc 13**; all datasets yield
+   multi-step walks with ample material for a $w{=}5$–$10$ skip-gram. The
+   embedding-quality red flag is dissolved.
+5. **T4's benefit scales with time-density / walk length / edge reuse**, i.e.
+   it is largest exactly where temporal embedding is most interesting. On the
+   time-dense mooc (median walk 13, edge reuse up to 2702×) empirical T4 nearly
+   *halves* the cross fraction (47%→27%); on short-walk, sparse-reuse
+   stackoverflow it helps less (50%→40%).
+
+**REVISED go/no-go (GREEN, with scope):**
+- **Proceed.** Walks are non-trivial on every dataset, and empirical-T4 lowers
+  the cross fraction on all of them — most on the time-dense graphs that are
+  the natural target for temporal embedding (mooc 47%→27%).
+- **Position the thesis on time-dense temporal graphs** (long walks, edge
+  reuse), where co-shard + empirical-T4 is strongest. Treat large
+  sparse-temporal graphs (stackoverflow, residual ~40%) as the honest hard
+  case, not the headline.
+- **T4 is a hard prerequisite and a real build** (pilot sampling → edge weights
+  → re-partition) — promote it to a co-equal contribution and budget for it;
+  the trivial analytic weight does **not** work.
+- **Scale-up validation still wanted:** confirm on a larger time-dense graph
+  (e.g., TGB tgbl-comment) at higher rank counts. mooc is the in-hand
+  time-dense proof but is small and bipartite.
+
+**Artifacts (this machine):** `pilot_edge_weights.py` (pilot), `partition_metis.py`
+(now accepts `<scale>` arg or `EWEIGHT_FILE` env), `.venv_part/` (pymetis venv,
+git-ignore), weighted partitions under `data/<P>/<base>_tw.*`, weights at
+`data/<base>.txt.ew`.
+
 **E2 — the scientific claim of Innovation 2 / T3 (single-machine ML, no MPI).**
 On one dataset, simulate sharding and train CTDNE-style embeddings three ways,
 compare temporal link-prediction AP:

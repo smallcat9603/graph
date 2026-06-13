@@ -105,11 +105,19 @@ def load_edges(path):
     return np.array(rows, dtype=np.int32)
 
 
-def partition_with_metis(xadj, adjncy, num_parts):
+def partition_with_metis(xadj, adjncy, num_parts, eweights=None):
     """Call pymetis, accepting both the new (CSRAdjacency) and legacy APIs.
     Numpy arrays are passed directly (pymetis honours the buffer protocol)
-    so we avoid building Python lists of tens of millions of ints. """
+    so we avoid building Python lists of tens of millions of ints.
+
+    When eweights is given (adjwgt aligned with adjncy), METIS minimizes the
+    *weighted* edgecut, so high-weight edges are kept within a partition. We
+    use the legacy call for the weighted case (it reliably accepts eweights)."""
     import pymetis
+
+    if eweights is not None:
+        return pymetis.part_graph(num_parts, xadj=xadj, adjncy=adjncy,
+                                  eweights=eweights)
 
     # New API (>=2024): pymetis.CSRAdjacency
     if hasattr(pymetis, "CSRAdjacency"):
@@ -124,10 +132,16 @@ def partition_with_metis(xadj, adjncy, num_parts):
 
 
 def main():
-    if len(sys.argv) != 3:
-        sys.exit("usage: partition_metis.py <edge_file> <num_parts>")
+    if len(sys.argv) not in (3, 4):
+        sys.exit("usage: partition_metis.py <edge_file> <num_parts> "
+                 "[temporal_scale]\n"
+                 "  temporal_scale > 0 (e.g. 100): T4 prototype -- weight edges\n"
+                 "  by earliness in time (early edges, which time-respecting\n"
+                 "  walks traverse most, are kept within a partition). Output\n"
+                 "  goes to <base>_tw.* so the unweighted baseline is preserved.")
     edge_file = sys.argv[1]
     num_parts = int(sys.argv[2])
+    temporal_scale = float(sys.argv[3]) if len(sys.argv) == 4 else 0.0
     if not resolve_chunks(edge_file):
         sys.exit(f"file not found: {edge_file} (or {edge_file}.part000)")
     if num_parts < 2:
@@ -157,7 +171,7 @@ def main():
     order = np.argsort(all_src, kind='stable')
     sorted_src = all_src[order]
     adjncy = all_dst[order].astype(np.int32)
-    del all_src, all_dst, order
+    del all_src, all_dst   # keep `order` for temporal-weight alignment below
 
     degree = np.bincount(sorted_src, minlength=n_nodes).astype(np.int32)
     del sorted_src
@@ -165,10 +179,46 @@ def main():
     np.cumsum(degree, out=xadj[1:])
     del degree
 
+    # --- 3b. T4 temporal edge weights (prototype). Time-respecting walks
+    #         dead-end fast (cursor races to t_max), so they overwhelmingly
+    #         traverse EARLY-timestamp edges. Weight early edges high so METIS
+    #         keeps the actually-traversed edges within a partition.
+    adjwgt = None
+    eweight_file = os.environ.get("EWEIGHT_FILE")
+    if eweight_file:
+        # Empirical per-edge weights (pilot_edge_weights.py): one weight per
+        # edge in the edge-file row order. Align with adjncy via the same
+        # doubling + ordering used for the CSR.
+        edge_w = np.loadtxt(eweight_file, dtype=np.int32)
+        if len(edge_w) != n_edges:
+            sys.exit(f"EWEIGHT_FILE has {len(edge_w)} rows, expected {n_edges}")
+        all_w = np.concatenate([edge_w, edge_w])
+        adjwgt = all_w[order].astype(np.int32)
+        del all_w, edge_w
+        temporal_scale = 1.0  # mark weighted so output goes to <base>_tw
+        print(f"      empirical edge weights from {eweight_file} "
+              f"(w in [{int(adjwgt.min())}, {int(adjwgt.max())}])")
+    elif temporal_scale > 0:
+        t = edges[:, 2].astype(np.float64)
+        tmin, tmax = float(t.min()), float(t.max())
+        span = (tmax - tmin) if tmax > tmin else 1.0
+        t_norm = (t - tmin) / span                      # 0=earliest, 1=latest
+        edge_w = (1.0 + temporal_scale * (1.0 - t_norm)) # early -> high weight
+        edge_w = np.rint(edge_w).astype(np.int32)
+        np.maximum(edge_w, 1, out=edge_w)
+        # Align with adjncy: same doubling (src->dst, dst->src) then same order.
+        all_w = np.concatenate([edge_w, edge_w])
+        adjwgt = all_w[order].astype(np.int32)
+        del all_w, t, t_norm, edge_w
+        print(f"      temporal weights: scale={temporal_scale} "
+              f"w in [1, {int(1+temporal_scale)}], early edges weighted high")
+    del order
+
     # --- 4. METIS
-    print(f"[4/5] partitioning into {num_parts} parts")
-    n_cuts, membership = partition_with_metis(xadj, adjncy, num_parts)
-    del xadj, adjncy
+    print(f"[4/5] partitioning into {num_parts} parts"
+          f"{' (temporal-weighted)' if adjwgt is not None else ''}")
+    n_cuts, membership = partition_with_metis(xadj, adjncy, num_parts, adjwgt)
+    del xadj, adjncy, adjwgt
     membership = np.asarray(membership, dtype=np.int32)
     print(f"      edge cuts = {n_cuts}  cut_ratio = {n_cuts / n_edges:.3f}")
 
@@ -177,6 +227,8 @@ def main():
     base = os.path.basename(edge_file)
     if base.endswith(".txt"):
         base = base[:-4]
+    if temporal_scale > 0:
+        base = base + "_tw"   # keep the unweighted baseline partition intact
     out_dir = os.path.join(os.path.dirname(edge_file) or ".", str(num_parts))
     os.makedirs(out_dir, exist_ok=True)
 

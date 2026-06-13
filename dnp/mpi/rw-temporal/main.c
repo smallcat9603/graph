@@ -30,6 +30,7 @@
 #include "comm_batch.h"
 #include "config.h"
 #include "graph_io.h"
+#include "intmap.h"
 #include "node_scheduler.h"
 #include "routing.h"
 #include "scheduler.h"
@@ -464,6 +465,7 @@ int main(int argc, char** argv) {
     path_buf_t paths;
     path_buf_init(&paths, walker_len);
 
+    walker_e1_reset();   /* E1 de-risking: count cross-rank adjacent pairs */
     double t0 = MPI_Wtime();
 
     if (args.policy == POLICY_NODE) {
@@ -475,6 +477,19 @@ int main(int argc, char** argv) {
     }
 
     double t1 = MPI_Wtime();
+
+    /* E1 (research_plan_v3.md §8): fraction of adjacent (center, context)
+     * pairs that cross a partition boundary == fraction of skip-gram pairs
+     * needing cross-rank embedding traffic under co-sharding. Small fraction
+     * ==> co-shard premise holds. */
+    long e1_local[2], e1_global[2];
+    walker_e1_get(&e1_local[0], &e1_local[1]);
+    MPI_Reduce(e1_local, e1_global, 2, MPI_LONG, MPI_SUM, 0, MPI_COMM_WORLD);
+    if (rank == 0) {
+        long tot = e1_global[0], crs = e1_global[1];
+        printf("E1 cross-rank pairs: %ld/%ld (%.2f%%) [p=%d]\n",
+               crs, tot, tot ? 100.0 * (double) crs / (double) tot : 0.0, size);
+    }
 
     /* Gather and write log */
     int  local_npaths = paths.nwalkers;
@@ -501,6 +516,34 @@ int main(int argc, char** argv) {
     MPI_Gatherv(paths.data, local_npaths * walker_len, MPI_INT,
                 all_paths, counts, displs, MPI_INT, 0, MPI_COMM_WORLD);
 
+    /* E1 window-w (gated by env E1_WINDOW=w): exact cross-rank fraction of
+     * skip-gram pairs for windows >1. Window-1 (the always-on counter above)
+     * equals the migration rate; for w>1 a pair (v_i,v_j) crosses iff its two
+     * endpoints are owned by different ranks, which needs a global owner map.
+     * Off by default, so normal runs pay nothing. */
+    int e1_W = 0;
+    { const char* s = getenv("E1_WINDOW"); if (s) e1_W = atoi(s); }
+    int* owned_counts = NULL;
+    int* owned_displs = NULL;
+    int* all_owned    = NULL;
+    if (e1_W > 0) {
+        if (rank == 0) owned_counts = (int*) malloc(sizeof(int) * size);
+        MPI_Gather(&part.nnodes, 1, MPI_INT, owned_counts, 1, MPI_INT,
+                   0, MPI_COMM_WORLD);
+        int total_owned = 0;
+        if (rank == 0) {
+            owned_displs = (int*) malloc(sizeof(int) * size);
+            owned_displs[0] = 0;
+            for (int i = 1; i < size; i++)
+                owned_displs[i] = owned_displs[i - 1] + owned_counts[i - 1];
+            total_owned = owned_displs[size - 1] + owned_counts[size - 1];
+            all_owned = (int*) malloc(sizeof(int) * total_owned);
+        }
+        MPI_Gatherv(part.l2g, part.nnodes, MPI_INT,
+                    all_owned, owned_counts, owned_displs, MPI_INT,
+                    0, MPI_COMM_WORLD);
+    }
+
     if (rank == 0) {
         char log_path[512];
         snprintf(log_path, sizeof(log_path),
@@ -512,9 +555,59 @@ int main(int argc, char** argv) {
         printf("wrote %s\n", log_path);
         printf("rank=0 elapsed=%fs sched=%s delta_t=%d total_walkers=%d\n",
                t1 - t0, mode_name, args.delta_t, total_walkers);
+
+        /* E1 window-w: build the owner map and count cross-rank pairs for
+         * every skip-gram window up to e1_W, over the gathered full paths. */
+        if (e1_W > 0) {
+            intmap_t owner;
+            intmap_init(&owner, (size_t) (owned_displs[size - 1] +
+                                          owned_counts[size - 1]) * 2 + 16);
+            for (int r = 0; r < size; r++)
+                for (int k = 0; k < owned_counts[r]; k++)
+                    intmap_put(&owner, all_owned[owned_displs[r] + k], r);
+
+            long* wt = (long*) calloc(e1_W + 1, sizeof(long)); /* total by gap */
+            long* wc = (long*) calloc(e1_W + 1, sizeof(long)); /* cross by gap */
+            long miss = 0;
+            int  path_cap = walker_len - WALKER_HEADER_INTS;
+            int  nwalk    = total_paths_int / walker_len;
+            for (int wkr = 0; wkr < nwalk; wkr++) {
+                const int* path = all_paths + (size_t) wkr * walker_len
+                                  + WALKER_HEADER_INTS;
+                int plen = 0;
+                while (plen < path_cap && path[plen] != WALKER_DEAD_END_PAD)
+                    plen++;
+                for (int i = 0; i < plen; i++) {
+                    int oi = intmap_get(&owner, path[i]);
+                    if (oi == INTMAP_MISS) { miss++; continue; }
+                    for (int k = 1; k <= e1_W && i + k < plen; k++) {
+                        int oj = intmap_get(&owner, path[i + k]);
+                        if (oj == INTMAP_MISS) { miss++; continue; }
+                        wt[k]++;
+                        if (oi != oj) wc[k]++;
+                    }
+                }
+            }
+            long ct = 0, cc = 0;
+            for (int w = 1; w <= e1_W; w++) {
+                ct += wt[w];
+                cc += wc[w];
+                printf("E1 window=%d cross-rank pairs: %ld/%ld (%.2f%%) [p=%d]\n",
+                       w, cc, ct, ct ? 100.0 * (double) cc / (double) ct : 0.0,
+                       size);
+            }
+            if (miss) printf("E1 window: %ld owner-map misses (unexpected)\n", miss);
+            intmap_free(&owner);
+            free(wt);
+            free(wc);
+        }
+
         free(counts);
         free(displs);
         free(all_paths);
+        free(owned_counts);
+        free(owned_displs);
+        free(all_owned);
     }
 
     path_buf_free(&paths);
