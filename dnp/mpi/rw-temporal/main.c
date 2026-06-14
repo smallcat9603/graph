@@ -29,6 +29,7 @@
 
 #include "comm_batch.h"
 #include "config.h"
+#include "embed.h"
 #include "graph_io.h"
 #include "intmap.h"
 #include "node_scheduler.h"
@@ -186,12 +187,38 @@ static void flush_round(outbound_t* outbound, int size, int max_steps,
  * before the next one starts. Kept as an ablation baseline.
  */
 
+/* M2 increment 1: co-shard embedding training (off unless EMBED_DIM set). */
+static embed_t* g_embed   = NULL;
+static int      g_emb_win = 5;   /* skip-gram window */
+static int      g_emb_neg = 5;   /* negatives per pair */
+static double   g_emb_wneg = 1.0;/* negative importance weight (1 = off) */
+
+/* Train window pairs within a local run: `cur` (local idx) is the node just
+ * stepped to; `ring`/`rlen` hold up to g_emb_win previous LOCAL node indices.
+ * Trains (cur, ctx) for each ctx in the ring, then pushes cur. */
+static void embed_on_local_step(int* ring, int* rlen, int cur) {
+    if (!g_embed) return;
+    for (int j = 0; j < *rlen; j++)
+        embed_train_pair(g_embed, cur, ring[j], g_emb_neg, g_emb_wneg);
+    if (*rlen < g_emb_win) {
+        ring[(*rlen)++] = cur;
+    } else {
+        for (int j = 1; j < g_emb_win; j++) ring[j - 1] = ring[j];
+        ring[g_emb_win - 1] = cur;
+    }
+}
+
 static int drive_walker(walker_t* w, const partition_t* part, const routing_t* routing,
                         path_buf_t* paths) {
     int dst_rank;
+    int ring[64]; int rlen = 0;
+    if (g_embed && w->cur_local >= 0) { ring[0] = w->cur_local; rlen = 1; }
     for (;;) {
         int r = walker_step(w, part, routing, &dst_rank);
-        if (r == WALKER_STEP_CONTINUE) continue;
+        if (r == WALKER_STEP_CONTINUE) {
+            embed_on_local_step(ring, &rlen, w->cur_local);
+            continue;
+        }
         if (r == WALKER_STEP_DONE || r == WALKER_STEP_DEAD_END) {
             walker_finalize(w);
             path_buf_push(paths, w->buf);
@@ -465,6 +492,29 @@ int main(int argc, char** argv) {
     path_buf_t paths;
     path_buf_init(&paths, walker_len);
 
+    /* M2 increment 1: enable co-shard embedding training if EMBED_DIM is set.
+     * Trains only in the drive-to-death loop (delta_t < 0). */
+    embed_t embed_store;
+    {
+        const char* sdim = getenv("EMBED_DIM");
+        if (sdim && atoi(sdim) > 0) {
+            int d = atoi(sdim);
+            const char* sw  = getenv("EMBED_WIN");  if (sw)  g_emb_win  = atoi(sw);
+            if (g_emb_win > 64) g_emb_win = 64;
+            const char* sn  = getenv("EMBED_NEG");  if (sn)  g_emb_neg  = atoi(sn);
+            const char* swn = getenv("EMBED_WNEG"); if (swn) g_emb_wneg = atof(swn);
+            double lr = 0.025;
+            const char* slr = getenv("EMBED_LR");   if (slr) lr = atof(slr);
+            embed_init(&embed_store, part.nnodes, d, lr,
+                       (unsigned) ((rank + 1) * 2654435761u));
+            g_embed = &embed_store;
+            if (rank == 0)
+                printf("EMBED: dim=%d win=%d neg=%d wneg=%.3f lr=%.3f "
+                       "(co-shard training ON; drive-to-death only)\n",
+                       d, g_emb_win, g_emb_neg, g_emb_wneg, lr);
+        }
+    }
+
     walker_e1_reset();   /* E1 de-risking: count cross-rank adjacent pairs */
     double t0 = MPI_Wtime();
 
@@ -477,6 +527,20 @@ int main(int argc, char** argv) {
     }
 
     double t1 = MPI_Wtime();
+
+    /* M2 increment 1: dump this rank's co-shard embedding shard for offline
+     * temporal-LP evaluation. */
+    if (g_embed) {
+        char ep[512];
+        snprintf(ep, sizeof(ep), "%s/embed_%s_p%d_r%d.txt",
+                 LOG_DIR, args.dataset, size, rank);
+        embed_dump(g_embed, part.l2g, ep);
+        if (rank == 0)
+            printf("EMBED: wrote shards %s/embed_%s_p%d_r*.txt\n",
+                   LOG_DIR, args.dataset, size);
+        embed_free(g_embed);
+        g_embed = NULL;
+    }
 
     /* E1 (research_plan_v3.md §8): fraction of adjacent (center, context)
      * pairs that cross a partition boundary == fraction of skip-gram pairs
@@ -597,6 +661,43 @@ int main(int argc, char** argv) {
                        size);
             }
             if (miss) printf("E1 window: %ld owner-map misses (unexpected)\n", miss);
+
+            /* M1 / F2-pilot: embedding-communication accounting at the training
+             * window e1_W. Empirical inputs: cc = cross-rank positive pairs,
+             * ct = total pairs (from the real walks + real partition above).
+             * Two-stage / NOMAD-style: every cross positive pair and every
+             * remote negative is fetched AND its delta sent back (2 vectors of
+             * d float32); negatives are global, so a fraction (P-1)/P land off
+             * the center's shard. Fused co-shard: the cross positive pair's
+             * gradient rides the migration message already in flight (1 vector),
+             * and negatives are sampled shard-local (0 remote, exchange off).
+             * Migration of walk state is identical for both, so it is excluded;
+             * this is the embedding-comm differentiator only. Bytes, not wall
+             * clock — the real fused engine (M2+) is needed for timing. */
+            {
+                int d = 128, K = 5; double rho = 0.1;
+                const char* sd = getenv("E1_DIM"); if (sd) d = atoi(sd);
+                const char* sk = getenv("E1_NEG"); if (sk) K = atoi(sk);
+                const char* sr = getenv("E1_RHO"); if (sr) rho = atof(sr);
+                double vec = (double) d * 4.0;                 /* float32 vector */
+                double remote_neg = (double) K * (double) ct
+                                    * (double) (size - 1) / (double) size;
+                double twostage = (cc + remote_neg) * 2.0 * vec;
+                /* fused: piggybacked positive grad (1 vec/cross pair) + the
+                 * rho-fraction of negatives still exchanged remotely (2 vec).
+                 * rho=0 is the optimistic bound; rho=0.1 is E2's quality point. */
+                double fused_lo = (double) cc * vec;                       /* rho=0 */
+                double fused    = fused_lo + rho * remote_neg * 2.0 * vec; /* rho   */
+                printf("F2 window=%d d=%d K=%d rho=%.2f: two-stage=%.1f MB  "
+                       "fused=%.1f MB (%.1fx)  fused@rho0=%.1f MB (%.1fx)  "
+                       "[cross=%ld total=%ld remote_neg=%.0f]\n",
+                       e1_W, d, K, rho,
+                       twostage / 1e6,
+                       fused / 1e6,    fused    > 0 ? twostage / fused : 0.0,
+                       fused_lo / 1e6, fused_lo > 0 ? twostage / fused_lo : 0.0,
+                       cc, ct, remote_neg);
+            }
+
             intmap_free(&owner);
             free(wt);
             free(wc);

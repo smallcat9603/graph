@@ -193,22 +193,46 @@ of the three-way (sample/train/communicate) overlap.
 
 ---
 
-## 7. Prior-art status (⚠ embedding line NOT deep-researched yet)
+## 7. Prior-art status — Phase 0 lightweight check done (2026-06-14)
 
-**Verified (from the v2 deep-research pass):**
-- DistGER (VLDB'23, arXiv 2303.15702) — distributed RW→embedding, **static**; 2-stage.
-- TGL (VLDB'22) / DistTGL (SC'23) — distributed temporal **GNN training**, not walk embedding.
-- SPEED (2023, arXiv 2308.14129) — streaming temporal partition, replication objective.
+**Verified static / different-objective (from v2 deep-research):**
+- DistGER (VLDB'23) — distributed RW→embedding, **static**; improves *distributed
+  skip-gram* with a "hotness block-based synchronization" to sync node vectors and
+  a RW-aware partitioner (−45% cross-machine comm). Static only.
+- TGL/DistTGL — distributed temporal **GNN training**, not walk embedding.
+- SPEED (2023) — streaming temporal partition, replication objective.
 - TEA (EuroSys'23) — single-machine temporal RW.
 
-**Must verify before committing (the most direct novelty threats):**
-1. Any **distributed** streaming/incremental temporal node-embedding system
-   (dynamic DeepWalk, tNodeEmbed, online CTDNE variants) — single-machine or distributed?
-2. Distributed embedding-consistency work (Hogwild!, parameter-server, async
-   word2vec) **specialized to temporal-walk access patterns** — has anyone co-sharded
-   graph + embedding for *temporal* walks?
-3. Whether the migration-piggyback idea (positive-pair gradient on the migration
-   message) appears in any distributed graph-embedding system.
+**⚠ NEW, CLOSE THREAT — NOMAD (arXiv 2604.09419, Apr 2026).** A distributed-memory
+**MPI** node-embedding framework that **already does most of v3's *systems* core**,
+for **static** graphs:
+- samples positive pairs with `owner(u)=p` so **u is always local, v may be
+  remote** — *exactly* our "co-shard makes most positive pairs local" observation;
+- **owner-computes** embeddings; **bounded staleness** for remote context vectors;
+- **batches remote embedding exchange with `MPI_Alltoallv`** — our batching idea;
+- negatives "sampled independently of partition boundaries", buffered + batched.
+
+**Implication: the co-shard + owner-computes + batched-`Alltoallv` + bounded-
+staleness mechanisms are NO LONGER novel — NOMAD published them (static, 2026).**
+What still appears genuinely unoccupied:
+- **Distributed *continuous-time temporal* (time-respecting) walk embedding** —
+  NOMAD/DistGER/ScaleRunner/KnightKing are all static; CTDNE/WalkingTime/dynamic-
+  node2vec/FILDNE are single-machine; TARIS is distributed time-respecting *graph
+  processing*, not embedding. The distributed×temporal×walk-embedding cell is open.
+- **Temporal-reachability partitioning (T4)** — validated to work here, and not in
+  any of the above.
+- The **time-window (cursor-band) locality** exploited for scheduling + comm.
+
+**Honest verdict: v3 is now "the temporal specialization of NOMAD-style distributed
+walk embedding," not a new paradigm.** It is still publishable IF positioned as
+exactly that — NOMAD(static) is the baseline to extend, and the temporal pieces
+(time-respecting walks, T4, time-window locality) carry the novelty. The generic
+co-shard/communication story must NOT be claimed as new.
+
+**This also dents C2/T3:** NOMAD just *batches global negatives* over `Alltoallv`
+and avoids the bias entirely. So shard-local-negatives + importance-weight is an
+*alternative* (less traffic, bounded bias), **not an obvious win** — we must
+justify it against NOMAD's batched-global-negatives or adopt the latter.
 
 ---
 
@@ -337,10 +361,50 @@ E1 cross-rank pair fraction at $w{=}5$, np=4 (walk-length median in parens):
   (e.g., TGB tgbl-comment) at higher rank counts. mooc is the in-hand
   time-dense proof but is small and bipartite.
 
-**Artifacts (this machine):** `pilot_edge_weights.py` (pilot), `partition_metis.py`
-(now accepts `<scale>` arg or `EWEIGHT_FILE` env), `.venv_part/` (pymetis venv,
+**Artifacts (this machine):** `pilot_edge_weights.py` (pilot, now also reports
+walk-length distribution), `partition_metis.py` (accepts `<scale>` arg or
+`EWEIGHT_FILE` env), `e2_negsample.py` (E2), `.venv_part/` (pymetis venv,
 git-ignore), weighted partitions under `data/<P>/<base>_tw.*`, weights at
 `data/<base>.txt.ew`.
+
+**E2 — results (2026-06-14, single machine, dim=64, 4 shards (balanced
+random), window 5, K=5 negatives, chronological 80/20 split).** Temporal
+link-prediction AP under four negative-sampling regimes (same walks, pairs,
+init, RNG — only the negatives differ):
+
+| dataset | global (ref) | local (no corr.) | local+weight | local+weight+exchange ρ=0.1 |
+| --- | --- | --- | --- | --- |
+| wikipedia | 0.856 | 0.709 | 0.813 | **0.840** |
+| reddit | 0.931 | 0.701 | 0.779 | **0.889** |
+| mooc | 0.600 | 0.550 | 0.579 | 0.531 |
+
+**Findings:**
+1. **The bias is real:** naive shard-local negatives (no correction) lose a lot
+   — wikipedia AP 0.86→0.71, reddit 0.93→0.70. T3 is solving a genuine problem.
+2. **The correction works** where link prediction has real signal: on wikipedia
+   and reddit, local+weight+exchange recovers to ≈global (0.840/0.856 and
+   0.889/0.931; AUC matches or exceeds global).
+3. **The periodic cross-shard exchange is the load-bearing piece, not the weight
+   alone.** On reddit the importance weight alone reaches only 0.779; adding the
+   ρ=0.1 exchange jumps it to 0.889. This **confirms the plan's claim that the
+   exchange-frequency bias–variance analysis is the core T3 contribution.**
+4. **mooc is inconclusive — eval setup, not method:** global itself is near
+   random (AUC 0.56), so the simple dot-product + random-negative LP protocol
+   does not suit mooc's bipartite structure. Needs a user/item-aware eval before
+   any mooc conclusion.
+
+**PLAN IMPACT:**
+- **T3 is GREEN** on graphs with LP signal, with the caveat that **the exchange
+  (not just the weight) is essential** — so the contribution must center on the
+  exchange-rate ρ trade-off (ρ=0.1 already recovers most of the gap; quantify
+  quality vs traffic across ρ).
+- **Fix the LP evaluation** (rank/time-aware negatives; user–item scoring for
+  bipartite graphs) before trusting mooc / production numbers.
+- Still TODO for rigor: multiple seeds + variance bars; METIS shards (not just
+  random) — local negatives become graph-near "hard negatives" there and may
+  behave differently; a ρ sweep.
+
+> Reproduce: `.venv_part/bin/python e2_negsample.py data/<ds>.txt 4 64 3`
 
 **E2 — the scientific claim of Innovation 2 / T3 (single-machine ML, no MPI).**
 On one dataset, simulate sharding and train CTDNE-style embeddings three ways,
@@ -378,3 +442,134 @@ them — more efficient than collecting broadly and writing later.
 The weakest / most valuable piece is **T3 (the exchange-frequency bias–variance
 analysis)** — it decides whether this reads as engineering or as a
 systems×ML contribution with real analysis.
+
+---
+
+## 10. Execution plan (outline-locked, 2026-06-14)
+
+Phase 0 is complete: novelty repositioned (temporal extension of NOMAD; do NOT
+claim co-shard/Alltoallv/staleness as new — see `nomad_differentiation.md`), and
+baselines secured (DistGER released; NOMAD as ablation config). This section
+locks **claims → headline figure → experiment → falsifiable gate** so the build
+produces only what each figure needs. Build the thinnest slice per figure,
+measure, then decide to continue.
+
+### Headline claims → figures → experiments
+
+| # | Claim (what the paper asserts) | Headline figure | Experiment | Pass / fail gate |
+| --- | --- | --- | --- | --- |
+| **CA** | Temporal-reachability partitioning (T4) cuts cross-rank traffic vs static partitioning — *strongest evidence in hand* | F1: cross-rank pair fraction & comm volume, static-METIS vs T4, per dataset/window | T4 wired into the live engine; re-run E1 (`E1_WINDOW`) | T4 reproduces the offline drop **in the live engine** (e.g. stackoverflow $w{=}5$ ≥ −8 pts; mooc ≈ −20 pts) |
+| **CB** | Co-shard + fused sampling–training cuts communication vs two-stage and vs NOMAD-style remote-context fetch | F2: comm volume & runtime — two-stage vs fused; vs NOMAD-style static config | M1 fused engine; instrument bytes/messages | fused < two-stage comm on ≥2 datasets, **embedding quality unchanged** (AP within noise) |
+| **CC** | Temporal-aware embedding beats static SOTA on temporal link prediction | F3: temporal-LP AP — v3 vs DistGER(static) vs single-machine CTDNE; + neg-sampling ablation | run DistGER (released) static; v3 temporal; E2 scaled to the engine | v3 temporal-LP **> DistGER-static**, and shard-local+correction within ~2 AP of global-negatives (per E2) |
+| **CD** | Engine scales on a real cluster; comm/compute crossover matches a cost model | F4: strong/weak scaling + comm fraction vs ranks | multi-node runs; fit α–β model | positive scaling in compute-heavy regime; model predicts crossover within tolerance |
+
+Three secondary results already in hand (cite, don't re-run as headline): the
+window-$w$ cross-fraction curve (E1), walk-length distributions, the ρ
+exchange-rate trade-off (E2).
+
+### Baselines (three-tier, locked)
+1. **DistGER** (released, VLDB'23, static) — published SOTA, run treating the
+   temporal graph as static.
+2. **NOMAD-style static** — our engine with timestamps ignored + remote-negative
+   fetch; ablates the temporal pieces.
+3. **v1 two-stage** (sample-then-train) — ablates fusion.
+
+### Milestones (refines §9; each gated on producing its figure)
+
+| M | Build (thinnest slice) | Produces | Gate to continue |
+| --- | --- | --- | --- |
+| **M1** | co-shard embedding table + fused positive-pair training on multi-rank **single node** (reuse `walker`/`scheduler`/`comm_batch`) | F2-pilot | fused < two-stage comm, quality unchanged → else stop & rethink fusion |
+| **M2** | T4 into the engine (pilot weights → partition load path) | F1 | live-engine T4 drop matches offline → else debug weighting |
+| **M3** | temporal-LP harness + DistGER baseline + shard-local negatives in-engine | F3 | v3 ≥ DistGER-static on temporal-LP → else reconsider thesis |
+| **M4** | real multi-node cluster + (synthetic OOM graph or TGB tgbl-comment) | F4 | positive scaling / model holds |
+
+### Standing scope & rigor rules (from de-risking)
+- **Primary datasets = time-dense** (mooc-like, TGB tgbl-comment); stackoverflow
+  is the honest hard case. Always report walk-length distributions.
+- **Fix the LP eval** (time-aware negatives; user–item scoring for bipartite)
+  before trusting numbers — current dot-product+random-neg eval is degenerate on
+  mooc.
+- **Rigor before claiming:** multiple seeds + variance; METIS shards (not just
+  random) for E2; ρ sweep.
+- **Do NOT** present co-shard / batched-`Alltoallv` / bounded-staleness as
+  contributions (NOMAD). Lead F1 (T4) — it is the strongest in-hand evidence.
+
+### Definition of done for "starting experiments"
+"Experiments" now means **building M1's thin slice and producing F2-pilot.**
+Success criterion: a single bar chart showing fused co-shard comm < two-stage
+comm on ≥2 datasets with matching AP. If that holds, proceed to M2; if not,
+the fusion premise is wrong and we stop before sinking the full build.
+
+### M1 result — F2-pilot (2026-06-14): GATE PASSED
+
+Thinnest slice taken: instead of a full distributed-SGD engine, an
+**embedding-communication accounting** on the real engine's real walks +
+partition (extends the E1 window post-process in `main.c`; env `E1_DIM`,
+`E1_NEG`, `E1_RHO`). Empirical inputs = cross-rank pair count + total pairs at
+the training window; the rest is a transparent byte model (float32 vectors;
+two-stage = NOMAD-style fetch+delta for cross context pairs and remote
+negatives; fused = piggybacked positive grad + shard-local negatives with a
+ρ-fraction still exchanged). Bytes, not wall-clock.
+
+Embedding-comm at $w{=}5$, $d{=}128$, $K{=}5$, np=4, static partition:
+
+| dataset | two-stage | fused @ρ=0.1 (quality-preserving, per E2) | fused @ρ=0 (bound) |
+| --- | --- | --- | --- |
+| wikipedia | 159 MB | 19.0 MB (**8.4×**) | 3.9 MB (41×) |
+| reddit | 202 MB | 24.8 MB (**8.2×**) | 5.7 MB (35×) |
+| stackoverflow | 162 MB | 23.7 MB (**6.8×**) | 9.4 MB (17×) |
+| mooc | 467 MB | 67.3 MB (**6.9×**) | 25.7 MB (18×) |
+
+**Verdict: PASS** — fused < two-stage on all 4 datasets; **6.8–8.4×** at E2's
+quality-preserving ρ=0.1 (quality half carried by E2: local+weight+exchange ≈
+global AP on wikipedia/reddit). → proceed to M2.
+
+**Honest decomposition (reframes the contribution emphasis):**
+- The comm win is **dominated by shard-local negatives (T3)**, not the
+  positive-pair piggyback: `remote_neg` ≈ 18× `cross_pairs`, so two-stage cost
+  is mostly remote-negative fetch, which fused avoids. **The paper's
+  communication story is T3 + T4, not the migration-piggyback** (the piggyback
+  is a smaller term, though still a real mechanistic difference vs NOMAD's
+  two-phase design).
+- ρ couples F2 (comm) with E2 (quality): ρ=0 gives 17–41× but lower quality;
+  ρ=0.1 gives 6.8–8.4× at ≈global quality. **The ρ trade-off is the headline
+  knob — exactly the T3 analysis the plan flagged as the core contribution.**
+
+**Caveats:** byte model not wall-clock (M2+ engine needed for timing); excludes
+walk-migration bytes (common to both); assumes balanced shards for the
+remote-negative fraction $(P{-}1)/P$. New artifact: F2 accounting in `main.c`
+(env-gated, off by default).
+
+### M2 result — increment 1: real in-engine co-shard training (2026-06-14)
+
+First real (not modeled) embedding training inside the MPI engine. New module
+`embed.{c,h}`: per-rank co-located embedding table (indexed by local node id),
+in-walk SGNS trained on **local-run window pairs** in the drive-to-death loop,
+**shard-local negatives**. Env-gated (`EMBED_DIM/WIN/NEG/WNEG/LR`); off by
+default. Increment-1 scope: cross-partition pairs **dropped** (added later via
+piggyback), `wneg=1.0` (correction off). Shards dumped per rank; offline
+temporal-LP eval in `m1_eval_lp.py`.
+
+**Leakage-free temporal LP (wikipedia, train-only 80% partition, np=4, d=64,
+win=5, K=5, 60k walkers):** **AUC 0.882, AP 0.895** on held-out future edges.
+
+- Validates the full path end-to-end: co-shard table → in-walk SGNS →
+  shard-local negatives → dump → eval. **GATE PASS.**
+- Quality is strong even with cross-pairs dropped + no correction, because
+  wikipedia's train-partition cross fraction is only ~5.6% — consistent with
+  the co-shard thesis (low-cross ⇒ local-only training nearly suffices).
+- Not directly comparable to E2's absolute numbers (different corpus size,
+  single online pass vs 3 epochs, different eval negatives) — read it as "the
+  in-engine embeddings are strong," not as a head-to-head with E2.
+
+**Remaining increments (real engine):**
+- **inc-2:** cross-partition pairs via migration-piggyback (walker carries
+  recent context vectors); measure quality recovery on higher-cross graphs.
+- **inc-3:** importance weight + periodic exchange (ρ) in-engine; reproduce E2.
+- **inc-4:** wire training into the batched loop; measure **real** comm
+  (wall-clock F2, not the byte model) two-stage vs fused.
+- **F3/F4:** DistGER head-to-head (released code) on temporal-as-static;
+  multi-node scaling.
+
+**Artifacts:** `embed.{c,h}`, `m1_eval_lp.py`, `data/<ds>_train.txt`,
+`log/embed_<ds>_p<P>_r*.txt`.
