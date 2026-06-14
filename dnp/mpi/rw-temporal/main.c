@@ -196,6 +196,69 @@ static embed_t* g_embed   = NULL;
 static int      g_emb_win = 5;   /* skip-gram window */
 static int      g_emb_neg = 5;   /* negatives per pair */
 static double   g_emb_wneg = 1.0;/* negative importance weight (1 = off) */
+static long     g_emb_pairs = 0; /* positive pairs trained so far (for twostage) */
+static int      g_emb_mode  = 0; /* 0 = fused (local negs), 1 = two-stage (NOMAD-style) */
+
+/* Two-stage / NOMAD-style embedding-communication for ONE round: a faithful
+ * comm pattern (not a separate trainer) that moves the embedding-vector volume
+ * a remote-negative design would -- K * pairs_round * (P-1)/P negative vectors
+ * fetched and their deltas returned, via MPI_Alltoallv of real d-float rows.
+ * Returns the wall-clock spent. Quantifies exactly the communication our fused
+ * (shard-local-negative) engine AVOIDS. */
+static double twostage_embed_exchange(long pairs_round, int K, int size, int rank,
+                                      embed_t* e) {
+    /* MUST be called collectively by every rank each round: pairs_round varies
+     * per rank, so it cannot gate the collectives (would deadlock). When
+     * pairs_round==0 the volume falls to the per=1 floor below. */
+    if (!e || size < 2) return 0.0;
+    if (pairs_round < 0) pairs_round = 0;
+    int d = e->d;
+    long remote_neg = (long) ((double) K * (double) pairs_round
+                              * (double) (size - 1) / (double) size);
+    int per = (int) (remote_neg / (size - 1));         /* ids requested per peer */
+    if (per < 1) per = 1;
+    if (per > e->n) per = e->n;
+
+    int* scnt = (int*) malloc(sizeof(int) * size);
+    int* rcnt = (int*) malloc(sizeof(int) * size);
+    int* sdis = (int*) malloc(sizeof(int) * size);
+    int* rdis = (int*) malloc(sizeof(int) * size);
+    for (int j = 0; j < size; j++) scnt[j] = (j == rank) ? 0 : per;
+
+    double t0 = MPI_Wtime();
+    /* `per` is capped by each rank's local node count, so it differs per rank;
+     * exchange the real counts before Alltoallv to avoid TRUNCATE. */
+    MPI_Alltoall(scnt, 1, MPI_INT, rcnt, 1, MPI_INT, MPI_COMM_WORLD);
+    int stot = 0, rtot = 0;
+    for (int j = 0; j < size; j++) { sdis[j] = stot; stot += scnt[j]; rdis[j] = rtot; rtot += rcnt[j]; }
+    /* 1. request: send `per` random row ids to each peer */
+    int* sreq = (int*) malloc(sizeof(int) * (stot ? stot : 1));
+    int* rreq = (int*) malloc(sizeof(int) * (rtot ? rtot : 1));
+    for (int i = 0; i < stot; i++) sreq[i] = rand() % e->n;
+    MPI_Alltoallv(sreq, scnt, sdis, MPI_INT, rreq, rcnt, rdis, MPI_INT, MPI_COMM_WORLD);
+
+    /* 2. reply with the requested d-float rows; 3. return deltas (same volume) */
+    int* scntd = (int*) malloc(sizeof(int) * size);
+    int* rcntd = (int*) malloc(sizeof(int) * size);
+    int* sdisd = (int*) malloc(sizeof(int) * size);
+    int* rdisd = (int*) malloc(sizeof(int) * size);
+    for (int j = 0; j < size; j++) { scntd[j] = rcnt[j] * d; rcntd[j] = scnt[j] * d; }
+    int sdt = 0, rdt = 0;
+    for (int j = 0; j < size; j++) { sdisd[j] = sdt; sdt += scntd[j]; rdisd[j] = rdt; rdt += rcntd[j]; }
+    float* reply = (float*) malloc(sizeof(float) * (sdt ? sdt : 1));
+    float* recvv = (float*) malloc(sizeof(float) * (rdt ? rdt : 1));
+    for (int i = 0; i < rtot; i++)
+        memcpy(reply + (size_t) i * d, e->in + (size_t) rreq[i] * d, sizeof(float) * d);
+    MPI_Alltoallv(reply, scntd, sdisd, MPI_FLOAT, recvv, rcntd, rdisd, MPI_FLOAT, MPI_COMM_WORLD);
+    /* delta send-back: same volume in the reverse direction */
+    MPI_Alltoallv(recvv, rcntd, rdisd, MPI_FLOAT, reply, scntd, sdisd, MPI_FLOAT, MPI_COMM_WORLD);
+    double t = MPI_Wtime() - t0;
+
+    free(scnt); free(rcnt); free(sdis); free(rdis);
+    free(sreq); free(rreq);
+    free(scntd); free(rcntd); free(sdisd); free(rdisd); free(reply); free(recvv);
+    return t;
+}
 
 /* Train window pairs within a local run: `cur` (local idx) is the node just
  * stepped to; `ring`/`rlen` hold up to g_emb_win previous LOCAL node indices.
@@ -204,6 +267,7 @@ static void embed_on_local_step(int* ring, int* rlen, int cur) {
     if (!g_embed) return;
     for (int j = 0; j < *rlen; j++)
         embed_train_pair(g_embed, cur, ring[j], g_emb_neg, g_emb_wneg);
+    g_emb_pairs += *rlen;   /* positive pairs trained (drives two-stage comm volume) */
     if (*rlen < g_emb_win) {
         ring[(*rlen)++] = cur;
     } else {
@@ -325,8 +389,14 @@ static void run_bucketed(const args_t* args, int rank, int size,
         scheduler_insert(&sched, w);
     }
 
+    /* F4 phase timers: separate compute / exchange (Alltoallv) / termination
+     * (Allreduce) so the communication fraction can be reported (the headline
+     * scaling metric on a real multi-node network). */
+    double t_compute = 0, t_exchange = 0, t_allreduce = 0, t_embxchg = 0;
     int global_done = 0;
     while (global_done < total_walkers) {
+        double ta = MPI_Wtime();
+        long pairs_before = g_emb_pairs;
         /* Drain every local bucket before each Alltoallv flush. */
         while (!scheduler_empty(&sched)) {
             int n;
@@ -336,10 +406,34 @@ static void run_bucketed(const args_t* args, int rank, int size,
             free(arr);
         }
 
+        double tb = MPI_Wtime();
         flush_round(outbound, size, args->nsteps, part, NULL, &sched, paths);
 
+        double tc = MPI_Wtime();
+        /* Two-stage baseline: pay the NOMAD-style remote embedding comm that the
+         * fused (local-negative) design avoids -- volume from this round's pairs. */
+        if (g_emb_mode == 1 && g_embed)
+            t_embxchg += twostage_embed_exchange(g_emb_pairs - pairs_before,
+                                                 g_emb_neg, size, rank, g_embed);
+
+        double tcc = MPI_Wtime();
         MPI_Allreduce(&paths->nwalkers, &global_done, 1, MPI_INT, MPI_SUM,
                       MPI_COMM_WORLD);
+        double td = MPI_Wtime();
+        t_compute += tb - ta; t_exchange += tc - tb;
+        t_allreduce += td - tcc;
+    }
+
+    /* Report the slowest-rank time per phase (wall-clock determinant). */
+    double loc[4] = { t_compute, t_exchange, t_allreduce, t_embxchg }, mx[4];
+    MPI_Reduce(loc, mx, 4, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
+    if (rank == 0) {
+        double tot = mx[0] + mx[1] + mx[2] + mx[3];
+        printf("PHASE compute=%.4f exchange=%.4f allreduce=%.4f emb_xchg=%.4f s  "
+               "comm_frac=%.1f%% [p=%d mode=%s]\n",
+               mx[0], mx[1], mx[2], mx[3],
+               tot > 0 ? 100.0 * (mx[1] + mx[2] + mx[3]) / tot : 0.0,
+               size, g_emb_mode ? "twostage" : "fused");
     }
 
     outbound_array_free(outbound, size);
@@ -506,6 +600,8 @@ int main(int argc, char** argv) {
             if (g_emb_win > 8) g_emb_win = 8;   /* bounded by walker_t.emb_ring */
             const char* sn  = getenv("EMBED_NEG");  if (sn)  g_emb_neg  = atoi(sn);
             const char* swn = getenv("EMBED_WNEG"); if (swn) g_emb_wneg = atof(swn);
+            const char* sm  = getenv("EMBED_MODE");
+            if (sm && strcmp(sm, "twostage") == 0) g_emb_mode = 1;
             double lr = 0.025;
             const char* slr = getenv("EMBED_LR");   if (slr) lr = atof(slr);
             embed_init(&embed_store, part.nnodes, d, lr,

@@ -877,6 +877,49 @@ reproduced across two independent datasets (one large, from TGB)**. New
 artifacts: `py-tgb`+`torch` in `.venv_part`, `data/tgbl_review*.txt`,
 `baselines/tgb_data/`.
 
+### F4 multi-node prep (2026-06-14) — Wisteria/BDEC-01 ready to run
+
+Cluster access confirmed (Wisteria/BDEC-01, U-Tokyo). Target subsystem
+**Odyssey** (A64FX aarch64, 48 cores/node, ~28 GiB/node, Tofu-D, `pjsub`).
+Done this session:
+- **Phase timing in the engine** (`run_bucketed`): prints
+  `PHASE compute/exchange/allreduce + comm_frac` — the headline scaling metric
+  the single-node byte model could not measure. Tested locally.
+- **Portability scan**: code is C99/POSIX clean (no `__attribute__`/VLA/typeof;
+  only `strdup` needs `-D_POSIX_C_SOURCE`). Should build with `mpifccpx -Kfast`.
+- **Wisteria prep package** in `wisteria/`: `build_wisteria.sh` (cross-compile),
+  `job_scaling.sh` (pjsub multi-node template, override `node`/`proc` per point),
+  `README_wisteria.md` (staging on `/work`, partition-per-proc-count, strong/weak
+  protocol, OOM-capability demo plan).
+
+Then: build on a login node, partition each dataset into {96,192,384,768,1536}
+parts on `/work`, run the sweep, collect `PHASE`/`elapsed`.
+
+### Both remaining pieces now BUILT (2026-06-14)
+
+**1. Two-stage baseline (`EMBED_MODE=twostage`).** A faithful NOMAD-style
+remote-embedding-comm pattern in `run_bucketed`: each round does the
+`MPI_Alltoallv` exchange of the embedding-vector volume a remote-negative design
+would move (≈ `K·pairs_round·(P-1)/P` d-float rows fetched + deltas returned),
+timed as a new `emb_xchg` PHASE component. Fused (local negatives) leaves it at
+**0**; two-stage pays it. Hit + fixed a real bug en route: a collective gated on
+per-rank `pairs_round` deadlocked (ranks with 0 local pairs skipped the
+Alltoallv) — now all ranks call it every round. Local 4-rank check:
+fused `emb_xchg=0.000` vs two-stage `emb_xchg=0.019 s` (small intra-node;
+**the gap is what grows on the real Tofu network — the point of the cluster run**).
+
+**2. Synthetic generator (`gen_synthetic.py`).** Streams a scale-free
+(power-law, inverse-CDF) temporal edge list to disk in ≤90 MiB `.partNNN`
+chunks, constant memory — for the OOM-capability demo. Tested end-to-end
+(1M edges → METIS partition → engine runs). Caveat: uniform power-law gives
+~40% cross-rank under METIS; partitioning a true billion-edge graph needs the
+`prepost` (338 GiB) node for METIS, or a future block-structured generator +
+streaming block partitioner (noted in `wisteria/README_wisteria.md`).
+
+`wisteria/job_scaling.sh` now passes `EMBMODE=fused|twostage` for the comm
+comparison. New artifacts: `gen_synthetic.py`; `twostage_embed_exchange()` +
+`emb_xchg` phase + `EMBED_MODE` env in `main.c`.
+
 ### M2 inc-2 finding — value of training cross-partition pairs (2026-06-14)
 
 Before building the expensive distributed migration-piggyback (carry context
