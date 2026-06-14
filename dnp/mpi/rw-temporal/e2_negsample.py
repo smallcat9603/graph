@@ -113,24 +113,39 @@ def train_sgns(pairs, W0, C0, shard_of, tables, M, regime, K=5,
     return W
 
 
-def eval_lp(W, test_pos, n, rng):
-    # negatives: random (u, v') pairs
-    u = test_pos[:, 0]
-    vneg = rng.integers(n, size=len(u))
-    s_pos = np.sum(W[u] * W[test_pos[:, 1]], axis=1)
-    s_neg = np.sum(W[u] * W[vneg], axis=1)
-    # AUC (Mann-Whitney)
-    scores = np.concatenate([s_pos, s_neg])
-    labels = np.concatenate([np.ones(len(s_pos)), np.zeros(len(s_neg))])
-    order = np.argsort(scores)
-    ranks = np.empty(len(scores)); ranks[order] = np.arange(1, len(scores) + 1)
-    n_pos = len(s_pos); n_neg = len(s_neg)
-    auc = (ranks[:n_pos].sum() - n_pos * (n_pos + 1) / 2) / (n_pos * n_neg)
-    # AP
-    o = np.argsort(-scores); lab = labels[o]
-    tp = np.cumsum(lab); prec = tp / np.arange(1, len(lab) + 1)
-    ap = (prec * lab).sum() / max(1, lab.sum())
-    return auc, ap
+def eval_lp(W, test_pos, n, rng, dst_pool=None, Kn=100):
+    """Destination-ranking temporal LP (TGB/CTDNE style). For each positive
+    (u, v), draw Kn negative destinations from dst_pool (the correct node type
+    for bipartite graphs, else all nodes) and rank v against them by dot score.
+    Returns (per-edge AUC, MRR, Hits@10). Batched to bound memory."""
+    u = test_pos[:, 0]; v = test_pos[:, 1]
+    if dst_pool is None:
+        dst_pool = np.arange(W.shape[0])
+    P = len(u)
+    inv_rank = np.empty(P); hits = np.empty(P); aucs = np.empty(P)
+    B = 4096
+    for b0 in range(0, P, B):
+        ub = u[b0:b0 + B]; vb = v[b0:b0 + B]; m = len(ub)
+        pos = np.sum(W[ub] * W[vb], axis=1)                       # (m,)
+        negi = dst_pool[rng.integers(len(dst_pool), size=(m, Kn))]
+        neg = np.einsum('pd,pkd->pk', W[ub], W[negi])             # (m,Kn)
+        ge = (neg >= pos[:, None]).sum(axis=1)                    # negs beating pos
+        rank = ge + 1
+        inv_rank[b0:b0 + m] = 1.0 / rank
+        hits[b0:b0 + m] = (rank <= 10)
+        aucs[b0:b0 + m] = (neg < pos[:, None]).mean(axis=1)
+    return float(aucs.mean()), float(inv_rank.mean()), float(hits.mean())
+
+
+def detect_dst_pool(inv, n):
+    """If the graph is (near-)bipartite, return the set of destination-side
+    local node ids as the negative pool; else None (use all nodes)."""
+    src = set(np.unique(inv[:, 0]).tolist())
+    dst = set(np.unique(inv[:, 1]).tolist())
+    overlap = len(src & dst)
+    if overlap <= 0.02 * min(len(src), len(dst)):       # < 2% overlap => bipartite
+        return np.array(sorted(dst), dtype=np.int64)
+    return None
 
 
 def main():
@@ -190,14 +205,20 @@ def main():
     W0 = (RNG.random((n, d)) - 0.5) / d
     C0 = np.zeros((n, d))
     rng_eval = np.random.default_rng(7)
+    dst_pool = detect_dst_pool(inv, n)
+    print(f"eval: {'bipartite (type-aware negs, |dst|=%d)' % len(dst_pool) if dst_pool is not None else 'general (all-node negs)'}")
 
-    print(f"\n{'regime':<14}{'AUC':>8}{'AP':>8}   (link prediction on held-out future edges)")
-    for regime in ["global", "local", "local_iw", "local_iw_x"]:
+    import os as _os
+    rho = float(_os.environ.get("E2_RHO", "0.1"))
+    regimes = _os.environ.get("E2_REGIMES", "global,local,local_iw,local_iw_x").split(",")
+    print(f"\n{'regime':<14}{'AUC':>8}{'MRR':>8}{'H@10':>8}   (dest-ranking LP; rho={rho})")
+    for regime in regimes:
         t0 = time.time()
         W = train_sgns(pairs, W0, C0, shard_of, tables, M, regime,
-                       epochs=epochs, global_table=global_table)
-        auc, ap = eval_lp(W, te, n, rng_eval)
-        print(f"{regime:<14}{auc:>8.4f}{ap:>8.4f}   ({time.time()-t0:.1f}s)")
+                       epochs=epochs, rho=rho, global_table=global_table)
+        auc, mrr, h10 = eval_lp(W, te, n, rng_eval, dst_pool=dst_pool)
+        print(f"{regime:<14}{auc:>8.4f}{mrr:>8.4f}{h10:>8.4f}   "
+              f"rho={rho} ({time.time()-t0:.1f}s)")
 
 
 if __name__ == "__main__":

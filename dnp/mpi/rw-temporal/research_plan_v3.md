@@ -395,14 +395,28 @@ init, RNG — only the negatives differ):
 
 **PLAN IMPACT:**
 - **T3 is GREEN** on graphs with LP signal, with the caveat that **the exchange
-  (not just the weight) is essential** — so the contribution must center on the
-  exchange-rate ρ trade-off (ρ=0.1 already recovers most of the gap; quantify
-  quality vs traffic across ρ).
-- **Fix the LP evaluation** (rank/time-aware negatives; user–item scoring for
-  bipartite graphs) before trusting mooc / production numbers.
-- Still TODO for rigor: multiple seeds + variance bars; METIS shards (not just
-  random) — local negatives become graph-near "hard negatives" there and may
-  behave differently; a ρ sweep.
+  (not just the weight) is essential** — the contribution centers on the
+  exchange-rate ρ trade-off.
+
+**⚠ CORRECTION (2026-06-14, after fixing the LP eval).** The AP numbers above
+came from a **saturated** eval (random all-node negatives + global AUC/AP). A
+proper **destination-ranking eval** (type-aware negatives for bipartite graphs;
+MRR / Hits@10) is far more discriminative and **overturns the "≈global at
+ρ=0.1" conclusion**:
+
+| reddit, MRR | global | ρ=0 | ρ=0.1 | **ρ=0.3** | ρ=1.0 |
+| --- | --- | --- | --- | --- | --- |
+| MRR | 0.71 | 0.31 | 0.37 | **0.69** | 0.71 |
+
+- ρ=0.1 recovers only ~half the MRR gap; **ρ≈0.3 is the real quality-preserving
+  point** (MRR 0.69 ≈ global 0.71). Coupled with F2, ρ=0.3 gives **~3.2× comm
+  reduction at matched quality** (not 8.4× at ρ=0.1, which loses quality).
+- The eval fix also makes mooc interpretable (still weak: global MRR 0.065,
+  |dst|=97 — confirming mooc is a poor embedding vehicle, not a method failure).
+- **The destination-ranking eval is now the standard** for all quality numbers
+  (`eval_lp` in `e2_negsample.py`, used by `inc2`/`m1_eval_lp`).
+- Still TODO for rigor: multiple seeds + variance; METIS shards in E2 (not just
+  random); confirm ρ≈0.3 on more datasets.
 
 > Reproduce: `.venv_part/bin/python e2_negsample.py data/<ds>.txt 4 64 3`
 
@@ -511,29 +525,42 @@ two-stage = NOMAD-style fetch+delta for cross context pairs and remote
 negatives; fused = piggybacked positive grad + shard-local negatives with a
 ρ-fraction still exchanged). Bytes, not wall-clock.
 
-Embedding-comm at $w{=}5$, $d{=}128$, $K{=}5$, np=4, static partition:
+Embedding-comm at $w{=}5$, $d{=}128$, $K{=}5$, np=4, static partition, at the
+**quality-preserving** exchange rate **ρ=0.3** (see the corrected ρ-frontier
+below; the earlier ρ=0.1 was NOT quality-preserving):
 
-| dataset | two-stage | fused @ρ=0.1 (quality-preserving, per E2) | fused @ρ=0 (bound) |
+| dataset | two-stage | fused @ρ=0.3 (quality-preserving) | fused @ρ=0 (bound, poor quality) |
 | --- | --- | --- | --- |
-| wikipedia | 159 MB | 19.0 MB (**8.4×**) | 3.9 MB (41×) |
-| reddit | 202 MB | 24.8 MB (**8.2×**) | 5.7 MB (35×) |
-| stackoverflow | 162 MB | 23.7 MB (**6.8×**) | 9.4 MB (17×) |
-| mooc | 467 MB | 67.3 MB (**6.9×**) | 25.7 MB (18×) |
+| wikipedia | 160 MB | 49.4 MB (**3.2×**) | 3.9 MB (41×) |
+| reddit | 198 MB | 61.6 MB (**3.2×**) | 5.6 MB (35×) |
+| stackoverflow | 157 MB | 50.7 MB (**3.1×**) | 9.3 MB (17×) |
+| mooc | 459 MB | 147.9 MB (**3.1×**) | 25.4 MB (18×) |
 
-**Verdict: PASS** — fused < two-stage on all 4 datasets; **6.8–8.4×** at E2's
-quality-preserving ρ=0.1 (quality half carried by E2: local+weight+exchange ≈
-global AP on wikipedia/reddit). → proceed to M2.
+**Verdict: PASS (honest headline ~3.2×)** — fused < two-stage on all datasets.
+At the quality-preserving operating point the embedding-comm reduction is
+**~3.1–3.2×** (not the 6.8–8.4× first reported at ρ=0.1, which a proper eval
+showed sacrifices quality). → proceed.
 
-**Honest decomposition (reframes the contribution emphasis):**
+**Corrected ρ-frontier (reddit, destination-ranking MRR; see §8 E2 correction):**
+
+| ρ | MRR | comm reduction |
+| --- | --- | --- |
+| 0.0 (pure local) | 0.31 | 35× |
+| 0.1 | 0.37 | 8.2× |
+| **0.3** | **0.69 ≈ global 0.71** | **3.2×** |
+| 1.0 | 0.71 | ~1× |
+
+**Honest decomposition:**
 - The comm win is **dominated by shard-local negatives (T3)**, not the
-  positive-pair piggyback: `remote_neg` ≈ 18× `cross_pairs`, so two-stage cost
-  is mostly remote-negative fetch, which fused avoids. **The paper's
-  communication story is T3 + T4, not the migration-piggyback** (the piggyback
-  is a smaller term, though still a real mechanistic difference vs NOMAD's
-  two-phase design).
-- ρ couples F2 (comm) with E2 (quality): ρ=0 gives 17–41× but lower quality;
-  ρ=0.1 gives 6.8–8.4× at ≈global quality. **The ρ trade-off is the headline
-  knob — exactly the T3 analysis the plan flagged as the core contribution.**
+  positive-pair piggyback (`remote_neg` ≈ 18× `cross_pairs`). The paper's
+  communication story is **T3 + T4**, not the migration-piggyback.
+- ρ is the headline knob and the **core T3 contribution**: it trades comm
+  against quality. The honest sweet spot is **ρ≈0.3 → ~3.2× comm at ≈global
+  quality**; ρ=0.1 over-saves comm at a real MRR cost; ρ=0 is poor.
+- A reviewer will compare this to NOMAD's batch-all-global-negatives (no bias,
+  but pays the full remote-negative comm = the two-stage column). Our claim:
+  **~3× less embedding-comm at matched quality** via ρ-tuned shard-local
+  negatives. That is the defensible contribution.
 
 **Caveats:** byte model not wall-clock (M2+ engine needed for timing); excludes
 walk-migration bytes (common to both); assumes balanced shards for the
@@ -573,3 +600,39 @@ win=5, K=5, 60k walkers):** **AUC 0.882, AP 0.895** on held-out future edges.
 
 **Artifacts:** `embed.{c,h}`, `m1_eval_lp.py`, `data/<ds>_train.txt`,
 `log/embed_<ds>_p<P>_r*.txt`.
+
+### M2 inc-2 finding — value of training cross-partition pairs (2026-06-14)
+
+Before building the expensive distributed migration-piggyback (carry context
+vectors forward + route gradient deltas back — the hardest engine component),
+quantified its value single-machine under the **real METIS partition** via
+`inc2_crosspair.py`: train SGNS with global negatives two ways on the same
+walks/partition — **keep** all window pairs (= inc-2) vs **drop** cross-shard
+pairs (= inc-1 local-only) — and compare temporal-LP AP.
+
+| dataset | cross-pair % | keep AP | drop AP | gap |
+| --- | --- | --- | --- | --- |
+| wikipedia | 16.9% | 0.856 | 0.842 | **−1.4 pt** |
+| reddit | 23.4% | 0.931 | 0.906 | **−2.5 pt** |
+| stackoverflow | 41.2% | 0.592 | 0.589 | −0.3 pt (degenerate: AUC≈0.55, near random) |
+
+**Verdict: DEFER / likely SKIP inc-2.** On the graphs where LP has signal,
+dropping cross-partition positive pairs costs only 1.4–2.5 AP — local-only
+(inc-1) captures nearly all the quality (cross pairs are the minority and
+skip-gram is robust to dropping some context). The migration-piggyback is the
+most complex piece of the engine; this gap does not justify it yet.
+
+**Residual uncertainty (honest):** no clean *high-cross + LP-has-signal*
+measurement exists — stackoverflow and mooc LP are both degenerate under the
+current dot-product + random-negative eval. So "skip inc-2" is supported but not
+airtight. **Gate before fully committing to skip:** fix the LP eval (time-aware
+negatives; user–item scoring for bipartite) and re-measure keep-vs-drop on a
+time-dense, high-cross graph. If the gap stays small there too, drop inc-2 for
+good and ship local-only co-shard (a major engine simplification).
+
+**Revised increment ladder:** inc-2 deprioritized → next highest value is
+**(a) fix the LP eval** (unblocks mooc/time-dense quality numbers and the inc-2
+gate), then **(b) inc-4** (wire training into the batched loop; measure *real*
+wall-clock comm two-stage vs fused), then **F3/F4** (DistGER head-to-head;
+multi-node scaling). New artifact: `inc2_crosspair.py` (walk-capped for large
+graphs).

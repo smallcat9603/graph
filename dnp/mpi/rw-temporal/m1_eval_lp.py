@@ -44,27 +44,26 @@ def main():
     if not keep:
         sys.exit("no test edges with both endpoints embedded")
     keep = np.array(keep)
-    ids = np.array(list(emb.keys()))
+
+    # dense remap: global id -> row in W
+    id_list = list(emb.keys())
+    idx_of = {g: i for i, g in enumerate(id_list)}
+    W = np.stack([emb[g] for g in id_list]).astype(np.float32)
+    dense = np.array([(idx_of[int(u)], idx_of[int(v)]) for u, v in keep])
+
+    # bipartite? -> destination negatives from the dst-side embedded nodes only
+    src_set = set(int(x) for x in edges[:, 0]); dst_set = set(int(x) for x in edges[:, 1])
+    if len(src_set & dst_set) <= 0.02 * min(len(src_set), len(dst_set)):
+        dst_pool = np.array([idx_of[g] for g in dst_set if g in idx_of], dtype=np.int64)
+        kind = f"bipartite (|dst|={len(dst_pool)})"
+    else:
+        dst_pool = None
+        kind = "general (all-node negs)"
+
+    from e2_negsample import eval_lp
     rng = np.random.default_rng(7)
-
-    def vec(arr):
-        return np.stack([emb[int(x)] for x in arr])
-
-    u = keep[:, 0]; v = keep[:, 1]
-    vneg = rng.choice(ids, size=len(u))
-    s_pos = np.sum(vec(u) * vec(v), axis=1)
-    s_neg = np.sum(vec(u) * vec(vneg), axis=1)
-
-    scores = np.concatenate([s_pos, s_neg])
-    labels = np.concatenate([np.ones(len(s_pos)), np.zeros(len(s_neg))])
-    order = np.argsort(scores); ranks = np.empty(len(scores))
-    ranks[order] = np.arange(1, len(scores) + 1)
-    npos, nneg = len(s_pos), len(s_neg)
-    auc = (ranks[:npos].sum() - npos * (npos + 1) / 2) / (npos * nneg)
-    o = np.argsort(-scores); lab = labels[o]
-    tp = np.cumsum(lab); prec = tp / np.arange(1, len(lab) + 1)
-    ap = (prec * lab).sum() / max(1, lab.sum())
-    print(f"temporal LP: AUC={auc:.4f}  AP={ap:.4f}  "
+    auc, mrr, h10 = eval_lp(W, dense, len(id_list), rng, dst_pool=dst_pool)
+    print(f"temporal LP [{kind}]: AUC={auc:.4f}  MRR={mrr:.4f}  Hits@10={h10:.4f}  "
           f"(test_edges_used={len(keep)})")
 
 
