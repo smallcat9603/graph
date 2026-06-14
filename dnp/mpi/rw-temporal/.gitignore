@@ -1,0 +1,12 @@
+# Local Python venv for the partitioner / pilot / eval scripts (pymetis, torch,
+# py-tgb). Multi-GB, rebuildable: python3 -m venv .venv_part && pip install
+# numpy pandas pymetis torch py-tgb
+.venv_part/
+
+# Scratch dir for external baselines / downloaded benchmark caches.
+# DistGER (github.com/RocmFang/DistGER) is re-clonable; TGB data is re-downloadable.
+baselines/
+
+# Compiled engine + objects
+rw
+*.o

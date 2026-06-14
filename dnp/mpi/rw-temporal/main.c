@@ -85,10 +85,14 @@ static void build_paths(const char* dataset, int rank, int size, run_mode_t mode
     }
 }
 
+/* Base seed: RNG_SEED env if set (reproducible multi-seed runs), else time. */
+static uint32_t rng_base(void) {
+    const char* s = getenv("RNG_SEED");
+    return s ? (uint32_t) atoi(s) : (uint32_t) time(NULL);
+}
 static void seed_rng(int rank) {
-    uint32_t t = (uint32_t) time(NULL);
     uint32_t r = (uint32_t) rank * 2654435761u;
-    srand((unsigned int) (t ^ r));
+    srand((unsigned int) (rng_base() ^ r));
 }
 
 /* ----------------------------------------------------------- batched comm
@@ -211,12 +215,10 @@ static void embed_on_local_step(int* ring, int* rlen, int cur) {
 static int drive_walker(walker_t* w, const partition_t* part, const routing_t* routing,
                         path_buf_t* paths) {
     int dst_rank;
-    int ring[64]; int rlen = 0;
-    if (g_embed && w->cur_local >= 0) { ring[0] = w->cur_local; rlen = 1; }
     for (;;) {
         int r = walker_step(w, part, routing, &dst_rank);
         if (r == WALKER_STEP_CONTINUE) {
-            embed_on_local_step(ring, &rlen, w->cur_local);
+            embed_on_local_step(w->emb_ring, &w->emb_rlen, w->cur_local);
             continue;
         }
         if (r == WALKER_STEP_DONE || r == WALKER_STEP_DEAD_END) {
@@ -290,6 +292,7 @@ static void process_bucket(walker_t** arr, int n,
         int r = walker_step(w, part, routing, &dst_rank);
         switch (r) {
             case WALKER_STEP_CONTINUE:
+                embed_on_local_step(w->emb_ring, &w->emb_rlen, w->cur_local);
                 scheduler_insert(sched, w);
                 break;
             case WALKER_STEP_DONE:
@@ -500,17 +503,17 @@ int main(int argc, char** argv) {
         if (sdim && atoi(sdim) > 0) {
             int d = atoi(sdim);
             const char* sw  = getenv("EMBED_WIN");  if (sw)  g_emb_win  = atoi(sw);
-            if (g_emb_win > 64) g_emb_win = 64;
+            if (g_emb_win > 8) g_emb_win = 8;   /* bounded by walker_t.emb_ring */
             const char* sn  = getenv("EMBED_NEG");  if (sn)  g_emb_neg  = atoi(sn);
             const char* swn = getenv("EMBED_WNEG"); if (swn) g_emb_wneg = atof(swn);
             double lr = 0.025;
             const char* slr = getenv("EMBED_LR");   if (slr) lr = atof(slr);
             embed_init(&embed_store, part.nnodes, d, lr,
-                       (unsigned) ((rank + 1) * 2654435761u));
+                       (unsigned) ((rank + 1) * 2654435761u) ^ rng_base());
             g_embed = &embed_store;
             if (rank == 0)
                 printf("EMBED: dim=%d win=%d neg=%d wneg=%.3f lr=%.3f "
-                       "(co-shard training ON; drive-to-death only)\n",
+                       "(co-shard training ON; drive-to-death + batched loops)\n",
                        d, g_emb_win, g_emb_neg, g_emb_wneg, lr);
         }
     }

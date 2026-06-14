@@ -23,6 +23,7 @@ def main():
     edges = load_edges(edge_file)
     edges = edges[np.argsort(edges[:, 2], kind='stable')]
     cut = int(split * len(edges))
+    test_t = edges[cut:]          # (M,3) u v t  -- keep time for time-local eval
     test = edges[cut:, :2]
 
     # load embeddings (global_id -> vector) from all shard files
@@ -63,8 +64,73 @@ def main():
     from e2_negsample import eval_lp
     rng = np.random.default_rng(7)
     auc, mrr, h10 = eval_lp(W, dense, len(id_list), rng, dst_pool=dst_pool)
-    print(f"temporal LP [{kind}]: AUC={auc:.4f}  MRR={mrr:.4f}  Hits@10={h10:.4f}  "
+    print(f"GLOBAL-neg LP [{kind}]: AUC={auc:.4f}  MRR={mrr:.4f}  Hits@10={h10:.4f}  "
           f"(test_edges_used={len(keep)})")
+
+    # --- time-local eval: negatives drawn from destinations active in the SAME
+    #     time window as the positive (temporally-contemporaneous). Tests
+    #     fine-grained temporal discrimination that global-neg LP hides.
+    keep_mask = np.array([(int(u) in idx_of and int(v) in idx_of) for u, v in test])
+    tt = test_t[keep_mask]
+    u_d = np.array([idx_of[int(x)] for x in tt[:, 0]])
+    v_d = np.array([idx_of[int(x)] for x in tt[:, 1]])
+    times = tt[:, 2].astype(np.float64)
+    NB = 20
+    lo, hi = times.min(), times.max()
+    binof = np.clip(((times - lo) / (hi - lo + 1e-9) * NB).astype(int), 0, NB - 1)
+    Kn = 100
+    inv_rank = []; hits = []
+    for b in range(NB):
+        m = np.where(binof == b)[0]
+        if len(m) < 2:
+            continue
+        pool = np.unique(v_d[m])            # dst active in this window
+        if len(pool) < 2:
+            continue
+        ub = u_d[m]; vb = v_d[m]
+        pos = np.sum(W[ub] * W[vb], axis=1)
+        negi = pool[rng.integers(len(pool), size=(len(m), Kn))]
+        neg = np.einsum('pd,pkd->pk', W[ub], W[negi])
+        ge = (neg >= pos[:, None]).sum(axis=1)
+        inv_rank.append(1.0 / (ge + 1)); hits.append(ge < 10)
+    if inv_rank:
+        mrr_t = float(np.concatenate(inv_rank).mean())
+        h10_t = float(np.concatenate(hits).mean())
+        print(f"TIME-LOCAL-neg LP: MRR={mrr_t:.4f}  Hits@10={h10_t:.4f}  "
+              f"(negs = destinations active in same time window, {NB} bins)")
+
+    # --- HISTORICAL-negative eval (Poursafaei et al., NeurIPS'22): negatives =
+    #     u's TRAIN-period partners (seen historically) other than the true v.
+    #     Tests whether the embedding ranks u's CURRENT/future partner above its
+    #     PAST partners -- the eval where memorization/static struggles.
+    train = edges[:cut]
+    hist = {}
+    for gu, gv in train[:, :2]:
+        iu = idx_of.get(int(gu)); iv = idx_of.get(int(gv))
+        if iu is None or iv is None:
+            continue
+        hist.setdefault(iu, set()).add(iv)
+    hist = {u: np.fromiter(s, dtype=np.int64) for u, s in hist.items() if len(s) >= 2}
+
+    # test positives whose source has >=2 historical partners
+    cand = [(uu, vv) for uu, vv in zip(u_d, v_d) if uu in hist]
+    if cand:
+        cand = np.array(cand)
+        if len(cand) > 20000:
+            cand = cand[rng.choice(len(cand), 20000, replace=False)]
+        Kn = 100
+        negi = np.empty((len(cand), Kn), dtype=np.int64)
+        for i, (uu, vv) in enumerate(cand):
+            pool = hist[uu]
+            negi[i] = pool[rng.integers(len(pool), size=Kn)]   # u's past partners
+        uu = cand[:, 0]; vv = cand[:, 1]
+        pos = np.sum(W[uu] * W[vv], axis=1)
+        neg = np.einsum('pd,pkd->pk', W[uu], W[negi])
+        ge = (neg >= pos[:, None]).sum(axis=1)
+        mrr_h = float(np.mean(1.0 / (ge + 1)))
+        h10_h = float(np.mean(ge < 10))
+        print(f"HISTORICAL-neg LP: MRR={mrr_h:.4f}  Hits@10={h10_h:.4f}  "
+              f"(negs = u's past train partners; {len(cand)} test edges)")
 
 
 if __name__ == "__main__":

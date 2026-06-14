@@ -58,11 +58,11 @@ def sigmoid(x):
 
 
 def train_sgns(pairs, W0, C0, shard_of, tables, M, regime, K=5,
-               epochs=3, lr0=0.025, rho=0.1, global_table=None):
+               epochs=3, lr0=0.025, rho=0.1, global_table=None, seed=42):
     """pairs: (P,2) int (center, context). Returns trained input embeddings."""
     W = W0.copy(); C = C0.copy()
     P = len(pairs)
-    rng = np.random.default_rng(42)
+    rng = np.random.default_rng(seed)
     bs = 4096
     for ep in range(epochs):
         lr = lr0 * (1 - ep / (epochs + 1))
@@ -149,10 +149,14 @@ def detect_dst_pool(inv, n):
 
 
 def main():
+    global RNG
     edge_file = sys.argv[1] if len(sys.argv) > 1 else "data/wikipedia.txt"
     n_shards  = int(sys.argv[2]) if len(sys.argv) > 2 else 4
     dim       = int(sys.argv[3]) if len(sys.argv) > 3 else 64
     epochs    = int(sys.argv[4]) if len(sys.argv) > 4 else 3
+    import os as _os0
+    seed = int(_os0.environ.get("E2_SEED", "0"))
+    RNG = np.random.default_rng(seed)
 
     edges = load_edges(edge_file)
     edges = edges[np.argsort(edges[:, 2], kind='stable')]   # chronological
@@ -190,7 +194,21 @@ def main():
 
     # frequencies (node occurrence in walks), shards, tables, masses
     freq = np.bincount(pairs[:, 0], minlength=n) + 1
-    shard_of = RNG.integers(n_shards, size=n)          # balanced random shards
+    import os as _os
+    if _os.environ.get("E2_SHARDS", "metis") == "random":
+        shard_of = RNG.integers(n_shards, size=n)      # balanced random shards
+        print("shards: random (balanced)")
+    else:
+        from partition_metis import partition_with_metis
+        a_s = np.concatenate([inv[:, 0], inv[:, 1]])
+        a_d = np.concatenate([inv[:, 1], inv[:, 0]])
+        o = np.argsort(a_s, kind='stable')
+        adjncy = a_d[o].astype(np.int32)
+        deg = np.bincount(a_s[o], minlength=n).astype(np.int32)
+        xadj = np.zeros(n + 1, dtype=np.int32); np.cumsum(deg, out=xadj[1:])
+        _, mem = partition_with_metis(xadj, adjncy, n_shards)
+        shard_of = np.asarray(mem, dtype=np.int64)
+        print(f"shards: METIS (sizes {np.bincount(shard_of, minlength=n_shards)})")
     node_ids = np.arange(n)
     global_table = unigram_table(freq, node_ids)
     p_glob = (freq.astype(np.float64) ** 0.75); p_glob /= p_glob.sum()
@@ -215,7 +233,7 @@ def main():
     for regime in regimes:
         t0 = time.time()
         W = train_sgns(pairs, W0, C0, shard_of, tables, M, regime,
-                       epochs=epochs, rho=rho, global_table=global_table)
+                       epochs=epochs, rho=rho, global_table=global_table, seed=seed + 42)
         auc, mrr, h10 = eval_lp(W, te, n, rng_eval, dst_pool=dst_pool)
         print(f"{regime:<14}{auc:>8.4f}{mrr:>8.4f}{h10:>8.4f}   "
               f"rho={rho} ({time.time()-t0:.1f}s)")

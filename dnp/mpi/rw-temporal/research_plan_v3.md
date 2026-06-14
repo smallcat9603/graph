@@ -415,8 +415,33 @@ MRR / Hits@10) is far more discriminative and **overturns the "≈global at
   |dst|=97 — confirming mooc is a poor embedding vehicle, not a method failure).
 - **The destination-ranking eval is now the standard** for all quality numbers
   (`eval_lp` in `e2_negsample.py`, used by `inc2`/`m1_eval_lp`).
-- Still TODO for rigor: multiple seeds + variance; METIS shards in E2 (not just
-  random); confirm ρ≈0.3 on more datasets.
+
+**⚠⚠ SECOND CORRECTION (2026-06-14, METIS shards instead of random).** E2's
+shards were RANDOM; the engine uses METIS. Re-running with METIS shards
+**reverses the ρ story entirely** (reddit, 3 seeds):
+
+| reddit, METIS shards | global MRR | **local (ρ=0, no correction)** MRR |
+| --- | --- | --- |
+| seed 0 / 1 / 2 | 0.710 / 0.710 / 0.705 | **0.675 / 0.687 / 0.694** |
+
+- **Pure shard-local negatives (ρ=0, no importance weight, no exchange) reach
+  ~96–97% of global MRR** under METIS sharding — stable across seeds.
+  On wikipedia, local even ≥ global (within noise).
+- **Why:** graph-clustered (METIS) shards make a node's local negatives its
+  graph neighbours = useful *hard negatives*. The bias that crippled local
+  sampling under RANDOM shards (MRR 0.23) is an artifact of bad partitioning,
+  not a real cost.
+- **Consequence — T3 simplifies and the comm win grows:** under the engine's
+  real partitioning, drop the importance-weight + ρ-exchange machinery entirely.
+  ρ=0 ⇒ **no remote-negative traffic at all ⇒ the full ~17–41× embedding-comm
+  reduction (F2 "bound" column) — now at near-global quality**, not the 3.2× of
+  the random-shard ρ=0.3 detour.
+- **Beautiful T3–T4 coupling (the paper's real story):** the same graph-aware
+  (METIS/T4) partition that minimizes migration *also* makes shard-local
+  negatives effective. One mechanism, two payoffs.
+- Honest caveats: a small consistent gap remains on reddit (~3–5% MRR); a tiny
+  ρ could close it but is marginal. Confirm on more datasets + with the
+  in-engine embeddings (m1) before finalizing; mooc still degenerate.
 
 > Reproduce: `.venv_part/bin/python e2_negsample.py data/<ds>.txt 4 64 3`
 
@@ -562,6 +587,17 @@ showed sacrifices quality). → proceed.
   **~3× less embedding-comm at matched quality** via ρ-tuned shard-local
   negatives. That is the defensible contribution.
 
+**⚠⚠ UPDATE — the ρ=0.3 figure above is superseded (see §8 second correction).**
+The ρ-frontier was measured under RANDOM shards. Under the engine's real **METIS
+shards**, pure shard-local negatives at **ρ=0** already reach ~96–97% of global
+MRR (graph-clustered shards → local negatives are useful hard negatives). So the
+honest operating point is **ρ=0**, giving the **full ~17–41× embedding-comm
+reduction (F2 "bound" column) at near-global quality** — and the
+importance-weight + exchange machinery can be dropped. The headline is therefore
+**~17–41× (ρ=0, METIS shards)**, not 3.2× (which was a random-shard artifact),
+with a small ~3–5% MRR caveat to confirm on more datasets / in-engine.
+**T3 collapses into T4:** good partitioning is what makes local negatives work.
+
 **Caveats:** byte model not wall-clock (M2+ engine needed for timing); excludes
 walk-migration bytes (common to both); assumes balanced shards for the
 remote-negative fraction $(P{-}1)/P$. New artifact: F2 accounting in `main.c`
@@ -600,6 +636,246 @@ win=5, K=5, 60k walkers):** **AUC 0.882, AP 0.895** on held-out future edges.
 
 **Artifacts:** `embed.{c,h}`, `m1_eval_lp.py`, `data/<ds>_train.txt`,
 `log/embed_<ds>_p<P>_r*.txt`.
+
+### M2 inc-4 — co-shard training in the batched loop (2026-06-14)
+
+Moved fused training from drive-to-death into the **batched scheduler**
+(`process_bucket`) — the real engine design. Per-walker local-run ring now
+lives in `walker_t` (reset on migration; cross-partition pairs dropped, per the
+inc-2 decision). Given the METIS-shard finding, the design is the **simplest
+form**: co-shard table + in-walk SGNS + **shard-local negatives, no correction,
+no exchange** (ρ=0).
+
+**In-engine temporal LP (reddit, batched single-bucket, train-only 80%
+partition, d=64, win=5, K=5, 60k walkers, ONE online pass):** AUC 0.853,
+MRR 0.534, Hits@10 0.746.
+
+- **Corroborates the simplified design in the real engine**: METIS partition +
+  local-only negatives produces useful embeddings (Hits@10 0.75 over |dst|≈981).
+- Absolute MRR is below the 3-epoch single-machine sim (~0.69) because the
+  engine does a **single online pass** and **drops cross-partition positive
+  pairs** (inc-1) — a training-budget gap, not a negative-sampling problem.
+  Multi-epoch (re-run the walk job into the same table) would close it.
+
+**Real wall-clock comm (two-stage vs fused) is DEFERRED, by design:** with
+local-only negatives the fused engine has ~zero embedding communication (only
+the sampler's existing walker migration), so a wall-clock comparison needs (a) a
+NOMAD-style remote-exchange baseline and (b) a real multi-node network —
+single-node intra-node MPI mutes it (v1's known caveat). The network-relevant
+comm claim is already carried by the F2 byte model + the ρ=0/METIS quality
+result (**~17–41× embedding-comm at near-global quality**). New artifact:
+`walker_t.emb_ring`; training now active in both run loops.
+
+**Engine status:** the fused design is essentially complete (co-shard + batched
++ local negatives). Remaining for a full paper: multi-epoch option; DistGER
+head-to-head (released code, static baseline); multi-node scaling (F4).
+
+### F3 baseline — DistGER unbuildable here; native static-walk baseline instead (2026-06-14)
+
+**DistGER does not build on this machine:** it hard-requires Intel **MKL**
+(`-D USE_MKL`, links `mkl_intel_ilp64`/`iomp5`, hardcoded
+`/opt/intel/oneapi/mkl/2022.0.2`) + MPICH/Ubuntu. MKL is **x86-only**; we are on
+**arm64 (Apple Silicon)** — no MKL exists. So the released static baseline is
+infeasible locally (would need an x86 Linux cluster).
+
+**Pivot (cleaner anyway):** added a `STATIC_WALK` mode to our own engine that
+ignores the $t>t_{\mathrm{cur}}$ constraint (samples all neighbours = DeepWalk-
+style static walks) on the *same* engine/partition/training. This isolates the
+value of the temporal constraint apples-to-apples.
+
+**Result (reddit, train-only, temporal LP):**
+
+| walks | AUC | MRR | Hits@10 |
+| --- | --- | --- | --- |
+| temporal (15k walkers) | 0.854 | 0.534 | 0.750 |
+| static (15k walkers) | 0.878 | 0.603 | 0.804 |
+| **temporal (60k, matched pair budget)** | 0.877 | **0.629** | 0.793 |
+| static (15k, ref) | 0.878 | 0.603 | 0.804 |
+
+- Naively static *beats* temporal — but that is a **training-volume confound**:
+  static walks never dead-end (full 30 steps) so they yield far more pairs.
+- **At matched training budget, temporal ≈ static** (MRR 0.629 vs 0.603,
+  Hits@10 0.793 vs 0.804 — within noise).
+
+**⚠ IMPORTANT framing consequence:** the time-respecting constraint does **not**
+improve temporal-LP quality over static walks (it is on par at equal budget).
+**Do NOT claim "temporal embeddings are better."** v3's defensible value is
+**systems/enabling**: provide the time-respecting walk *primitive* (required by
+CTDNE/CAW-style temporal methods) at distributed scale, **at no quality cost vs
+static**, plus the T3→T4 communication finding. Quality superiority is not a
+contribution; the temporal primitive + the comm story is.
+
+New artifact: `STATIC_WALK` env in `walker.c`.
+
+### Time-sensitive eval (the last shot at a quality claim) — NEGATIVE (2026-06-14)
+
+Added a **time-local-negative** eval (`m1_eval_lp.py`): for each test edge
+(u,v,t), negatives = destinations active in the SAME time window as t (20 bins)
+— tests fine-grained temporal discrimination that global-negative LP hides.
+Compared temporal vs static walks at matched training budget (reddit):
+
+| walks | GLOBAL MRR | TIME-LOCAL MRR | TIME-LOCAL Hits@10 |
+| --- | --- | --- | --- |
+| temporal (60k) | 0.619 | 0.574 | 0.773 |
+| static (15k) | 0.606 | 0.562 | 0.789 |
+
+**Still a wash** — temporal ≈ static even on the time-sensitive eval (temporal
+MRR marginally higher, Hits@10 marginally lower; within noise). **The quality
+probe FAILED to find a temporal advantage.**
+
+Likely root cause: both produce a **single static vector per node**, which
+cannot encode time-varying behavior — so the walk-sampling difference washes out
+at inference. A genuine temporal-quality benefit would need **time-aware
+embeddings** (TGN-style time encoding), i.e., a different model, not walk+skip-
+gram. Caveats: one dataset with LP signal (reddit); our walks are forward-uniform
++ dead-ending (not CTDNE/CAW biased walks); coarse bins.
+
+**DECISIVE FRAMING (post-de-risking).** v3 is a **systems / enabling**
+contribution, **not** a quality-improvement one:
+- Provides the distributed time-respecting walk **primitive** (required by
+  temporal methods) at scale, **at no quality cost vs static** walks.
+- Plus the **T3→T4 communication finding** (good partition makes shard-local
+  negatives effective; ~17–41× embedding-comm at near-global quality vs a
+  two-stage baseline).
+- Systems mechanics overlap NOMAD (static, 2026); quality is on par with static.
+
+Realistic venue: **mid-tier (Cluster / ICPP / IPDPS)** as an enabling-systems
+paper. Not a strong-venue quality story. Decision for the author: (B) write the
+modest enabling-systems paper, or (C) pivot (v2 pure-HPC, or a time-aware-model
+direction that could claim quality). De-risking has made this call cheap and
+clear before any months-long build.
+
+### Historical-negative eval (the field-standard hard test) — temporal edges out static (2026-06-14)
+
+Added historical-negative LP (Poursafaei et al., NeurIPS'22 D&B): negatives =
+u's TRAIN-period partners other than the true v. This is the eval where easy
+negatives stop hiding differences (the EdgeBank lesson). Reddit, matched budget:
+
+| eval | temporal (60k) MRR | static (15k) MRR | Δ |
+| --- | --- | --- | --- |
+| global-neg | 0.618 | 0.604 | +0.014 |
+| time-local-neg | 0.575 | 0.564 | +0.011 |
+| **historical-neg** | **0.135** | **0.127** | +0.008 |
+| historical Hits@10 | 0.170 | 0.159 | +0.011 |
+
+**Findings:**
+1. Historical negatives are far harder (MRR ~0.6 → ~0.13) and both static-vector
+   approaches are weak there — consistent with the field: ranking the *current*
+   partner above *past* partners needs **time-aware models** (TGN), which a
+   single static vector per node cannot be. This is the ceiling, not a bug.
+2. **Temporal walks give a small but CONSISTENT edge over static** across all
+   three eval regimes (+0.008–0.014 MRR, ~5–7% relative; temporal ≥ static in
+   5/6 metrics). Not a blowout, but a real, literature-aligned positive.
+
+**Refined B framing (slightly upgraded):** not merely "no quality cost" but a
+**small consistent quality edge** from the temporal constraint, *plus* the
+enabling systems contribution, *plus* the honest scoping that big temporal gains
+require time-aware models (out of scope for walk+skip-gram). This matches the
+post-2022 literature (CTDNE's temporal>static is real but eval-dependent;
+EdgeBank/TGB show easy negatives hide differences and simple baselines are
+strong).
+
+**Caveat:** Δ is small (0.008–0.014 MRR), single seed / single dataset
+(reddit) — direction is consistent across 3 evals but **needs multiple seeds +
+more datasets to claim significance**. New artifact: historical + time-local
+evals in `m1_eval_lp.py`.
+
+### Multi-seed × multi-dataset confirmation (2026-06-14) — the real story emerges
+
+3 seeds (`RNG_SEED` env), temporal (60k) vs static (15k), matched budget:
+
+| dataset | eval | temporal (μ, 3 seeds) | static (μ) | Δ |
+| --- | --- | --- | --- | --- |
+| reddit | global MRR | 0.622 | 0.604 | temporal +0.018 |
+| reddit | **historical MRR** | 0.124 | 0.122 | ~tied |
+| wikipedia | global MRR | 0.652 | **0.739** | **static +0.087** |
+| wikipedia | **historical MRR** | **0.132** | 0.094 | **temporal +0.038** |
+
+**The eval determines the winner — exactly the EdgeBank/Poursafaei lesson:**
+- On **easy (global random) negatives**, the high-data static walks can win big
+  (wikipedia static +0.087) — easy negatives reward "is this a plausible edge
+  at all," which longer static walks nail. Easy eval is **unreliable**.
+- On the **field-recommended HISTORICAL negatives** (current vs past partners),
+  **temporal walks win** — clearly on wikipedia (**+0.038, and the 3 seeds are
+  NON-OVERLAPPING**: temporal min 0.122 > static max 0.108), tied on reddit.
+
+**Verdict — a defensible, literature-aligned quality claim for B:**
+> The time-respecting constraint improves **hard-negative** temporal LP
+> (clearly on wikipedia, neutral on reddit), while easy-negative evals are
+> unreliable and can favor static. This reproduces the Poursafaei/EdgeBank
+> finding on our engine and is the honest, correct way to state the temporal
+> benefit.
+
+So B is **no longer "enabling-only"**: there is a real (eval-gated, dataset-
+dependent) temporal quality benefit on the correct eval. Still mixed across
+datasets (wikipedia clear, reddit tied) → **report both honestly; add 1–2 more
+datasets** to map how often the wikipedia-style clear win occurs. New artifact:
+`RNG_SEED` env in `main.c`.
+
+### Clarity check — mooc added (2026-06-14): benefit is dataset-dependent, not universal
+
+mooc, 3 seeds: temporal global MRR ~0.050 / hist ~0.098; static global ~0.060 /
+hist ~0.165. **mooc is DEGENERATE and excluded** (objective grounds, not
+cherry-picking): global MRR ≈ 0.05 is the **random floor** for |dst|≈97 → the
+embeddings learn essentially nothing on mooc, so any eval on top is noise; and
+with ~97 destinations + users repeating the same few actions, historical
+negatives overlap the positive (ill-posed eval). Static's apparent historical
+"win" on mooc is a degeneracy artifact.
+
+**Honest tally across all usable temporal datasets:**
+
+| dataset | hard (historical) eval | status |
+| --- | --- | --- |
+| wikipedia | **temporal > static** (+0.038, non-overlapping seeds) | clean ✓ |
+| reddit | tied | clean |
+| mooc | static > temporal | **degenerate** (random-floor embeddings) — exclude |
+| stackoverflow | — | degenerate (undersampled, sparse history) |
+
+**Measured verdict (pre-TGB):** the temporal hard-eval benefit is real but, on
+local data, clear only on wikipedia (reddit tied; mooc/SO degenerate).
+
+### TGB clarity check — tgbl-review REPRODUCES the pattern robustly (2026-06-14)
+
+Downloaded TGB (`py-tgb` + torch) and exported **tgbl-review** (Amazon reviews,
+4.87M edges, 350K nodes) to our format. At feasible walker budgets the large
+graph is undercovered (global MRR ≈ random); with heavy coverage (temporal 2M /
+static 500k walkers) it becomes functional and shows, across **3 seeds**:
+
+| tgbl-review | global MRR | historical MRR |
+| --- | --- | --- |
+| temporal | 0.073–0.077 | **0.156–0.160** |
+| static | 0.223–0.226 | 0.125–0.128 |
+
+- **historical: temporal +0.031, NON-OVERLAPPING across 3 seeds** (temporal min
+  0.156 > static max 0.128) — same as wikipedia, on a 25× larger independent
+  TGB benchmark.
+- global: static wins big (longer walks → more easy-task training) — the easy
+  eval remains unreliable.
+
+**UPGRADED cross-dataset verdict (the quality claim is now solid):**
+
+| dataset | hard (historical) eval | robustness |
+| --- | --- | --- |
+| wikipedia | temporal **+0.038** | 3 seeds non-overlapping ✓ |
+| tgbl-review (TGB, 4.87M) | temporal **+0.031** | 3 seeds non-overlapping ✓ |
+| reddit | tied | clean |
+| mooc / stackoverflow | degenerate | excluded (small-dst / undercovered) |
+
+> **Temporal walks robustly beat static on the field-recommended hard-negative
+> (historical) eval — on 2 of 3 clean datasets including a large TGB benchmark —
+> while easy (global) negatives are unreliable and favor static.** This
+> operationalizes the Poursafaei/EdgeBank lesson on our engine and is a genuine,
+> eval-gated, cross-dataset temporal quality benefit. Honest scope: the benefit
+> is specific to hard negatives; absolute historical MRR is low (~0.16) because
+> single static-vector embeddings cap it — large absolute gains need time-aware
+> models. Datasets with tiny destination sets (mooc) or that need cluster-scale
+> coverage (stackoverflow) are out of reach here.
+
+**This resolves the quality question for B**: not enabling-only, not a universal
+quality win, but a **robust eval-gated temporal benefit on the correct eval,
+reproduced across two independent datasets (one large, from TGB)**. New
+artifacts: `py-tgb`+`torch` in `.venv_part`, `data/tgbl_review*.txt`,
+`baselines/tgb_data/`.
 
 ### M2 inc-2 finding — value of training cross-partition pairs (2026-06-14)
 

@@ -23,6 +23,9 @@ void walker_spawn(walker_t* w, int id, int max_steps, const partition_t* part) {
         w->cur_local = local;
         w->buf[w->len++] = part->l2g[local];
     }
+    /* start the local-run ring with the spawn node */
+    w->emb_rlen = 0;
+    if (w->cur_local >= 0) { w->emb_ring[0] = w->cur_local; w->emb_rlen = 1; }
 }
 
 void walker_adopt(walker_t* w, int* recv_buf, int recv_len, int max_steps,
@@ -42,6 +45,9 @@ void walker_adopt(walker_t* w, int* recv_buf, int recv_len, int max_steps,
         exit(EXIT_FAILURE);
     }
     w->cur_local = local;
+    /* fresh local run on this rank (cross-boundary pairs are dropped) */
+    w->emb_rlen = 0;
+    if (w->cur_local >= 0) { w->emb_ring[0] = w->cur_local; w->emb_rlen = 1; }
 }
 
 /* Pick a uniformly random neighbour with t > t_cur, drawing jointly from
@@ -53,18 +59,28 @@ void walker_adopt(walker_t* w, int* recv_buf, int recv_len, int max_steps,
  *   remote hop: *out_next_global / *out_dst_rank / *out_next_t set,
  *               *out_next_local = -1
  */
+/* STATIC_WALK env (lazy-read): ignore the t>t_cur constraint and sample from
+ * ALL neighbours -- a DeepWalk-style static-walk baseline on the same engine /
+ * partition, to isolate the value of the temporal (time-respecting) constraint
+ * (DistGER is unbuildable here -- Intel MKL/x86 -- so this is the static ref). */
+static int g_static_walk = -1;
+
 static int pick_next_hop(const partition_t* part, const routing_t* routing,
                          int cur_local, int cur_global, int t_cur,
                          int* out_next_local, int* out_next_global,
                          int* out_dst_rank, int* out_next_t) {
+    if (g_static_walk < 0) {
+        const char* s = getenv("STATIC_WALK");
+        g_static_walk = (s && atoi(s) > 0) ? 1 : 0;
+    }
     const tal_t* tal = &part->tals[cur_local];
-    int local_lo = tal_upper_bound(tal, t_cur);
+    int local_lo = g_static_walk ? 0 : tal_upper_bound(tal, t_cur);
     int n_local = tal->size - local_lo;
 
     const route_entry_t* re = routing_lookup(routing, cur_global);
     int remote_lo = 0, n_remote = 0;
     if (re) {
-        remote_lo = routing_upper_bound(re, t_cur);
+        remote_lo = g_static_walk ? 0 : routing_upper_bound(re, t_cur);
         n_remote  = re->npeers - remote_lo;
     }
 

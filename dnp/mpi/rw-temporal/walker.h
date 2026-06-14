@@ -22,6 +22,11 @@ typedef struct {
     int  len;        /* valid ints in buf (header + path so far) */
     int  cap_ints;   /* WALKER_HEADER_INTS + max_steps */
     int  cur_local;  /* local id of current node (-1 before first step) */
+    /* M2 inc-4: ring of recent LOCAL node ids for in-walk embedding training
+     * (window pairs within the current local run; reset on migration since
+     * cross-partition pairs are not trained). Not transmitted over MPI. */
+    int  emb_ring[8];
+    int  emb_rlen;
 } walker_t;
 
 /* Step return codes. */
