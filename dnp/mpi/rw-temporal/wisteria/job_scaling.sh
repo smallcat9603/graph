@@ -4,9 +4,9 @@
 #PJM -L node=4
 #PJM --mpi proc=192
 #PJM -L elapse=0:20:00
-#PJM -g GROUP            # <-- EDIT: your project/billing group code
+#PJM -g gz00
 #PJM -j
-#PJM -N rwscale
+#PJM -N t4weak
 #
 # Strong/weak-scaling run for the distributed temporal-walk + co-shard embedding
 # engine. Submit one job per scaling point, overriding node/proc:
@@ -21,15 +21,24 @@
 # pre-partitioned into <proc> parts under data/<proc>/ (see README_wisteria.md).
 # All paths are under /work (compute nodes cannot read /home).
 
-DATASET=${DATASET:-stackoverflow_a2q}   # graph staged under data/<proc>/
-NWALK=${NWALK:-50000}                    # walkers per rank  (weak scaling: fix this)
+DATASET=${DATASET:-stackoverflow_a2q_tw}   # graph staged under data/<proc>/
+NWALK=${NWALK:-50000}                    # WEAK scaling: walkers per rank (fixed)
+TOTAL=${TOTAL:-0}                         # STRONG scaling: fixed total walkers; if >0,
+                                          # NWALK := TOTAL/proc (overrides NWALK)
 NSTEPS=${NSTEPS:-30}
 DELTA_T=${DELTA_T:-0}                     # 0 = single-bucket batched (the real engine)
-EMB=${EMB:-0}                             # 1 = also train co-shard embeddings
-EMBMODE=${EMBMODE:-fused}                 # fused (local negs) | twostage (NOMAD-style)
+EMB=${EMB:-1}                             # 1 = also train co-shard embeddings
+EMBMODE=${EMBMODE:-twostage}                 # fused (local negs) | twostage (NOMAD-style)
 
 P=${PJM_MPI_PROC}
-echo "=== scaling: nodes=${PJM_NODE} proc=${P} dataset=${DATASET} nwalk/rank=${NWALK} emb=${EMB} mode=${EMBMODE} ==="
+if [ "$TOTAL" -gt 0 ]; then
+    NWALK=$((TOTAL / P))                  # strong scaling: shrink per-rank load as P grows
+    MODE_STR="strong(total=${TOTAL})"
+else
+    MODE_STR="weak(nwalk/rank=${NWALK})"
+fi
+export NO_LOG=1   # skip the unscalable gather-all-paths-to-rank0 + log write (F4 needs only PHASE/elapsed)
+echo "=== scaling: nodes=${PJM_NODE} proc=${P} dataset=${DATASET} ${MODE_STR} nwalk/rank=${NWALK} emb=${EMB} mode=${EMBMODE} ==="
 
 if [ "$EMB" = "1" ]; then
     # fused vs twostage: the comm comparison. PHASE reports emb_xchg (the remote

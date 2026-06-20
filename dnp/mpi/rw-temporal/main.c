@@ -654,30 +654,36 @@ int main(int argc, char** argv) {
                crs, tot, tot ? 100.0 * (double) crs / (double) tot : 0.0, size);
     }
 
-    /* Gather and write log */
+    /* Gather and write log. NO_LOG=1 skips this entirely: gathering every
+     * walker path to rank 0 is inherently unscalable (at 1536 ranks x 50k
+     * walkers it is ~11 GB to one node and overflows int counts / the Tofu
+     * STag registration). For F4 scaling we only need PHASE + elapsed, which
+     * are produced before this point, so the log is unnecessary. */
+    int  no_log = (getenv("NO_LOG") != NULL);
     int  local_npaths = paths.nwalkers;
     int* counts = NULL;
     int* displs = NULL;
-    if (rank == 0) {
-        counts = (int*) malloc(sizeof(int) * size);
-        displs = (int*) malloc(sizeof(int) * size);
-    }
-    MPI_Gather(&local_npaths, 1, MPI_INT, counts, 1, MPI_INT, 0, MPI_COMM_WORLD);
-
     int* all_paths       = NULL;
     int  total_paths_int = 0;
-    if (rank == 0) {
-        displs[0] = 0;
-        counts[0] *= walker_len;
-        for (int i = 1; i < size; i++) {
-            displs[i] = displs[i - 1] + counts[i - 1];
-            counts[i] *= walker_len;
+    if (!no_log) {
+        if (rank == 0) {
+            counts = (int*) malloc(sizeof(int) * size);
+            displs = (int*) malloc(sizeof(int) * size);
         }
-        total_paths_int = displs[size - 1] + counts[size - 1];
-        all_paths = (int*) malloc(sizeof(int) * total_paths_int);
+        MPI_Gather(&local_npaths, 1, MPI_INT, counts, 1, MPI_INT, 0, MPI_COMM_WORLD);
+        if (rank == 0) {
+            displs[0] = 0;
+            counts[0] *= walker_len;
+            for (int i = 1; i < size; i++) {
+                displs[i] = displs[i - 1] + counts[i - 1];
+                counts[i] *= walker_len;
+            }
+            total_paths_int = displs[size - 1] + counts[size - 1];
+            all_paths = (int*) malloc(sizeof(int) * total_paths_int);
+        }
+        MPI_Gatherv(paths.data, local_npaths * walker_len, MPI_INT,
+                    all_paths, counts, displs, MPI_INT, 0, MPI_COMM_WORLD);
     }
-    MPI_Gatherv(paths.data, local_npaths * walker_len, MPI_INT,
-                all_paths, counts, displs, MPI_INT, 0, MPI_COMM_WORLD);
 
     /* E1 window-w (gated by env E1_WINDOW=w): exact cross-rank fraction of
      * skip-gram pairs for windows >1. Window-1 (the always-on counter above)
@@ -708,20 +714,22 @@ int main(int argc, char** argv) {
     }
 
     if (rank == 0) {
-        char log_path[512];
-        snprintf(log_path, sizeof(log_path),
-                 "%s/%d_%s_w%d_s%d_p%d_e%d_dt%d_pol%d.txt",
-                 LOG_DIR, (int) t1, args.dataset,
-                 args.nwalkers_per_rank, args.nsteps, size,
-                 (int) args.mode, args.delta_t, (int) args.policy);
-        log_write(log_path, all_paths, total_paths_int / walker_len, walker_len);
-        printf("wrote %s\n", log_path);
+        if (!no_log) {
+            char log_path[512];
+            snprintf(log_path, sizeof(log_path),
+                     "%s/%d_%s_w%d_s%d_p%d_e%d_dt%d_pol%d.txt",
+                     LOG_DIR, (int) t1, args.dataset,
+                     args.nwalkers_per_rank, args.nsteps, size,
+                     (int) args.mode, args.delta_t, (int) args.policy);
+            log_write(log_path, all_paths, total_paths_int / walker_len, walker_len);
+            printf("wrote %s\n", log_path);
+        }
         printf("rank=0 elapsed=%fs sched=%s delta_t=%d total_walkers=%d\n",
                t1 - t0, mode_name, args.delta_t, total_walkers);
 
         /* E1 window-w: build the owner map and count cross-rank pairs for
          * every skip-gram window up to e1_W, over the gathered full paths. */
-        if (e1_W > 0) {
+        if (!no_log && e1_W > 0) {
             intmap_t owner;
             intmap_init(&owner, (size_t) (owned_displs[size - 1] +
                                           owned_counts[size - 1]) * 2 + 16);

@@ -126,6 +126,10 @@ void walker_e1_get(long* total, long* cross) {
 int walker_step(walker_t* w, const partition_t* part, const routing_t* routing,
                 int* out_dst_rank) {
     if (w->len >= w->cap_ints) return WALKER_STEP_DONE;
+    /* Empty partition (nnodes==0, e.g. METIS produced an empty part at high
+     * rank counts): the walker never got a start node (cur_local stayed -1).
+     * It cannot walk -- terminate instead of dereferencing tals[-1]. */
+    if (w->cur_local < 0) return WALKER_STEP_DEAD_END;
 
     /* The starting node was already placed by walker_spawn / walker_adopt,
      * so every walker_step call takes a real edge. */

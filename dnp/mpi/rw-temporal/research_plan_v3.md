@@ -920,6 +920,154 @@ streaming block partitioner (noted in `wisteria/README_wisteria.md`).
 comparison. New artifacts: `gen_synthetic.py`; `twostage_embed_exchange()` +
 `emb_xchg` phase + `EMBED_MODE` env in `main.c`.
 
+### F4 cluster bring-up on Wisteria/BDEC-01 (2026-06-14) — smoke test PASSED
+
+Built (`mpifccpx -Kfast`, Odyssey A64FX) and ran multi-node. Two latent bugs,
+both **aarch64/AddressSanitizer-exposed, harmless on x86 at low rank counts**,
+fixed:
+1. **strdup/getline (POSIX-only)** in `chunkio.c`/`routing.c` — replaced with
+   portable `dup_str`/`read_line` (no feature-macro dependency).
+2. **Empty-partition crash (the real one):** at high rank counts METIS produces
+   empty parts (reddit/96 had ~10 ranks with 0 nodes); `walker_spawn` left
+   `cur_local=-1`, then `tal_upper_bound(&tals[-1])` read out of bounds. ASan
+   pinpointed it (`graph_io.h:58` ← `walker.c:77`, OOB 8 B left of a `malloc(0)`
+   region). Fixed with a `cur_local<0 → DEAD_END` guard in `walker_step`.
+   (Earlier Mac runs at np≤16 had no empty parts, so were unaffected.)
+
+**Smoke test (reddit, 96 ranks, 2 nodes):** runs clean —
+`PHASE compute=0.14 exchange=3.24 allreduce=0.13, comm_frac=96%`, elapsed 3.3 s.
+The full pipeline (build → partition → multi-node run → phase timing → output)
+is validated on the cluster.
+
+**But reddit/96 is a degenerate data point** (not for the paper): 10984 nodes /
+96 parts ≈ 50 nodes/rank, **91% cross-rank pairs**, ~10 empty parts →
+communication-saturated (96%). **The scaling study needs a big graph** so each
+rank has real local work: use **stackoverflow_a2q** (2.46M nodes → ~1600/rank at
+1536 ranks); reddit only at low rank counts.
+
+Tooling added: `wisteria/partition_scaling.sh` (Mac-side batch partition into
+{96,192,384,768,1536}, resumable, rsync-ready — the cluster's Python 3.6 can't
+build pymetis, so partition locally and upload).
+
+### F4 first real data — weak scaling on stackoverflow (2026-06-14)
+
+Weak scaling (50k walkers/rank fixed, static-METIS partition, fused), Odyssey:
+
+| nodes | proc | total walkers | elapsed | compute | exchange | allreduce | comm% | E1 cross% |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 2 | 96 | 4.8M | 5.52 | 0.86 | 6.42 | 0.38 | 88.8 | 58.9 |
+| 4 | 192 | 9.6M | 4.01 | 0.73 | 3.90 | 0.41 | 85.5 | 61.4 |
+| 8 | 384 | 19.2M | 4.60 | 0.81 | 4.17 | 0.56 | 85.4 | 63.8 |
+| 16 | 768 | 38.4M | 3.66 | 0.77 | 3.12 | 0.64 | 83.1 | 65.6 |
+| 32 | 1536 | 76.8M | 3.40 | 0.77 | 2.73 | 0.73 | 81.8 | 66.9 |
+
+**Findings (5 complete points, 2→32 nodes = 16× scale):** compute is **flat
+(0.73–0.86 s) = textbook ideal weak scaling on the compute side**; **elapsed is
+flat-to-decreasing (5.5→3.4 s) despite 16× more total work** — the engine
+handles the scale-up gracefully; allreduce grows monotonically (0.38→0.73,
+termination-detection cost → async-termination is future work); **the system is
+communication-bound (comm 82–89%)**, driven by the **high cross-rank rate
+(59→67%)** of static-METIS-partitioned stackoverflow. → this is exactly the
+**motivation for T4** (cut crossing → cut migration → cut comm); the offline T4
+result (−10..−20 pt crossing) should translate to lower comm + better scaling
+on the real network. The headline cluster experiment is **static vs T4
+partition**, same sweep.
+
+**node=32 crash was the log-gather, not the engine:** `MPI_Gatherv` of all
+76.8M paths to rank 0 (~11 GB) overflowed `int` counts and the Tofu STag 16 GiB
+limit. F4 needs only PHASE/elapsed (produced before the gather), so added
+**`NO_LOG=1`** (main.c + job_scaling.sh default) to skip the gather + log write.
+Verified locally (PHASE/elapsed still printed, no log written).
+
+**Remaining = pure execution on the cluster:** rerun node=32 (NO_LOG); the
+**static-vs-T4 partition comparison** (the headline); strong scaling (fixed
+total walkers); fused vs twostage (`EMB=1`). Engine + tooling ready; T4 partition
+recipe in `wisteria/README_wisteria.md`.
+
+### F4 headline result — static vs T4 partition, weak scaling (2026-06-14)
+
+Same weak sweep on the T4 (empirical-traversal-weighted) partition vs static
+METIS. T4 → static deltas:
+
+| nodes | cross% static→T4 | exchange s static→T4 | elapsed s static→T4 |
+| --- | --- | --- | --- |
+| 2 | 58.9→54.0 (−4.9) | 6.42→6.25 | 5.52→5.44 |
+| 4 | 61.4→56.7 (−4.7) | 3.90→4.15 | 4.01→4.20 |
+| 8 | 63.8→58.7 (−5.1) | 4.17→3.57 | 4.60→3.81 |
+| 16 | 65.6→60.1 (−5.5) | 3.12→3.16 | 3.66→3.61 |
+| 32 | 66.9→60.9 (−6.0) | 2.73→**2.41 (−12%)** | 3.40→**2.92 (−14%)** |
+
+**Result (UPDATED with 3-rep medians, ranges tight = reproducible):**
+T4 vs static, weak scaling, median of 3 reps:
+
+| proc | cross Δpt | exchange % | elapsed % | speedup (static/T4) |
+| --- | --- | --- | --- | --- |
+| 96 | −4.9 | −4.7 | −6.0 | 1.06× |
+| 192 | −4.7 | +6.8 | +3.3 | 0.97× (T4 slower) |
+| 384 | −5.1 | −16.9 | −19.3 | 1.24× |
+| 768 | −5.5 | +1.9 | −3.5 | 1.03× |
+| 1536 | −6.0 | −12.0 | −16.4 | **1.20× (ranges non-overlapping: static 3.44–3.48 vs T4 2.89–2.94)** |
+
+- **Cross-rank rate: −4.9 to −6.0 pt, ~zero variance (deterministic)** — the
+  clean, monotone, reproducible mechanism. The core defensible contribution.
+- **Wall-clock: T4 faster at 4/5 scales; 1.20× at the largest (32 nodes),
+  statistically clean (non-overlapping 3-rep ranges); 1.24× at 384.** But
+  **non-monotone** — at proc=192 T4 is reproducibly 3% *slower*. The cross→comm
+  translation is non-linear and network-/mapping-dependent, not pure volume.
+- 3-rep ranges are tight, so the non-monotonicity is **real config dependence,
+  not noise.**
+
+**Honest paper framing:** T4 consistently cuts the cross-rank rate (−5–6 pt);
+this yields a communication/wall-clock win that is strongest at the largest,
+most-relevant scale (32 nodes: −12% exchange, 1.20× speedup, significant) but is
+network-dependent and non-monotone across intermediate scales. Lead with the
+robust mechanism (cross-rate) + the largest-scale speedup; disclose the
+non-monotonicity.
+
+**Tooling:** `analyze_scaling.py` parses `*.out` → median[min-max] per
+(dataset,mode,proc) + a 2-variant delta table (incl. `emb_xchg`).
+
+### F4 strong scaling (TOTAL=8M, 3-rep medians, 2026-06-14)
+
+| proc | static elapsed | T4 elapsed | static compute | comm% (static) |
+| --- | --- | --- | --- | --- |
+| 96 | 6.72 | 6.27 | 1.40 | 84.6 |
+| 192 | 3.81 | 4.00 | 0.62 | 86.9 |
+| 384 | 3.72 | 3.03 | 0.35 | 91.8 |
+| 768 | 2.25 | 2.45 | 0.17 | 93.2 |
+| 1536 | 1.81 | 1.64 | 0.09 | 95.6 |
+
+- **Compute strong-scales near-ideally** (static 1.40→0.09 = 15.6× over 16×
+  procs). **Overall speedup ~3.7× (static) / 3.8× (T4) over 16× procs (~23%
+  efficiency) — capped by communication** (comm% rises 85→96% as compute
+  shrinks). Classic strong-scaling comm-bound regime → motivates T4 + async.
+- T4 again helps at the largest scale (1536: −9% elapsed) but is non-monotone
+  (192/768 slightly worse) — same network/config dependence as weak scaling.
+
+### F4 fused vs two-stage — the headline communication result (3-rep, T4 partition)
+
+| proc | emb_xchg fused→twostage (s) | two-stage slower than fused |
+| --- | --- | --- |
+| 96 | 0.00 → 3.09 | +38% |
+| 192 | 0.00 → 3.66 | +57% |
+| 384 | 0.00 → 4.57 | +81% |
+| 768 | 0.00 → 5.89 | +117% |
+| 1536 | 0.00 → 6.86 | **+154% (2.5× slower)** |
+
+- **fused (co-shard + shard-local negatives) has ZERO embedding communication;
+  two-stage (NOMAD-style remote-embedding exchange) pays `emb_xchg` that GROWS
+  with scale (3.1→6.9 s)** → end-to-end **38%→154% slower, gap widening with
+  scale; 2.5× slower at 32 nodes.**
+- **Clean, monotone, reproducible** (tight ranges), unlike the noisy T4
+  wall-clock. Combined with E2 (under METIS shards, ρ=0 local negatives ≈ global
+  quality), **fused beats two-stage on BOTH communication and quality** — the
+  strongest evidence for the co-shard contribution.
+
+**F4 COMPLETE.** Paper headline ordering: (1) fused vs two-stage (cleanest, big,
+monotone, scale-growing); (2) strong scaling (near-ideal compute, comm-capped);
+(3) weak scaling (compute flat, comm-bound); (4) T4 partition (cross −5–6 pt
+clean; wall-clock win at largest scale, non-monotone). All on real Tofu, 3-rep.
+
 ### M2 inc-2 finding — value of training cross-partition pairs (2026-06-14)
 
 Before building the expensive distributed migration-piggyback (carry context

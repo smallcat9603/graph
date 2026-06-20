@@ -23,6 +23,24 @@ void routing_free(routing_t* r) {
     intmap_free(&r->index);
 }
 
+/* Portable getline replacement (getline is POSIX-only; under some
+ * cross-compilers it is implicitly declared, corrupting the buffer pointer on
+ * 64-bit targets). Reads one '\n'-terminated line, growing *buf as needed.
+ * Returns line length, or -1 at EOF with nothing read. */
+static long read_line(char** buf, size_t* cap, FILE* fp) {
+    if (*buf == NULL) { *cap = 256; *buf = (char*) malloc(*cap); }
+    size_t len = 0;
+    int ch;
+    while ((ch = fgetc(fp)) != EOF) {
+        if (len + 1 >= *cap) { *cap *= 2; *buf = (char*) realloc(*buf, *cap); }
+        if (ch == '\n') break;
+        (*buf)[len++] = (char) ch;
+    }
+    if (ch == EOF && len == 0) return -1;
+    (*buf)[len] = '\0';
+    return (long) len;
+}
+
 static int cmp_peer_by_t(const void* a, const void* b) {
     int ta = ((const route_peer_t*) a)->t;
     int tb = ((const route_peer_t*) b)->t;
@@ -107,7 +125,7 @@ int routing_load(routing_t* r, const char* path) {
             free_chunks(chunks, nchunks);
             return -1;
         }
-        while (getline(&line, &bufsz, fp) != -1) {
+        while (read_line(&line, &bufsz, fp) != -1) {
             int           src, npeers;
             route_peer_t* peers = NULL;
             if (parse_line(line, &src, &peers, &npeers) != 0) {

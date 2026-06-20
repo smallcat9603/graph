@@ -33,14 +33,40 @@ done
 slow step. Partitions are reused across all runs, so do this once.)
 
 ## 3. Scaling sweep — submit one job per point
-`wisteria/job_scaling.sh` (EDIT `-g GROUP` first). Override node/proc per point:
+`wisteria/job_scaling.sh` (EDIT `-g GROUP` first; it sets `NO_LOG=1` so the
+unscalable gather is skipped — only `PHASE`/`elapsed` are produced). Pass run
+parameters as env vars; override node/proc on the pjsub command line.
+
+**Weak scaling** (fixed walkers/rank, default `NWALK=50000`):
 ```
 for n in 2 4 8 16 32; do
   pjsub -L node=$n --mpi proc=$((n*48)) wisteria/job_scaling.sh
 done
 ```
+**Strong scaling** (fixed TOTAL walkers; per-rank shrinks as P grows):
+```
+for n in 2 4 8 16 32; do
+  TOTAL=2000000 pjsub -x TOTAL -L node=$n --mpi proc=$((n*48)) wisteria/job_scaling.sh
+done
+```
+**The full F4 matrix** — set env per sweep (`-x VAR` forwards it to the job):
+| sweep | env |
+| --- | --- |
+| weak, static partition | `DATASET=stackoverflow_a2q` |
+| weak, **T4** partition | `DATASET=stackoverflow_a2q_tw` |
+| strong, static | `DATASET=stackoverflow_a2q TOTAL=2000000` |
+| strong, T4 | `DATASET=stackoverflow_a2q_tw TOTAL=2000000` |
+| embedding comm: fused | `EMB=1 EMBMODE=fused` |
+| embedding comm: two-stage | `EMB=1 EMBMODE=twostage` |
+
+e.g. `DATASET=stackoverflow_a2q_tw pjsub -x DATASET -L node=8 --mpi proc=384 wisteria/job_scaling.sh`.
+(Forward env to the batch job with pjsub `-x VAR1,VAR2` or `export` inside a wrapper.)
+
 Smoke-test first in `debug-o` (≤144 nodes, 30 min) or interactively:
 `pjsub --interact -g GROUP -L rscgrp=interactive-o,node=2 --mpi proc=96`.
+Note: strong scaling at high P gives a small per-rank load (TOTAL=2M / 1536 ≈
+1302 walkers/rank) → likely communication-bound at the high end; raise TOTAL
+(e.g. 8–16M) if you want the compute-bound regime at scale.
 
 ## 4. F4 experiment protocol
 
@@ -63,6 +89,36 @@ stackoverflow fits one node, so it does NOT show this — generate a **synthetic
 billion-edge temporal graph** (scale-free + timestamps) and show the engine
 runs at high node count while low node count OOMs. (Generator TBD; note as the
 capability figure.)
+
+## 4b. Headline experiment: static vs T4 (temporal-reachability) partition
+
+Weak scaling showed the system is communication-bound, driven by the high
+cross-rank rate of static-METIS partitions. T4 weights edges by empirical
+time-respecting traversal frequency to cut crossing → cut migration → cut comm.
+Build a T4-partitioned copy and run the SAME sweep; compare `comm_frac`/elapsed.
+
+On the **Mac** (`.venv_part` has pymetis):
+```
+# 1) pilot: per-edge traversal weights (once, on the full graph)
+.venv_part/bin/python pilot_edge_weights.py data/stackoverflow_a2q.txt 500000 30
+# 2) partition each proc count WITH those weights -> data/<P>/stackoverflow_a2q_tw.*
+for P in 96 192 384 768 1536; do
+  EWEIGHT_FILE=data/stackoverflow_a2q.txt.ew \
+    .venv_part/bin/python partition_metis.py data/stackoverflow_a2q.txt $P
+done
+# 3) rsync the _tw partitions up
+rsync -av data/96 data/192 data/384 data/768 data/1536 \
+    z30130@wisteria.cc.u-tokyo.ac.jp:/work/gz00/z30130/<rw-temporal>/data/
+```
+On the **cluster**, run the sweep against the T4 dataset name:
+```
+for n in 2 4 8 16 32; do
+  DATASET=stackoverflow_a2q_tw pjsub -L node=$n --mpi proc=$((n*48)) wisteria/job_scaling.sh
+done
+```
+Compare `comm_frac`/`exchange`/`elapsed` of `stackoverflow_a2q` (static) vs
+`stackoverflow_a2q_tw` (T4) at each node count → the T4 communication win on a
+real network.
 
 ## 5. Honest scope (carry into the paper)
 - Quality result is already established single-node (eval-gated temporal benefit,
