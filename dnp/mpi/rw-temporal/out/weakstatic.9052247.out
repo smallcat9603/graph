@@ -1,0 +1,772 @@
+=== scaling: nodes=4 proc=192 dataset=stackoverflow_a2q weak(nwalk/rank=50000) nwalk/rank=50000 emb=0 mode=fused ===
+rank=51/192 dataset=stackoverflow_a2q walkers=50000 (2550000..2599999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=51 loaded data/192/stackoverflow_a2q.sub51.txt (|V_local|=11890  t_range=[4101108,239695365])
+rank=51 loaded routing data/192/stackoverflow_a2q.rt51.txt (8979 entries)
+rank=51 added 580 boundary-only nodes from routing
+rank=52/192 dataset=stackoverflow_a2q walkers=50000 (2600000..2649999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=52 loaded data/192/stackoverflow_a2q.sub52.txt (|V_local|=12122  t_range=[3961596,239681502])
+rank=52 loaded routing data/192/stackoverflow_a2q.rt52.txt (7633 entries)
+rank=52 added 360 boundary-only nodes from routing
+rank=48/192 dataset=stackoverflow_a2q walkers=50000 (2400000..2449999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=48 loaded data/192/stackoverflow_a2q.sub48.txt (|V_local|=11783  t_range=[481578,239694294])
+rank=48 loaded routing data/192/stackoverflow_a2q.rt48.txt (8892 entries)
+rank=48 added 696 boundary-only nodes from routing
+rank=59/192 dataset=stackoverflow_a2q walkers=50000 (2950000..2999999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=59 loaded data/192/stackoverflow_a2q.sub59.txt (|V_local|=12881  t_range=[5610435,239695480])
+rank=59 loaded routing data/192/stackoverflow_a2q.rt59.txt (6709 entries)
+rank=59 added 341 boundary-only nodes from routing
+rank=95/192 dataset=stackoverflow_a2q walkers=50000 (4750000..4799999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=95 loaded data/192/stackoverflow_a2q.sub95.txt (|V_local|=11824  t_range=[2217201,239673545])
+rank=95 loaded routing data/192/stackoverflow_a2q.rt95.txt (8930 entries)
+rank=95 added 640 boundary-only nodes from routing
+rank=53/192 dataset=stackoverflow_a2q walkers=50000 (2650000..2699999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=53 loaded data/192/stackoverflow_a2q.sub53.txt (|V_local|=12098  t_range=[3977491,239690776])
+rank=53 loaded routing data/192/stackoverflow_a2q.rt53.txt (8427 entries)
+rank=53 added 369 boundary-only nodes from routing
+rank=62/192 dataset=stackoverflow_a2q walkers=50000 (3100000..3149999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=62 loaded data/192/stackoverflow_a2q.sub62.txt (|V_local|=12992  t_range=[247683,239695444])
+rank=62 loaded routing data/192/stackoverflow_a2q.rt62.txt (7892 entries)
+rank=62 added 226 boundary-only nodes from routing
+rank=54/192 dataset=stackoverflow_a2q walkers=50000 (2700000..2749999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=54 loaded data/192/stackoverflow_a2q.sub54.txt (|V_local|=11537  t_range=[2498532,239680022])
+rank=54 loaded routing data/192/stackoverflow_a2q.rt54.txt (9239 entries)
+rank=54 added 929 boundary-only nodes from routing
+rank=72/192 dataset=stackoverflow_a2q walkers=50000 (3600000..3649999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=72 loaded data/192/stackoverflow_a2q.sub72.txt (|V_local|=11732  t_range=[4083817,239668183])
+rank=72 loaded routing data/192/stackoverflow_a2q.rt72.txt (8640 entries)
+rank=72 added 738 boundary-only nodes from routing
+rank=50/192 dataset=stackoverflow_a2q walkers=50000 (2500000..2549999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=50 loaded data/192/stackoverflow_a2q.sub50.txt (|V_local|=12968  t_range=[844842,239683136])
+rank=50 loaded routing data/192/stackoverflow_a2q.rt50.txt (7183 entries)
+rank=50 added 249 boundary-only nodes from routing
+rank=85/192 dataset=stackoverflow_a2q walkers=50000 (4250000..4299999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=85 loaded data/192/stackoverflow_a2q.sub85.txt (|V_local|=13066  t_range=[1192947,239663409])
+rank=85 loaded routing data/192/stackoverflow_a2q.rt85.txt (6098 entries)
+rank=85 added 156 boundary-only nodes from routing
+rank=57/192 dataset=stackoverflow_a2q walkers=50000 (2850000..2899999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=57 loaded data/192/stackoverflow_a2q.sub57.txt (|V_local|=12829  t_range=[4051376,239694502])
+rank=57 loaded routing data/192/stackoverflow_a2q.rt57.txt (8153 entries)
+rank=57 added 393 boundary-only nodes from routing
+rank=49/192 dataset=stackoverflow_a2q walkers=50000 (2450000..2499999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=49 loaded data/192/stackoverflow_a2q.sub49.txt (|V_local|=12601  t_range=[1826550,239696630])
+rank=49 loaded routing data/192/stackoverflow_a2q.rt49.txt (8732 entries)
+rank=49 added 611 boundary-only nodes from routing
+rank=69/192 dataset=stackoverflow_a2q walkers=50000 (3450000..3499999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=69 loaded data/192/stackoverflow_a2q.sub69.txt (|V_local|=12179  t_range=[3387974,239694756])
+rank=69 loaded routing data/192/stackoverflow_a2q.rt69.txt (7650 entries)
+rank=69 added 298 boundary-only nodes from routing
+rank=89/192 dataset=stackoverflow_a2q walkers=50000 (4450000..4499999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=89 loaded data/192/stackoverflow_a2q.sub89.txt (|V_local|=13071  t_range=[470731,239661576])
+rank=89 loaded routing data/192/stackoverflow_a2q.rt89.txt (5910 entries)
+rank=89 added 151 boundary-only nodes from routing
+rank=91/192 dataset=stackoverflow_a2q walkers=50000 (4550000..4599999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=91 loaded data/192/stackoverflow_a2q.sub91.txt (|V_local|=12972  t_range=[670011,239687459])
+rank=91 loaded routing data/192/stackoverflow_a2q.rt91.txt (6558 entries)
+rank=91 added 250 boundary-only nodes from routing
+rank=83/192 dataset=stackoverflow_a2q walkers=50000 (4150000..4199999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=83 loaded data/192/stackoverflow_a2q.sub83.txt (|V_local|=12151  t_range=[3942835,239659972])
+rank=83 loaded routing data/192/stackoverflow_a2q.rt83.txt (8098 entries)
+rank=83 added 324 boundary-only nodes from routing
+rank=153/192 dataset=stackoverflow_a2q walkers=50000 (7650000..7699999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=153 loaded data/192/stackoverflow_a2q.sub153.txt (|V_local|=12006  t_range=[778301,239692058])
+rank=153 loaded routing data/192/stackoverflow_a2q.rt153.txt (8713 entries)
+rank=153 added 476 boundary-only nodes from routing
+rank=146/192 dataset=stackoverflow_a2q walkers=50000 (7300000..7349999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=146 loaded data/192/stackoverflow_a2q.sub146.txt (|V_local|=13112  t_range=[4161743,239696916])
+rank=146 loaded routing data/192/stackoverflow_a2q.rt146.txt (7980 entries)
+rank=146 added 106 boundary-only nodes from routing
+rank=154/192 dataset=stackoverflow_a2q walkers=50000 (7700000..7749999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=154 loaded data/192/stackoverflow_a2q.sub154.txt (|V_local|=13087  t_range=[15034007,239678748])
+rank=154 loaded routing data/192/stackoverflow_a2q.rt154.txt (7997 entries)
+rank=154 added 131 boundary-only nodes from routing
+rank=147/192 dataset=stackoverflow_a2q walkers=50000 (7350000..7399999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=147 loaded data/192/stackoverflow_a2q.sub147.txt (|V_local|=12103  t_range=[5471915,239690603])
+rank=147 loaded routing data/192/stackoverflow_a2q.rt147.txt (8913 entries)
+rank=147 added 375 boundary-only nodes from routing
+rank=148/192 dataset=stackoverflow_a2q walkers=50000 (7400000..7449999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=148 loaded data/192/stackoverflow_a2q.sub148.txt (|V_local|=13133  t_range=[18224416,239693836])
+rank=148 loaded routing data/192/stackoverflow_a2q.rt148.txt (8013 entries)
+rank=148 added 89 boundary-only nodes from routing
+rank=151/192 dataset=stackoverflow_a2q walkers=50000 (7550000..7599999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=151 loaded data/192/stackoverflow_a2q.sub151.txt (|V_local|=13116  t_range=[7633113,239668023])
+rank=151 loaded routing data/192/stackoverflow_a2q.rt151.txt (6977 entries)
+rank=151 added 106 boundary-only nodes from routing
+rank=191/192 dataset=stackoverflow_a2q walkers=50000 (9550000..9599999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=191 loaded data/192/stackoverflow_a2q.sub191.txt (|V_local|=12538  t_range=[4731496,239682067])
+rank=191 loaded routing data/192/stackoverflow_a2q.rt191.txt (110 entries)
+rank=191 added 1 boundary-only nodes from routing
+rank=150/192 dataset=stackoverflow_a2q walkers=50000 (7500000..7549999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=150 loaded data/192/stackoverflow_a2q.sub150.txt (|V_local|=11947  t_range=[7127831,239690861])
+rank=150 loaded routing data/192/stackoverflow_a2q.rt150.txt (8934 entries)
+rank=150 added 521 boundary-only nodes from routing
+rank=156/192 dataset=stackoverflow_a2q walkers=50000 (7800000..7849999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=156 loaded data/192/stackoverflow_a2q.sub156.txt (|V_local|=12131  t_range=[4038209,239695360])
+rank=156 loaded routing data/192/stackoverflow_a2q.rt156.txt (8728 entries)
+rank=156 added 335 boundary-only nodes from routing
+rank=186/192 dataset=stackoverflow_a2q walkers=50000 (9300000..9349999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=186 loaded data/192/stackoverflow_a2q.sub186.txt (|V_local|=12183  t_range=[8381050,239689728])
+rank=186 loaded routing data/192/stackoverflow_a2q.rt186.txt (715 entries)
+rank=186 added 152 boundary-only nodes from routing
+rank=185/192 dataset=stackoverflow_a2q walkers=50000 (9250000..9299999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=185 loaded data/192/stackoverflow_a2q.sub185.txt (|V_local|=12186  t_range=[9557227,239698329])
+rank=185 loaded routing data/192/stackoverflow_a2q.rt185.txt (7953 entries)
+rank=185 added 285 boundary-only nodes from routing
+rank=187/192 dataset=stackoverflow_a2q walkers=50000 (9350000..9399999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=187 loaded data/192/stackoverflow_a2q.sub187.txt (|V_local|=12134  t_range=[2900682,239694000])
+rank=187 loaded routing data/192/stackoverflow_a2q.rt187.txt (8471 entries)
+rank=187 added 352 boundary-only nodes from routing
+rank=167/192 dataset=stackoverflow_a2q walkers=50000 (8350000..8399999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=167 loaded data/192/stackoverflow_a2q.sub167.txt (|V_local|=13151  t_range=[11346815,239697440])
+rank=167 loaded routing data/192/stackoverflow_a2q.rt167.txt (6321 entries)
+rank=167 added 66 boundary-only nodes from routing
+rank=149/192 dataset=stackoverflow_a2q walkers=50000 (7450000..7499999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=149 loaded data/192/stackoverflow_a2q.sub149.txt (|V_local|=13062  t_range=[4133563,239696683])
+rank=149 loaded routing data/192/stackoverflow_a2q.rt149.txt (8384 entries)
+rank=149 added 146 boundary-only nodes from routing
+rank=145/192 dataset=stackoverflow_a2q walkers=50000 (7250000..7299999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=145 loaded data/192/stackoverflow_a2q.sub145.txt (|V_local|=13132  t_range=[41694900,239697241])
+rank=145 loaded routing data/192/stackoverflow_a2q.rt145.txt (7557 entries)
+rank=145 added 90 boundary-only nodes from routing
+rank=157/192 dataset=stackoverflow_a2q walkers=50000 (7850000..7899999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=157 loaded data/192/stackoverflow_a2q.sub157.txt (|V_local|=12179  t_range=[3956875,239698131])
+rank=157 loaded routing data/192/stackoverflow_a2q.rt157.txt (8703 entries)
+rank=157 added 294 boundary-only nodes from routing
+rank=152/192 dataset=stackoverflow_a2q walkers=50000 (7600000..7649999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=152 loaded data/192/stackoverflow_a2q.sub152.txt (|V_local|=13083  t_range=[1704659,239673934])
+rank=152 loaded routing data/192/stackoverflow_a2q.rt152.txt (5518 entries)
+rank=152 added 138 boundary-only nodes from routing
+rank=158/192 dataset=stackoverflow_a2q walkers=50000 (7900000..7949999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=158 loaded data/192/stackoverflow_a2q.sub158.txt (|V_local|=12113  t_range=[4133061,239688404])
+rank=158 loaded routing data/192/stackoverflow_a2q.rt158.txt (8493 entries)
+rank=158 added 359 boundary-only nodes from routing
+rank=170/192 dataset=stackoverflow_a2q walkers=50000 (8500000..8549999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=170 loaded data/192/stackoverflow_a2q.sub170.txt (|V_local|=13033  t_range=[4707386,239659596])
+rank=170 loaded routing data/192/stackoverflow_a2q.rt170.txt (9137 entries)
+rank=170 added 186 boundary-only nodes from routing
+rank=159/192 dataset=stackoverflow_a2q walkers=50000 (7950000..7999999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=159 loaded data/192/stackoverflow_a2q.sub159.txt (|V_local|=12231  t_range=[7612463,239697543])
+rank=159 loaded routing data/192/stackoverflow_a2q.rt159.txt (7780 entries)
+rank=159 added 242 boundary-only nodes from routing
+rank=155/192 dataset=stackoverflow_a2q walkers=50000 (7750000..7799999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=155 loaded data/192/stackoverflow_a2q.sub155.txt (|V_local|=13093  t_range=[11364874,239690037])
+rank=155 loaded routing data/192/stackoverflow_a2q.rt155.txt (8206 entries)
+rank=155 added 127 boundary-only nodes from routing
+rank=174/192 dataset=stackoverflow_a2q walkers=50000 (8700000..8749999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=174 loaded data/192/stackoverflow_a2q.sub174.txt (|V_local|=11472  t_range=[3329795,239671207])
+rank=174 loaded routing data/192/stackoverflow_a2q.rt174.txt (9278 entries)
+rank=174 added 1012 boundary-only nodes from routing
+rank=161/192 dataset=stackoverflow_a2q walkers=50000 (8050000..8099999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=161 loaded data/192/stackoverflow_a2q.sub161.txt (|V_local|=12249  t_range=[3955293,239689699])
+rank=161 loaded routing data/192/stackoverflow_a2q.rt161.txt (7987 entries)
+rank=161 added 227 boundary-only nodes from routing
+rank=140/192 dataset=stackoverflow_a2q walkers=50000 (7000000..7049999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=140 loaded data/192/stackoverflow_a2q.sub140.txt (|V_local|=12953  t_range=[4760142,239697882])
+rank=140 loaded routing data/192/stackoverflow_a2q.rt140.txt (7523 entries)
+rank=140 added 268 boundary-only nodes from routing
+rank=143/192 dataset=stackoverflow_a2q walkers=50000 (7150000..7199999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=143 loaded data/192/stackoverflow_a2q.sub143.txt (|V_local|=12115  t_range=[4049690,239685287])
+rank=143 loaded routing data/192/stackoverflow_a2q.rt143.txt (8255 entries)
+rank=143 added 366 boundary-only nodes from routing
+rank=99/192 dataset=stackoverflow_a2q walkers=50000 (4950000..4999999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=99 loaded data/192/stackoverflow_a2q.sub99.txt (|V_local|=12659  t_range=[4789658,239675165])
+rank=99 loaded routing data/192/stackoverflow_a2q.rt99.txt (8222 entries)
+rank=99 added 211 boundary-only nodes from routing
+rank=105/192 dataset=stackoverflow_a2q walkers=50000 (5250000..5299999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=105 loaded data/192/stackoverflow_a2q.sub105.txt (|V_local|=12192  t_range=[9176729,239695371])
+rank=105 loaded routing data/192/stackoverflow_a2q.rt105.txt (8560 entries)
+rank=105 added 282 boundary-only nodes from routing
+rank=98/192 dataset=stackoverflow_a2q walkers=50000 (4900000..4949999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=98 loaded data/192/stackoverflow_a2q.sub98.txt (|V_local|=13116  t_range=[7142456,239695688])
+rank=98 loaded routing data/192/stackoverflow_a2q.rt98.txt (8099 entries)
+rank=98 added 103 boundary-only nodes from routing
+rank=101/192 dataset=stackoverflow_a2q walkers=50000 (5050000..5099999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=101 loaded data/192/stackoverflow_a2q.sub101.txt (|V_local|=13058  t_range=[5531938,239681469])
+rank=101 loaded routing data/192/stackoverflow_a2q.rt101.txt (8344 entries)
+rank=101 added 164 boundary-only nodes from routing
+rank=106/192 dataset=stackoverflow_a2q walkers=50000 (5300000..5349999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=106 loaded data/192/stackoverflow_a2q.sub106.txt (|V_local|=12694  t_range=[6693739,239695626])
+rank=106 loaded routing data/192/stackoverflow_a2q.rt106.txt (7839 entries)
+rank=106 added 225 boundary-only nodes from routing
+rank=119/192 dataset=stackoverflow_a2q walkers=50000 (5950000..5999999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=119 loaded data/192/stackoverflow_a2q.sub119.txt (|V_local|=12122  t_range=[16672627,239694307])
+rank=119 loaded routing data/192/stackoverflow_a2q.rt119.txt (8944 entries)
+rank=119 added 352 boundary-only nodes from routing
+rank=107/192 dataset=stackoverflow_a2q walkers=50000 (5350000..5399999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=107 loaded data/192/stackoverflow_a2q.sub107.txt (|V_local|=12333  t_range=[5475232,239695848])
+rank=107 loaded routing data/192/stackoverflow_a2q.rt107.txt (7345 entries)
+rank=107 added 146 boundary-only nodes from routing
+rank=97/192 dataset=stackoverflow_a2q walkers=50000 (4850000..4899999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=97 loaded data/192/stackoverflow_a2q.sub97.txt (|V_local|=13114  t_range=[5768633,239689731])
+rank=97 loaded routing data/192/stackoverflow_a2q.rt97.txt (7759 entries)
+rank=97 added 108 boundary-only nodes from routing
+rank=103/192 dataset=stackoverflow_a2q walkers=50000 (5150000..5199999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=103 loaded data/192/stackoverflow_a2q.sub103.txt (|V_local|=13132  t_range=[24233808,239671948])
+rank=103 loaded routing data/192/stackoverflow_a2q.rt103.txt (7510 entries)
+rank=103 added 90 boundary-only nodes from routing
+rank=138/192 dataset=stackoverflow_a2q walkers=50000 (6900000..6949999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=138 loaded data/192/stackoverflow_a2q.sub138.txt (|V_local|=12093  t_range=[4229738,239698171])
+rank=138 loaded routing data/192/stackoverflow_a2q.rt138.txt (8499 entries)
+rank=138 added 387 boundary-only nodes from routing
+rank=128/192 dataset=stackoverflow_a2q walkers=50000 (6400000..6449999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=128 loaded data/192/stackoverflow_a2q.sub128.txt (|V_local|=12263  t_range=[31079546,239697546])
+rank=128 loaded routing data/192/stackoverflow_a2q.rt128.txt (8532 entries)
+rank=128 added 212 boundary-only nodes from routing
+rank=122/192 dataset=stackoverflow_a2q walkers=50000 (6100000..6149999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=122 loaded data/192/stackoverflow_a2q.sub122.txt (|V_local|=13069  t_range=[4222166,239693779])
+rank=122 loaded routing data/192/stackoverflow_a2q.rt122.txt (7244 entries)
+rank=122 added 147 boundary-only nodes from routing
+rank=100/192 dataset=stackoverflow_a2q walkers=50000 (5000000..5049999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=100 loaded data/192/stackoverflow_a2q.sub100.txt (|V_local|=13141  t_range=[7787416,239690129])
+rank=100 loaded routing data/192/stackoverflow_a2q.rt100.txt (8353 entries)
+rank=100 added 80 boundary-only nodes from routing
+rank=104/192 dataset=stackoverflow_a2q walkers=50000 (5200000..5249999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=104 loaded data/192/stackoverflow_a2q.sub104.txt (|V_local|=13062  t_range=[16885910,239692719])
+rank=104 loaded routing data/192/stackoverflow_a2q.rt104.txt (8728 entries)
+rank=104 added 156 boundary-only nodes from routing
+rank=79/192 dataset=stackoverflow_a2q walkers=50000 (3950000..3999999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=79 loaded data/192/stackoverflow_a2q.sub79.txt (|V_local|=13093  t_range=[1631927,239697973])
+rank=79 loaded routing data/192/stackoverflow_a2q.rt79.txt (6355 entries)
+rank=79 added 129 boundary-only nodes from routing
+rank=67/192 dataset=stackoverflow_a2q walkers=50000 (3350000..3399999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=67 loaded data/192/stackoverflow_a2q.sub67.txt (|V_local|=12975  t_range=[570920,239686456])
+rank=67 loaded routing data/192/stackoverflow_a2q.rt67.txt (5587 entries)
+rank=67 added 247 boundary-only nodes from routing
+rank=55/192 dataset=stackoverflow_a2q walkers=50000 (2750000..2799999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=55 loaded data/192/stackoverflow_a2q.sub55.txt (|V_local|=12875  t_range=[280015,239640496])
+rank=55 loaded routing data/192/stackoverflow_a2q.rt55.txt (6385 entries)
+rank=55 added 347 boundary-only nodes from routing
+rank=75/192 dataset=stackoverflow_a2q walkers=50000 (3750000..3799999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=75 loaded data/192/stackoverflow_a2q.sub75.txt (|V_local|=11870  t_range=[2254818,239686336])
+rank=75 loaded routing data/192/stackoverflow_a2q.rt75.txt (8235 entries)
+rank=75 added 598 boundary-only nodes from routing
+rank=87/192 dataset=stackoverflow_a2q walkers=50000 (4350000..4399999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=87 loaded data/192/stackoverflow_a2q.sub87.txt (|V_local|=11984  t_range=[224199,239696778])
+rank=87 loaded routing data/192/stackoverflow_a2q.rt87.txt (8764 entries)
+rank=87 added 482 boundary-only nodes from routing
+rank=81/192 dataset=stackoverflow_a2q walkers=50000 (4050000..4099999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=81 loaded data/192/stackoverflow_a2q.sub81.txt (|V_local|=11964  t_range=[2655650,239694351])
+rank=81 loaded routing data/192/stackoverflow_a2q.rt81.txt (8829 entries)
+rank=81 added 498 boundary-only nodes from routing
+rank=71/192 dataset=stackoverflow_a2q walkers=50000 (3550000..3599999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=71 loaded data/192/stackoverflow_a2q.sub71.txt (|V_local|=13038  t_range=[3964818,239688297])
+rank=71 loaded routing data/192/stackoverflow_a2q.rt71.txt (7327 entries)
+rank=71 added 184 boundary-only nodes from routing
+rank=84/192 dataset=stackoverflow_a2q walkers=50000 (4200000..4249999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=84 loaded data/192/stackoverflow_a2q.sub84.txt (|V_local|=13049  t_range=[4289546,239686872])
+rank=84 loaded routing data/192/stackoverflow_a2q.rt84.txt (7700 entries)
+rank=84 added 167 boundary-only nodes from routing
+rank=65/192 dataset=stackoverflow_a2q walkers=50000 (3250000..3299999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=65 loaded data/192/stackoverflow_a2q.sub65.txt (|V_local|=13020  t_range=[2749185,239693167])
+rank=65 loaded routing data/192/stackoverflow_a2q.rt65.txt (7279 entries)
+rank=65 added 199 boundary-only nodes from routing
+rank=92/192 dataset=stackoverflow_a2q walkers=50000 (4600000..4649999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=92 loaded data/192/stackoverflow_a2q.sub92.txt (|V_local|=13079  t_range=[495252,239697801])
+rank=92 loaded routing data/192/stackoverflow_a2q.rt92.txt (6990 entries)
+rank=92 added 143 boundary-only nodes from routing
+rank=82/192 dataset=stackoverflow_a2q walkers=50000 (4100000..4149999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=82 loaded data/192/stackoverflow_a2q.sub82.txt (|V_local|=12048  t_range=[4893566,239693832])
+rank=82 loaded routing data/192/stackoverflow_a2q.rt82.txt (8448 entries)
+rank=82 added 426 boundary-only nodes from routing
+rank=61/192 dataset=stackoverflow_a2q walkers=50000 (3050000..3099999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=61 loaded data/192/stackoverflow_a2q.sub61.txt (|V_local|=13052  t_range=[1549139,239690001])
+rank=61 loaded routing data/192/stackoverflow_a2q.rt61.txt (7473 entries)
+rank=61 added 160 boundary-only nodes from routing
+rank=90/192 dataset=stackoverflow_a2q walkers=50000 (4500000..4549999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=90 loaded data/192/stackoverflow_a2q.sub90.txt (|V_local|=11857  t_range=[3330944,239691980])
+rank=90 loaded routing data/192/stackoverflow_a2q.rt90.txt (8856 entries)
+rank=90 added 623 boundary-only nodes from routing
+rank=56/192 dataset=stackoverflow_a2q walkers=50000 (2800000..2849999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=56 loaded data/192/stackoverflow_a2q.sub56.txt (|V_local|=13057  t_range=[1740545,239662518])
+rank=56 loaded routing data/192/stackoverflow_a2q.rt56.txt (5857 entries)
+rank=56 added 165 boundary-only nodes from routing
+rank=76/192 dataset=stackoverflow_a2q walkers=50000 (3800000..3849999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=76 loaded data/192/stackoverflow_a2q.sub76.txt (|V_local|=12143  t_range=[546717,239691900])
+rank=76 loaded routing data/192/stackoverflow_a2q.rt76.txt (7483 entries)
+rank=76 added 334 boundary-only nodes from routing
+rank=73/192 dataset=stackoverflow_a2q walkers=50000 (3650000..3699999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=73 loaded data/192/stackoverflow_a2q.sub73.txt (|V_local|=13048  t_range=[433363,239686153])
+rank=73 loaded routing data/192/stackoverflow_a2q.rt73.txt (5013 entries)
+rank=73 added 174 boundary-only nodes from routing
+rank=74/192 dataset=stackoverflow_a2q walkers=50000 (3700000..3749999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=74 loaded data/192/stackoverflow_a2q.sub74.txt (|V_local|=13001  t_range=[5520942,239646549])
+rank=74 loaded routing data/192/stackoverflow_a2q.rt74.txt (5932 entries)
+rank=74 added 221 boundary-only nodes from routing
+rank=60/192 dataset=stackoverflow_a2q walkers=50000 (3000000..3049999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=60 loaded data/192/stackoverflow_a2q.sub60.txt (|V_local|=12934  t_range=[2327455,239698070])
+rank=60 loaded routing data/192/stackoverflow_a2q.rt60.txt (8072 entries)
+rank=60 added 282 boundary-only nodes from routing
+rank=93/192 dataset=stackoverflow_a2q walkers=50000 (4650000..4699999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=93 loaded data/192/stackoverflow_a2q.sub93.txt (|V_local|=12121  t_range=[2175541,239698773])
+rank=93 loaded routing data/192/stackoverflow_a2q.rt93.txt (8521 entries)
+rank=93 added 351 boundary-only nodes from routing
+rank=77/192 dataset=stackoverflow_a2q walkers=50000 (3850000..3899999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=77 loaded data/192/stackoverflow_a2q.sub77.txt (|V_local|=13044  t_range=[12011657,239697892])
+rank=77 loaded routing data/192/stackoverflow_a2q.rt77.txt (6937 entries)
+rank=77 added 175 boundary-only nodes from routing
+rank=70/192 dataset=stackoverflow_a2q walkers=50000 (3500000..3549999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=70 loaded data/192/stackoverflow_a2q.sub70.txt (|V_local|=13137  t_range=[4245607,239679954])
+rank=70 loaded routing data/192/stackoverflow_a2q.rt70.txt (5958 entries)
+rank=70 added 85 boundary-only nodes from routing
+rank=86/192 dataset=stackoverflow_a2q walkers=50000 (4300000..4349999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=86 loaded data/192/stackoverflow_a2q.sub86.txt (|V_local|=12016  t_range=[2125797,239693171])
+rank=86 loaded routing data/192/stackoverflow_a2q.rt86.txt (8386 entries)
+rank=86 added 465 boundary-only nodes from routing
+rank=58/192 dataset=stackoverflow_a2q walkers=50000 (2900000..2949999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=58 loaded data/192/stackoverflow_a2q.sub58.txt (|V_local|=12870  t_range=[4211754,239689858])
+rank=58 loaded routing data/192/stackoverflow_a2q.rt58.txt (8557 entries)
+rank=58 added 346 boundary-only nodes from routing
+rank=63/192 dataset=stackoverflow_a2q walkers=50000 (3150000..3199999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=27/192 dataset=stackoverflow_a2q walkers=50000 (1350000..1399999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=27 loaded data/192/stackoverflow_a2q.sub27.txt (|V_local|=12062  t_range=[1792299,239676644])
+rank=27 loaded routing data/192/stackoverflow_a2q.rt27.txt (8483 entries)
+rank=27 added 412 boundary-only nodes from routing
+rank=15/192 dataset=stackoverflow_a2q walkers=50000 (750000..799999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=15 loaded data/192/stackoverflow_a2q.sub15.txt (|V_local|=11853  t_range=[2826246,239683791])
+rank=15 loaded routing data/192/stackoverflow_a2q.rt15.txt (8979 entries)
+rank=15 added 618 boundary-only nodes from routing
+rank=28/192 dataset=stackoverflow_a2q walkers=50000 (1400000..1449999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=28 loaded data/192/stackoverflow_a2q.sub28.txt (|V_local|=13052  t_range=[477915,239692824])
+rank=28 loaded routing data/192/stackoverflow_a2q.rt28.txt (7586 entries)
+rank=28 added 165 boundary-only nodes from routing
+rank=23/192 dataset=stackoverflow_a2q walkers=50000 (1150000..1199999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=23 loaded data/192/stackoverflow_a2q.sub23.txt (|V_local|=12955  t_range=[1801425,239685758])
+rank=23 loaded routing data/192/stackoverflow_a2q.rt23.txt (7715 entries)
+rank=23 added 262 boundary-only nodes from routing
+rank=25/192 dataset=stackoverflow_a2q walkers=50000 (1250000..1299999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=25 loaded data/192/stackoverflow_a2q.sub25.txt (|V_local|=12602  t_range=[4523352,239682350])
+rank=25 loaded routing data/192/stackoverflow_a2q.rt25.txt (8354 entries)
+rank=25 added 211 boundary-only nodes from routing
+rank=1/192 dataset=stackoverflow_a2q walkers=50000 (50000..99999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=1 loaded data/192/stackoverflow_a2q.sub1.txt (|V_local|=10870  t_range=[269346,239622397])
+rank=1 loaded routing data/192/stackoverflow_a2q.rt1.txt (8850 entries)
+rank=1 added 1602 boundary-only nodes from routing
+rank=0/192 dataset=stackoverflow_a2q walkers=50000 (0..49999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=0 loaded data/192/stackoverflow_a2q.sub0.txt (|V_local|=11399  t_range=[610355,239656546])
+rank=0 loaded routing data/192/stackoverflow_a2q.rt0.txt (9098 entries)
+rank=0 added 1079 boundary-only nodes from routing
+PHASE compute=0.7379 exchange=3.9060 allreduce=0.4068 emb_xchg=0.0000 s  comm_frac=85.4% [p=192 mode=fused]
+E1 cross-rank pairs: 31744343/51713424 (61.39%) [p=192]
+rank=0 elapsed=4.013163s sched=single-bucket delta_t=0 total_walkers=9600000
+rank=29/192 dataset=stackoverflow_a2q walkers=50000 (1450000..1499999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=29 loaded data/192/stackoverflow_a2q.sub29.txt (|V_local|=12044  t_range=[2256969,239676163])
+rank=29 loaded routing data/192/stackoverflow_a2q.rt29.txt (8355 entries)
+rank=29 added 429 boundary-only nodes from routing
+rank=14/192 dataset=stackoverflow_a2q walkers=50000 (700000..749999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=14 loaded data/192/stackoverflow_a2q.sub14.txt (|V_local|=11816  t_range=[2514222,239679420])
+rank=14 loaded routing data/192/stackoverflow_a2q.rt14.txt (8770 entries)
+rank=14 added 658 boundary-only nodes from routing
+rank=2/192 dataset=stackoverflow_a2q walkers=50000 (100000..149999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=2 loaded data/192/stackoverflow_a2q.sub2.txt (|V_local|=12939  t_range=[0,239675952])
+rank=2 loaded routing data/192/stackoverflow_a2q.rt2.txt (5719 entries)
+rank=2 added 283 boundary-only nodes from routing
+rank=5/192 dataset=stackoverflow_a2q walkers=50000 (250000..299999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=5 loaded data/192/stackoverflow_a2q.sub5.txt (|V_local|=11486  t_range=[1087920,239686054])
+rank=5 loaded routing data/192/stackoverflow_a2q.rt5.txt (8886 entries)
+rank=5 added 988 boundary-only nodes from routing
+rank=3/192 dataset=stackoverflow_a2q walkers=50000 (150000..199999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=3 loaded data/192/stackoverflow_a2q.sub3.txt (|V_local|=11638  t_range=[2237374,239683440])
+rank=3 loaded routing data/192/stackoverflow_a2q.rt3.txt (8954 entries)
+rank=3 added 830 boundary-only nodes from routing
+rank=45/192 dataset=stackoverflow_a2q walkers=50000 (2250000..2299999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=45 loaded data/192/stackoverflow_a2q.sub45.txt (|V_local|=11946  t_range=[1200853,239674614])
+rank=45 loaded routing data/192/stackoverflow_a2q.rt45.txt (8944 entries)
+rank=45 added 532 boundary-only nodes from routing
+rank=21/192 dataset=stackoverflow_a2q walkers=50000 (1050000..1099999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=21 loaded data/192/stackoverflow_a2q.sub21.txt (|V_local|=11867  t_range=[3932604,239681985])
+rank=21 loaded routing data/192/stackoverflow_a2q.rt21.txt (8974 entries)
+rank=21 added 602 boundary-only nodes from routing
+rank=20/192 dataset=stackoverflow_a2q walkers=50000 (1000000..1049999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=20 loaded data/192/stackoverflow_a2q.sub20.txt (|V_local|=13042  t_range=[2840335,239666536])
+rank=20 loaded routing data/192/stackoverflow_a2q.rt20.txt (6227 entries)
+rank=20 added 180 boundary-only nodes from routing
+rank=12/192 dataset=stackoverflow_a2q walkers=50000 (600000..649999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=12 loaded data/192/stackoverflow_a2q.sub12.txt (|V_local|=11781  t_range=[1980903,239695278])
+rank=12 loaded routing data/192/stackoverflow_a2q.rt12.txt (8904 entries)
+rank=12 added 691 boundary-only nodes from routing
+rank=19/192 dataset=stackoverflow_a2q walkers=50000 (950000..999999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=19 loaded data/192/stackoverflow_a2q.sub19.txt (|V_local|=11959  t_range=[1731646,239603223])
+rank=19 loaded routing data/192/stackoverflow_a2q.rt19.txt (8347 entries)
+rank=19 added 526 boundary-only nodes from routing
+rank=4/192 dataset=stackoverflow_a2q walkers=50000 (200000..249999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=4 loaded data/192/stackoverflow_a2q.sub4.txt (|V_local|=12043  t_range=[391430,239646440])
+rank=4 loaded routing data/192/stackoverflow_a2q.rt4.txt (7493 entries)
+rank=4 added 442 boundary-only nodes from routing
+rank=44/192 dataset=stackoverflow_a2q walkers=50000 (2200000..2249999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=44 loaded data/192/stackoverflow_a2q.sub44.txt (|V_local|=13049  t_range=[2819319,239671726])
+rank=44 loaded routing data/192/stackoverflow_a2q.rt44.txt (6086 entries)
+rank=44 added 168 boundary-only nodes from routing
+rank=6/192 dataset=stackoverflow_a2q walkers=50000 (300000..349999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=6 loaded data/192/stackoverflow_a2q.sub6.txt (|V_local|=11566  t_range=[3069854,239695898])
+rank=6 loaded routing data/192/stackoverflow_a2q.rt6.txt (8077 entries)
+rank=6 added 906 boundary-only nodes from routing
+rank=17/192 dataset=stackoverflow_a2q walkers=50000 (850000..899999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=17 loaded data/192/stackoverflow_a2q.sub17.txt (|V_local|=11827  t_range=[1785838,239676747])
+rank=17 loaded routing data/192/stackoverflow_a2q.rt17.txt (9019 entries)
+rank=17 added 641 boundary-only nodes from routing
+rank=37/192 dataset=stackoverflow_a2q walkers=50000 (1850000..1899999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=37 loaded data/192/stackoverflow_a2q.sub37.txt (|V_local|=12192  t_range=[3956179,239678852])
+rank=37 loaded routing data/192/stackoverflow_a2q.rt37.txt (8500 entries)
+rank=37 added 285 boundary-only nodes from routing
+rank=10/192 dataset=stackoverflow_a2q walkers=50000 (500000..549999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=10 loaded data/192/stackoverflow_a2q.sub10.txt (|V_local|=12272  t_range=[2303784,239688370])
+rank=10 loaded routing data/192/stackoverflow_a2q.rt10.txt (8388 entries)
+rank=160/192 dataset=stackoverflow_a2q walkers=50000 (8000000..8049999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=160 loaded data/192/stackoverflow_a2q.sub160.txt (|V_local|=12183  t_range=[11381876,239692814])
+rank=160 loaded routing data/192/stackoverflow_a2q.rt160.txt (8355 entries)
+rank=160 added 298 boundary-only nodes from routing
+rank=188/192 dataset=stackoverflow_a2q walkers=50000 (9400000..9449999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=188 loaded data/192/stackoverflow_a2q.sub188.txt (|V_local|=12100  t_range=[9141541,239696328])
+rank=188 loaded routing data/192/stackoverflow_a2q.rt188.txt (846 entries)
+rank=188 added 406 boundary-only nodes from routing
+rank=181/192 dataset=stackoverflow_a2q walkers=50000 (9050000..9099999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=181 loaded data/192/stackoverflow_a2q.sub181.txt (|V_local|=12299  t_range=[10871527,239679312])
+rank=181 loaded routing data/192/stackoverflow_a2q.rt181.txt (7180 entries)
+rank=181 added 184 boundary-only nodes from routing
+rank=189/192 dataset=stackoverflow_a2q walkers=50000 (9450000..9499999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=189 loaded data/192/stackoverflow_a2q.sub189.txt (|V_local|=13208  t_range=[5775685,239694854])
+rank=189 loaded routing data/192/stackoverflow_a2q.rt189.txt (657 entries)
+rank=189 added 13 boundary-only nodes from routing
+rank=162/192 dataset=stackoverflow_a2q walkers=50000 (8100000..8149999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=162 loaded data/192/stackoverflow_a2q.sub162.txt (|V_local|=12145  t_range=[4156317,239691541])
+rank=162 loaded routing data/192/stackoverflow_a2q.rt162.txt (8823 entries)
+rank=162 added 332 boundary-only nodes from routing
+rank=190/192 dataset=stackoverflow_a2q walkers=50000 (9500000..9549999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=190 loaded data/192/stackoverflow_a2q.sub190.txt (|V_local|=12467  t_range=[8346835,239665824])
+rank=190 loaded routing data/192/stackoverflow_a2q.rt190.txt (183 entries)
+rank=190 added 1 boundary-only nodes from routing
+rank=175/192 dataset=stackoverflow_a2q walkers=50000 (8750000..8799999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=175 loaded data/192/stackoverflow_a2q.sub175.txt (|V_local|=12850  t_range=[3714543,239661157])
+rank=175 loaded routing data/192/stackoverflow_a2q.rt175.txt (8624 entries)
+rank=175 added 365 boundary-only nodes from routing
+rank=163/192 dataset=stackoverflow_a2q walkers=50000 (8150000..8199999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=163 loaded data/192/stackoverflow_a2q.sub163.txt (|V_local|=13099  t_range=[5482693,239691804])
+rank=163 loaded routing data/192/stackoverflow_a2q.rt163.txt (6842 entries)
+rank=163 added 122 boundary-only nodes from routing
+rank=178/192 dataset=stackoverflow_a2q walkers=50000 (8900000..8949999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=178 loaded data/192/stackoverflow_a2q.sub178.txt (|V_local|=11951  t_range=[1331762,239688226])
+rank=178 loaded routing data/192/stackoverflow_a2q.rt178.txt (8823 entries)
+rank=178 added 526 boundary-only nodes from routing
+rank=165/192 dataset=stackoverflow_a2q walkers=50000 (8250000..8299999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=165 loaded data/192/stackoverflow_a2q.sub165.txt (|V_local|=12351  t_range=[6381964,239693013])
+rank=165 loaded routing data/192/stackoverflow_a2q.rt165.txt (7796 entries)
+rank=165 added 214 boundary-only nodes from routing
+rank=173/192 dataset=stackoverflow_a2q walkers=50000 (8650000..8699999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=173 loaded data/192/stackoverflow_a2q.sub173.txt (|V_local|=13147  t_range=[20001656,239698527])
+rank=173 loaded routing data/192/stackoverflow_a2q.rt173.txt (7713 entries)
+rank=173 added 74 boundary-only nodes from routing
+rank=172/192 dataset=stackoverflow_a2q walkers=50000 (8600000..8649999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=172 loaded data/192/stackoverflow_a2q.sub172.txt (|V_local|=13077  t_range=[26541795,239698686])
+rank=172 loaded routing data/192/stackoverflow_a2q.rt172.txt (8691 entries)
+rank=172 added 140 boundary-only nodes from routing
+rank=177/192 dataset=stackoverflow_a2q walkers=50000 (8850000..8899999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=177 loaded data/192/stackoverflow_a2q.sub177.txt (|V_local|=11895  t_range=[3187557,239689213])
+rank=177 loaded routing data/192/stackoverflow_a2q.rt177.txt (9172 entries)
+rank=177 added 579 boundary-only nodes from routing
+rank=183/192 dataset=stackoverflow_a2q walkers=50000 (9150000..9199999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=183 loaded data/192/stackoverflow_a2q.sub183.txt (|V_local|=12163  t_range=[3638494,239692780])
+rank=183 loaded routing data/192/stackoverflow_a2q.rt183.txt (8742 entries)
+rank=183 added 310 boundary-only nodes from routing
+rank=182/192 dataset=stackoverflow_a2q walkers=50000 (9100000..9149999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=182 loaded data/192/stackoverflow_a2q.sub182.txt (|V_local|=12028  t_range=[5071984,239698387])
+rank=182 loaded routing data/192/stackoverflow_a2q.rt182.txt (8921 entries)
+rank=182 added 444 boundary-only nodes from routing
+rank=171/192 dataset=stackoverflow_a2q walkers=50000 (8550000..8599999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=171 loaded data/192/stackoverflow_a2q.sub171.txt (|V_local|=11943  t_range=[2735655,239698412])
+rank=171 loaded routing data/192/stackoverflow_a2q.rt171.txt (9061 entries)
+rank=171 added 522 boundary-only nodes from routing
+rank=164/192 dataset=stackoverflow_a2q walkers=50000 (8200000..8249999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=164 loaded data/192/stackoverflow_a2q.sub164.txt (|V_local|=13131  t_range=[25088677,239698299])
+rank=164 loaded routing data/192/stackoverflow_a2q.rt164.txt (7376 entries)
+rank=164 added 91 boundary-only nodes from routing
+rank=176/192 dataset=stackoverflow_a2q walkers=50000 (8800000..8849999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=176 loaded data/192/stackoverflow_a2q.sub176.txt (|V_local|=13082  t_range=[3953840,239685903])
+rank=176 loaded routing data/192/stackoverflow_a2q.rt176.txt (6819 entries)
+rank=176 added 140 boundary-only nodes from routing
+rank=179/192 dataset=stackoverflow_a2q walkers=50000 (8950000..8999999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=179 loaded data/192/stackoverflow_a2q.sub179.txt (|V_local|=12991  t_range=[4740192,239690455])
+rank=179 loaded routing data/192/stackoverflow_a2q.rt179.txt (8856 entries)
+rank=179 added 220 boundary-only nodes from routing
+rank=184/192 dataset=stackoverflow_a2q walkers=50000 (9200000..9249999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=184 loaded data/192/stackoverflow_a2q.sub184.txt (|V_local|=12298  t_range=[6458568,239675433])
+rank=184 loaded routing data/192/stackoverflow_a2q.rt184.txt (6667 entries)
+rank=184 added 180 boundary-only nodes from routing
+rank=144/192 dataset=stackoverflow_a2q walkers=50000 (7200000..7249999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=144 loaded data/192/stackoverflow_a2q.sub144.txt (|V_local|=12047  t_range=[3984684,239697927])
+rank=144 loaded routing data/192/stackoverflow_a2q.rt144.txt (8760 entries)
+rank=144 added 427 boundary-only nodes from routing
+rank=180/192 dataset=stackoverflow_a2q walkers=50000 (9000000..9049999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=180 loaded data/192/stackoverflow_a2q.sub180.txt (|V_local|=12013  t_range=[4168263,239684442])
+rank=180 loaded routing data/192/stackoverflow_a2q.rt180.txt (8894 entries)
+rank=180 added 473 boundary-only nodes from routing
+rank=168/192 dataset=stackoverflow_a2q walkers=50000 (8400000..8449999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=168 loaded data/192/stackoverflow_a2q.sub168.txt (|V_local|=12002  t_range=[5110197,239687693])
+rank=168 loaded routing data/192/stackoverflow_a2q.rt168.txt (9096 entries)
+rank=168 added 470 boundary-only nodes from routing
+rank=133/192 dataset=stackoverflow_a2q walkers=50000 (6650000..6699999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=133 loaded data/192/stackoverflow_a2q.sub133.txt (|V_local|=13090  t_range=[21630264,239691948])
+rank=133 loaded routing data/192/stackoverflow_a2q.rt133.txt (7034 entries)
+rank=133 added 132 boundary-only nodes from routing
+rank=109/192 dataset=stackoverflow_a2q walkers=50000 (5450000..5499999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=109 loaded data/192/stackoverflow_a2q.sub109.txt (|V_local|=13154  t_range=[46500659,239671394])
+rank=109 loaded routing data/192/stackoverflow_a2q.rt109.txt (8322 entries)
+rank=109 added 64 boundary-only nodes from routing
+rank=131/192 dataset=stackoverflow_a2q walkers=50000 (6550000..6599999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=131 loaded data/192/stackoverflow_a2q.sub131.txt (|V_local|=12123  t_range=[4640004,239681882])
+rank=131 loaded routing data/192/stackoverflow_a2q.rt131.txt (8600 entries)
+rank=131 added 356 boundary-only nodes from routing
+rank=127/192 dataset=stackoverflow_a2q walkers=50000 (6350000..6399999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=127 loaded data/192/stackoverflow_a2q.sub127.txt (|V_local|=13139  t_range=[13840742,239696671])
+rank=127 loaded routing data/192/stackoverflow_a2q.rt127.txt (6300 entries)
+rank=127 added 83 boundary-only nodes from routing
+rank=112/192 dataset=stackoverflow_a2q walkers=50000 (5600000..5649999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=112 loaded data/192/stackoverflow_a2q.sub112.txt (|V_local|=13128  t_range=[39760423,239685984])
+rank=112 loaded routing data/192/stackoverflow_a2q.rt112.txt (8398 entries)
+rank=112 added 93 boundary-only nodes from routing
+rank=113/192 dataset=stackoverflow_a2q walkers=50000 (5650000..5699999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=113 loaded data/192/stackoverflow_a2q.sub113.txt (|V_local|=13132  t_range=[30870623,239693037])
+rank=113 loaded routing data/192/stackoverflow_a2q.rt113.txt (7937 entries)
+rank=113 added 82 boundary-only nodes from routing
+rank=114/192 dataset=stackoverflow_a2q walkers=50000 (5700000..5749999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=114 loaded data/192/stackoverflow_a2q.sub114.txt (|V_local|=12280  t_range=[21418723,239694962])
+rank=114 loaded routing data/192/stackoverflow_a2q.rt114.txt (7662 entries)
+rank=114 added 194 boundary-only nodes from routing
+rank=102/192 dataset=stackoverflow_a2q walkers=50000 (5100000..5149999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=102 loaded data/192/stackoverflow_a2q.sub102.txt (|V_local|=12248  t_range=[10589661,239684947])
+rank=102 loaded routing data/192/stackoverflow_a2q.rt102.txt (8698 entries)
+rank=102 added 224 boundary-only nodes from routing
+rank=130/192 dataset=stackoverflow_a2q walkers=50000 (6500000..6549999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=130 loaded data/192/stackoverflow_a2q.sub130.txt (|V_local|=13185  t_range=[4096852,239697243])
+rank=130 loaded routing data/192/stackoverflow_a2q.rt130.txt (4479 entries)
+rank=130 added 37 boundary-only nodes from routing
+rank=134/192 dataset=stackoverflow_a2q walkers=50000 (6700000..6749999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=134 loaded data/192/stackoverflow_a2q.sub134.txt (|V_local|=13085  t_range=[11448273,239692372])
+rank=134 loaded routing data/192/stackoverflow_a2q.rt134.txt (6989 entries)
+rank=134 added 136 boundary-only nodes from routing
+rank=108/192 dataset=stackoverflow_a2q walkers=50000 (5400000..5449999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=108 loaded data/192/stackoverflow_a2q.sub108.txt (|V_local|=12201  t_range=[10385233,239694601])
+rank=108 loaded routing data/192/stackoverflow_a2q.rt108.txt (8820 entries)
+rank=108 added 279 boundary-only nodes from routing
+rank=123/192 dataset=stackoverflow_a2q walkers=50000 (6150000..6199999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=123 loaded data/192/stackoverflow_a2q.sub123.txt (|V_local|=11577  t_range=[10176045,239691319])
+rank=123 loaded routing data/192/stackoverflow_a2q.rt123.txt (9285 entries)
+rank=123 added 899 boundary-only nodes from routing
+rank=135/192 dataset=stackoverflow_a2q walkers=50000 (6750000..6799999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=135 loaded data/192/stackoverflow_a2q.sub135.txt (|V_local|=12066  t_range=[7833869,239694200])
+rank=135 loaded routing data/192/stackoverflow_a2q.rt135.txt (8689 entries)
+rank=135 added 408 boundary-only nodes from routing
+rank=124/192 dataset=stackoverflow_a2q walkers=50000 (6200000..6249999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=124 loaded data/192/stackoverflow_a2q.sub124.txt (|V_local|=13102  t_range=[18632170,239686889])
+rank=124 loaded routing data/192/stackoverflow_a2q.rt124.txt (5832 entries)
+rank=124 added 119 boundary-only nodes from routing
+rank=125/192 dataset=stackoverflow_a2q walkers=50000 (6250000..6299999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=125 loaded data/192/stackoverflow_a2q.sub125.txt (|V_local|=13039  t_range=[2399229,239687617])
+rank=125 loaded routing data/192/stackoverflow_a2q.rt125.txt (6411 entries)
+rank=125 added 178 boundary-only nodes from routing
+rank=137/192 dataset=stackoverflow_a2q walkers=50000 (6850000..6899999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=137 loaded data/192/stackoverflow_a2q.sub137.txt (|V_local|=12888  t_range=[7091315,239698486])
+rank=137 loaded routing data/192/stackoverflow_a2q.rt137.txt (9001 entries)
+rank=137 added 330 boundary-only nodes from routing
+rank=120/192 dataset=stackoverflow_a2q walkers=50000 (6000000..6049999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=120 loaded data/192/stackoverflow_a2q.sub120.txt (|V_local|=12113  t_range=[2079063,239685061])
+rank=120 loaded routing data/192/stackoverflow_a2q.rt120.txt (8130 entries)
+rank=120 added 369 boundary-only nodes from routing
+rank=136/192 dataset=stackoverflow_a2q walkers=50000 (6800000..6849999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=136 loaded data/192/stackoverflow_a2q.sub136.txt (|V_local|=13141  t_range=[18403365,239698816])
+rank=136 loaded routing data/192/stackoverflow_a2q.rt136.txt (7079 entries)
+rank=136 added 81 boundary-only nodes from routing
+rank=139/192 dataset=stackoverflow_a2q walkers=50000 (6950000..6999999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=139 loaded data/192/stackoverflow_a2q.sub139.txt (|V_local|=13033  t_range=[19288022,239692865])
+rank=139 loaded routing data/192/stackoverflow_a2q.rt139.txt (7715 entries)
+rank=139 added 189 boundary-only nodes from routing
+rank=116/192 dataset=stackoverflow_a2q walkers=50000 (5800000..5849999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=116 loaded data/192/stackoverflow_a2q.sub116.txt (|V_local|=13140  t_range=[22506706,239693009])
+rank=116 loaded routing data/192/stackoverflow_a2q.rt116.txt (7939 entries)
+rank=116 added 82 boundary-only nodes from routing
+rank=132/192 dataset=stackoverflow_a2q walkers=50000 (6600000..6649999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=132 loaded data/192/stackoverflow_a2q.sub132.txt (|V_local|=12121  t_range=[4055423,239686692])
+rank=132 loaded routing data/192/stackoverflow_a2q.rt132.txt (8208 entries)
+rank=132 added 370 boundary-only nodes from routing
+rank=111/192 dataset=stackoverflow_a2q walkers=50000 (5550000..5599999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=111 loaded data/192/stackoverflow_a2q.sub111.txt (|V_local|=12289  t_range=[4293354,239688781])
+rank=111 loaded routing data/192/stackoverflow_a2q.rt111.txt (8543 entries)
+rank=111 added 186 boundary-only nodes from routing
+rank=121/192 dataset=stackoverflow_a2q walkers=50000 (6050000..6099999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=121 loaded data/192/stackoverflow_a2q.sub121.txt (|V_local|=12221  t_range=[4628953,239682873])
+rank=121 loaded routing data/192/stackoverflow_a2q.rt121.txt (8012 entries)
+rank=63 loaded data/192/stackoverflow_a2q.sub63.txt (|V_local|=11733  t_range=[1671999,239660483])
+rank=63 loaded routing data/192/stackoverflow_a2q.rt63.txt (8965 entries)
+rank=63 added 745 boundary-only nodes from routing
+rank=88/192 dataset=stackoverflow_a2q walkers=50000 (4400000..4449999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=88 loaded data/192/stackoverflow_a2q.sub88.txt (|V_local|=11612  t_range=[1728435,239683646])
+rank=88 loaded routing data/192/stackoverflow_a2q.rt88.txt (9045 entries)
+rank=88 added 862 boundary-only nodes from routing
+rank=64/192 dataset=stackoverflow_a2q walkers=50000 (3200000..3249999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=64 loaded data/192/stackoverflow_a2q.sub64.txt (|V_local|=13051  t_range=[246132,239694147])
+rank=64 loaded routing data/192/stackoverflow_a2q.rt64.txt (6232 entries)
+rank=64 added 171 boundary-only nodes from routing
+rank=78/192 dataset=stackoverflow_a2q walkers=50000 (3900000..3949999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=78 loaded data/192/stackoverflow_a2q.sub78.txt (|V_local|=12156  t_range=[5336356,239661154])
+rank=78 loaded routing data/192/stackoverflow_a2q.rt78.txt (8277 entries)
+rank=78 added 319 boundary-only nodes from routing
+rank=94/192 dataset=stackoverflow_a2q walkers=50000 (4700000..4749999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=94 loaded data/192/stackoverflow_a2q.sub94.txt (|V_local|=11875  t_range=[4109521,239693607])
+rank=94 loaded routing data/192/stackoverflow_a2q.rt94.txt (9029 entries)
+rank=94 added 603 boundary-only nodes from routing
+rank=68/192 dataset=stackoverflow_a2q walkers=50000 (3400000..3449999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=68 loaded data/192/stackoverflow_a2q.sub68.txt (|V_local|=12213  t_range=[2374200,239653745])
+rank=68 loaded routing data/192/stackoverflow_a2q.rt68.txt (7832 entries)
+rank=68 added 995 boundary-only nodes from routing
+rank=80/192 dataset=stackoverflow_a2q walkers=50000 (4000000..4049999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=80 loaded data/192/stackoverflow_a2q.sub80.txt (|V_local|=13121  t_range=[5097706,239697118])
+rank=80 loaded routing data/192/stackoverflow_a2q.rt80.txt (6962 entries)
+rank=80 added 101 boundary-only nodes from routing
+rank=66/192 dataset=stackoverflow_a2q walkers=50000 (3300000..3349999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=66 loaded data/192/stackoverflow_a2q.sub66.txt (|V_local|=12211  t_range=[1627707,239677078])
+rank=66 loaded routing data/192/stackoverflow_a2q.rt66.txt (7864 entries)
+rank=66 added 265 boundary-only nodes from routing
+rank=10 added 632 boundary-only nodes from routing
+rank=13/192 dataset=stackoverflow_a2q walkers=50000 (650000..699999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=13 loaded data/192/stackoverflow_a2q.sub13.txt (|V_local|=11658  t_range=[3428294,239676654])
+rank=13 loaded routing data/192/stackoverflow_a2q.rt13.txt (9233 entries)
+rank=13 added 818 boundary-only nodes from routing
+rank=9/192 dataset=stackoverflow_a2q walkers=50000 (450000..499999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=9 loaded data/192/stackoverflow_a2q.sub9.txt (|V_local|=11367  t_range=[1177970,239683628])
+rank=9 loaded routing data/192/stackoverflow_a2q.rt9.txt (9184 entries)
+rank=9 added 1108 boundary-only nodes from routing
+rank=18/192 dataset=stackoverflow_a2q walkers=50000 (900000..949999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=18 loaded data/192/stackoverflow_a2q.sub18.txt (|V_local|=12923  t_range=[426786,239678405])
+rank=18 loaded routing data/192/stackoverflow_a2q.rt18.txt (8365 entries)
+rank=18 added 294 boundary-only nodes from routing
+rank=33/192 dataset=stackoverflow_a2q walkers=50000 (1650000..1699999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=33 loaded data/192/stackoverflow_a2q.sub33.txt (|V_local|=12136  t_range=[5504793,239691434])
+rank=33 loaded routing data/192/stackoverflow_a2q.rt33.txt (8840 entries)
+rank=33 added 343 boundary-only nodes from routing
+rank=31/192 dataset=stackoverflow_a2q walkers=50000 (1550000..1599999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=31 loaded data/192/stackoverflow_a2q.sub31.txt (|V_local|=13097  t_range=[4144354,239663093])
+rank=31 loaded routing data/192/stackoverflow_a2q.rt31.txt (7892 entries)
+rank=31 added 120 boundary-only nodes from routing
+rank=43/192 dataset=stackoverflow_a2q walkers=50000 (2150000..2199999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=43 loaded data/192/stackoverflow_a2q.sub43.txt (|V_local|=12992  t_range=[2896796,239691913])
+rank=43 loaded routing data/192/stackoverflow_a2q.rt43.txt (7178 entries)
+rank=43 added 223 boundary-only nodes from routing
+rank=30/192 dataset=stackoverflow_a2q walkers=50000 (1500000..1549999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=30 loaded data/192/stackoverflow_a2q.sub30.txt (|V_local|=12143  t_range=[3076078,239696704])
+rank=30 loaded routing data/192/stackoverflow_a2q.rt30.txt (8696 entries)
+rank=30 added 335 boundary-only nodes from routing
+rank=35/192 dataset=stackoverflow_a2q walkers=50000 (1750000..1799999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=35 loaded data/192/stackoverflow_a2q.sub35.txt (|V_local|=13097  t_range=[7745483,239696352])
+rank=35 loaded routing data/192/stackoverflow_a2q.rt35.txt (7802 entries)
+rank=35 added 124 boundary-only nodes from routing
+rank=47/192 dataset=stackoverflow_a2q walkers=50000 (2350000..2399999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=47 loaded data/192/stackoverflow_a2q.sub47.txt (|V_local|=12978  t_range=[1452197,239680414])
+rank=47 loaded routing data/192/stackoverflow_a2q.rt47.txt (6772 entries)
+rank=47 added 222 boundary-only nodes from routing
+rank=39/192 dataset=stackoverflow_a2q walkers=50000 (1950000..1999999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=39 loaded data/192/stackoverflow_a2q.sub39.txt (|V_local|=11979  t_range=[3966243,239672105])
+rank=39 loaded routing data/192/stackoverflow_a2q.rt39.txt (8880 entries)
+rank=39 added 488 boundary-only nodes from routing
+rank=169/192 dataset=stackoverflow_a2q walkers=50000 (8450000..8499999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=169 loaded data/192/stackoverflow_a2q.sub169.txt (|V_local|=13121  t_range=[3728262,239687288])
+rank=169 loaded routing data/192/stackoverflow_a2q.rt169.txt (7767 entries)
+rank=169 added 98 boundary-only nodes from routing
+rank=166/192 dataset=stackoverflow_a2q walkers=50000 (8300000..8349999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=166 loaded data/192/stackoverflow_a2q.sub166.txt (|V_local|=13121  t_range=[5769379,239689862])
+rank=166 loaded routing data/192/stackoverflow_a2q.rt166.txt (7521 entries)
+rank=166 added 101 boundary-only nodes from routing
+rank=121 added 253 boundary-only nodes from routing
+rank=126/192 dataset=stackoverflow_a2q walkers=50000 (6300000..6349999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=126 loaded data/192/stackoverflow_a2q.sub126.txt (|V_local|=12150  t_range=[4369834,239686728])
+rank=126 loaded routing data/192/stackoverflow_a2q.rt126.txt (8163 entries)
+rank=126 added 325 boundary-only nodes from routing
+rank=118/192 dataset=stackoverflow_a2q walkers=50000 (5900000..5949999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=118 loaded data/192/stackoverflow_a2q.sub118.txt (|V_local|=13119  t_range=[3296715,239695219])
+rank=118 loaded routing data/192/stackoverflow_a2q.rt118.txt (7804 entries)
+rank=118 added 103 boundary-only nodes from routing
+rank=115/192 dataset=stackoverflow_a2q walkers=50000 (5750000..5799999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=115 loaded data/192/stackoverflow_a2q.sub115.txt (|V_local|=12270  t_range=[14940567,239678177])
+rank=115 loaded routing data/192/stackoverflow_a2q.rt115.txt (8190 entries)
+rank=115 added 211 boundary-only nodes from routing
+rank=110/192 dataset=stackoverflow_a2q walkers=50000 (5500000..5549999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=110 loaded data/192/stackoverflow_a2q.sub110.txt (|V_local|=13151  t_range=[36920531,239696984])
+rank=110 loaded routing data/192/stackoverflow_a2q.rt110.txt (8002 entries)
+rank=110 added 68 boundary-only nodes from routing
+rank=142/192 dataset=stackoverflow_a2q walkers=50000 (7100000..7149999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=142 loaded data/192/stackoverflow_a2q.sub142.txt (|V_local|=13085  t_range=[4060051,239677683])
+rank=142 loaded routing data/192/stackoverflow_a2q.rt142.txt (7349 entries)
+rank=142 added 133 boundary-only nodes from routing
+rank=117/192 dataset=stackoverflow_a2q walkers=50000 (5850000..5899999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=117 loaded data/192/stackoverflow_a2q.sub117.txt (|V_local|=12316  t_range=[12000922,239696134])
+rank=117 loaded routing data/192/stackoverflow_a2q.rt117.txt (7695 entries)
+rank=117 added 173 boundary-only nodes from routing
+rank=96/192 dataset=stackoverflow_a2q walkers=50000 (4800000..4849999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=96 loaded data/192/stackoverflow_a2q.sub96.txt (|V_local|=12265  t_range=[4103799,239689794])
+rank=96 loaded routing data/192/stackoverflow_a2q.rt96.txt (7967 entries)
+rank=96 added 214 boundary-only nodes from routing
+rank=141/192 dataset=stackoverflow_a2q walkers=50000 (7050000..7099999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=141 loaded data/192/stackoverflow_a2q.sub141.txt (|V_local|=13074  t_range=[6571594,239696094])
+rank=141 loaded routing data/192/stackoverflow_a2q.rt141.txt (6280 entries)
+rank=141 added 146 boundary-only nodes from routing
+rank=129/192 dataset=stackoverflow_a2q walkers=50000 (6450000..6499999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=129 loaded data/192/stackoverflow_a2q.sub129.txt (|V_local|=13079  t_range=[4122811,239680005])
+rank=129 loaded routing data/192/stackoverflow_a2q.rt129.txt (7018 entries)
+rank=129 added 135 boundary-only nodes from routing
+rank=11/192 dataset=stackoverflow_a2q walkers=50000 (550000..599999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=11 loaded data/192/stackoverflow_a2q.sub11.txt (|V_local|=12690  t_range=[1639488,239696664])
+rank=11 loaded routing data/192/stackoverflow_a2q.rt11.txt (7180 entries)
+rank=11 added 532 boundary-only nodes from routing
+rank=7/192 dataset=stackoverflow_a2q walkers=50000 (350000..399999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=7 loaded data/192/stackoverflow_a2q.sub7.txt (|V_local|=13063  t_range=[54040,239662517])
+rank=7 loaded routing data/192/stackoverflow_a2q.rt7.txt (4524 entries)
+rank=7 added 159 boundary-only nodes from routing
+rank=26/192 dataset=stackoverflow_a2q walkers=50000 (1300000..1349999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=26 loaded data/192/stackoverflow_a2q.sub26.txt (|V_local|=13092  t_range=[4117606,239691520])
+rank=26 loaded routing data/192/stackoverflow_a2q.rt26.txt (7707 entries)
+rank=26 added 130 boundary-only nodes from routing
+rank=46/192 dataset=stackoverflow_a2q walkers=50000 (2300000..2349999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=46 loaded data/192/stackoverflow_a2q.sub46.txt (|V_local|=13001  t_range=[4141736,239690034])
+rank=46 loaded routing data/192/stackoverflow_a2q.rt46.txt (7447 entries)
+rank=46 added 215 boundary-only nodes from routing
+rank=42/192 dataset=stackoverflow_a2q walkers=50000 (2100000..2149999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=42 loaded data/192/stackoverflow_a2q.sub42.txt (|V_local|=12049  t_range=[7132757,239669825])
+rank=42 loaded routing data/192/stackoverflow_a2q.rt42.txt (8806 entries)
+rank=42 added 430 boundary-only nodes from routing
+rank=22/192 dataset=stackoverflow_a2q walkers=50000 (1100000..1149999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=22 loaded data/192/stackoverflow_a2q.sub22.txt (|V_local|=13050  t_range=[3322852,239694952])
+rank=22 loaded routing data/192/stackoverflow_a2q.rt22.txt (6470 entries)
+rank=22 added 172 boundary-only nodes from routing
+rank=41/192 dataset=stackoverflow_a2q walkers=50000 (2050000..2099999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=41 loaded data/192/stackoverflow_a2q.sub41.txt (|V_local|=12273  t_range=[3954048,239694340])
+rank=41 loaded routing data/192/stackoverflow_a2q.rt41.txt (8063 entries)
+rank=41 added 202 boundary-only nodes from routing
+rank=24/192 dataset=stackoverflow_a2q walkers=50000 (1200000..1249999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=24 loaded data/192/stackoverflow_a2q.sub24.txt (|V_local|=12096  t_range=[4014742,239671803])
+rank=24 loaded routing data/192/stackoverflow_a2q.rt24.txt (8339 entries)
+rank=24 added 382 boundary-only nodes from routing
+rank=36/192 dataset=stackoverflow_a2q walkers=50000 (1800000..1849999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=36 loaded data/192/stackoverflow_a2q.sub36.txt (|V_local|=12069  t_range=[2174466,239676036])
+rank=36 loaded routing data/192/stackoverflow_a2q.rt36.txt (8270 entries)
+rank=36 added 409 boundary-only nodes from routing
+rank=16/192 dataset=stackoverflow_a2q walkers=50000 (800000..849999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=16 loaded data/192/stackoverflow_a2q.sub16.txt (|V_local|=13008  t_range=[358288,239676923])
+rank=16 loaded routing data/192/stackoverflow_a2q.rt16.txt (5998 entries)
+rank=16 added 211 boundary-only nodes from routing
+rank=40/192 dataset=stackoverflow_a2q walkers=50000 (2000000..2049999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=40 loaded data/192/stackoverflow_a2q.sub40.txt (|V_local|=12146  t_range=[256708,239680416])
+rank=40 loaded routing data/192/stackoverflow_a2q.rt40.txt (8368 entries)
+rank=40 added 327 boundary-only nodes from routing
+rank=38/192 dataset=stackoverflow_a2q walkers=50000 (1900000..1949999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=38 loaded data/192/stackoverflow_a2q.sub38.txt (|V_local|=12174  t_range=[2305015,239698105])
+rank=38 loaded routing data/192/stackoverflow_a2q.rt38.txt (8050 entries)
+rank=38 added 308 boundary-only nodes from routing
+rank=34/192 dataset=stackoverflow_a2q walkers=50000 (1700000..1749999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=34 loaded data/192/stackoverflow_a2q.sub34.txt (|V_local|=13080  t_range=[5837741,239697823])
+rank=34 loaded routing data/192/stackoverflow_a2q.rt34.txt (7248 entries)
+rank=34 added 135 boundary-only nodes from routing
+rank=32/192 dataset=stackoverflow_a2q walkers=50000 (1600000..1649999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=32 loaded data/192/stackoverflow_a2q.sub32.txt (|V_local|=13073  t_range=[4122849,239675248])
+rank=32 loaded routing data/192/stackoverflow_a2q.rt32.txt (7156 entries)
+rank=32 added 144 boundary-only nodes from routing
+rank=8/192 dataset=stackoverflow_a2q walkers=50000 (400000..449999) steps=30 mode=0 sched=single-bucket delta_t=0 policy=0
+rank=8 loaded data/192/stackoverflow_a2q.sub8.txt (|V_local|=12587  t_range=[1604260,239683820])
+rank=8 loaded routing data/192/stackoverflow_a2q.rt8.txt (4880 entries)
+rank=8 added 635 boundary-only nodes from routing
