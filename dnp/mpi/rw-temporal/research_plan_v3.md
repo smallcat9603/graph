@@ -1,5 +1,17 @@
 # Research Plan v3 — Co-located Distributed Temporal Node Embedding
 
+> **⚠ STATUS / HOW TO READ THIS FILE (2026-06-21)**
+> 1. This is the **research lab notebook** — a cumulative log of how the idea
+>    evolved and what the experiments found. It is NOT the paper.
+> 2. **§0–§6 are the ORIGINAL aspirations and are partly SUPERSEDED.** In
+>    particular the migration-piggyback (C1) and the importance-weight + periodic
+>    ρ-exchange (C2/T3) were **dropped during de-risking** — do not treat §0–§6 as
+>    current. Read them as "what we set out to do."
+> 3. **The LOCKED, final conclusions and all cluster results live in §10** (and the
+>    de-risking corrections in §8). When §0–§6 and §10 disagree, **§10 wins.**
+> 4. The **paper writing plan** (chapter structure, INSIGHTs) is a separate file:
+>    `paper_plan_v3.md` — derived from §10, reflects only locked results.
+
 Target: a systems-for-ML venue (MLSys / KDD applied / VLDB; fallback Cluster, SC ML track).
 Builds on the accepted NBiS 2026 paper (the "v1" characterization study).
 Sibling to `research_plan_v2.md` — v2 stays a pure HPC-systems paper; **v3 pivots
