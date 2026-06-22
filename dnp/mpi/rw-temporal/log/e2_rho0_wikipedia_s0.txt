@@ -1,0 +1,9 @@
+wikipedia.txt: nodes=9227 edges=157474 train=125979 test=31495 shards=4 dim=64 ep=3
+walks=40035 positive_pairs=1430802
+shards: METIS (sizes [2306 2307 2307 2307])
+shard masses M = [0.22  0.261 0.277 0.242]  (sum=1.000)
+eval: bipartite (type-aware negs, |dst|=1000)
+
+regime             AUC     MRR    H@10   (dest-ranking LP; rho=0.1)
+global          0.8007  0.5837  0.6931   rho=0.1 (14.1s)
+local           0.8634  0.5930  0.6976   rho=0.1 (14.2s)

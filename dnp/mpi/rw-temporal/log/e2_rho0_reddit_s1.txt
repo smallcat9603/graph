@@ -1,0 +1,9 @@
+reddit.txt: nodes=10984 edges=672447 train=537957 test=134490 shards=4 dim=64 ep=3
+walks=54635 positive_pairs=2382890
+shards: METIS (sizes [2746 2746 2747 2745])
+shard masses M = [0.209 0.261 0.273 0.257]  (sum=1.000)
+eval: bipartite (type-aware negs, |dst|=984)
+
+regime             AUC     MRR    H@10   (dest-ranking LP; rho=0.1)
+global          0.9473  0.7099  0.8695   rho=0.1 (25.5s)
+local           0.9001  0.6866  0.8213   rho=0.1 (27.3s)

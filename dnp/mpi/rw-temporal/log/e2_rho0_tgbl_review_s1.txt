@@ -1,0 +1,9 @@
+tgbl_review.txt: nodes=352637 edges=4873540 train=3898832 test=974708 shards=4 dim=64 ep=3
+walks=1747520 positive_pairs=41342862
+shards: METIS (sizes [88160 88159 88159 88159])
+shard masses M = [0.316 0.263 0.227 0.194]  (sum=1.000)
+eval: general (all-node negs)
+
+regime             AUC     MRR    H@10   (dest-ranking LP; rho=0.1)
+global          0.7202  0.1895  0.3350   rho=0.1 (1948.8s)
+local           0.5902  0.1647  0.3293   rho=0.1 (716.0s)
