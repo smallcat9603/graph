@@ -1115,3 +1115,36 @@ gate), then **(b) inc-4** (wire training into the batched loop; measure *real*
 wall-clock comm two-stage vs fused), then **F3/F4** (DistGER head-to-head;
 multi-node scaling). New artifact: `inc2_crosspair.py` (walk-capped for large
 graphs).
+
+### Camera-ready audit (2026-09-22) — weak-scaling figures were plotted from a single run
+
+While adding error bars for HPCC reviewer 1 ("please use statistical confidence
+when plotting results — the mean can be deceiving"), found that the weak-scaling
+figure panel (b) and the phase-breakdown figure were built from the **`rwscale`**
+job family, which is **n=1 per point**, whereas the TRP table was built from
+**`weakstatic`/`weakt4`** (n=3). Same sweep, two different run sets; the figure
+caption said "3-rep medians".
+
+Cause: `analyze_scaling.py` groups only by (dataset, proc), so it pools every job
+family into one bucket (that is why it reported reps=7 and reps=10 for buckets
+that should hold 3). It also skips `rwscale.*` entirely, because those headers
+lack the `weak(`/`strong(` keyword its regex requires.
+
+Raw per-family medians [min-max], n=3, from `out/*.out`:
+
+| family | 96 | 192 | 384 | 768 | 1536 |
+| --- | --- | --- | --- | --- | --- |
+| weakstatic elapsed | 5.67[5.62-5.81] | 4.02[4.01-4.03] | 4.65[4.64-4.65] | 3.62[3.57-3.66] | 3.48[3.44-3.48] |
+| rwscale elapsed (n=1) | 5.52 | 4.01 | 4.60 | 3.66 | 3.40 |
+| strongstatic elapsed | 6.72[6.43-6.73] | 3.81[3.69-3.81] | 3.72[3.68-3.73] | 2.25[2.24-2.27] | 1.81[1.76-1.84] |
+| embtwostage emb_xchg | 3.09[3.09-3.10] | 3.66[3.38-3.68] | 4.57[4.57-4.58] | 5.89[5.88-5.93] | 6.86[6.78-7.09] |
+
+**Resolution:** both figures now use `weakstatic` (n=3) so figure, table and
+caption agree. Two numbers in the paper's §V-D moved: 5.52 -> 5.67 s and
+3.40 -> 3.48 s. Nothing else moved — compute 0.73-0.86 s, allreduce 0.38->0.73 s,
+comm 82-89%, and the TRP table deltas were already 3-rep.
+
+**Carry forward:** if `analyze_scaling.py` is used again, group by job family,
+not by (dataset, proc), and widen RE_HEAD to match headers without the
+weak/strong keyword. Quality per-seed values were NOT preserved for reddit, so
+`fig:quality` carries no whiskers; log per-seed MRR next time.
