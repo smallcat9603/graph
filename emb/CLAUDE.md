@@ -1,6 +1,7 @@
 # emb
 
-New research project (topic to be set by the author).
+Node-embedding research continuing `graph/dnp/kg` (refactored copy; see `README.md`).
+Never modify `../dnp/kg/`: it is the reference the regression tests compare against.
 Code and results here follow the code↔paper sync spec:
 
 @~/.claude/specs/CODE_PAPER_SYNC_SPEC.md
@@ -15,4 +16,7 @@ Relative paths below are relative to this folder (`graph/emb/`).
 
 Read `plan.md`'s current-state index first at every resume.
 
-This folder sits inside the `graph` repo, which cannot hold large data: keep datasets and raw outputs out of git.
+This folder sits inside the `graph` repo, which cannot hold large data: keep datasets and raw outputs out of git (`out/` is ignored).
+
+Python: `.venv/bin/python` (3.13); run `.venv/bin/python -m pytest -q` after any change to `embkg/`.
+The viewer is `.venv/bin/streamlit run app/Home.py` and needs the local Neo4j DBMS running.

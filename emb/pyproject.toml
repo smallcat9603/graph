@@ -1,0 +1,15 @@
+[project]
+name = "embkg"
+version = "0.1.0"
+description = "Random-walk node embedding and knowledge-graph tools (continuation of graph/dnp/kg)"
+requires-python = ">=3.10"
+
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["embkg"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

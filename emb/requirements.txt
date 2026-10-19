@@ -1,0 +1,20 @@
+altair==6.3.0
+graphdatascience==2.2
+igraph==1.0.0
+langchain-core==1.6.12
+langchain-neo4j==0.11.0
+langchain-openai==1.7.2
+matplotlib==3.11.2
+neo4j==6.4.1
+networkx==3.7
+numpy==2.5.4
+optuna==5.0.0
+pandas==3.0.6
+plotly==7.1.0
+pytest==9.1.1
+scikit-learn==1.9.1
+scipy==1.18.1
+spacy==3.8.16
+streamlit==1.66.0
+# spaCy models (On-the-fly mode): python -m spacy download en_core_web_sm ja_core_news_sm
+-e .
